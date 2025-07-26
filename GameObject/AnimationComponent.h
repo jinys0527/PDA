@@ -32,3 +32,5 @@ private:
 	AnimationController m_AnimationController;
 	std::string m_CurrentClipName;
 };
+
+REGISTER_COMPONENT(AnimationComponent);

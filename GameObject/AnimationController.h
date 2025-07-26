@@ -29,3 +29,5 @@ private:
 	float m_Elapsed = 0.f;
 	bool m_Loop = true;
 };
+
+REGISTER_COMPONENT(AnimationController);

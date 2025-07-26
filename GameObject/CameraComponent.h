@@ -18,3 +18,4 @@ protected:
 	float m_Height;
 };
 
+REGISTER_COMPONENT(CameraComponent);

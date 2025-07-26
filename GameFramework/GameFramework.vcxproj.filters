@@ -27,9 +27,6 @@
     <ClInclude Include="TitleScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Homework.txt">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
     <ClInclude Include="InputManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>

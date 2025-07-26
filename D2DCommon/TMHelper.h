@@ -14,7 +14,7 @@ namespace TM
 		swprintf_s(
 			buffer,
 			bufSize,
-			L"%.2f, %.2f\n%.2f, %.2f\n%.2f, %.2\n",
+			L"%.2f, %.2f\n%.2f, %.2f\n%.2f, %.2f\n",
 			matrix._11, matrix._12,
 			matrix._21, matrix._22,
 			matrix._31, matrix._32

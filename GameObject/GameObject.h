@@ -15,6 +15,7 @@ class SpriteRenderer;
 class GameObject
 {
 	friend class Editor;
+	friend class Scene;
 public:
 	GameObject(EventDispatcher& eventDispatcher);
 	virtual ~GameObject() = default;

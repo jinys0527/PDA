@@ -62,3 +62,4 @@ protected:
 	CollisionState m_CollisionState = CollisionState::None;
 };
 
+REGISTER_COMPONENT(ColliderComponent);

@@ -130,7 +130,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Editor.h" />
-    <ClInclude Include="Homework.txt" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="MainApp.h" />
     <ClInclude Include="pch.h" />

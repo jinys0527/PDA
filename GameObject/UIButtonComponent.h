@@ -26,3 +26,4 @@ private:
 	D2D1_COLOR_F m_PressedColor = D2D1::ColorF(D2D1::ColorF::DarkGray);
 };
 
+REGISTER_COMPONENT(UIButtonComponent);

@@ -2,6 +2,7 @@
 #include "UIComponent.h"
 #include <wrl/client.h>
 #include <d2d1.h>
+#include <dwrite.h>
 #include <string>
 
 class D2DRenderer;
@@ -28,3 +29,4 @@ private:
 	Microsoft::WRL::ComPtr<IDWriteTextLayout> m_TextLayout;
 };
 
+REGISTER_COMPONENT(UITextComponent);

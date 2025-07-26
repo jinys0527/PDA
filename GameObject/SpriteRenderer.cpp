@@ -1,4 +1,5 @@
 #include "SpriteRenderer.h"
+#include <filesystem>
 
 void SpriteRenderer::SetPivotPreset(SpritePivotPreset spp, const D2D1_SIZE_F& size)
 {
@@ -36,10 +37,18 @@ void SpriteRenderer::OnEvent(EventType type, const void* data)
 
 void SpriteRenderer::Serialize(nlohmann::json& j) const
 {
+	j["textureKey"] = m_TextureKey;
+	j["path"] = m_Path;
+	j["filpX"] = m_FlipX;
+	j["filpY"] = m_FlipY;
 }
 
 void SpriteRenderer::Deserialize(const nlohmann::json& j)
 {
+	m_TextureKey = j["textureKey"].get<std::string>();
+	m_Path = j["path"].get<std::string>();
+	m_FlipX = j["filpX"].get<bool>();
+	m_FlipY = j["filpY"].get<bool>();
 }
 
 void SpriteRenderer::SetTexture(Microsoft::WRL::ComPtr<ID2D1Bitmap1> texture)

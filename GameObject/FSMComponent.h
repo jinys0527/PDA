@@ -16,3 +16,4 @@ private:
 	FSM m_Fsm;
 };
 
+REGISTER_COMPONENT(FSMComponent);

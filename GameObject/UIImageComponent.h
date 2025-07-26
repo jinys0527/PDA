@@ -22,3 +22,4 @@ private:
 	D2D1_RECT_F m_SourceRect = {};
 };
 
+REGISTER_COMPONENT(UIImageComponent);

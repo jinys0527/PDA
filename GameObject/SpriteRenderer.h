@@ -30,6 +30,7 @@ public:
 	void SetTexture(Microsoft::WRL::ComPtr<ID2D1Bitmap1> texture);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap1> GetTexture() const;
 
+
 	void SetFlipX(bool flipX);
 	bool GetFlipX() const;
 
@@ -44,8 +45,12 @@ public:
 	void SetPivotPreset(SpritePivotPreset spp, const D2D1_SIZE_F& size);
 
 private:
+	std::string m_TextureKey;
+	std::string m_Path;
 	Microsoft::WRL::ComPtr<ID2D1Bitmap1> m_Sprite;
 	bool m_FlipX;
 	bool m_FlipY;
 	Vec2F m_Pivot;
 };
+
+REGISTER_COMPONENT(SpriteRenderer);

@@ -1,5 +1,5 @@
 #pragma once
-#include <vector>
+#include <unordered_map>
 #include "CameraObject.h"
 #include <memory>
 
@@ -26,7 +26,7 @@ public:
 	void Serialize(nlohmann::json& j) const;
 	void Deserialize(const nlohmann::json& j);
 protected:
-	std::vector<std::shared_ptr<GameObject>> m_GameObjects;
+	std::unordered_map<std::string, std::shared_ptr<GameObject>> m_GameObjects;
 	CameraObject m_Camera;
 	EventDispatcher& m_EventDispatcher;
 private:

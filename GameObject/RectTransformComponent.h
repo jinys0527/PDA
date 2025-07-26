@@ -32,6 +32,7 @@ class RectTransformComponent : public Component
 	using Mat3X2F = D2D1::Matrix3x2F;
 
 public:
+	RectTransformComponent() = default;
 	RectTransformComponent(const Vec2F& position,
 		const Vec2F& size,
 		AnchorPrset anchor = AnchorPrset::TopLeft,
@@ -122,3 +123,4 @@ private:
 	bool m_IsDirty = true;
 };
 
+REGISTER_COMPONENT(RectTransformComponent);

@@ -65,3 +65,4 @@ private:
 	TransformComponent* m_Transform = nullptr;
 };
 
+REGISTER_COMPONENT(RigidbodyComponent);

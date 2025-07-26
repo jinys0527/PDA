@@ -24,3 +24,4 @@ protected:
 	float m_Opacity = 1.0f;
 };
 
+REGISTER_COMPONENT(UIComponent);

@@ -33,3 +33,4 @@ protected:
 	void OnCollisionExit(const CollisionInfo* info) override { std::cout << "exit" << std::endl; }
 };
 
+REGISTER_COMPONENT(BoxColliderComponent);

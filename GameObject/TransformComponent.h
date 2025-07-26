@@ -107,4 +107,4 @@ private:
 	int m_ZOrder = 0;
 };
 
-	
+REGISTER_COMPONENT(TransformComponent);

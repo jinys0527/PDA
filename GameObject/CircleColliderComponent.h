@@ -19,3 +19,4 @@ protected:
 	float m_Radius;
 };
 
+REGISTER_COMPONENT(CircleColliderComponent);

@@ -171,10 +171,20 @@ void TransformComponent::OnEvent(EventType type, const void* data)
 
 void TransformComponent::Serialize(nlohmann::json& j) const
 {
+	j["position"]["x"] = m_Position.x;
+	j["position"]["y"] = m_Position.y;
+	j["rotation"] = m_Rotation;
+	j["scale"]["x"] = m_Scale.x;
+	j["scale"]["y"] = m_Scale.y;
 }
 
 void TransformComponent::Deserialize(const nlohmann::json& j)
 {
+	m_Position.x = j["position"]["x"].get<float>();
+	m_Position.y = j["position"]["y"].get<float>();
+	m_Rotation = j["rotation"].get<float>();
+	m_Scale.x = j["scale"]["x"].get<float>();
+	m_Scale.y = j["scale"]["y"].get<float>();
 }
 
 void TransformComponent::UpdateMatrices()
