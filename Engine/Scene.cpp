@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Scene.h"
 #include "json.hpp"
+#include "GameObject.h"
 
 Scene::~Scene()
 {

@@ -6,8 +6,8 @@
 
 void SceneManager::Initialize()
 {
-	auto testScene = AddScene("TestScene", std::make_shared<TestScene>());
-	auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>());
+	auto testScene = AddScene("TestScene", std::make_shared<TestScene>(m_EventDispatcher));
+	auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher));
 
 	testScene->Initialize();
 	titleScene->Initialize();
@@ -24,6 +24,7 @@ void SceneManager::Render()
 {
 	std::vector<RenderInfo> renderInfo;
 	m_CurrentScene->Render(renderInfo);
+	m_Renderer.Draw(renderInfo);
 }
 
 std::shared_ptr<Scene> SceneManager::AddScene(const std::string& name, std::shared_ptr<Scene> scene)

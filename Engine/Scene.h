@@ -1,6 +1,5 @@
 #pragma once
 #include <unordered_map>
-#include "CameraObject.h"
 #include <memory>
 #include <vector>
 #include "RenderData.h"
@@ -13,7 +12,7 @@ class Scene
 public:
 	friend class Editor;
 
-	Scene() = default;
+	Scene(EventDispatcher& eventDispatcher) : m_EventDispatcher(eventDispatcher) {}
 	virtual ~Scene();
 	virtual void Initialize() = 0;
 	virtual void Finalize() = 0;
@@ -32,7 +31,6 @@ public:
 	void Deserialize(const nlohmann::json& j);
 protected:
 	std::unordered_map<std::string, std::shared_ptr<GameObject>> m_GameObjects;
-	CameraObject m_Camera;
 	EventDispatcher& m_EventDispatcher;
 private:
 	Scene(const Scene&) = delete;

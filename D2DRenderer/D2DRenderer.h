@@ -2,6 +2,8 @@
 
 #include <wrl/client.h>
 #include <d2d1helper.h>
+#include <vector>
+#include "RenderData.h"
 using namespace Microsoft::WRL;
 
 
@@ -28,6 +30,14 @@ public:
 	void DrawBitmap(ID2D1Bitmap1* bitmap, D2D1_RECT_F destRect, D2D1_RECT_F srcRect, float opacity = 1.0f);
 
 	void DrawMessage(const wchar_t* text, float left, float top, float width, float height, const D2D1::ColorF& color);
+
+	void Draw(std::vector<RenderInfo>& renderInfo);
+
+	Math::Vector2F CalcAnchorOffset(const Math::Vector2F& parentSize,
+		const Anchor& anchor,
+		const Math::Vector2F& anchoredPosition,
+		const Math::Vector2F& sizeDelta,
+		const Math::Vector2F& pivot);
 
 	void SetTransform(const D2D1_MATRIX_3X2_F tm);
 

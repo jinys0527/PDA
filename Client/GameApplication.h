@@ -3,6 +3,7 @@
 #include "NzWndBase.h"
 #include <wrl/client.h>
 #include "Engine.h"
+#include "SceneManager.h"
 
 class GameObject;
 class CameraObject;
@@ -10,7 +11,7 @@ class CameraObject;
 class GameApplication : public NzWndBase
 {
 public:
-	GameApplication(Engine& engine) : NzWndBase(), m_Engine(engine) { }
+	GameApplication(Engine& engine, SceneManager& sceneManager) : NzWndBase(), m_Engine(engine), m_SceneManager(sceneManager) { }
 	virtual ~GameApplication() = default;
 
 	bool Initialize();
@@ -36,5 +37,6 @@ private:
 	CameraObject* m_Camera;
 	GameObject* m_Obstacle;
 	Engine& m_Engine;
+	SceneManager& m_SceneManager;
 };
 

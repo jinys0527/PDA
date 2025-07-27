@@ -3,6 +3,7 @@
 #include "json.hpp"
 #include "Scene.h"
 #include "TransformComponent.h"
+#include "GameObject.h"
 #include <fstream>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>

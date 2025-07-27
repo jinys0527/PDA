@@ -94,23 +94,23 @@ TransformComponent::Matrix3X2F TransformComponent::GetInverseWorldMatrix()
 	return inv;
 }
 
-void TransformComponent::SetPivotPreset(PivotPreset preset, const D2D1_SIZE_F& size)
+void TransformComponent::SetPivotPreset(TransformPivotPreset preset, const D2D1_SIZE_F& size)
 {
 	switch (preset)
 	{
-	case PivotPreset::TopLeft:
+	case TransformPivotPreset::TopLeft:
 		m_Pivot = { 0.0f, 0.0f };
 		break;
-	case PivotPreset::TopRight:
+	case TransformPivotPreset::TopRight:
 		m_Pivot = { size.width, 0.0f };
 		break;
-	case PivotPreset::BottomLeft:
+	case TransformPivotPreset::BottomLeft:
 		m_Pivot = { 0.0f, size.height };
 		break;
-	case PivotPreset::BottomRight:
+	case TransformPivotPreset::BottomRight:
 		m_Pivot = { size.width, size.height };
 		break;
-	case PivotPreset::Center:
+	case TransformPivotPreset::Center:
 		m_Pivot = { size.width * 0.5f, size.height * 0.5f };
 		break;
 	}

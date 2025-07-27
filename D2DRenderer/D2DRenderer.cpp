@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "D2DRenderer.h"
+#include <algorithm>
+#include "RectTransformComponent.h"
 
 void D2DRenderer::Initialize(HWND hwnd)
 {
@@ -98,6 +100,89 @@ void D2DRenderer::DrawMessage(const wchar_t* text, float left, float top, float 
 		D2D1_DRAW_TEXT_OPTIONS_NONE,
 		DWRITE_MEASURING_MODE_NATURAL
 	);
+}
+
+void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
+{
+	std::vector<RenderInfo> sortedInfo = renderInfo;
+	std::sort(sortedInfo.begin(), sortedInfo.end(), [](const RenderInfo& a, const RenderInfo& b) {return a.layer < b.layer; });
+
+	m_d2dContext->BeginDraw();
+
+	for (const auto& info : sortedInfo)
+	{
+		if (!info.bitmap)
+		{	
+			continue;
+		}
+
+		// 앵커 + 피벗 계산
+		D2D1_SIZE_F bmpSize = info.bitmap->GetSize();
+
+		Math::Vector2F pos = CalcAnchorOffset(info.parentSize, info.anchor, info.anchoredPosition, info.sizeDelta, info.pivot); // min/max 기준 위치
+		Math::Vector2F pivotOffset = { info.size.x * info.pivot.x, info.size.y * info.pivot.y };
+
+		D2D1_MATRIX_3X2_F mat =
+			D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y) *
+			D2D1::Matrix3x2F::Scale(info.scale.x, info.scale.y) *
+			D2D1::Matrix3x2F::Rotation(info.rotation) *
+			D2D1::Matrix3x2F::Translation(pos.x, pos.y);
+
+		D2D1_RECT_F destRect = {
+			0.0f, 0.0f,
+			bmpSize.width,
+			bmpSize.height
+		};
+
+		m_d2dContext->DrawBitmap(
+			info.bitmap.Get(),
+			&destRect,
+			info.opacity,
+			D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+			nullptr
+		);
+	}
+
+	m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());
+
+	m_d2dContext->EndDraw();
+}
+
+Math::Vector2F D2DRenderer::CalcAnchorOffset(const Math::Vector2F& parentSize,
+	const Anchor& anchor,
+	const Math::Vector2F& anchoredPosition,
+	const Math::Vector2F& sizeDelta,
+	const Math::Vector2F& pivot)
+{
+	// Anchor 영역 계산
+	Math::Vector2F anchorAreaMin = {
+		parentSize.x * anchor.minPoint.x,
+		parentSize.y * anchor.minPoint.y
+	};
+
+	Math::Vector2F anchorAreaMax = {
+		parentSize.x * anchor.maxPoint.x,
+		parentSize.y * anchor.maxPoint.y
+	};
+
+	Math::Vector2F anchorAreaSize = {
+		anchorAreaMax.x - anchorAreaMin.x,
+		anchorAreaMax.y - anchorAreaMin.y
+	};
+
+	// 최종 UI 크기 계산
+	Math::Vector2F size = {
+		anchorAreaSize.x + sizeDelta.x,
+		anchorAreaSize.y + sizeDelta.y
+	};
+
+	// 최종 위치 계산
+	Math::Vector2F finalPos = {
+		anchorAreaMin.x + anchoredPosition.x - size.x * pivot.x,
+		anchorAreaMin.y + anchoredPosition.y - size.y * pivot.y
+	};
+
+	return finalPos;
 }
 
 void D2DRenderer::SetTransform(const D2D1_MATRIX_3X2_F tm)

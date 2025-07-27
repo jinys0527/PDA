@@ -3,7 +3,8 @@
 
 class TestScene : public Scene
 {
-	TestScene() = default;
+public:
+	TestScene(EventDispatcher& eventDispatcher) : Scene(eventDispatcher) {}
 	virtual ~TestScene() = default;
 
 	void Initialize() override;

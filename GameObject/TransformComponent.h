@@ -4,7 +4,7 @@
 #include <vector>
 
 
-enum class PivotPreset
+enum class TransformPivotPreset
 {
 	TopLeft,
 	TopRight,
@@ -62,7 +62,7 @@ public:
 
 	Matrix3X2F GetInverseWorldMatrix();
 
-	void SetPivotPreset(PivotPreset preset, const D2D1_SIZE_F& size);
+	void SetPivotPreset(TransformPivotPreset preset, const D2D1_SIZE_F& size);
 	D2D1_POINT_2F GetPivotPoint() const { return m_Pivot; }
 
 	std::string GetTypeName() override { return "TransformComponent"; }

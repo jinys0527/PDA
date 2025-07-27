@@ -11,7 +11,7 @@ enum class AnchorPrset
 	Center
 };
 
-enum class PivotPreset
+enum class RectTransformPivotPreset
 {
 	TopLeft,
 	TopRight,
@@ -36,7 +36,7 @@ public:
 	RectTransformComponent(const Vec2F& position,
 		const Vec2F& size,
 		AnchorPrset anchor = AnchorPrset::TopLeft,
-		PivotPreset pivot = PivotPreset::Center,
+		RectTransformPivotPreset pivot = RectTransformPivotPreset::Center,
 		float rotation = 0.0f,
 		const Vec2F& scale = { 1.0f, 1.0f }) { }
 	virtual ~RectTransformComponent() = default;
@@ -49,7 +49,7 @@ public:
 	void Deserialize(const nlohmann::json& j) override;
 
 	void SetAnchorPreset(AnchorPrset preset);
-	void SetPivotPreset(PivotPreset preset);
+	void SetPivotPreset(RectTransformPivotPreset preset);
 
 	void SetPosition(const Vec2F& position)
 	{

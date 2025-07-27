@@ -40,23 +40,23 @@ void RectTransformComponent::SetAnchorPreset(AnchorPrset preset)
 	}
 }
 
-void RectTransformComponent::SetPivotPreset(PivotPreset preset)
+void RectTransformComponent::SetPivotPreset(RectTransformPivotPreset preset)
 {
 	switch (preset)
 	{
-	case PivotPreset::TopLeft:
+	case RectTransformPivotPreset::TopLeft:
 		m_Pivot = { 0.0f, 0.0f };
 		break;
-	case PivotPreset::TopRight:
+	case RectTransformPivotPreset::TopRight:
 		m_Pivot = { 1.0f, 0.0f };
 		break;
-	case PivotPreset::BottomLeft:
+	case RectTransformPivotPreset::BottomLeft:
 		m_Pivot = { 0.0f, 1.0f };
 		break;
-	case PivotPreset::BottomRight:
+	case RectTransformPivotPreset::BottomRight:
 		m_Pivot = { 1.0f, 1.0f };
 		break;
-	case PivotPreset::Center:
+	case RectTransformPivotPreset::Center:
 		m_Pivot = { 0.5f, 0.5f };
 		break;
 	default:

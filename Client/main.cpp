@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Engine.h"
 #include "GameApplication.h"
+#include "SceneManager.h"
 
 namespace
 {
@@ -18,8 +19,9 @@ int main()
 		return -1;
 
     Engine engine;
+	SceneManager sceneManager(engine.GetRenderer(), engine.GetEventDispatcher());
 
- 	g_pMainApp = new GameApplication(engine);
+ 	g_pMainApp = new GameApplication(engine, sceneManager);
  
  	if (!g_pMainApp->Initialize())
  	{
