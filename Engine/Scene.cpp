@@ -6,6 +6,20 @@ Scene::~Scene()
 {
 }
 
+void Scene::AddGameObject(std::shared_ptr<GameObject> gameObject)
+{
+	m_GameObjects[gameObject->m_Name] = gameObject;
+}
+
+void Scene::RemoveGameObject(std::shared_ptr<GameObject> gameObject)
+{
+	auto it = m_GameObjects.find(gameObject->m_Name);
+	if (it != m_GameObjects.end())
+	{
+		m_GameObjects.erase(gameObject->m_Name);
+	}
+}
+
 void Scene::Serialize(nlohmann::json& j) const
 {
 	j["gameObjects"] = nlohmann::json::array();

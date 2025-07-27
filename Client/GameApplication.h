@@ -1,0 +1,40 @@
+#pragma once
+
+#include "NzWndBase.h"
+#include <wrl/client.h>
+#include "Engine.h"
+
+class GameObject;
+class CameraObject;
+
+class GameApplication : public NzWndBase
+{
+public:
+	GameApplication(Engine& engine) : NzWndBase(), m_Engine(engine) { }
+	virtual ~GameApplication() = default;
+
+	bool Initialize();
+	void Run();
+	void Finalize();
+
+	bool OnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) override;
+
+private:
+	void UpdateInput();
+	void UpdateLogic();
+	void Update();
+
+	void Render();
+	
+	void OnResize(int width, int height) override;
+	void OnClose() override;
+
+	Microsoft::WRL::ComPtr<ID2D1Bitmap1>        m_TestBitmap;
+	Microsoft::WRL::ComPtr<ID2D1Bitmap1>        m_Background;
+
+	GameObject* m_Player;
+	CameraObject* m_Camera;
+	GameObject* m_Obstacle;
+	Engine& m_Engine;
+};
+

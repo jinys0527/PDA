@@ -23,6 +23,9 @@ public:
 	virtual void Update(float deltaTime) = 0;
 	virtual void Render(HDC hDC) = 0;
 
+	void AddGameObject(std::shared_ptr<GameObject> gameObject);
+	void RemoveGameObject(std::shared_ptr<GameObject> gameObject);
+
 	void Serialize(nlohmann::json& j) const;
 	void Deserialize(const nlohmann::json& j);
 protected:

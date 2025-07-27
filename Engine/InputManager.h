@@ -16,6 +16,6 @@ public:
 private:
 	std::unordered_set<char> m_KeysDown;			// 현재 눌림
 	std::unordered_set<char> m_KeysDownPrev;		// 이전 프레임 눌림
-	EventDispatcher& m_EventDispatcher;			// 참조 보관
+	EventDispatcher& m_EventDispatcher;				// 참조 보관
 };
 

@@ -13,6 +13,7 @@ private:
 
 private:
 	Scene* m_CurrentScene;
+	std::string m_SelectedKey;
 	int m_SelectedIndex = -1;
 };
 

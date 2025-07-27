@@ -16,6 +16,7 @@ class GameObject
 {
 	friend class Editor;
 	friend class Scene;
+	friend class TestScene;
 public:
 	GameObject(EventDispatcher& eventDispatcher);
 	virtual ~GameObject() = default;
@@ -54,6 +55,7 @@ public:
 	}
 
 	void Update(float deltaTime);
+	void Render();
 
 	TransformComponent* RenderPosition();		//테스트용
 	SpriteRenderer* RenderTexture();
