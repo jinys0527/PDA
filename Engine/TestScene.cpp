@@ -2,7 +2,7 @@
 #include "TestScene.h"
 #include "GameObject.h"
 
-void TestScene::Initialize(NzWndBase* pWnd)
+void TestScene::Initialize()
 {
 	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(m_EventDispatcher);
 	gameObject->m_Name = "test";
@@ -27,12 +27,16 @@ void TestScene::FixedUpdate()
 
 void TestScene::Update(float deltaTime)
 {
+	for (auto gameObject : m_GameObjects)
+	{
+		gameObject.second->Update(deltaTime);
+	}
 }
 
-void TestScene::Render(HDC hDC)
+void TestScene::Render(std::vector<RenderInfo>& renderInfo)
 {
 	for (auto gameObject : m_GameObjects)
 	{
-		//gameObject->Render();
+		gameObject.second->Render(renderInfo);
 	}
 }

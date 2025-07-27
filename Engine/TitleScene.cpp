@@ -3,7 +3,7 @@
 #include "InputManager.h"
 #include "TestListener.h"
 
-void TitleScene::Initialize(NzWndBase* pWnd)
+void TitleScene::Initialize()
 {
 }
 
@@ -24,6 +24,6 @@ void TitleScene::Update(float deltaTime)
 
 }
 
-void TitleScene::Render(HDC hDC)
+void TitleScene::Render(std::vector<RenderInfo>& renderInfo)
 {
 }

@@ -2,6 +2,8 @@
 #include <unordered_map>
 #include "CameraObject.h"
 #include <memory>
+#include <vector>
+#include "RenderData.h"
 
 class NzWndBase;
 class GameObject;
@@ -13,7 +15,7 @@ public:
 
 	Scene() = default;
 	virtual ~Scene();
-	virtual void Initialize(NzWndBase* pWnd) = 0;
+	virtual void Initialize() = 0;
 	virtual void Finalize() = 0;
 
 	virtual void Enter() = 0;
@@ -21,7 +23,7 @@ public:
 
 	virtual void FixedUpdate() = 0;
 	virtual void Update(float deltaTime) = 0;
-	virtual void Render(HDC hDC) = 0;
+	virtual void Render(std::vector<RenderInfo>& renderInfo) = 0;
 
 	void AddGameObject(std::shared_ptr<GameObject> gameObject);
 	void RemoveGameObject(std::shared_ptr<GameObject> gameObject);

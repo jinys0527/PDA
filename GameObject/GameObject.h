@@ -8,6 +8,8 @@
 #include "Component.h"
 #include "EventDispatcher.h"
 #include "json.hpp"
+#include <vector>
+#include "RenderData.h"
 
 class TransformComponent;
 class SpriteRenderer;
@@ -55,7 +57,7 @@ public:
 	}
 
 	void Update(float deltaTime);
-	void Render();
+	void Render(std::vector<RenderInfo>& renderInfo);
 
 	TransformComponent* RenderPosition();		//테스트용
 	SpriteRenderer* RenderTexture();
@@ -71,6 +73,7 @@ public:
 protected:
 	std::string m_Name;
 	std::unordered_map<std::type_index, std::unique_ptr<Component>> m_Components;
+	TransformComponent* m_Transform;
 	EventDispatcher& m_EventDispatcher;
 };
 

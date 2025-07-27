@@ -6,7 +6,7 @@ class TestScene : public Scene
 	TestScene() = default;
 	virtual ~TestScene() = default;
 
-	void Initialize(NzWndBase* pWnd) override;
+	void Initialize() override;
 	void Finalize()  override;
 
 	void Enter() override;
@@ -14,6 +14,6 @@ class TestScene : public Scene
 
 	void FixedUpdate() override;
 	void Update(float deltaTime) override;
-	void Render(HDC hDC) override;
+	void Render(std::vector<RenderInfo>& renderInfo) override;
 };
 
