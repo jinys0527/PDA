@@ -60,6 +60,8 @@ public:
 	const Matrix3X2F& GetWorldMatrix();
 	const Matrix3X2F& GetLocalMatrix();
 
+	void MultiplyMatrix(D2D1::Matrix3x2F cameraTM);
+
 	Matrix3X2F GetInverseWorldMatrix();
 
 	void SetPivotPreset(TransformPivotPreset preset, const D2D1_SIZE_F& size);
