@@ -4,7 +4,7 @@
 class TitleScene : public Scene
 {
 public:
-	TitleScene(EventDispatcher& eventDispatcher) : Scene(eventDispatcher) {}
+	TitleScene(EventDispatcher& eventDispatcher, AssetManager& assetManager) : Scene(eventDispatcher, assetManager) {}
 	virtual ~TitleScene() = default;
 
 	void Initialize() override;

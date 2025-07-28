@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 #include "RenderData.h"
+#include "AssetManager.h"
 
 class NzWndBase;
 class GameObject;
@@ -12,7 +13,7 @@ class Scene
 public:
 	friend class Editor;
 
-	Scene(EventDispatcher& eventDispatcher) : m_EventDispatcher(eventDispatcher) {}
+	Scene(EventDispatcher& eventDispatcher, AssetManager& assetManager) : m_EventDispatcher(eventDispatcher), m_AssetManager(assetManager) {}
 	virtual ~Scene();
 	virtual void Initialize() = 0;
 	virtual void Finalize() = 0;
@@ -29,9 +30,12 @@ public:
 
 	void Serialize(nlohmann::json& j) const;
 	void Deserialize(const nlohmann::json& j);
+
+	Math::Vector2F m_ViewOffset = { 0.0f, 0.0f };
 protected:
 	std::unordered_map<std::string, std::shared_ptr<GameObject>> m_GameObjects;
 	EventDispatcher& m_EventDispatcher;
+	AssetManager& m_AssetManager;
 private:
 	Scene(const Scene&) = delete;
 	Scene& operator=(const Scene&) = delete;

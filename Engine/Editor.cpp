@@ -11,18 +11,71 @@
 
 void Editor::Update()
 {
+	ImGui::SetNextWindowPos(ImVec2(100, 100), ImGuiCond_Always);
+	ImGui::SetNextWindowSize(ImVec2(300, 600), ImGuiCond_Always);
 	ImGui::Begin("Scene Editor");
 
-	if (!m_CurrentScene) {
+	auto currentScene = m_SceneManager.GetCurrentScene();
+	if (!currentScene) {
 		ImGui::Text("No scene loaded");
 		ImGui::End();
 		return;
 	}
 
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			// 메뉴 아이템을 누르면 패널 열기 플래그 토글
+			if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
+			{
+				nlohmann::json j;
+				currentScene->Serialize(j);
+				std::ofstream ofs("scene.json");
+				ofs << j.dump(4);
+			}
+			if (ImGui::MenuItem("Load Scene", "Ctrl+O"))
+			{
+				nlohmann::json j;
+				std::ifstream ifs("scene.json");
+				ifs >> j;
+				currentScene->Deserialize(j);
+			}
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMainMenuBar();
+	}
+
+	ImGuiIO& io = ImGui::GetIO();
+	if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_S)) // Ctrl+S
+	{
+		nlohmann::json j;
+		currentScene->Serialize(j);
+		std::ofstream ofs("scene.json");
+		ofs << j.dump(4);
+	}
+
+	if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_O)) // Ctrl+O
+	{
+		nlohmann::json j;
+		std::ifstream ifs("scene.json");
+		ifs >> j;
+		currentScene->Deserialize(j);
+	}
+
 	int index = 0;
 
+	ImGui::Separator();
+	ImGui::Text("Camera Offset");
+	ImGui::DragFloat2("Offset", &currentScene->m_ViewOffset.x, 1.0f); // 수동 이동
+
+	ImGui::SliderFloat("Offset X", &currentScene->m_ViewOffset.x, -1000.0f, 1000.0f);
+	ImGui::SliderFloat("Offset Y", &currentScene->m_ViewOffset.y, -1000.0f, 1000.0f);
+
 	//GameObject 리스트
-	for (const auto& [key, goPtr] : m_CurrentScene->m_GameObjects)
+	for (const auto& [key, goPtr] : currentScene->m_GameObjects)
 	{
 		bool selected = (m_SelectedKey == key);
 		if (ImGui::Selectable(key.c_str(), selected))
@@ -36,7 +89,7 @@ void Editor::Update()
 	// 선택된 GameObject 편집
 	if (!m_SelectedKey.empty())
 	{
-		auto& go = m_CurrentScene->m_GameObjects[m_SelectedKey];
+		auto& go = currentScene->m_GameObjects[m_SelectedKey];
 		// go는 std::shared_ptr<GameObject>
 		char buf[128];
 		strncpy_s(buf, go->m_Name.c_str(), sizeof(buf));
@@ -46,26 +99,30 @@ void Editor::Update()
 			go->m_Name = buf;
 		}
 
-		if (auto* transform = go->GetComponent<TransformComponent>())
+		
+		auto* transform = go->GetComponent  <TransformComponent>();
+		
+		if (transform)
 		{
-			ImGui::DragFloat2("Position", &transform->m_Position.x, 0.1f);
-			ImGui::DragFloat( "Rotation", &transform->m_Rotation,   0.1f);
-			ImGui::DragFloat2("Scale",    &transform->m_Scale.x,    0.1f);
+			Math::Vector2F pos = transform->GetPosition();
+			float rot = transform->GetRotation();
+			Math::Vector2F scale = transform->GetScale();
+
+			if (ImGui::DragFloat2("Position##Transform", &pos.x, 0.1f))
+			{
+				transform->SetPosition(pos);
+			}
+			if (ImGui::DragFloat("Rotation##Transform", &rot, 0.1f))
+			{
+				transform->SetRotation(rot);
+			}
+			if (ImGui::DragFloat2("Scale##Transform", &scale.x, 0.1f))
+			{
+				transform->SetScale(scale);
+			}
 		}
-	}
+		
 
-	if (ImGui::Button("Save Scene")) {
-		nlohmann::json j;
-		m_CurrentScene->Serialize(j);
-		std::ofstream ofs("scene.json");
-		ofs << j.dump(4);
-	}
-
-	if (ImGui::Button("Load Scene")) {
-		nlohmann::json j;
-		std::ifstream ifs("scene.json");
-		ifs >> j;
-		m_CurrentScene->Deserialize(j);
 	}
 
 	ImGui::End();

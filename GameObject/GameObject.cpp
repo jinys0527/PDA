@@ -29,10 +29,13 @@ void GameObject::Render(std::vector<RenderInfo>& renderInfo)
 		{
 			RenderInfo info;
 			info.bitmap = sprite->GetTexture();
-			info.position = m_Transform->GetPosition();
-			info.scale = m_Transform->GetScale();
-			info.rotation = m_Transform->GetRotation();
+			info.worldMatrix = m_Transform->GetWorldMatrix();
 			info.pivot = sprite->GetPivot();
+			// UI가 아닌 일반 오브젝트 위치로 설정
+			info.anchor = Anchor{ {0.0f, 0.0f}, {0.0f, 0.0f} }; // (0,0)-(0,0) 고정값
+			info.anchoredPosition = m_Transform->GetPosition();
+			info.sizeDelta = { 0, 0 };
+			info.parentSize = { 0, 0 };
 			renderInfo.push_back(info);
 		}
 	}

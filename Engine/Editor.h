@@ -1,18 +1,17 @@
 #pragma once
-
-class Scene;
+#include "SceneManager.h"
 
 class Editor
 {
 public:
-	void SetScene(Scene* scene) { m_CurrentScene = scene; }
+	Editor(SceneManager& sceneManager) : m_SceneManager(sceneManager) {}
 	void Update();
 private:
 	void DrawHierarchy();
 	void DrawInspector();
 
 private:
-	Scene* m_CurrentScene;
+	SceneManager& m_SceneManager;;
 	std::string m_SelectedKey;
 	int m_SelectedIndex = -1;
 };

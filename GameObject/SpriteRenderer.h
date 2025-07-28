@@ -30,6 +30,8 @@ public:
 	void SetTexture(Microsoft::WRL::ComPtr<ID2D1Bitmap1> texture);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap1> GetTexture() const;
 
+	void SetTextureKey(std::string key) { m_TextureKey = key; }
+	void SetPath(std::string path) { m_Path = path; }
 
 	void SetFlipX(bool flipX);
 	bool GetFlipX() const;

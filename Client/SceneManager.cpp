@@ -6,8 +6,8 @@
 
 void SceneManager::Initialize()
 {
-	auto testScene = AddScene("TestScene", std::make_shared<TestScene>(m_EventDispatcher));
-	auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher));
+	auto testScene = AddScene("TestScene", std::make_shared<TestScene>(m_EventDispatcher, m_AssetManager));
+	auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher, m_AssetManager));
 
 	testScene->Initialize();
 	titleScene->Initialize();
