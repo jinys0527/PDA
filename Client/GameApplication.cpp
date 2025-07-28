@@ -23,6 +23,7 @@ bool GameApplication::Initialize()
 	}
 	
 	m_Engine.GetRenderer().Initialize(m_hwnd);
+	
 
 	m_Player = new GameObject(m_Engine.GetEventDispatcher());
  	m_Player->AddComponent<SpriteRenderer>();
@@ -41,7 +42,8 @@ bool GameApplication::Initialize()
  	bx->Start();
  
 	m_SceneManager.Initialize();
- 
+	m_Camera = m_SceneManager.GetCamera();
+	m_Engine.GetRenderer().SetCamera(m_Camera);
  	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
  	assert(m_TestBitmap != nullptr && "Failed to load test bitmap.");
  
@@ -74,8 +76,8 @@ void GameApplication::Run()
 	{
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
-			if (false == m_Engine.GetInputManager().OnHandleMessage(msg))
-				TranslateMessage(&msg);
+			//if (false == m_Engine.GetInputManager().OnHandleMessage(msg))
+			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
 		else
@@ -95,10 +97,7 @@ void GameApplication::Finalize()
 	{
 		delete m_Player;
 	}
-	if (m_Camera)
-	{	
-		delete m_Camera;
-	}
+
 	if (m_Obstacle)
 	{
 		delete m_Obstacle;

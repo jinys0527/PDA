@@ -7,6 +7,7 @@
 
 class NzWndBase;
 class GameObject;
+class CameraObject;
 
 class Scene
 {
@@ -28,14 +29,17 @@ public:
 	void AddGameObject(std::shared_ptr<GameObject> gameObject);
 	void RemoveGameObject(std::shared_ptr<GameObject> gameObject);
 
+	void SetMainCamera(std::shared_ptr<GameObject> gameObject);
+	CameraObject* GetMainCamera() { return m_Camera; }
+
 	void Serialize(nlohmann::json& j) const;
 	void Deserialize(const nlohmann::json& j);
 
-	Math::Vector2F m_ViewOffset = { 0.0f, 0.0f };
 protected:
 	std::unordered_map<std::string, std::shared_ptr<GameObject>> m_GameObjects;
 	EventDispatcher& m_EventDispatcher;
 	AssetManager& m_AssetManager;
+	CameraObject* m_Camera;
 private:
 	Scene(const Scene&) = delete;
 	Scene& operator=(const Scene&) = delete;

@@ -69,10 +69,21 @@ void Editor::Update()
 
 	ImGui::Separator();
 	ImGui::Text("Camera Offset");
-	ImGui::DragFloat2("Offset", &currentScene->m_ViewOffset.x, 1.0f); // 수동 이동
+	auto cameraTrans = currentScene->GetMainCamera()->GetComponent<TransformComponent>();
+	Math::Vector2F cameraPos = cameraTrans->GetPosition();
+	if (ImGui::DragFloat2("Offset", &cameraPos.x, 1.0f))
+	{
+		cameraTrans->SetPosition(cameraPos);
+	}// 수동 이동
 
-	ImGui::SliderFloat("Offset X", &currentScene->m_ViewOffset.x, -1000.0f, 1000.0f);
-	ImGui::SliderFloat("Offset Y", &currentScene->m_ViewOffset.y, -1000.0f, 1000.0f);
+	if (ImGui::SliderFloat("Offset X", &cameraPos.x, -1000.0f, 1000.0f))
+	{
+		cameraTrans->SetPosition(cameraPos);
+	}
+	if (ImGui::SliderFloat("Offset Y", &cameraPos.y, -1000.0f, 1000.0f))
+	{
+		cameraTrans->SetPosition(cameraPos);
+	}
 
 	//GameObject 리스트
 	for (const auto& [key, goPtr] : currentScene->m_GameObjects)
@@ -96,7 +107,9 @@ void Editor::Update()
 		if (ImGui::InputText("Name", buf, sizeof(buf)))
 		{
 			// key 변경 시 map key도 변경해야 한다면 별도 로직 필요 (주의)
+			currentScene->RemoveGameObject(go);
 			go->m_Name = buf;
+			currentScene->AddGameObject(go);
 		}
 
 		

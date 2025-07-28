@@ -41,6 +41,8 @@ void SceneManager::SetCurrentScene(const std::string& name)
 	{
 		m_CurrentScene = it->second;
 	}
+
+	m_Camera = m_CurrentScene->GetMainCamera();
 }
 
 std::shared_ptr<Scene> SceneManager::GetCurrentScene() const

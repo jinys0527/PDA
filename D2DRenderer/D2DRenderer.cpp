@@ -2,6 +2,8 @@
 #include "D2DRenderer.h"
 #include <algorithm>
 #include "RectTransformComponent.h"
+#include "TransformComponent.h"
+#include "CameraObject.h"
 
 void D2DRenderer::Initialize(HWND hwnd)
 {
@@ -107,6 +109,10 @@ void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
 	std::vector<RenderInfo> sortedInfo = renderInfo;
 	std::sort(sortedInfo.begin(), sortedInfo.end(), [](const RenderInfo& a, const RenderInfo& b) {return a.layer < b.layer; });
 
+	auto cameraTrans = m_Camera->GetComponent<TransformComponent>();
+	D2D1::Matrix3x2F cameraMatrix = cameraTrans->GetWorldMatrix();
+	cameraMatrix.Invert();
+
 	for (const auto& info : sortedInfo)
 	{
 		if (!info.bitmap)
@@ -126,6 +132,8 @@ void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
 			m.m21, m.m22,
 			m.dx,  m.dy
 		};
+
+		mat = cameraMatrix * mat;
 
 		m_d2dContext->SetTransform(mat); // 여기서 행렬 적용
 

@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "json.hpp"
 #include "GameObject.h"
+#include "CameraObject.h"
 
 Scene::~Scene()
 {
@@ -9,6 +10,10 @@ Scene::~Scene()
 
 void Scene::AddGameObject(std::shared_ptr<GameObject> gameObject)
 {
+	if (gameObject->m_Name == "Camera")
+	{
+		SetMainCamera(gameObject);
+	}
 	m_GameObjects[gameObject->m_Name] = gameObject;
 }
 
@@ -19,6 +24,11 @@ void Scene::RemoveGameObject(std::shared_ptr<GameObject> gameObject)
 	{
 		m_GameObjects.erase(gameObject->m_Name);
 	}
+}
+
+void Scene::SetMainCamera(std::shared_ptr<GameObject> gameObject)
+{
+	m_Camera = dynamic_cast<CameraObject*>(gameObject.get());
 }
 
 void Scene::Serialize(nlohmann::json& j) const
