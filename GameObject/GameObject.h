@@ -56,8 +56,8 @@ public:
 		return nullptr;
 	}
 
-	void Update(float deltaTime);
-	void Render(std::vector<RenderInfo>& renderInfo);
+	virtual void Update(float deltaTime);
+	virtual void Render(std::vector<RenderInfo>& renderInfo);
 
 	TransformComponent* RenderPosition();		//테스트용
 	SpriteRenderer* RenderTexture();

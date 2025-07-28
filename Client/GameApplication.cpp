@@ -7,6 +7,9 @@
 #include "TransformComponent.h"
 #include "BoxColliderComponent.h"
 
+#include "PlayerObject.h"
+#include "RunPlayerController.h"
+
 bool GameApplication::Initialize()
 {
 	const wchar_t* className  = L"PDA";
@@ -20,12 +23,15 @@ bool GameApplication::Initialize()
 
 	m_Engine.GetRenderer().Initialize(m_hwnd);
 
-	m_Player = new GameObject(m_Engine.GetEventDispatcher());
+	m_Player = new PlayerObject(m_Engine.GetEventDispatcher());
  	m_Player->AddComponent<SpriteRenderer>();
  	TransformComponent* trans = m_Player->GetComponent<TransformComponent>();
  	trans->SetPosition({ 200.0f, 400.0f });
-	m_Engine.GetEventDispatcher().AddListener(EventType::KeyDown, trans);
-	m_Engine.GetEventDispatcher().AddListener(EventType::KeyUp, trans);
+	//RunPlayerController* controller = m_Player->GetComponent<RunPlayerController>();
+	//m_Engine.GetEventDispatcher().AddListener(EventType::KeyDown, trans);
+	//m_Engine.GetEventDispatcher().AddListener(EventType::KeyUp, trans);
+	//m_Engine.GetEventDispatcher().AddListener(EventType::KeyDown, controller);
+	//m_Engine.GetEventDispatcher().AddListener(EventType::KeyUp, controller);
  	BoxColliderComponent* bx = m_Player->AddComponent<BoxColliderComponent>();
  	bx->Start();
  
@@ -140,6 +146,8 @@ void GameApplication::Update()
 			playerCol->SetCollisionState(CollisionState::None);
 		}
 	}
+
+	m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F(1, 0, 0, 1, 10, 10));
 }
 
 void GameApplication::Render()
@@ -153,7 +161,7 @@ void GameApplication::Render()
  
 	m_Engine.GetRenderer().RenderBegin();
  
-	m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
+	//m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
  
  	//배경 그리기
  	if (m_Background != nullptr)
