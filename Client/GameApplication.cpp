@@ -160,6 +160,7 @@ void GameApplication::Render()
 	m_Engine.GetRenderer().RenderBegin();
  
 	//m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
+	// 
 	//렌더용 행렬 계산
 	D2D1::Matrix3x2F cameraTM = m_Camera->GetComponent<CameraComponent>()->GetViewMatrix();
 
@@ -176,19 +177,15 @@ void GameApplication::Render()
 	
  	TransformComponent trans = *m_Player->RenderPosition();
  	Math::Vector2F pos = trans.GetPosition();
+
  
-	D2D1_RECT_F destRect = D2D1::RectF(
-		pos.x - srcSize.width / 2,
-		pos.y - srcSize.height / 2,
-		pos.x + srcSize.width / 2,
-		pos.y + srcSize.height / 2);
 
 	//m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Translation(pos.x - srcSize.width/2, pos.y - srcSize.height / 2));
  
  	SpriteRenderer sp = *m_Player->RenderTexture();
  	ID2D1Bitmap1* bmp = *sp.GetTexture().GetAddressOf();
  
-	m_Engine.GetRenderer().DrawBitmap(bmp, destRect);
+	m_Engine.GetRenderer().DrawBitmap(bmp, srcRect, &trans, finalTM);
  
 	//m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
  	BoxColliderComponent* bx = m_Player->GetComponent<BoxColliderComponent>();
@@ -201,22 +198,6 @@ void GameApplication::Render()
  
  	trans = *m_Obstacle->RenderPosition();
  	pos = trans.GetPosition();
- 
-	//m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Translation(pos.x - srcSize.width / 2, pos.y - srcSize.height / 2));
- 
- 	sp = *m_Obstacle->RenderTexture();
- 	bmp = *sp.GetTexture().GetAddressOf();
- 
-	m_Engine.GetRenderer().DrawBitmap(bmp, srcRect);
- 
-	//m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
- 	bx = m_Obstacle->GetComponent<BoxColliderComponent>();
- 	bx->SetSize({ srcSize.width, srcSize.height });
- 	left = bx->GetCenter().x - bx->GetSize().x / 2;
- 	top = bx->GetCenter().y - bx->GetSize().y / 2;
- 	right = bx->GetCenter().x + bx->GetSize().x / 2;
- 	bottom = bx->GetCenter().y + bx->GetSize().y / 2;
-	m_Engine.GetRenderer().DrawRectangle(left, top, right, bottom, D2D1::ColorF::Black);
  
 	m_Engine.GetRenderer().RenderEnd();
 }

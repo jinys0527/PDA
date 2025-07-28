@@ -2,6 +2,7 @@
 #include "D2DRenderer.h"
 #include <algorithm>
 #include "RectTransformComponent.h"
+#include "TransformComponent.h"
 
 void D2DRenderer::Initialize(HWND hwnd)
 {
@@ -79,6 +80,16 @@ void D2DRenderer::DrawBitmap(ID2D1Bitmap1* bitmap, D2D1_RECT_F destRect, D2D1_RE
 		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, 
 		srcRect
 	);
+}
+
+void D2DRenderer::DrawBitmap(ID2D1Bitmap1* bitmap, D2D1_RECT_F dest, 
+	TransformComponent* trans, D2D1::Matrix3x2F viewTM)
+{
+	D2D1::Matrix3x2F finalTM = trans->GetWorldMatrix() * viewTM;
+
+	SetTransform(finalTM);
+
+	DrawBitmap(bitmap, dest);
 }
 
 void D2DRenderer::DrawMessage(const wchar_t* text, float left, float top, float width, float height, const D2D1::ColorF& color)

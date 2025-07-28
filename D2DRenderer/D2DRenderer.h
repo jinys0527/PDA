@@ -6,6 +6,7 @@
 #include "RenderData.h"
 using namespace Microsoft::WRL;
 
+class TransformComponent;
 
 class D2DRenderer
 {
@@ -28,6 +29,9 @@ public:
 	void DrawBitmap(ID2D1Bitmap1* bitmap, D2D1_RECT_F dest);
 
 	void DrawBitmap(ID2D1Bitmap1* bitmap, D2D1_RECT_F destRect, D2D1_RECT_F srcRect, float opacity = 1.0f);
+
+	void DrawBitmap(ID2D1Bitmap1* bitmap, D2D1_RECT_F dest, TransformComponent* trans, D2D1::Matrix3x2F viewTM);
+
 
 	void DrawMessage(const wchar_t* text, float left, float top, float width, float height, const D2D1::ColorF& color);
 
