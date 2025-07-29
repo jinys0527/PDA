@@ -10,13 +10,14 @@ class D2DRenderer;
 class UITextComponent : public UIComponent
 {
 public:
+	static constexpr const char* StaticTypeName = "UITextComponent";
+	const char* GetTypeName() const override { return StaticTypeName; }
+
 	virtual ~UITextComponent() = default;
 	void SetText(const std::wstring& text);
 	void SetFontSize(float size);
 	void SetColor(const D2D1_COLOR_F& color);
 	void Render(D2DRenderer* renderer);
-
-	std::string GetTypeName() override { return "UITextComponent"; }
 
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;

@@ -30,6 +30,8 @@ class ColliderComponent : public Component, public IEventListener
 {
 	
 public:
+	static constexpr const char* StaticTypeName = "ColliderComponent";
+	const char* GetTypeName() const override { return StaticTypeName; }
 	virtual ~ColliderComponent() { OnDestroy(); }
 	virtual void Start();
 	void SetCenter(const Vec2F& center)
@@ -39,7 +41,7 @@ public:
 	const Vec2F& GetCenter() const {
 		return m_Center;
 	}
-	std::string GetTypeName() override { return "ColliderComponent"; }
+
 	void Update(float deltaTime) override;
 	void OnEvent(EventType type, const void* data) override;
 	virtual void OnDestroy();

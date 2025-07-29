@@ -2,6 +2,8 @@
 #include "Scene.h"
 #include "json.hpp"
 #include "GameObject.h"
+#include "CameraObject.h"
+#include <unordered_set>
 
 Scene::~Scene()
 {
@@ -9,6 +11,10 @@ Scene::~Scene()
 
 void Scene::AddGameObject(std::shared_ptr<GameObject> gameObject)
 {
+	if (gameObject->m_Name == "Camera")
+	{
+		SetMainCamera(gameObject);
+	}
 	m_GameObjects[gameObject->m_Name] = gameObject;
 }
 
@@ -19,6 +25,11 @@ void Scene::RemoveGameObject(std::shared_ptr<GameObject> gameObject)
 	{
 		m_GameObjects.erase(gameObject->m_Name);
 	}
+}
+
+void Scene::SetMainCamera(std::shared_ptr<GameObject> gameObject)
+{
+	m_Camera = dynamic_cast<CameraObject*>(gameObject.get());
 }
 
 void Scene::Serialize(nlohmann::json& j) const
@@ -34,11 +45,41 @@ void Scene::Serialize(nlohmann::json& j) const
 
 void Scene::Deserialize(const nlohmann::json& j)
 {
-	m_GameObjects.clear();
+	std::unordered_set<std::string> jsonNames;
 	for (const auto& gameObjectJson : j.at("gameObjects"))
 	{
-		auto gameObject = std::make_shared<GameObject>(m_EventDispatcher);
-		gameObject->Deserialize(gameObjectJson);
-		m_GameObjects[gameObject->m_Name] = std::move(gameObject);
+		jsonNames.insert(gameObjectJson.at("name").get<std::string>());
+	}
+
+	// 기존에 없어진 오브젝트 삭제
+	for (auto it = m_GameObjects.begin(); it != m_GameObjects.end(); )
+	{
+		if (jsonNames.find(it->first) == jsonNames.end())
+		{
+			it = m_GameObjects.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
+
+	// JSON 오브젝트 별로 기존 오브젝트가 있으면 Deserialize, 없으면 새 생성
+	for (const auto& gameObjectJson : j.at("gameObjects"))
+	{
+		std::string name = gameObjectJson.at("name");
+		auto it = m_GameObjects.find(name);
+		if (it != m_GameObjects.end())
+		{
+			// 기존 오브젝트가 있으면 내부 상태만 갱신
+			it->second->Deserialize(gameObjectJson);
+		}
+		else
+		{
+			// 없으면 새로 생성 후 추가
+			auto gameObject = std::make_shared<GameObject>(m_EventDispatcher);
+			gameObject->Deserialize(gameObjectJson);
+			m_GameObjects[name] = std::move(gameObject);
+		}
 	}
 }
