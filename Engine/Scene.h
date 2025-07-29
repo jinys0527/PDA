@@ -3,16 +3,18 @@
 #include <memory>
 #include <vector>
 #include "RenderData.h"
+#include "AssetManager.h"
 
 class NzWndBase;
 class GameObject;
+class CameraObject;
 
 class Scene
 {
 public:
 	friend class Editor;
 
-	Scene(EventDispatcher& eventDispatcher) : m_EventDispatcher(eventDispatcher) {}
+	Scene(EventDispatcher& eventDispatcher, AssetManager& assetManager) : m_EventDispatcher(eventDispatcher), m_AssetManager(assetManager) {}
 	virtual ~Scene();
 	virtual void Initialize() = 0;
 	virtual void Finalize() = 0;
@@ -27,11 +29,21 @@ public:
 	void AddGameObject(std::shared_ptr<GameObject> gameObject);
 	void RemoveGameObject(std::shared_ptr<GameObject> gameObject);
 
+	void SetMainCamera(std::shared_ptr<GameObject> gameObject);
+	CameraObject* GetMainCamera() { return m_Camera; }
+
 	void Serialize(nlohmann::json& j) const;
 	void Deserialize(const nlohmann::json& j);
+
+	void SetName(std::string name) { m_Name = name; }
+	std::string GetName() const { return m_Name; }
+
 protected:
 	std::unordered_map<std::string, std::shared_ptr<GameObject>> m_GameObjects;
 	EventDispatcher& m_EventDispatcher;
+	AssetManager& m_AssetManager;
+	CameraObject* m_Camera;
+	std::string m_Name;
 private:
 	Scene(const Scene&) = delete;
 	Scene& operator=(const Scene&) = delete;

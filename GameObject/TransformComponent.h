@@ -17,6 +17,9 @@ class TransformComponent : public Component, public IEventListener
 {
 	friend class Editor;
 public:
+	static constexpr const char* StaticTypeName = "TransformComponent";
+	const char* GetTypeName() const override { return StaticTypeName; }
+
 	using Vec2F = Math::Vector2F;
 	using Matrix3X2F = D2D1::Matrix3x2F;
 
@@ -65,7 +68,6 @@ public:
 	void SetPivotPreset(TransformPivotPreset preset, const D2D1_SIZE_F& size);
 	D2D1_POINT_2F GetPivotPoint() const { return m_Pivot; }
 
-	std::string GetTypeName() override { return "TransformComponent"; }
 	void Update(float deltaTime) override;
 	void OnEvent(EventType type, const void* data) override;
 
