@@ -31,6 +31,11 @@ private:
 	bool m_IsAPressed = false;
 	bool m_IsSPressed = false;
 	bool m_IsDPressed = false;
+	bool m_IsSpacePressed = false;
+	bool m_IsJump = false;
+	bool m_JumpStart = 0;
 
+	float m_Z;
+	float m_Velocity;
 };
 

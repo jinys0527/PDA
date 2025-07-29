@@ -161,6 +161,8 @@ void GameApplication::Render()
  
 	m_Engine.GetRenderer().RenderBegin();
  
+
+
 	//m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
  
  	//배경 그리기
@@ -172,6 +174,12 @@ void GameApplication::Render()
 		m_Engine.GetRenderer().DrawBitmap(m_Background.Get(), bgRect);
  	}
  
+	//std::vector<RenderInfo> renderInfo;
+
+	//m_Player->Render(renderInfo);
+
+	//m_Engine.GetRenderer().Draw(renderInfo);
+
  	TransformComponent trans = *m_Player->RenderPosition();
  	Math::Vector2F pos = trans.GetPosition();
  
@@ -209,7 +217,7 @@ void GameApplication::Render()
  	right = bx->GetCenter().x + bx->GetSize().x / 2;
  	bottom = bx->GetCenter().y + bx->GetSize().y / 2;
 	m_Engine.GetRenderer().DrawRectangle(left, top, right, bottom, D2D1::ColorF::Black);
- 
+
 	m_Engine.GetRenderer().RenderEnd();
 }
 

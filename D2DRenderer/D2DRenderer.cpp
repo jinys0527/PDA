@@ -134,6 +134,10 @@ void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
 			bmpSize.height
 		};
 
+		m_d2dContext->SetTransform(mat);
+
+		//m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());
+
 		m_d2dContext->DrawBitmap(
 			info.bitmap.Get(),
 			&destRect,
@@ -141,6 +145,8 @@ void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
 			D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
 			nullptr
 		);
+
+		m_d2dContext->DrawRectangle(&destRect, m_brush.Get());
 	}
 
 	m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());

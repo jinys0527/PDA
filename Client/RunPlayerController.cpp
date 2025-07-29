@@ -16,9 +16,39 @@ void RunPlayerController::Update(float deltaTime)
 	if (m_IsSPressed) delta.y += moveSpeed * deltaTime;
 	if (m_IsDPressed) delta.x += moveSpeed * deltaTime;
 
+	if (m_IsSpacePressed)
+	{
+		if (m_IsJump == false)
+		{
+			m_JumpStart = true;
+			m_IsJump = true;
+		}
+	}
+
+	if (m_JumpStart)
+	{
+		m_Velocity = 5.0f;// 나중에 점프력 변수 만들듯
+		m_JumpStart = false;
+	}
+
+	if (m_IsJump)
+	{
+		m_Velocity -= 0.1f;
+		m_Z += m_Velocity;// 나중에 gravity 변수 만들듯
+		if (m_Z <= 0)
+		{
+			m_Z = 0;
+			m_Velocity = 0;
+			m_IsJump = false;
+		}
+	}
+
+	delta.y = m_Z;
+
 	if (delta.x != 0 || delta.y != 0)
 	{
-		m_Owner->GetComponent<TransformComponent>()->Translate(delta);
+		//m_Owner->GetComponent<TransformComponent>()->Translate(delta);
+		m_Owner->GetComponent<TransformComponent>()->SetPosition(delta);
 	}
 
 	//m_Position.x += delta.x;
@@ -42,6 +72,7 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 		case 'A': m_IsAPressed = isDown; break;
 		case 'S': m_IsSPressed = isDown; break;
 		case 'D': m_IsDPressed = isDown; break;
+		case ' ': m_IsSpacePressed = isDown; break;
 		default: break;
 		}
 	}
@@ -58,6 +89,7 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 		case 'A': m_IsAPressed = isDown; break;
 		case 'S': m_IsSPressed = isDown; break;
 		case 'D': m_IsDPressed = isDown; break;
+		case ' ': m_IsSpacePressed = isDown; break;
 		default: break;
 		}
 	}
