@@ -122,7 +122,9 @@ void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
 	std::vector<RenderInfo> sortedInfo = renderInfo;
 	std::sort(sortedInfo.begin(), sortedInfo.end(), [](const RenderInfo& a, const RenderInfo& b) {return a.layer < b.layer; });
 
-	m_d2dContext->BeginDraw();
+	auto cameraTrans = m_Camera->GetComponent<TransformComponent>();
+	D2D1::Matrix3x2F cameraMatrix = cameraTrans->GetWorldMatrix();
+	cameraMatrix.Invert();
 
 	for (const auto& info : sortedInfo)
 	{
@@ -134,14 +136,19 @@ void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
 		// 앵커 + 피벗 계산
 		D2D1_SIZE_F bmpSize = info.bitmap->GetSize();
 
-		Math::Vector2F pos = CalcAnchorOffset(info.parentSize, info.anchor, info.anchoredPosition, info.sizeDelta, info.pivot); // min/max 기준 위치
-		Math::Vector2F pivotOffset = { info.size.x * info.pivot.x, info.size.y * info.pivot.y };
+// 		Math::Vector2F pos = CalcAnchorOffset(info.parentSize, info.anchor, info.anchoredPosition, info.sizeDelta, info.pivot); // min/max 기준 위치
+// 		Math::Vector2F pivotOffset = { info.size.x * info.pivot.x, info.size.y * info.pivot.y };
 
-		D2D1_MATRIX_3X2_F mat =
-			D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y) *
-			D2D1::Matrix3x2F::Scale(info.scale.x, info.scale.y) *
-			D2D1::Matrix3x2F::Rotation(info.rotation) *
-			D2D1::Matrix3x2F::Translation(pos.x, pos.y);
+		const auto& m = info.worldMatrix;
+		D2D1_MATRIX_3X2_F mat = {
+			m.m11, m.m12,
+			m.m21, m.m22,
+			m.dx,  m.dy
+		};
+
+		mat = cameraMatrix * mat;
+
+		m_d2dContext->SetTransform(mat); // 여기서 행렬 적용
 
 		D2D1_RECT_F destRect = {
 			0.0f, 0.0f,
@@ -160,7 +167,6 @@ void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
 
 	m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());
 
-	m_d2dContext->EndDraw();
 }
 
 Math::Vector2F D2DRenderer::CalcAnchorOffset(const Math::Vector2F& parentSize,

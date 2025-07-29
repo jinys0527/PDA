@@ -6,6 +6,7 @@
 #include "RenderData.h"
 using namespace Microsoft::WRL;
 
+
 class TransformComponent;
 class CameraObject;
 
@@ -68,6 +69,8 @@ public:
 
 	ID3D11RenderTargetView* GetD3DRenderTargetView() const { return m_d3dRenderTargetView.Get(); }
 
+	void SetCamera(CameraObject* camera) { m_Camera = camera; }
+
 private:
 	void CreateDeviceAndSwapChain(HWND hwnd);
 
@@ -79,6 +82,8 @@ private:
 
 private:
 	HWND m_hwnd = nullptr;
+
+	CameraObject* m_Camera;
 
 	ComPtr<ID3D11Device>			m_d3dDevice;
 	ComPtr<IDXGISwapChain1>			m_swapChain;

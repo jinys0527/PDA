@@ -6,8 +6,16 @@
 #include "SpriteRenderer.h"
 #include "TransformComponent.h"
 #include "BoxColliderComponent.h"
+
 #include "CameraComponent.h"
 #include "Background.h"
+
+#include <imgui.h>
+#include <imgui_impl_dx11.h>
+#include <imgui_impl_win32.h>
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 
 bool GameApplication::Initialize()
 {
@@ -19,11 +27,13 @@ bool GameApplication::Initialize()
 		return false;
 	}
 	
-
 	m_Engine.GetRenderer().Initialize(m_hwnd);
+	auto assetManager = m_Engine.GetAssetManager();
 
 	m_Player = new GameObject(m_Engine.GetEventDispatcher());
- 	m_Player->AddComponent<SpriteRenderer>();
+ 	auto sr = m_Player->AddComponent<SpriteRenderer>();
+	sr->SetAssetManager(&assetManager);
+
  	TransformComponent* trans = m_Player->GetComponent<TransformComponent>();
  	trans->SetPosition({ 200.0f, 300.0f });
 	m_Engine.GetEventDispatcher().AddListener(EventType::KeyDown, trans);
@@ -31,39 +41,42 @@ bool GameApplication::Initialize()
  	BoxColliderComponent* bx = m_Player->AddComponent<BoxColliderComponent>();
  	bx->Start();
  
-	// ƒ´∏ﬁ∂Û 
+	// Ïπ¥Î©îÎùº 
 	m_Camera = new CameraObject(m_Engine.GetEventDispatcher(), 1024, 800);
 	trans = m_Camera->GetComponent<TransformComponent>();
 	m_Engine.GetEventDispatcher().AddListener(EventType::KeyDown, trans);
 	m_Engine.GetEventDispatcher().AddListener(EventType::KeyUp, trans);
-	// end ƒ´∏ﬁ∂Û
+	// end Ïπ¥Î©îÎùº
 
  	m_Obstacle = new GameObject(m_Engine.GetEventDispatcher());
- 	m_Obstacle->AddComponent<SpriteRenderer>();
- 	trans = m_Obstacle->GetComponent < TransformComponent>();
+ 	sr = m_Obstacle->AddComponent<SpriteRenderer>();
+	sr->SetAssetManager(&assetManager);
+ 	trans = m_Obstacle->GetComponent<TransformComponent>();
  	trans->SetPosition({ 700.0f, 300.0f });
  	bx = m_Obstacle->AddComponent<BoxColliderComponent>();
  	bx->Start();
  
-	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
+
 	m_SceneManager.Initialize();
 	m_Camera = m_SceneManager.GetCamera();
 	m_Engine.GetRenderer().SetCamera(m_Camera);
-	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
+ 	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
+
  	assert(m_TestBitmap != nullptr && "Failed to load test bitmap.");
  
  	m_Background = m_Engine.GetAssetManager().LoadTexture(L"vecteezy", L"../Resource/vecteezy.png");
  	assert(m_Background != nullptr && "Failed to load background texture.");
  
  
- 	SpriteRenderer* sr = m_Player->GetComponent<SpriteRenderer>();
+ 	sr = m_Player->GetComponent<SpriteRenderer>();
  	sr->SetTexture(m_TestBitmap);
  
  
- 	sr = m_Obstacle->GetComponent< SpriteRenderer>();
+ 	sr = m_Obstacle->GetComponent<SpriteRenderer>();
  	sr->SetTexture(m_TestBitmap);
 	
-	//πÈ±◊∂ÛøÓµÂ µŒ∞≥
+
+	//Î∞±Í∑∏ÎùºÏö¥Îìú ÎëêÍ∞ú
 	for (auto& obj : m_BackgroundObj)
 	{
 		obj = new Background(m_Engine.GetEventDispatcher());
@@ -93,17 +106,17 @@ void GameApplication::Run()
 	{
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
-			if (false == m_Engine.GetInputManager().OnHandleMessage(msg))
-				TranslateMessage(&msg);
+			//if (false == m_Engine.GetInputManager().OnHandleMessage(msg))
+			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
 		else
 		{
-			m_Engine.UpdateTime();
-			Update();
-			m_Engine.UpdateInput();
-			UpdateLogic();
-			Render();
+ 			m_Engine.UpdateTime();
+ 			Update();
+ 			m_Engine.UpdateInput();
+ 			UpdateLogic();
+ 			Render();
 		}
 	}
 }
@@ -114,16 +127,26 @@ void GameApplication::Finalize()
 	{
 		delete m_Player;
 	}
-	if (m_Camera)
-		delete m_Camera;
+
 	if (m_Obstacle)
+	{
 		delete m_Obstacle;
+	}
 	__super::Destroy();
+
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
 
 }
 
 bool GameApplication::OnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam))
+	{
+		return true; // ImGuiÍ∞Ä Î©îÏãúÏßÄÎ•º Ï≤òÎ¶¨ÌñàÏúºÎ©¥ true Î∞òÌôò
+	}
+
 	return false;
 }
 
@@ -137,6 +160,7 @@ void GameApplication::UpdateLogic()
 
 void GameApplication::Update()
 {
+
 
 	// FixedUpdate
 	{
@@ -193,12 +217,15 @@ void GameApplication::Update()
 		}
 	}
 
-	//πÈ±◊∂ÛøÓµÂ æ˜µ•¿Ã∆Æ
+	//Î∞±Í∑∏ÎùºÏö¥Îìú ÏóÖÎç∞Ïù¥Ìä∏
 	for (auto& obj : m_BackgroundObj)
 	{
 		obj->Update(m_Engine.GetTimer().DeltaTime());
 	}
 	// 	m_Player->Update(m_Engine.GetTimer().DeltaTime());
+
+// 	m_Player->Update(m_Engine.GetTimer().DeltaTime());
+
 // 
 // 	auto* playerCol = m_Player->GetComponent<BoxColliderComponent>();
 // 	auto* obsCol = m_Obstacle->GetComponent<BoxColliderComponent>();
@@ -242,8 +269,9 @@ void GameApplication::Render()
 	m_Engine.GetRenderer().GetD2DContext()->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
 	m_Engine.GetRenderer().RenderBegin();
 
+
 	//------------------------------------
-	// ∑ª¥ıøÎ «‡∑ƒ ∞ËªÍ
+	// Î†åÎçîÏö© ÌñâÎ†¨ Í≥ÑÏÇ∞
 	D2D1::Matrix3x2F cameraTM = m_Camera->GetComponent<CameraComponent>()->GetViewMatrix();
 	D2D1::Matrix3x2F renderTM = D2D1::Matrix3x2F::Scale(1, -1) * D2D1::Matrix3x2F::Translation(0, 1080);
 	D2D1::Matrix3x2F finalTM = renderTM * cameraTM;
@@ -253,7 +281,7 @@ void GameApplication::Render()
 
 
 	//------------------------------------
-	// πË∞Ê ∏’¿˙ ∑ª¥ı
+	// Î∞∞Í≤Ω Î®ºÏ†Ä Î†åÎçî
 	SpriteRenderer sp;
 	TransformComponent trans;
 	ID2D1Bitmap1* bmp;
@@ -271,7 +299,7 @@ void GameApplication::Render()
 
 	//------------------------------------
 
-	// «√∑π¿ÃæÓ
+	// ÌîåÎ†àÏù¥Ïñ¥
 	//std::cout << m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dx
 	//	<< " " << m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dy
 	//	<< std::endl;
@@ -288,7 +316,7 @@ void GameApplication::Render()
 	BoxColliderComponent* bx = m_Player->GetComponent<BoxColliderComponent>();
 	bx->SetSize({ srcSize.width, srcSize.height });
 
-	// ¿Âæ÷π∞
+	// Ïû•Ïï†Î¨º
 	trans = *m_Obstacle->RenderPosition();
 	pos = trans.GetPosition();
 
@@ -301,7 +329,14 @@ void GameApplication::Render()
 	m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
 
 	m_SceneManager.Render();
-	//πË∞Ê ±◊∏Æ±‚
+	//Î∞∞Í≤Ω Í∑∏Î¶¨Í∏∞
+=======
+ 
+	m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
+ 
+	m_SceneManager.Render();
+ 	//Î∞∞Í≤Ω Í∑∏Î¶¨Í∏∞
+
 //   	if (m_Background != nullptr)
 //   	{
 //   		D2D1_SIZE_F bgSize = m_Background->GetSize();
@@ -363,7 +398,7 @@ void GameApplication::RenderImGUI()
 
 	if (pd3dDeviceContext == nullptr || rtvs[0] == nullptr)
 	{
-		return; // ∑ª¥ı∏µ ƒ¡≈ÿΩ∫∆Æ≥™ ∫‰∞° æ¯¿∏∏È ∏Æ≈œ
+		return; // Î†åÎçîÎßÅ Ïª®ÌÖçÏä§Ìä∏ÎÇò Î∑∞Í∞Ä ÏóÜÏúºÎ©¥ Î¶¨ÌÑ¥
 	}
 	m_Engine.GetRenderer().GetD3DContext()->OMSetRenderTargets(1, rtvs, nullptr);
 

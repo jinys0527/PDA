@@ -185,6 +185,7 @@ void TransformComponent::Deserialize(const nlohmann::json& j)
 	m_Rotation = j["rotation"].get<float>();
 	m_Scale.x = j["scale"]["x"].get<float>();
 	m_Scale.y = j["scale"]["y"].get<float>();
+	UpdateMatrices();
 }
 
 void TransformComponent::UpdateMatrices()
