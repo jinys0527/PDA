@@ -8,6 +8,9 @@ class RigidbodyComponent : public Component
 {
 	using Vec2F = Math::Vector2F;
 public:
+	static constexpr const char* StaticTypeName = "RigidbodyComponent";
+	const char* GetTypeName() const override { return StaticTypeName; }
+
 	RigidbodyComponent(float mass = 1.0f, bool isKinematic = false) : m_Mass(mass), m_IsKinematic(isKinematic), m_Velocity(0, 0), m_Force(0, 0), m_Gravity(0.0f, -9.8f), m_FrictionCoefficient(0.1f)
 	{
 	}
@@ -19,7 +22,6 @@ public:
 
 	void Update(float deltaTime) override;
 	void OnEvent(EventType type, const void* data) override;
-	std::string GetTypeName() override { return "RigidbodyComponent"; }
 
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;

@@ -9,14 +9,15 @@ class AnimationClip;
 class AnimationComponent : public Component
 {
 public:
+	static constexpr const char* StaticTypeName = "AnimationComponent";
+	const char* GetTypeName() const override { return StaticTypeName; }
+
 	void AddClip(const std::string& name, const AnimationClip* clip)
 	{
 		m_Clips[name] = clip;
 	}
 
 	void Play(const std::string& name, bool loop = true);
-
-	std::string GetTypeName() override { return "AnimationComponent"; }
 
 	void Update(float deltaTime) override;
 

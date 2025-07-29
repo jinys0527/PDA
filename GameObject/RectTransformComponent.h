@@ -32,6 +32,9 @@ class RectTransformComponent : public Component
 	using Mat3X2F = D2D1::Matrix3x2F;
 
 public:
+	static constexpr const char* StaticTypeName = "RectTransformComponent";
+	const char* GetTypeName() const override { return StaticTypeName; }
+
 	RectTransformComponent() = default;
 	RectTransformComponent(const Vec2F& position,
 		const Vec2F& size,
@@ -43,7 +46,6 @@ public:
 
 	void Update(float deltaTime) override;
 	void OnEvent(EventType type, const void* data) override;
-	std::string GetTypeName() override { return "RectTransformComponent"; }
 
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;
