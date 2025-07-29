@@ -6,8 +6,10 @@ class CameraComponent : public Component
 {
 	friend class CameraObject;
 public:
+	static constexpr const char* StaticTypeName = "CameraComponent";
+	const char* GetTypeName() const override { return StaticTypeName; }
+
 	virtual ~CameraComponent() = default;
-	std::string GetTypeName() override { return "CameraComponent"; }
 	void Update(float deltaTime) override;
 	void OnEvent(EventType type, const void* data) override;
 

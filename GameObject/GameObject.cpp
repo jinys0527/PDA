@@ -19,8 +19,8 @@ void GameObject::Update(float deltaTime)
 
 void GameObject::Render(std::vector<RenderInfo>& renderInfo)
 {
-	auto it = m_Components.find(typeid(SpriteRenderer));
-	auto it2 = m_Components.find(typeid(UIImageComponent));
+	auto it = m_Components.find(SpriteRenderer::StaticTypeName);
+	auto it2 = m_Components.find(UIImageComponent::StaticTypeName);
 
 	if (it != m_Components.end())
 	{
@@ -60,7 +60,7 @@ TransformComponent* GameObject::RenderPosition()
 	if (sr != nullptr)
 	{
 		//sr->Render();
-		auto it = m_Components.find(typeid(TransformComponent));
+		auto it = m_Components.find(TransformComponent::StaticTypeName);
 		if (it != m_Components.end()) {
 			return dynamic_cast<TransformComponent*>(it->second.get());
 		}
@@ -70,7 +70,7 @@ TransformComponent* GameObject::RenderPosition()
 
 SpriteRenderer* GameObject::RenderTexture()
 {
-	auto it = m_Components.find(typeid(SpriteRenderer));
+	auto it = m_Components.find(SpriteRenderer::StaticTypeName);
 	if (it != m_Components.end())
 	{
 		return dynamic_cast<SpriteRenderer*>(it->second.get());
@@ -94,16 +94,31 @@ void GameObject::Serialize(nlohmann::json& j) const
 void GameObject::Deserialize(const nlohmann::json& j)
 {
 	m_Name = j.at("name");
-	m_Components.clear();
 
 	for (const auto& compJson : j.at("components"))
 	{
 		std::string typeName = compJson.at("type");
-		auto comp = ComponentFactory::Instance().Create(typeName);
-		if (comp)
+
+		// 기존 컴포넌트가 있으면 찾아서 갱신
+		auto it = std::find_if(m_Components.begin(), m_Components.end(),
+			[&](const auto& pair)
+			{
+				return pair.second->GetTypeName() == typeName;
+			});
+
+		if (it != m_Components.end())
 		{
-			comp->Deserialize(compJson.at("data"));
-			AddComponent(std::move(comp));
+			it->second->Deserialize(compJson.at("data"));
+		}
+		else
+		{
+			// 없으면 새로 생성 후 추가
+			auto comp = ComponentFactory::Instance().Create(typeName);
+			if (comp)
+			{
+				comp->Deserialize(compJson.at("data"));
+				AddComponent(std::move(comp));
+			}
 		}
 	}
 }

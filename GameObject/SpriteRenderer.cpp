@@ -1,5 +1,6 @@
 #include "SpriteRenderer.h"
 #include <filesystem>
+#include "AssetManager.h"
 
 void SpriteRenderer::SetPivotPreset(SpritePivotPreset spp, const D2D1_SIZE_F& size)
 {
@@ -21,10 +22,6 @@ void SpriteRenderer::SetPivotPreset(SpritePivotPreset spp, const D2D1_SIZE_F& si
 		m_Pivot = { size.width, size.height };
 		break;
 	}
-}
-
-SpriteRenderer::SpriteRenderer() : m_FlipX(false), m_FlipY(false)
-{
 }
 
 void SpriteRenderer::Update(float deltaTime)
@@ -49,6 +46,10 @@ void SpriteRenderer::Deserialize(const nlohmann::json& j)
 	m_Path = j["path"].get<std::string>();
 	m_FlipX = j["filpX"].get<bool>();
 	m_FlipY = j["filpY"].get<bool>();
+
+	std::wstring key(m_TextureKey.begin(), m_TextureKey.end());
+
+	m_Sprite = m_AssetManager->LoadTexture(key, m_Path);
 }
 
 void SpriteRenderer::SetTexture(Microsoft::WRL::ComPtr<ID2D1Bitmap1> texture)

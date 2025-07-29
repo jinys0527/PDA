@@ -19,35 +19,32 @@ class GameObject
 	friend class Editor;
 	friend class Scene;
 	friend class TestScene;
+	friend class TitleScene;
 public:
 	GameObject(EventDispatcher& eventDispatcher);
 	virtual ~GameObject() = default;
+
 	template<typename T, typename... Args>
 	T* AddComponent(Args&&... args)
 	{
-		static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
-
+		static_assert(std::is_constructible_v<T, Args...>, "Invalid constructor arguments for T.");
 		auto comp = std::make_unique<T>(std::forward<Args>(args)...);
-
 		comp->SetOwner(this);
-
 		T* ptr = comp.get();
-
-		m_Components[typeid(T)] = std::move(comp);
-
+		m_Components[std::string(T::StaticTypeName)] = std::move(comp);
 		return ptr;
 	}
 
 	void AddComponent(std::unique_ptr<Component> comp)	//Deserialize¿ë
 	{
 		comp->SetOwner(this);
-		m_Components[typeid(*comp)] = std::move(comp);
+		m_Components[comp->GetTypeName()] = std::move(comp);
 	}
 
 	template<typename T>
 	T* GetComponent() const 
 	{
-		auto it = m_Components.find(typeid(T));
+		auto it = m_Components.find(T::StaticTypeName);
 		if (it != m_Components.end())
 		{
 			return static_cast<T*>(it->second.get());
@@ -72,7 +69,7 @@ public:
 	EventDispatcher& GetEventDispatcher() const { return m_EventDispatcher; }
 protected:
 	std::string m_Name;
-	std::unordered_map<std::type_index, std::unique_ptr<Component>> m_Components;
+	std::unordered_map<std::string, std::unique_ptr<Component>> m_Components;
 	TransformComponent* m_Transform;
 	EventDispatcher& m_EventDispatcher;
 };

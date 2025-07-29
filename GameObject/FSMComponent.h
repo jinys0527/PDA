@@ -5,10 +5,11 @@
 
 class FSMComponent : public Component
 {
-public:
+public:	
+	static constexpr const char* StaticTypeName = "FSMComponent";
+	const char* GetTypeName() const override { return StaticTypeName; }
 	void Update(float deltaTime) override;
 	void OnEvent(EventType type, const void* data) override;
-	std::string GetTypeName() override { return "FSMComponent"; }
 
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;

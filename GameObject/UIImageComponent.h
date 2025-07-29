@@ -8,12 +8,13 @@ class D2DRenderer;
 class UIImageComponent : public UIComponent
 {
 public:
+	static constexpr const char* StaticTypeName = "UIImageComponent";
+	const char* GetTypeName() const override { return StaticTypeName; }
+
 	virtual ~UIImageComponent() = default;
 	void SetBitmap(Microsoft::WRL::ComPtr<ID2D1Bitmap1> bitmap);
 	void SetUV(const D2D1_RECT_F& sourceRect);
 	void Render(D2DRenderer* renderer);
-
-	std::string GetTypeName() override { return "UIImageComponent"; }
 
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;

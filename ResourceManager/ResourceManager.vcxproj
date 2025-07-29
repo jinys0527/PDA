@@ -150,9 +150,6 @@
     <ProjectReference Include="..\D2DRenderer\D2DRenderer.vcxproj">
       <Project>{9ff2b6a5-f095-40ab-9553-0fa7ee84593f}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\GameObject\GameObject.vcxproj">
-      <Project>{27a8092d-9702-4ab5-9e74-0a204595aad5}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

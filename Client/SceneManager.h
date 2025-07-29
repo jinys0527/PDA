@@ -10,6 +10,7 @@
 
 class SceneManager
 {
+	friend class Editor;
 public:
 	SceneManager(D2DRenderer& renderer, EventDispatcher& eventDispatcher, AssetManager& assetManager) : m_Renderer(renderer), m_EventDispatcher(eventDispatcher), m_AssetManager(assetManager){ }
 	~SceneManager() = default;

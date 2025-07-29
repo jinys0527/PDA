@@ -12,6 +12,7 @@ void TestScene::Initialize()
 	auto trans = gameObject->GetComponent<TransformComponent>();
 	trans->SetPosition({ 300.0f, 300.0f });
 	auto sr = gameObject->AddComponent<SpriteRenderer>();
+	sr->SetAssetManager(&m_AssetManager);
 	auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
 	sr->SetPath("../Resource/cat.png");
 	sr->SetTextureKey("cat_texture");
@@ -21,6 +22,7 @@ void TestScene::Initialize()
 	auto trans2 = gameObject2->GetComponent<TransformComponent>();
 	trans2->SetPosition({ 800.0f, 500.0f });
 	auto sr2 = gameObject2->AddComponent<SpriteRenderer>();
+	sr2->SetAssetManager(&m_AssetManager);
 	sr2->SetPath("../Resource/cat.png");
 	sr2->SetTextureKey("cat_texture");
 
@@ -28,6 +30,7 @@ void TestScene::Initialize()
 	cameraObject->m_Name = "Camera";
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
 	trans3->SetPosition({ 960.0f, 540.0f });
+	SetMainCamera(cameraObject);
 
 	sr->SetTexture(bitmap);
 	sr2->SetTexture(bitmap);

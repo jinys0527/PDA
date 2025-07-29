@@ -35,11 +35,15 @@ public:
 	void Serialize(nlohmann::json& j) const;
 	void Deserialize(const nlohmann::json& j);
 
+	void SetName(std::string name) { m_Name = name; }
+	std::string GetName() const { return m_Name; }
+
 protected:
 	std::unordered_map<std::string, std::shared_ptr<GameObject>> m_GameObjects;
 	EventDispatcher& m_EventDispatcher;
 	AssetManager& m_AssetManager;
 	CameraObject* m_Camera;
+	std::string m_Name;
 private:
 	Scene(const Scene&) = delete;
 	Scene& operator=(const Scene&) = delete;

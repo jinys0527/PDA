@@ -23,10 +23,12 @@ bool GameApplication::Initialize()
 	}
 	
 	m_Engine.GetRenderer().Initialize(m_hwnd);
-	
+	auto assetManager = m_Engine.GetAssetManager();
 
 	m_Player = new GameObject(m_Engine.GetEventDispatcher());
- 	m_Player->AddComponent<SpriteRenderer>();
+ 	auto sr = m_Player->AddComponent<SpriteRenderer>();
+	sr->SetAssetManager(&assetManager);
+
  	TransformComponent* trans = m_Player->GetComponent<TransformComponent>();
  	trans->SetPosition({ 200.0f, 400.0f });
 	m_Engine.GetEventDispatcher().AddListener(EventType::KeyDown, trans);
@@ -35,8 +37,9 @@ bool GameApplication::Initialize()
  	bx->Start();
  
  	m_Obstacle = new GameObject(m_Engine.GetEventDispatcher());
- 	m_Obstacle->AddComponent<SpriteRenderer>();
- 	trans = m_Obstacle->GetComponent < TransformComponent>();
+ 	sr = m_Obstacle->AddComponent<SpriteRenderer>();
+	sr->SetAssetManager(&assetManager);
+ 	trans = m_Obstacle->GetComponent<TransformComponent>();
  	trans->SetPosition({ 700.0f, 300.0f });
  	bx = m_Obstacle->AddComponent<BoxColliderComponent>();
  	bx->Start();
@@ -51,11 +54,11 @@ bool GameApplication::Initialize()
  	assert(m_Background != nullptr && "Failed to load background texture.");
  
  
- 	SpriteRenderer* sr = m_Player->GetComponent<SpriteRenderer>();
+ 	sr = m_Player->GetComponent<SpriteRenderer>();
  	sr->SetTexture(m_TestBitmap);
  
  
- 	sr = m_Obstacle->GetComponent< SpriteRenderer>();
+ 	sr = m_Obstacle->GetComponent<SpriteRenderer>();
  	sr->SetTexture(m_TestBitmap);
 	
 	ImGui::CreateContext();
@@ -130,39 +133,39 @@ void GameApplication::UpdateLogic()
 
 void GameApplication::Update()
 {
-	m_Player->Update(m_Engine.GetTimer().DeltaTime());
-
-	auto* playerCol = m_Player->GetComponent<BoxColliderComponent>();
-	auto* obsCol = m_Obstacle->GetComponent<BoxColliderComponent>();
-
-	bool isColliding = playerCol->BoxVsBox(*obsCol);
-	CollisionState prevState = playerCol->GetCollisionState();
-
-	if (isColliding)
-	{
-		if (prevState == CollisionState::None || prevState == CollisionState::Exit)
-		{
-			playerCol->SetCollisionState(CollisionState::Enter);
-			printf("Collision Enter\n");
-		}
-		else
-		{
-			playerCol->SetCollisionState(CollisionState::Stay);
-			printf("Collision Stay\n");
-		}
-	}
-	else
-	{
-		if (prevState == CollisionState::Enter || prevState == CollisionState::Stay)
-		{
-			playerCol->SetCollisionState(CollisionState::Exit);
-			printf("Collision Exit\n");
-		}
-		else
-		{
-			playerCol->SetCollisionState(CollisionState::None);
-		}
-	}
+// 	m_Player->Update(m_Engine.GetTimer().DeltaTime());
+// 
+// 	auto* playerCol = m_Player->GetComponent<BoxColliderComponent>();
+// 	auto* obsCol = m_Obstacle->GetComponent<BoxColliderComponent>();
+// 
+// 	bool isColliding = playerCol->BoxVsBox(*obsCol);
+// 	CollisionState prevState = playerCol->GetCollisionState();
+// 
+// 	if (isColliding)
+// 	{
+// 		if (prevState == CollisionState::None || prevState == CollisionState::Exit)
+// 		{
+// 			playerCol->SetCollisionState(CollisionState::Enter);
+// 			printf("Collision Enter\n");
+// 		}
+// 		else
+// 		{
+// 			playerCol->SetCollisionState(CollisionState::Stay);
+// 			printf("Collision Stay\n");
+// 		}
+// 	}
+// 	else
+// 	{
+// 		if (prevState == CollisionState::Enter || prevState == CollisionState::Stay)
+// 		{
+// 			playerCol->SetCollisionState(CollisionState::Exit);
+// 			printf("Collision Exit\n");
+// 		}
+// 		else
+// 		{
+// 			playerCol->SetCollisionState(CollisionState::None);
+// 		}
+// 	}
 }
 
 void GameApplication::Render()

@@ -22,6 +22,8 @@ void Editor::Update()
 		return;
 	}
 
+	std::string fileName = currentScene->GetName() + ".json";
+
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
@@ -31,13 +33,13 @@ void Editor::Update()
 			{
 				nlohmann::json j;
 				currentScene->Serialize(j);
-				std::ofstream ofs("scene.json");
+				std::ofstream ofs(fileName);
 				ofs << j.dump(4);
 			}
 			if (ImGui::MenuItem("Load Scene", "Ctrl+O"))
 			{
 				nlohmann::json j;
-				std::ifstream ifs("scene.json");
+				std::ifstream ifs(fileName);
 				ifs >> j;
 				currentScene->Deserialize(j);
 			}
@@ -53,14 +55,14 @@ void Editor::Update()
 	{
 		nlohmann::json j;
 		currentScene->Serialize(j);
-		std::ofstream ofs("scene.json");
+		std::ofstream ofs(fileName);
 		ofs << j.dump(4);
 	}
 
 	if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_O)) // Ctrl+O
 	{
 		nlohmann::json j;
-		std::ifstream ifs("scene.json");
+		std::ifstream ifs(fileName);
 		ifs >> j;
 		currentScene->Deserialize(j);
 	}
@@ -85,6 +87,21 @@ void Editor::Update()
 		cameraTrans->SetPosition(cameraPos);
 	}
 
+	std::string selectedScene = "";
+	ImGui::Begin("Scene List");
+	//Scene 리스트
+	for (const auto& [key, goPtr] : m_SceneManager.m_Scenes)
+	{
+		bool isSelected = (selectedScene == key);
+		if (ImGui::Selectable(key.c_str(), isSelected))
+		{
+			selectedScene = key;
+			m_SceneManager.SetCurrentScene(key);
+		}
+	}
+	ImGui::End();
+
+	ImGui::Begin("Hierarchy");
 	//GameObject 리스트
 	for (const auto& [key, goPtr] : currentScene->m_GameObjects)
 	{
@@ -96,11 +113,15 @@ void Editor::Update()
 		}
 		++index;
 	}
+	ImGui::End();
+
 
 	// 선택된 GameObject 편집
+	ImGui::Begin("Inspector");
+
 	if (!m_SelectedKey.empty())
 	{
-		auto& go = currentScene->m_GameObjects[m_SelectedKey];
+		auto go = currentScene->m_GameObjects[m_SelectedKey];
 		// go는 std::shared_ptr<GameObject>
 		char buf[128];
 		strncpy_s(buf, go->m_Name.c_str(), sizeof(buf));
@@ -110,6 +131,7 @@ void Editor::Update()
 			currentScene->RemoveGameObject(go);
 			go->m_Name = buf;
 			currentScene->AddGameObject(go);
+			m_SelectedKey = go->m_Name;
 		}
 
 		
@@ -134,9 +156,8 @@ void Editor::Update()
 				transform->SetScale(scale);
 			}
 		}
-		
-
 	}
+	ImGui::End();
 
 	ImGui::End();
 }

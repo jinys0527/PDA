@@ -5,6 +5,9 @@
 class AnimationController : public Component
 {
 public:
+	static constexpr const char* StaticTypeName = "AnimationController";
+	const char* GetTypeName() const override { return StaticTypeName; }
+
 	virtual ~AnimationController() = default;
 
 	bool IsValid() const { return m_Clip != nullptr; }
@@ -21,7 +24,6 @@ public:
 
 	void Update(float deltaTime) override;
 	void OnEvent(EventType type, const void* data) override;
-	std::string GetTypeName() override { return "AnimationController"; }
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;
 private:

@@ -5,34 +5,6 @@
                 {
                     "data": {
                         "position": {
-                            "x": 800.0,
-                            "y": 500.0
-                        },
-                        "rotation": 0.0,
-                        "scale": {
-                            "x": 1.0,
-                            "y": 1.0
-                        }
-                    },
-                    "type": "TransformComponent"
-                },
-                {
-                    "data": {
-                        "filpX": false,
-                        "filpY": false,
-                        "path": "../Resource/cat.png",
-                        "textureKey": "cat_texture"
-                    },
-                    "type": "SpriteRenderer"
-                }
-            ],
-            "name": "test2"
-        },
-        {
-            "components": [
-                {
-                    "data": {
-                        "position": {
                             "x": 300.0,
                             "y": 300.0
                         },
@@ -61,7 +33,7 @@
                 {
                     "data": {
                         "position": {
-                            "x": 960.0,
+                            "x": 1000.0,
                             "y": 540.0
                         },
                         "rotation": 0.0,
