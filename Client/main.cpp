@@ -2,8 +2,6 @@
 #include "Engine.h"
 #include "GameApplication.h"
 #include "SceneManager.h"
-#include "Editor.h"
-#include "imgui.h"
 
 namespace
 {
@@ -22,9 +20,8 @@ int main()
 
     Engine engine;
 	SceneManager sceneManager(engine.GetRenderer(), engine.GetEventDispatcher(), engine.GetAssetManager());
-    Editor editor(sceneManager);
 
- 	g_pMainApp = new GameApplication(engine, sceneManager, editor);
+ 	g_pMainApp = new GameApplication(engine, sceneManager);
  
  	if (!g_pMainApp->Initialize())
  	{

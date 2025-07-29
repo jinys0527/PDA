@@ -12,7 +12,7 @@ class CameraObject;
 class GameApplication : public NzWndBase
 {
 public:
-	GameApplication(Engine& engine, SceneManager& sceneManager, Editor& editor) : NzWndBase(), m_Engine(engine), m_SceneManager(sceneManager), m_Editor(editor) { }
+	GameApplication(Engine& engine, SceneManager& sceneManager) : NzWndBase(), m_Engine(engine), m_SceneManager(sceneManager) { }
 	virtual ~GameApplication() = default;
 
 	bool Initialize();
@@ -44,7 +44,7 @@ private:
 	// fixedupdate용 시간
 	float m_fFrameCount;
 
-	Editor& m_Editor;
+	//Editor& m_Editor;
 
 	Engine& m_Engine;
 	SceneManager& m_SceneManager;

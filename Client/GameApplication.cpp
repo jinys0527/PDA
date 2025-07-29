@@ -87,10 +87,10 @@ bool GameApplication::Initialize()
 
 	m_BackgroundObj[1]->GetComponent<TransformComponent>()->SetPosition({ 1920, 1080 });
 
-	ImGui::CreateContext();
-	ImGui_ImplWin32_Init(m_hwnd);
+	//ImGui::CreateContext();
+	//ImGui_ImplWin32_Init(m_hwnd);
 
-	ImGui_ImplDX11_Init(m_Engine.GetRenderer().GetD3DDevice(), m_Engine.GetRenderer().GetD3DContext());
+	//ImGui_ImplDX11_Init(m_Engine.GetRenderer().GetD3DDevice(), m_Engine.GetRenderer().GetD3DContext());
 
 	ID3D11RenderTargetView* rtvs[] = { m_Engine.GetRenderer().GetD3DRenderTargetView() };
 
@@ -134,9 +134,9 @@ void GameApplication::Finalize()
 	}
 	__super::Destroy();
 
-	ImGui_ImplDX11_Shutdown();
+	/*ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
+	ImGui::DestroyContext();*/
 
 }
 
@@ -323,9 +323,9 @@ void GameApplication::Render()
 
 	m_Engine.GetRenderer().RenderEnd();
  
-	m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
+	//m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
  
-	m_SceneManager.Render();
+	//m_SceneManager.Render();
  	//배경 그리기
 //   	if (m_Background != nullptr)
 //   	{
@@ -373,11 +373,11 @@ void GameApplication::Render()
 //   	bottom = bx->GetCenter().y + bx->GetSize().y / 2;
 //  	m_Engine.GetRenderer().DrawRectangle(left, top, right, bottom, D2D1::ColorF::Black);
 
-	m_Engine.GetRenderer().RenderEnd(false);
+	//m_Engine.GetRenderer().RenderEnd(false);
 
-	RenderImGUI();
+	//RenderImGUI();
 
-	m_Engine.GetRenderer().Present();
+	//m_Engine.GetRenderer().Present();
 }
 
 void GameApplication::RenderImGUI()
@@ -396,7 +396,7 @@ void GameApplication::RenderImGUI()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	m_Editor.Update();
+	//m_Editor.Update();
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
