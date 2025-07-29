@@ -30,10 +30,10 @@ D2D1::Matrix3x2F CameraComponent::GetViewMatrix()
 
 	auto pan = D2D1::Matrix3x2F::Translation(-position.x, -position.y);
 
-	auto scaleFlip = D2D1::Matrix3x2F::Scale(m_Zoom, -m_Zoom);
+	//auto scaleFlip = D2D1::Matrix3x2F::Scale(m_Zoom, -m_Zoom);
 
 	//auto center = D2D1::Matrix3x2F::Translation(m_Width * 0.5f, m_Height * 0.5f);
 
-	return pan * scaleFlip /** center*/;
+	return pan /* scaleFlip /** center*/;
 }
 

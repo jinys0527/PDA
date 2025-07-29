@@ -36,7 +36,10 @@ private:
 	GameObject* m_Player;
 	CameraObject* m_Camera;
 	GameObject* m_Obstacle;
-	GameObject* m_BackgroundObj;
+	std::array<GameObject*, 2> m_BackgroundObj;
+
+	// fixedupdate용 현재 시간
+	float m_fFrameCount;
 
 	Engine& m_Engine;
 	SceneManager& m_SceneManager;

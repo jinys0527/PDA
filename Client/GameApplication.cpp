@@ -14,7 +14,7 @@ bool GameApplication::Initialize()
 	const wchar_t* className  = L"PDA";
 	const wchar_t* windowName = L"PDA";
 
-	if (false == Create(className, windowName, 1024, 800))
+	if (false == Create(className, windowName, 1920, 1080))
 	{
 		return false;
 	}
@@ -45,11 +45,7 @@ bool GameApplication::Initialize()
  	bx = m_Obstacle->AddComponent<BoxColliderComponent>();
  	bx->Start();
  
-	// 백그라운드
-	m_BackgroundObj = new Background(m_Engine.GetEventDispatcher());
-	m_BackgroundObj->AddComponent<SpriteRenderer>();
- 
- 	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
+	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
  	assert(m_TestBitmap != nullptr && "Failed to load test bitmap.");
  
  	m_Background = m_Engine.GetAssetManager().LoadTexture(L"vecteezy", L"../Resource/vecteezy.png");
@@ -63,8 +59,17 @@ bool GameApplication::Initialize()
  	sr = m_Obstacle->GetComponent< SpriteRenderer>();
  	sr->SetTexture(m_TestBitmap);
 	
-	sr = m_BackgroundObj->GetComponent<SpriteRenderer>();
-	sr->SetTexture(m_Background);
+	//백그라운드 두개
+	for (auto& obj : m_BackgroundObj)
+	{
+		obj = new Background(m_Engine.GetEventDispatcher());
+		obj->AddComponent<SpriteRenderer>();
+		sr = obj->GetComponent<SpriteRenderer>();
+		sr->SetTexture(m_Background);
+	}
+	m_BackgroundObj[0]->GetComponent<TransformComponent>()->SetPosition({ 0, 1080 });
+
+	m_BackgroundObj[1]->GetComponent<TransformComponent>()->SetPosition({ 1920, 1080 });
 
 	return true;
 }
@@ -121,6 +126,20 @@ void GameApplication::UpdateLogic()
 
 void GameApplication::Update()
 {
+
+	// FixedUpdate
+	{
+		m_fFrameCount += m_Engine.GetTimer().DeltaTime();
+		while (m_fFrameCount >= 16.0f)
+		{
+
+			m_fFrameCount -= 16.0f;
+		}
+
+	}
+
+	std::cout << m_Engine.GetTimer().TotalTime() << std::endl;
+
 	m_Player->Update(m_Engine.GetTimer().DeltaTime());
 
 	Math::Vector2F pos = m_Camera->GetComponent<TransformComponent>()->GetPosition();
@@ -159,10 +178,12 @@ void GameApplication::Update()
 		}
 	}
 
-	if (Background* bg = dynamic_cast<Background*>(m_BackgroundObj))
+	//백그라운드 업데이트
+	for (auto& obj : m_BackgroundObj)
 	{
-		bg->Update(m_Engine.GetTimer().DeltaTime());
+		obj->Update(m_Engine.GetTimer().DeltaTime());
 	}
+
 }
 
 void GameApplication::Render()
@@ -174,29 +195,39 @@ void GameApplication::Render()
 	m_Engine.GetRenderer().GetD2DContext()->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
 	m_Engine.GetRenderer().RenderBegin();
 
+	//------------------------------------
 	// 렌더용 행렬 계산
 	D2D1::Matrix3x2F cameraTM = m_Camera->GetComponent<CameraComponent>()->GetViewMatrix();
-	D2D1::Matrix3x2F renderTM = D2D1::Matrix3x2F::Scale(1, -1) * D2D1::Matrix3x2F::Translation(0, 0);
+	D2D1::Matrix3x2F renderTM = D2D1::Matrix3x2F::Scale(1, -1) * D2D1::Matrix3x2F::Translation(0, 1080);
 	D2D1::Matrix3x2F finalTM = renderTM * cameraTM;
 
 	m_Engine.GetRenderer().SetTransform(finalTM);
+	//------------------------------------
+
 
 	//------------------------------------
 	// 배경 먼저 렌더
-	SpriteRenderer sp = *m_BackgroundObj->RenderTexture();
-	ID2D1Bitmap1* bmp = *sp.GetTexture().GetAddressOf();
+	SpriteRenderer sp;
+	TransformComponent trans;
+	ID2D1Bitmap1* bmp;
+	Math::Vector2F pos;
+	srcRect = D2D1::RectF(0.0f, 0.0f, 1920, 1080);
 
-	TransformComponent trans = *m_BackgroundObj->RenderPosition();
-	Math::Vector2F pos = trans.GetPosition();
-	srcRect = D2D1::RectF(0.0f, 0.0f, 1024, 800);
+	for (auto& obj : m_BackgroundObj)
+	{
+		sp = *obj->RenderTexture();
+		bmp = *sp.GetTexture().GetAddressOf();
+		trans = *obj->RenderPosition();
+		pos = trans.GetPosition();
+		m_Engine.GetRenderer().DrawBitmap(bmp, srcRect, &trans, finalTM);
+	}
 
-	m_Engine.GetRenderer().DrawBitmap(bmp, srcRect, &trans, finalTM);
 	//------------------------------------
 
 	// 플레이어
-	std::cout << m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dx
-		<< m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dy
-		<< std::endl;
+	//std::cout << m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dx
+	//	<< m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dy
+	//	<< std::endl;
 
 	trans = *m_Player->RenderPosition();
 	pos = trans.GetPosition();
