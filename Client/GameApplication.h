@@ -36,6 +36,8 @@ private:
 	GameObject* m_Player;
 	CameraObject* m_Camera;
 	GameObject* m_Obstacle;
+	GameObject* m_BackgroundObj;
+
 	Engine& m_Engine;
 	SceneManager& m_SceneManager;
 };
