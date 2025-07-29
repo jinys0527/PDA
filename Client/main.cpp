@@ -2,6 +2,8 @@
 #include "Engine.h"
 #include "GameApplication.h"
 #include "SceneManager.h"
+#include "Editor.h"
+#include "imgui.h"
 
 namespace
 {
@@ -19,16 +21,17 @@ int main()
 		return -1;
 
     Engine engine;
-	SceneManager sceneManager(engine.GetRenderer(), engine.GetEventDispatcher());
+	SceneManager sceneManager(engine.GetRenderer(), engine.GetEventDispatcher(), engine.GetAssetManager());
+    Editor editor(sceneManager);
 
- 	g_pMainApp = new GameApplication(engine, sceneManager);
+ 	g_pMainApp = new GameApplication(engine, sceneManager, editor);
  
  	if (!g_pMainApp->Initialize())
  	{
  		std::cerr << "Failed to initialize sample code." << std::endl;
  		return -1;
  	}
- 
+
  	g_pMainApp->Run();
  
  	g_pMainApp->Finalize();

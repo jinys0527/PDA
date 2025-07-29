@@ -4,6 +4,7 @@
 #include <wrl/client.h>
 #include "Engine.h"
 #include "SceneManager.h"
+#include "Editor.h"
 
 class GameObject;
 class CameraObject;
@@ -11,7 +12,7 @@ class CameraObject;
 class GameApplication : public NzWndBase
 {
 public:
-	GameApplication(Engine& engine, SceneManager& sceneManager) : NzWndBase(), m_Engine(engine), m_SceneManager(sceneManager) { }
+	GameApplication(Engine& engine, SceneManager& sceneManager, Editor& editor) : NzWndBase(), m_Engine(engine), m_SceneManager(sceneManager), m_Editor(editor) { }
 	virtual ~GameApplication() = default;
 
 	bool Initialize();
@@ -26,6 +27,7 @@ private:
 	void Update();
 
 	void Render();
+	void RenderImGUI();
 	
 	void OnResize(int width, int height) override;
 	void OnClose() override;
@@ -36,10 +38,13 @@ private:
 	GameObject* m_Player;
 	CameraObject* m_Camera;
 	GameObject* m_Obstacle;
+
 	std::array<GameObject*, 2> m_BackgroundObj;
 
-	// fixedupdate¿ë ÇöÀç ½Ã°£
+	// fixedupdateìš© ì‹œê°„
 	float m_fFrameCount;
+
+	Editor& m_Editor;
 
 	Engine& m_Engine;
 	SceneManager& m_SceneManager;
