@@ -136,6 +136,17 @@ void GameApplication::Finalize()
 	{
 		delete m_Obstacle;
 	}
+
+	if (m_Camera)
+	{
+		delete m_Camera;
+	}
+
+	for (auto background : m_BackgroundObj)
+	{
+		delete background;
+	}
+
 	__super::Destroy();
 
 	/*ImGui_ImplDX11_Shutdown();
