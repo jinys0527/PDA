@@ -17,6 +17,10 @@ void GameObject::Update(float deltaTime)
 	}
 }
 
+void GameObject::FixedUpdate()
+{
+}
+
 void GameObject::Render(std::vector<RenderInfo>& renderInfo)
 {
 	auto it = m_Components.find(typeid(SpriteRenderer));

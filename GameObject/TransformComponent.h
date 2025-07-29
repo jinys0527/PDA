@@ -60,9 +60,6 @@ public:
 	const Matrix3X2F& GetWorldMatrix();
 	const Matrix3X2F& GetLocalMatrix();
 
-	// ? 이거 뭐임? 내가 만들긴 했는데
-	void MultiplyMatrix(D2D1::Matrix3x2F cameraTM);
-
 	Matrix3X2F GetInverseWorldMatrix();
 
 	void SetPivotPreset(TransformPivotPreset preset, const D2D1_SIZE_F& size);

@@ -130,10 +130,16 @@ void GameApplication::Update()
 	// FixedUpdate
 	{
 		m_fFrameCount += m_Engine.GetTimer().DeltaTime();
-		while (m_fFrameCount >= 16.0f)
-		{
+		
+		std::cout << m_fFrameCount << std::endl;
 
-			m_fFrameCount -= 16.0f;
+		while (m_fFrameCount >= 0.016f)
+		{
+			for (auto& obj : m_BackgroundObj)
+			{
+				obj->FixedUpdate();
+			}
+			m_fFrameCount -= 0.016f;
 		}
 
 	}
@@ -142,7 +148,7 @@ void GameApplication::Update()
 
 	Math::Vector2F pos = m_Camera->GetComponent<TransformComponent>()->GetPosition();
 
-	m_Camera->GetComponent<TransformComponent>()->SetPosition({pos.x + 50.f * m_Engine.GetTimer().DeltaTime(), pos.y});
+	//m_Camera->GetComponent<TransformComponent>()->SetPosition({pos.x + 50.f * m_Engine.GetTimer().DeltaTime(), pos.y});
 
 	auto* playerCol = m_Player->GetComponent<BoxColliderComponent>();
 	auto* obsCol = m_Obstacle->GetComponent<BoxColliderComponent>();
@@ -223,9 +229,9 @@ void GameApplication::Render()
 	//------------------------------------
 
 	// 플레이어
-	std::cout << m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dx
-		<< " " << m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dy
-		<< std::endl;
+	//std::cout << m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dx
+	//	<< " " << m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dy
+	//	<< std::endl;
 
 	trans = *m_Player->RenderPosition();
 	pos = trans.GetPosition();

@@ -8,11 +8,12 @@ public:
 	Background() = default;
 	Background(EventDispatcher& eventDispatcher) : GameObject(eventDispatcher) 
 	{
-		m_moveSpeed = 5.0f;
+		m_moveSpeed = 1920.0f;
 	}
 
 	void ToggleScroll() { m_isScroll = !m_isScroll; }
 	void Update(float deltaTime) override;
+	void FixedUpdate() override;
 private:
 	void Scroll(float deltaTime);
 	void SetMoveSpeed(float moveSpeed) { m_moveSpeed = moveSpeed; }
