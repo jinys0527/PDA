@@ -40,6 +40,7 @@ private:
 
 	// fixedupdate용 현재 시간
 	float m_fFrameCount;
+	Editor& m_Editor;
 
 	Engine& m_Engine;
 	SceneManager& m_SceneManager;

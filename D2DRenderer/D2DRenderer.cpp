@@ -3,6 +3,7 @@
 #include <algorithm>
 #include "RectTransformComponent.h"
 #include "TransformComponent.h"
+#include "CameraObject.h"
 
 void D2DRenderer::Initialize(HWND hwnd)
 {

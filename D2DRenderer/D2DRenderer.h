@@ -7,6 +7,7 @@
 using namespace Microsoft::WRL;
 
 class TransformComponent;
+class CameraObject;
 
 class D2DRenderer
 {
