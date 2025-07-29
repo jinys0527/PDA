@@ -138,8 +138,6 @@ void GameApplication::Update()
 
 	}
 
-	std::cout << m_Engine.GetTimer().TotalTime() << std::endl;
-
 	m_Player->Update(m_Engine.GetTimer().DeltaTime());
 
 	Math::Vector2F pos = m_Camera->GetComponent<TransformComponent>()->GetPosition();
@@ -225,9 +223,9 @@ void GameApplication::Render()
 	//------------------------------------
 
 	// 플레이어
-	//std::cout << m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dx
-	//	<< m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dy
-	//	<< std::endl;
+	std::cout << m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dx
+		<< " " << m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dy
+		<< std::endl;
 
 	trans = *m_Player->RenderPosition();
 	pos = trans.GetPosition();

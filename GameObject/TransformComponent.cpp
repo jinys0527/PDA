@@ -121,9 +121,9 @@ void TransformComponent::Update(float deltaTime)
 	constexpr float moveSpeed = 100.0f; // 초당 이동 속도
 	D2D1_POINT_2F delta = { 0.0f, 0.0f };
 
-	if (m_IsWPressed) delta.y -= moveSpeed * deltaTime;
+	if (m_IsWPressed) delta.y += moveSpeed * deltaTime;
 	if (m_IsAPressed) delta.x -= moveSpeed * deltaTime;
-	if (m_IsSPressed) delta.y += moveSpeed * deltaTime;
+	if (m_IsSPressed) delta.y -= moveSpeed * deltaTime;
 	if (m_IsDPressed) delta.x += moveSpeed * deltaTime;
 
 	m_Position.x += delta.x;

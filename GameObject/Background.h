@@ -8,7 +8,7 @@ public:
 	Background() = default;
 	Background(EventDispatcher& eventDispatcher) : GameObject(eventDispatcher) 
 	{
-		m_moveSpeed = -5.0f;
+		m_moveSpeed = 5.0f;
 	}
 
 	void ToggleScroll() { m_isScroll = !m_isScroll; }
