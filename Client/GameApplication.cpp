@@ -40,10 +40,14 @@ bool GameApplication::Initialize()
  	bx->Start();
  
 	// 카메라 
-	m_Camera = new CameraObject(m_Engine.GetEventDispatcher(), 1024, 800);
+	m_Camera = new CameraObject(m_Engine.GetEventDispatcher(), 1920, 1080);
 	trans = m_Camera->GetComponent<TransformComponent>();
 	m_Engine.GetEventDispatcher().AddListener(EventType::KeyDown, trans);
 	m_Engine.GetEventDispatcher().AddListener(EventType::KeyUp, trans);
+
+	Math::Vector2F pos = trans->GetPosition();
+	std::cout << pos.x << " " << pos.y << std::endl;
+
 	// end 카메라
 
  	m_Obstacle = new GameObject(m_Engine.GetEventDispatcher());
@@ -57,8 +61,8 @@ bool GameApplication::Initialize()
 
 	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
 	m_SceneManager.Initialize();
-	m_Camera = m_SceneManager.GetCamera();
-	m_Engine.GetRenderer().SetCamera(m_Camera);
+	//m_Camera = m_SceneManager.GetCamera();
+	//m_Engine.GetRenderer().SetCamera(m_Camera);
  	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
 
  	assert(m_TestBitmap != nullptr && "Failed to load test bitmap.");
@@ -165,7 +169,7 @@ void GameApplication::Update()
 	{
 		m_fFrameCount += m_Engine.GetTimer().DeltaTime();
 		
-		std::cout << m_fFrameCount << std::endl;
+		//std::cout << m_fFrameCount << std::endl;
 
 		while (m_fFrameCount >= 0.016f)
 		{
@@ -287,10 +291,13 @@ void GameApplication::Render()
 
 	for (auto& obj : m_BackgroundObj)
 	{
+
 		sp = *obj->RenderTexture();
 		bmp = *sp.GetTexture().GetAddressOf();
 		trans = *obj->RenderPosition();
 		pos = trans.GetPosition();
+
+
 		m_Engine.GetRenderer().DrawBitmap(bmp, srcRect, &trans, finalTM);
 	}
 
