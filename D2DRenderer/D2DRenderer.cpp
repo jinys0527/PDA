@@ -83,6 +83,19 @@ void D2DRenderer::DrawBitmap(ID2D1Bitmap1* bitmap, D2D1_RECT_F destRect, D2D1_RE
 	);
 }
 
+void D2DRenderer::DrawBitmap(ID2D1Bitmap1* bitmap, D2D1_RECT_F dest, 
+	TransformComponent* trans, D2D1::Matrix3x2F viewTM)
+{
+
+	D2D1::Matrix3x2F worldTM = trans->GetWorldMatrix();
+	D2D1::Matrix3x2F renderTM = TM::MakeRenderMatrix(true);
+	D2D1::Matrix3x2F finalTM = renderTM* worldTM * viewTM;
+
+	SetTransform(finalTM);
+
+	DrawBitmap(bitmap, dest);
+}
+
 void D2DRenderer::DrawMessage(const wchar_t* text, float left, float top, float width, float height, const D2D1::ColorF& color)
 {
 	if (nullptr == m_textBrush)

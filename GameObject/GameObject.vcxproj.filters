@@ -90,6 +90,9 @@
     <ClInclude Include="AnimationController.h">
       <Filter>Component\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp">
@@ -145,6 +148,9 @@
     </ClCompile>
     <ClCompile Include="AnimationController.cpp">
       <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>Object\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
