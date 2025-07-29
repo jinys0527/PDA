@@ -5,6 +5,7 @@
 #include "TransformComponent.h"
 #include "CameraObject.h"
 
+
 void D2DRenderer::Initialize(HWND hwnd)
 {
 	m_hwnd = hwnd;
@@ -83,6 +84,19 @@ void D2DRenderer::DrawBitmap(ID2D1Bitmap1* bitmap, D2D1_RECT_F destRect, D2D1_RE
 	);
 }
 
+void D2DRenderer::DrawBitmap(ID2D1Bitmap1* bitmap, D2D1_RECT_F dest, 
+	TransformComponent* trans, D2D1::Matrix3x2F viewTM)
+{
+
+	D2D1::Matrix3x2F worldTM = trans->GetWorldMatrix();
+	D2D1::Matrix3x2F renderTM = TM::MakeRenderMatrix(true);
+	D2D1::Matrix3x2F finalTM = renderTM* worldTM * viewTM;
+
+	SetTransform(finalTM);
+
+	DrawBitmap(bitmap, dest);
+}
+
 void D2DRenderer::DrawMessage(const wchar_t* text, float left, float top, float width, float height, const D2D1::ColorF& color)
 {
 	if (nullptr == m_textBrush)
@@ -120,10 +134,10 @@ void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
 			continue;
 		}
 
-		// æﬁƒø + ««π˛ ∞ËªÍ
+		// ÏïµÏª§ + ÌîºÎ≤ó Í≥ÑÏÇ∞
 		D2D1_SIZE_F bmpSize = info.bitmap->GetSize();
 
-// 		Math::Vector2F pos = CalcAnchorOffset(info.parentSize, info.anchor, info.anchoredPosition, info.sizeDelta, info.pivot); // min/max ±‚¡ÿ ¿ßƒ°
+// 		Math::Vector2F pos = CalcAnchorOffset(info.parentSize, info.anchor, info.anchoredPosition, info.sizeDelta, info.pivot); // min/max Í∏∞Ï§Ä ÏúÑÏπò
 // 		Math::Vector2F pivotOffset = { info.size.x * info.pivot.x, info.size.y * info.pivot.y };
 
 		const auto& m = info.worldMatrix;
@@ -135,7 +149,7 @@ void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
 
 		mat = cameraMatrix * mat;
 
-		m_d2dContext->SetTransform(mat); // ø©±‚º≠ «‡∑ƒ ¿˚øÎ
+		m_d2dContext->SetTransform(mat); // Ïó¨Í∏∞ÏÑú ÌñâÎ†¨ Ï†ÅÏö©
 
 		D2D1_RECT_F destRect = {
 			0.0f, 0.0f,
@@ -162,7 +176,7 @@ Math::Vector2F D2DRenderer::CalcAnchorOffset(const Math::Vector2F& parentSize,
 	const Math::Vector2F& sizeDelta,
 	const Math::Vector2F& pivot)
 {
-	// Anchor øµø™ ∞ËªÍ
+	// Anchor ÏòÅÏó≠ Í≥ÑÏÇ∞
 	Math::Vector2F anchorAreaMin = {
 		parentSize.x * anchor.minPoint.x,
 		parentSize.y * anchor.minPoint.y
@@ -178,13 +192,13 @@ Math::Vector2F D2DRenderer::CalcAnchorOffset(const Math::Vector2F& parentSize,
 		anchorAreaMax.y - anchorAreaMin.y
 	};
 
-	// √÷¡æ UI ≈©±‚ ∞ËªÍ
+	// ÏµúÏ¢Ö UI ÌÅ¨Í∏∞ Í≥ÑÏÇ∞
 	Math::Vector2F size = {
 		anchorAreaSize.x + sizeDelta.x,
 		anchorAreaSize.y + sizeDelta.y
 	};
 
-	// √÷¡æ ¿ßƒ° ∞ËªÍ
+	// ÏµúÏ¢Ö ÏúÑÏπò Í≥ÑÏÇ∞
 	Math::Vector2F finalPos = {
 		anchorAreaMin.x + anchoredPosition.x - size.x * pivot.x,
 		anchorAreaMin.y + anchoredPosition.y - size.y * pivot.y

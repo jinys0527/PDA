@@ -6,6 +6,8 @@ class CameraComponent : public Component
 {
 	friend class CameraObject;
 public:
+	CameraComponent() = default;
+	CameraComponent(const float width, const float height);
 	virtual ~CameraComponent() = default;
 	std::string GetTypeName() override { return "CameraComponent"; }
 	void Update(float deltaTime) override;
@@ -13,9 +15,14 @@ public:
 
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;
+
+	D2D1::Matrix3x2F GetViewMatrix();
+	
 protected:
 	float m_Width;
 	float m_Height;
+
+	float m_Zoom = 1;
 };
 
 REGISTER_COMPONENT(CameraComponent);
