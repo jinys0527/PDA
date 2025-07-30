@@ -103,7 +103,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon; $(SolutionDir)D2DRenderer; $(SolutionDir)ImGUIDX11; $(SolutionDir)Event; $(SolutionDir)ResourceManager; $(SolutionDir)GameObject; $(SolutionDir)Client;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon; $(SolutionDir)D2DRenderer; $(SolutionDir)ImGUIDX11; $(SolutionDir)Event; $(SolutionDir)ResourceManager; $(SolutionDir)GameObject; $(SolutionDir)Client; $(SolutionDir)AI;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -152,6 +152,9 @@
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AI\AI.vcxproj">
+      <Project>{caef7820-a7a9-4733-b1b2-c39189190480}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\D2DCommon\D2DCommon.vcxproj">
       <Project>{2a34c5ab-2844-40c0-8720-9745743e797b}</Project>
     </ProjectReference>
