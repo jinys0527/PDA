@@ -9,6 +9,11 @@
 
 #include "CameraComponent.h"
 #include "Background.h"
+#include <imgui.h>
+#include <imgui_impl_dx11.h>
+#include <imgui_impl_win32.h>
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -30,6 +35,7 @@ bool GameApplication::Initialize()
 	}
 	
 	m_Engine.GetRenderer().Initialize(m_hwnd);
+
 	auto assetManager = m_Engine.GetAssetManager();
 
 	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
@@ -99,7 +105,7 @@ bool GameApplication::OnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 {
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam))
 	{
-		return true; // ImGui°¡ ¸Þ½ÃÁö¸¦ Ã³¸®ÇßÀ¸¸é true ¹ÝÈ¯
+		return true; // ImGuiê°€ ë©”ì‹œì§€ë¥¼ ì²˜ë¦¬í–ˆìœ¼ë©´ true ë°˜í™˜
 	}
 
 	return false;
@@ -116,6 +122,16 @@ void GameApplication::UpdateLogic()
 void GameApplication::Update()
 {
 	m_SceneManager.Update(m_Engine.GetTimer().DeltaTime());
+	// FixedUpdate
+	{
+
+		while (m_fFrameCount >= 0.016f)
+		{
+			m_fFrameCount -= 0.016f;
+		}
+
+	}
+
 }
 
 void GameApplication::Render()
@@ -127,9 +143,7 @@ void GameApplication::Render()
 	m_SceneManager.Render();
 
 	m_Engine.GetRenderer().RenderEnd(false);
-
-	//RenderImGUI();
-
+  
 	m_Engine.GetRenderer().Present();
 }
 
@@ -141,7 +155,7 @@ void GameApplication::RenderImGUI()
 
 	if (pd3dDeviceContext == nullptr || rtvs[0] == nullptr)
 	{
-		return;// ·»´õ¸µ ÄÁÅØ½ºÆ®³ª ºä°¡ ¾øÀ¸¸é ¸®ÅÏ
+		return; // ë Œë”ë§ ì»¨í…ìŠ¤íŠ¸ë‚˜ ë·°ê°€ ì—†ìœ¼ë©´ ë¦¬í„´
 	}
 	m_Engine.GetRenderer().GetD3DContext()->OMSetRenderTargets(1, rtvs, nullptr);
 
