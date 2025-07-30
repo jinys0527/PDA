@@ -21,6 +21,9 @@ void RigidbodyComponent::Integrate(float deltaTime)
 	if (m_IsKinematic || !m_Transform)
 		return;
 
+	if (m_Force.y >= 3.0f)
+		m_Force = m_Force;
+
 	//중력 적용
 	Vec2F totalForce = m_Force + m_Gravity * m_Mass;
 
@@ -34,7 +37,7 @@ void RigidbodyComponent::Integrate(float deltaTime)
 
 	Vec2F acceleration = (m_Mass > 0.0f) ? (totalForce / m_Mass) : Vec2F(0, 0);
 	m_Velocity += acceleration * deltaTime;
-	Vec2F newPos = m_Transform->GetPosition() + m_Velocity * deltaTime;
+	Vec2F newPos = m_Transform->GetPosition() + m_Velocity;// 여기서 한번더 deltatime 곱하던데 그러면 delta 두번 곱한거라 엄청 느려졌음
 	m_Transform->SetPosition(newPos);
 
 	// 너무 느리면 정지 (정밀도 오차 방지)
