@@ -20,9 +20,9 @@ void RunPlayerController::Update(float deltaTime)
 	constexpr float moveSpeed = 500.0f; // 초당 이동 속도
 	Math::Vector2F delta = { 0.0f, 0.0f };
 
-	//if (m_IsWPressed) delta.y -= moveSpeed * deltaTime;
+	if (m_IsWPressed) m_Z += moveSpeed * deltaTime;
 	if (m_IsAPressed) delta.x -= moveSpeed * deltaTime;
-	//if (m_IsSPressed) delta.y += moveSpeed * deltaTime;
+	if (m_IsSPressed) m_Z -= moveSpeed * deltaTime;
 	if (m_IsDPressed) delta.x += moveSpeed * deltaTime;
 
 	if (m_IsSpacePressed && m_IsSlide == false)

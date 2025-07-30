@@ -30,6 +30,11 @@ public:
 	virtual void Serialize(nlohmann::json& j) const override;
 	virtual void Deserialize(const nlohmann::json& j) override;
 
+	float GetZ()
+	{
+		return m_Z;
+	}
+
 private:
 	// 입력 처리
 	bool m_IsWPressed = false;

@@ -30,44 +30,37 @@ void PlayerObject::Update(float deltaTime)
 
 void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 {
-	//auto it = m_Components.find(typeid(SpriteRenderer));// 아직 기존과 동일 아마 그림자 그리는 것 추후에 추가할 듯
-	//auto it2 = m_Components.find(typeid(UIImageComponent));
+	auto it = m_Components.find(SpriteRenderer::StaticTypeName);
+	auto it2 = m_Components.find(UIImageComponent::StaticTypeName);
 
-	//if (it != m_Components.end())
-	//{
-	//	SpriteRenderer* sprite = dynamic_cast<SpriteRenderer*>(it->second.get());
-	//	if (sprite)
-	//	{
-	//		RenderInfo info;
-	//		info.bitmap = sprite->GetTexture();
-	//		//info.position = m_Transform->GetPosition();
-	//		//info.scale = m_Transform->GetScale();
-	//		info.parentSize.x = 0;
-	//		info.parentSize.y = 0;
-	//		info.sizeDelta.x = 0;
-	//		info.sizeDelta.y = 0;
-	//		info.anchoredPosition.x = 0;
-	//		info.anchoredPosition.y = 0;
-	//		//if (sprite->GetFlipX())
-	//		//	info.scale.x = -info.scale.x;
-	//		//if (sprite->GetFlipY())
-	//		//	info.scale.y = -info.scale.y;
-	//		//info.rotation = m_Transform->GetRotation();
-	//		info.pivot = sprite->GetPivot();
-	//		renderInfo.push_back(info);
-	//	}
-	//}
-	//else if (it2 != m_Components.end())
-	//{
-	//	UIImageComponent* image = dynamic_cast<UIImageComponent*>(it2->second.get());
-	//	if (image)
-	//	{
-	//		RenderInfo info;
-	//		renderInfo.push_back(info);
-	//	}
-	//}
-	//else
-	//{
-	//	return;
-	//}
+	if (it != m_Components.end())
+	{
+		SpriteRenderer* sprite = dynamic_cast<SpriteRenderer*>(it->second.get());
+		if (sprite)
+		{
+			RenderInfo info;
+			info.bitmap = sprite->GetTexture();
+			info.worldMatrix = m_Transform->GetWorldMatrix() * D2D1::Matrix3x2F::Translation(0, dynamic_cast<RunPlayerController*>(m_Components.find(RunPlayerController::StaticTypeName)->second.get())->GetZ());
+			info.pivot = sprite->GetPivot();
+			// UI가 아닌 일반 오브젝트 위치로 설정
+			info.anchor = Anchor{ {0.0f, 0.0f}, {0.0f, 0.0f} }; // (0,0)-(0,0) 고정값
+			info.anchoredPosition = m_Transform->GetPosition();
+			info.sizeDelta = { 0, 0 };
+			info.parentSize = { 0, 0 };
+			renderInfo.push_back(info);
+		}
+	}
+	else if (it2 != m_Components.end())
+	{
+		UIImageComponent* image = dynamic_cast<UIImageComponent*>(it2->second.get());
+		if (image)
+		{
+			RenderInfo info;
+			renderInfo.push_back(info);
+		}
+	}
+	else
+	{
+		return;
+	}
 }
