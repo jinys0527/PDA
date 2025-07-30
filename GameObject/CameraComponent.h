@@ -12,6 +12,10 @@ public:
 	static constexpr const char* StaticTypeName = "CameraComponent";
 	const char* GetTypeName() const override { return StaticTypeName; }
 
+/* // 확인 부탁
+	static constexpr const char* StaticTypeName = "CameraObject";
+	const char* GetTypeName() const override { return StaticTypeName; }
+*/
 	void Update(float deltaTime) override;
 	void OnEvent(EventType type, const void* data) override;
 
