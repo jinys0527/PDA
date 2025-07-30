@@ -36,7 +36,6 @@ private:
 	Microsoft::WRL::ComPtr<ID2D1Bitmap1>        m_Background;
 
 	GameObject* m_Player;
-	CameraObject* m_Camera;
 	GameObject* m_Obstacle;
 
 	std::array<GameObject*, 2> m_BackgroundObj;
