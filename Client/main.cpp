@@ -22,7 +22,7 @@ int main()
 
     Engine engine;
 	SceneManager sceneManager(engine.GetRenderer(), engine.GetEventDispatcher(), engine.GetAssetManager());
-    Editor editor(sceneManager);
+    Editor editor;
 
  	g_pMainApp = new GameApplication(engine, sceneManager, editor);
  

@@ -33,7 +33,7 @@ bool GameApplication::Initialize()
 	sr->SetAssetManager(&assetManager);
  	TransformComponent* trans = m_Player->GetComponent<TransformComponent>();
  	trans->SetPosition({ 200.0f, 400.0f });
-	//RunPlayerController* controller = m_Player->GetComponent<RunPlayerController>();
+	RunPlayerController* controller = m_Player->GetComponent<RunPlayerController>();
 	//m_Engine.GetEventDispatcher().AddListener(EventType::KeyDown, trans);
 	//m_Engine.GetEventDispatcher().AddListener(EventType::KeyUp, trans);
 	//m_Engine.GetEventDispatcher().AddListener(EventType::KeyDown, controller);
@@ -84,7 +84,7 @@ void GameApplication::Run()
 	{
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
-			//if (false == m_Engine.GetInputManager().OnHandleMessage(msg))
+			if (false == m_Engine.GetInputManager().OnHandleMessage(msg))
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
@@ -242,7 +242,7 @@ void GameApplication::Render()
  	bottom = bx->GetCenter().y + bx->GetSize().y / 2;
 	m_Engine.GetRenderer().DrawRectangle(left, top, right, bottom, D2D1::ColorF::Black);
 
-	m_Engine.GetRenderer().RenderEnd();
+	//m_Engine.GetRenderer().RenderEnd();
 
 //   	if (m_Background != nullptr)
 //   	{
