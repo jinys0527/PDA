@@ -131,8 +131,8 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 		case 'A': m_IsAPressed = isDown; break;
 		case 'S': m_IsSPressed = isDown; break;
 		case 'D': m_IsDPressed = isDown; break;
-		case ' ': m_IsSpacePressed = isDown; break;
-		case 16: m_IsShiftPressed = isDown; break;
+		case VK_SPACE : m_IsSpacePressed = isDown; break;
+		case VK_SHIFT : m_IsShiftPressed = isDown; break;
 		default: break;
 		}
 	}
@@ -149,8 +149,8 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 		case 'A': m_IsAPressed = isDown; break;
 		case 'S': m_IsSPressed = isDown; break;
 		case 'D': m_IsDPressed = isDown; break;
-		case ' ': m_IsSpacePressed = isDown; break;
-		case 16: m_IsShiftPressed = isDown; break;
+		case VK_SPACE : m_IsSpacePressed = isDown; break;
+		case VK_SHIFT : m_IsShiftPressed = isDown; break;
 		default: break;
 		}
 	}
