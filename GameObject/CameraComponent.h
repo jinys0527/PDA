@@ -9,7 +9,8 @@ public:
 	CameraComponent() = default;
 	CameraComponent(const float width, const float height);
 	virtual ~CameraComponent() = default;
-	std::string GetTypeName() override { return "CameraComponent"; }
+	static constexpr const char* StaticTypeName = "CameraObject";
+	const char* GetTypeName() const override { return StaticTypeName; }
 	void Update(float deltaTime) override;
 	void OnEvent(EventType type, const void* data) override;
 

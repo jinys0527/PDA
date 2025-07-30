@@ -12,7 +12,7 @@ class CameraObject;
 class GameApplication : public NzWndBase
 {
 public:
-	GameApplication(Engine& engine, SceneManager& sceneManager, Editor& editor) : NzWndBase(), m_Engine(engine), m_SceneManager(sceneManager), m_Editor(editor) { }
+	GameApplication(Engine& engine, SceneManager& sceneManager) : NzWndBase(), m_Engine(engine), m_SceneManager(sceneManager) { }
 	virtual ~GameApplication() = default;
 
 	bool Initialize();
@@ -36,12 +36,11 @@ private:
 	Microsoft::WRL::ComPtr<ID2D1Bitmap1>        m_Background;
 
 	GameObject* m_Player;
-	CameraObject* m_Camera;
 	GameObject* m_Obstacle;
 
 	std::array<GameObject*, 2> m_BackgroundObj;
 
-	// fixedupdate�� ���� �ð�
+	// fixedupdate용 시간
 	float m_fFrameCount;
 	Editor& m_Editor;
 

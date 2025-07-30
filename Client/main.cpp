@@ -2,8 +2,6 @@
 #include "Engine.h"
 #include "GameApplication.h"
 #include "SceneManager.h"
-#include "Editor.h"
-#include "imgui.h"
 
 namespace
 {
@@ -14,7 +12,7 @@ int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	//_CrtSetBreakAlloc(166);
+	//_CrtSetBreakAlloc(528);
 
 	HRESULT hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
 	if (FAILED(hr))
@@ -22,9 +20,8 @@ int main()
 
     Engine engine;
 	SceneManager sceneManager(engine.GetRenderer(), engine.GetEventDispatcher(), engine.GetAssetManager());
-    Editor editor(sceneManager);
 
- 	g_pMainApp = new GameApplication(engine, sceneManager, editor);
+ 	g_pMainApp = new GameApplication(engine, sceneManager);
  
  	if (!g_pMainApp->Initialize())
  	{
