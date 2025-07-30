@@ -6,6 +6,10 @@
 #include "SpriteRenderer.h"
 #include "TransformComponent.h"
 #include "BoxColliderComponent.h"
+
+#include "CameraComponent.h"
+#include "Background.h"
+
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
@@ -41,6 +45,13 @@ bool GameApplication::Initialize()
  	BoxColliderComponent* bx = m_Player->AddComponent<BoxColliderComponent>();
  	bx->Start();
  
+	// Ïπ¥Î©îÎùº 
+	m_Camera = new CameraObject(m_Engine.GetEventDispatcher(), 1024, 800);
+	trans = m_Camera->GetComponent<TransformComponent>();
+	m_Engine.GetEventDispatcher().AddListener(EventType::KeyDown, trans);
+	m_Engine.GetEventDispatcher().AddListener(EventType::KeyUp, trans);
+	// end Ïπ¥Î©îÎùº
+
  	m_Obstacle = new GameObject(m_Engine.GetEventDispatcher());
  	sr = m_Obstacle->AddComponent<SpriteRenderer>();
 	sr->SetAssetManager(&assetManager);
@@ -49,10 +60,12 @@ bool GameApplication::Initialize()
  	bx = m_Obstacle->AddComponent<BoxColliderComponent>();
  	bx->Start();
  
+
 	m_SceneManager.Initialize();
 	m_Camera = m_SceneManager.GetCamera();
 	m_Engine.GetRenderer().SetCamera(m_Camera);
  	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
+
  	assert(m_TestBitmap != nullptr && "Failed to load test bitmap.");
  
  	m_Background = m_Engine.GetAssetManager().LoadTexture(L"vecteezy", L"../Resource/vecteezy.png");
@@ -66,6 +79,19 @@ bool GameApplication::Initialize()
  	sr = m_Obstacle->GetComponent<SpriteRenderer>();
  	sr->SetTexture(m_TestBitmap);
 	
+
+	//Î∞±Í∑∏ÎùºÏö¥Îìú ÎëêÍ∞ú
+	for (auto& obj : m_BackgroundObj)
+	{
+		obj = new Background(m_Engine.GetEventDispatcher());
+		obj->AddComponent<SpriteRenderer>();
+		sr = obj->GetComponent<SpriteRenderer>();
+		sr->SetTexture(m_Background);
+	}
+	m_BackgroundObj[0]->GetComponent<TransformComponent>()->SetPosition({ 0, 1080 });
+
+	m_BackgroundObj[1]->GetComponent<TransformComponent>()->SetPosition({ 1920, 1080 });
+
 	ImGui::CreateContext();
 	ImGui_ImplWin32_Init(m_hwnd);
 
@@ -122,7 +148,7 @@ bool GameApplication::OnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 {
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam))
 	{
-		return true; // ImGui∞° ∏ﬁΩ√¡ˆ∏¶ √≥∏Æ«ﬂ¿∏∏È true π›»Ø
+		return true; // ImGuiÍ∞Ä Î©îÏãúÏßÄÎ•º Ï≤òÎ¶¨ÌñàÏúºÎ©¥ true Î∞òÌôò
 	}
 
 	return false;
@@ -138,112 +164,182 @@ void GameApplication::UpdateLogic()
 
 void GameApplication::Update()
 {
+
+
+	// FixedUpdate
+	{
+		m_fFrameCount += m_Engine.GetTimer().DeltaTime();
+		
+		std::cout << m_fFrameCount << std::endl;
+
+		while (m_fFrameCount >= 0.016f)
+		{
+			for (auto& obj : m_BackgroundObj)
+			{
+				obj->FixedUpdate();
+			}
+			m_fFrameCount -= 0.016f;
+		}
+
+	}
+
 	m_Player->Update(m_Engine.GetTimer().DeltaTime());
 
-	//auto* playerCol = m_Player->GetComponent<BoxColliderComponent>();
-	//auto* obsCol = m_Obstacle->GetComponent<BoxColliderComponent>();
+	Math::Vector2F pos = m_Camera->GetComponent<TransformComponent>()->GetPosition();
 
-	//bool isColliding = playerCol->BoxVsBox(*obsCol);
-	//CollisionState prevState = playerCol->GetCollisionState();
+	//m_Camera->GetComponent<TransformComponent>()->SetPosition({pos.x + 50.f * m_Engine.GetTimer().DeltaTime(), pos.y});
 
-	//if (isColliding)
-	//{
-	//	if (prevState == CollisionState::None || prevState == CollisionState::Exit)
-	//	{
-	//		playerCol->SetCollisionState(CollisionState::Enter);
-	//		printf("Collision Enter\n");
-	//	}
-	//	else
-	//	{
-	//		playerCol->SetCollisionState(CollisionState::Stay);
-	//		printf("Collision Stay\n");
-	//	}
-	//}
-	//else
-	//{
-	//	if (prevState == CollisionState::Enter || prevState == CollisionState::Stay)
-	//	{
-	//		playerCol->SetCollisionState(CollisionState::Exit);
-	//		printf("Collision Exit\n");
-	//	}
-	//	else
-	//	{
-	//		playerCol->SetCollisionState(CollisionState::None);
-	//	}
-	//}
+	auto* playerCol = m_Player->GetComponent<BoxColliderComponent>();
+	auto* obsCol = m_Obstacle->GetComponent<BoxColliderComponent>();
 
-	//m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F(1, 0, 0, 1, 10, 10));
+	bool isColliding = playerCol->BoxVsBox(*obsCol);
+	CollisionState prevState = playerCol->GetCollisionState();
+
+	if (isColliding)
+	{
+		if (prevState == CollisionState::None || prevState == CollisionState::Exit)
+		{
+			playerCol->SetCollisionState(CollisionState::Enter);
+			printf("Collision Enter\n");
+		}
+		else
+		{
+			playerCol->SetCollisionState(CollisionState::Stay);
+			printf("Collision Stay\n");
+		}
+	}
+	else
+	{
+		if (prevState == CollisionState::Enter || prevState == CollisionState::Stay)
+		{
+			playerCol->SetCollisionState(CollisionState::Exit);
+			printf("Collision Exit\n");
+		}
+		else
+		{
+			playerCol->SetCollisionState(CollisionState::None);
+		}
+	}
+
+	//Î∞±Í∑∏ÎùºÏö¥Îìú ÏóÖÎç∞Ïù¥Ìä∏
+	for (auto& obj : m_BackgroundObj)
+	{
+		obj->Update(m_Engine.GetTimer().DeltaTime());
+	}
+	// 	m_Player->Update(m_Engine.GetTimer().DeltaTime());
+
+// 	m_Player->Update(m_Engine.GetTimer().DeltaTime());
+
+// 
+// 	auto* playerCol = m_Player->GetComponent<BoxColliderComponent>();
+// 	auto* obsCol = m_Obstacle->GetComponent<BoxColliderComponent>();
+// 
+// 	bool isColliding = playerCol->BoxVsBox(*obsCol);
+// 	CollisionState prevState = playerCol->GetCollisionState();
+// 
+// 	if (isColliding)
+// 	{
+// 		if (prevState == CollisionState::None || prevState == CollisionState::Exit)
+// 		{
+// 			playerCol->SetCollisionState(CollisionState::Enter);
+// 			printf("Collision Enter\n");
+// 		}
+// 		else
+// 		{
+// 			playerCol->SetCollisionState(CollisionState::Stay);
+// 			printf("Collision Stay\n");
+// 		}
+// 	}
+// 	else
+// 	{
+// 		if (prevState == CollisionState::Enter || prevState == CollisionState::Stay)
+// 		{
+// 			playerCol->SetCollisionState(CollisionState::Exit);
+// 			printf("Collision Exit\n");
+// 		}
+// 		else
+// 		{
+// 			playerCol->SetCollisionState(CollisionState::None);
+// 		}
+// 	}
 }
 
 void GameApplication::Render()
 {
- 	D2D1_SIZE_F srcSize = m_TestBitmap->GetSize();
- 	D2D1_RECT_F srcRect = D2D1::RectF(0.0f, 0.0f, srcSize.width, srcSize.height);
- 
- 	m_Engine.GetRenderer().SetTarget();
- 
+	D2D1_SIZE_F srcSize = m_TestBitmap->GetSize();
+	D2D1_RECT_F srcRect = D2D1::RectF(0.0f, 0.0f, srcSize.width, srcSize.height);
+
+	m_Engine.GetRenderer().SetTarget();
 	m_Engine.GetRenderer().GetD2DContext()->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
- 
 	m_Engine.GetRenderer().RenderBegin();
+
+
+	//------------------------------------
+	// Î†åÎçîÏö© ÌñâÎ†¨ Í≥ÑÏÇ∞
+	D2D1::Matrix3x2F cameraTM = m_Camera->GetComponent<CameraComponent>()->GetViewMatrix();
+	D2D1::Matrix3x2F renderTM = D2D1::Matrix3x2F::Scale(1, -1) * D2D1::Matrix3x2F::Translation(0, 1080);
+	D2D1::Matrix3x2F finalTM = renderTM * cameraTM;
+
+	m_Engine.GetRenderer().SetTransform(finalTM);
+	//------------------------------------
+
+
+	//------------------------------------
+	// Î∞∞Í≤Ω Î®ºÏ†Ä Î†åÎçî
+	SpriteRenderer sp;
+	TransformComponent trans;
+	ID2D1Bitmap1* bmp;
+	Math::Vector2F pos;
+	srcRect = D2D1::RectF(0.0f, 0.0f, 1920, 1080);
+
+	for (auto& obj : m_BackgroundObj)
+	{
+		sp = *obj->RenderTexture();
+		bmp = *sp.GetTexture().GetAddressOf();
+		trans = *obj->RenderPosition();
+		pos = trans.GetPosition();
+		m_Engine.GetRenderer().DrawBitmap(bmp, srcRect, &trans, finalTM);
+	}
+
+	//------------------------------------
+
+	// ÌîåÎ†àÏù¥Ïñ¥
+	//std::cout << m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dx
+	//	<< " " << m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dy
+	//	<< std::endl;
+
+	trans = *m_Player->RenderPosition();
+	pos = trans.GetPosition();
+
+	sp = *m_Player->RenderTexture();
+	bmp = *sp.GetTexture().GetAddressOf();
+
+	srcRect = D2D1::RectF(0.0f, 0.0f, srcSize.width, srcSize.height);
+	m_Engine.GetRenderer().DrawBitmap(bmp, srcRect, &trans, finalTM);
+
+	BoxColliderComponent* bx = m_Player->GetComponent<BoxColliderComponent>();
+	bx->SetSize({ srcSize.width, srcSize.height });
+
+	// Ïû•Ïï†Î¨º
+	trans = *m_Obstacle->RenderPosition();
+	pos = trans.GetPosition();
+
+	m_Engine.GetRenderer().DrawBitmap(bmp, srcRect, &trans, finalTM);
+	bx = m_Obstacle->GetComponent<BoxColliderComponent>();
+	bx->SetSize({ srcSize.width, srcSize.height });
+
+	m_Engine.GetRenderer().RenderEnd();
+
+	m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
+
+	m_SceneManager.Render();
+	//Î∞∞Í≤Ω Í∑∏Î¶¨Í∏∞
+=======
  
 	m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
 
 	m_SceneManager.Render();
- 	//πË∞Ê ±◊∏Æ±‚
- 	if (m_Background != nullptr)
- 	{
- 		D2D1_SIZE_F bgSize = m_Background->GetSize();
- 		D2D1_RECT_F bgRect = D2D1::RectF(0.f, 0.f, bgSize.width * 2, bgSize.height * 2);
- 
-		m_Engine.GetRenderer().DrawBitmap(m_Background.Get(), bgRect);
- 	}
- 
-	//std::vector<RenderInfo> renderInfo;
-
-	//m_Player->Render(renderInfo);
-
-	//m_Engine.GetRenderer().Draw(renderInfo);
-
- 	TransformComponent trans = *m_Player->RenderPosition();
- 	Math::Vector2F pos = trans.GetPosition();
- 
-	m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Translation(pos.x - srcSize.width/2, pos.y - srcSize.height / 2));
- 
- 	SpriteRenderer sp = *m_Player->RenderTexture();
- 	ID2D1Bitmap1* bmp = *sp.GetTexture().GetAddressOf();
- 
-	m_Engine.GetRenderer().DrawBitmap(bmp, srcRect);
- 
-	m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
- 	BoxColliderComponent* bx = m_Player->GetComponent<BoxColliderComponent>();
- 	bx->SetSize({ srcSize.width, srcSize.height });
- 	float left = bx->GetCenter().x - bx->GetSize().x / 2;
- 	float top = bx->GetCenter().y - bx->GetSize().y / 2;
- 	float right = bx->GetCenter().x + bx->GetSize().x / 2;
- 	float bottom = bx->GetCenter().y + bx->GetSize().y / 2;
-	m_Engine.GetRenderer().DrawRectangle(left, top, right, bottom, D2D1::ColorF::Black);
- 
- 	trans = *m_Obstacle->RenderPosition();
- 	pos = trans.GetPosition();
- 
-	m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Translation(pos.x - srcSize.width / 2, pos.y - srcSize.height / 2));
- 
- 	sp = *m_Obstacle->RenderTexture();
- 	bmp = *sp.GetTexture().GetAddressOf();
- 
-	m_Engine.GetRenderer().DrawBitmap(bmp, srcRect);
- 
-	m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
- 	bx = m_Obstacle->GetComponent<BoxColliderComponent>();
- 	bx->SetSize({ srcSize.width, srcSize.height });
- 	left = bx->GetCenter().x - bx->GetSize().x / 2;
- 	top = bx->GetCenter().y - bx->GetSize().y / 2;
- 	right = bx->GetCenter().x + bx->GetSize().x / 2;
- 	bottom = bx->GetCenter().y + bx->GetSize().y / 2;
-	m_Engine.GetRenderer().DrawRectangle(left, top, right, bottom, D2D1::ColorF::Black);
-
-	//m_Engine.GetRenderer().RenderEnd();
-
+ 	//Î∞∞Í≤Ω Í∑∏Î¶¨Í∏∞
 //   	if (m_Background != nullptr)
 //   	{
 //   		D2D1_SIZE_F bgSize = m_Background->GetSize();
@@ -305,7 +401,7 @@ void GameApplication::RenderImGUI()
 
 	if (pd3dDeviceContext == nullptr || rtvs[0] == nullptr)
 	{
-		return; // ∑ª¥ı∏µ ƒ¡≈ÿΩ∫∆Æ≥™ ∫‰∞° æ¯¿∏∏È ∏Æ≈œ
+		return; // Î†åÎçîÎßÅ Ïª®ÌÖçÏä§Ìä∏ÎÇò Î∑∞Í∞Ä ÏóÜÏúºÎ©¥ Î¶¨ÌÑ¥
 	}
 	m_Engine.GetRenderer().GetD3DContext()->OMSetRenderTargets(1, rtvs, nullptr);
 
