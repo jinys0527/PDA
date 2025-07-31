@@ -11,6 +11,7 @@ class CameraObject;
 
 class GameApplication : public NzWndBase
 {
+
 public:
 	GameApplication(Engine& engine, SceneManager& sceneManager) : NzWndBase(), m_Engine(engine), m_SceneManager(sceneManager) { }
 	virtual ~GameApplication() = default;

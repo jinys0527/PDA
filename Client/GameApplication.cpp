@@ -38,12 +38,16 @@ bool GameApplication::Initialize()
 	m_Engine.GetEventDispatcher().AddListener(EventType::KeyUp, trans);
  	BoxColliderComponent* bx = m_Player->AddComponent<BoxColliderComponent>();
  	bx->Start();
- 
+	std::cout<< bx->GetCenter().x << " " << bx->GetCenter().y << std::endl;
+
+	bx->GetFSM().SetOnEnter("None", []() {std::cout << "None" << std::endl; });
+	bx->GetFSM().SetOnEnter("Enter", []() {std::cout << "Enter" << std::endl; });
+	bx->GetFSM().SetOnEnter("Stay", []() {std::cout << "Stay" << std::endl; });
+	bx->GetFSM().SetOnEnter("Exit", []() {std::cout << "Exit" << std::endl; });
+
 	// 카메라 
 	m_Camera = new CameraObject(m_Engine.GetEventDispatcher(), 1920, 1080);
 	trans = m_Camera->GetComponent<TransformComponent>();
-	m_Engine.GetEventDispatcher().AddListener(EventType::KeyDown, trans);
-	m_Engine.GetEventDispatcher().AddListener(EventType::KeyUp, trans);
 
 	Math::Vector2F pos = trans->GetPosition();
 	std::cout << pos.x << " " << pos.y << std::endl;
@@ -57,7 +61,7 @@ bool GameApplication::Initialize()
  	trans->SetPosition({ 700.0f, 300.0f });
  	bx = m_Obstacle->AddComponent<BoxColliderComponent>();
  	bx->Start();
- 
+	std::cout << bx->GetCenter().x << " " << bx->GetCenter().y << std::endl;
 
 	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
 	m_SceneManager.Initialize();
@@ -110,8 +114,8 @@ void GameApplication::Run()
 	{
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
-			//if (false == m_Engine.GetInputManager().OnHandleMessage(msg))
-			TranslateMessage(&msg);
+			if (false == m_Engine.GetInputManager().OnHandleMessage(msg))
+				TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
 		else
@@ -194,6 +198,7 @@ void GameApplication::Update()
 	}
 
 	m_Player->Update(m_Engine.GetTimer().DeltaTime());
+	
 
 	Math::Vector2F pos = m_Camera->GetComponent<TransformComponent>()->GetPosition();
 
@@ -203,31 +208,28 @@ void GameApplication::Update()
 	auto* obsCol = m_Obstacle->GetComponent<BoxColliderComponent>();
 
 	bool isColliding = playerCol->BoxVsBox(*obsCol);
-	CollisionState prevState = playerCol->GetCollisionState();
-
+	
 	if (isColliding)
 	{
-		if (prevState == CollisionState::None || prevState == CollisionState::Exit)
+		if (playerCol->GetFSM().GetCurrentState() == "None")
 		{
-			playerCol->SetCollisionState(CollisionState::Enter);
-			printf("Collision Enter\n");
+			playerCol->GetFSM().OnEvent("CollisionEnter");
 		}
-		else
+		else if (playerCol->GetFSM().GetCurrentState() == "Stay")
 		{
-			playerCol->SetCollisionState(CollisionState::Stay);
-			printf("Collision Stay\n");
+			std::cout << "Stay" << std::endl;
+		}
+		else if(playerCol->GetFSM().GetCurrentState() == "Enter")
+		{
+			playerCol->GetFSM().OnEvent("CollisionStay");
 		}
 	}
 	else
 	{
-		if (prevState == CollisionState::Enter || prevState == CollisionState::Stay)
+		if (playerCol->GetFSM().GetCurrentState() == "Stay")
 		{
-			playerCol->SetCollisionState(CollisionState::Exit);
-			printf("Collision Exit\n");
-		}
-		else
-		{
-			playerCol->SetCollisionState(CollisionState::None);
+			playerCol->GetFSM().OnEvent("CollisionExit");
+			playerCol->GetFSM().OnEvent("None");
 		}
 	}
 
@@ -236,40 +238,6 @@ void GameApplication::Update()
 	{
 		obj->Update(m_Engine.GetTimer().DeltaTime());
 	}
-
-// 	m_Player->Update(m_Engine.GetTimer().DeltaTime());
-// 
-// 	auto* playerCol = m_Player->GetComponent<BoxColliderComponent>();
-// 	auto* obsCol = m_Obstacle->GetComponent<BoxColliderComponent>();
-// 
-// 	bool isColliding = playerCol->BoxVsBox(*obsCol);
-// 	CollisionState prevState = playerCol->GetCollisionState();
-// 
-// 	if (isColliding)
-// 	{
-// 		if (prevState == CollisionState::None || prevState == CollisionState::Exit)
-// 		{
-// 			playerCol->SetCollisionState(CollisionState::Enter);
-// 			printf("Collision Enter\n");
-// 		}
-// 		else
-// 		{
-// 			playerCol->SetCollisionState(CollisionState::Stay);
-// 			printf("Collision Stay\n");
-// 		}
-// 	}
-// 	else
-// 	{
-// 		if (prevState == CollisionState::Enter || prevState == CollisionState::Stay)
-// 		{
-// 			playerCol->SetCollisionState(CollisionState::Exit);
-// 			printf("Collision Exit\n");
-// 		}
-// 		else
-// 		{
-// 			playerCol->SetCollisionState(CollisionState::None);
-// 		}
-// 	}
 }
 
 void GameApplication::Render()
@@ -363,14 +331,14 @@ void GameApplication::Render()
 //   
 //  	m_Engine.GetRenderer().DrawBitmap(bmp, srcRect);
 //   
-//  	m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
-//   	BoxColliderComponent* bx = m_Player->GetComponent<BoxColliderComponent>();
-//   	bx->SetSize({ srcSize.width, srcSize.height });
-//   	float left = bx->GetCenter().x - bx->GetSize().x / 2;
-//   	float top = bx->GetCenter().y - bx->GetSize().y / 2;
-//   	float right = bx->GetCenter().x + bx->GetSize().x / 2;
-//   	float bottom = bx->GetCenter().y + bx->GetSize().y / 2;
-//  	m_Engine.GetRenderer().DrawRectangle(left, top, right, bottom, D2D1::ColorF::Black);
+	//m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
+	//bx = m_Player->GetComponent<BoxColliderComponent>();
+	//bx->SetSize({ srcSize.width, srcSize.height });
+	//float left = bx->GetCenter().x - bx->GetSize().x / 2;
+	//float top = bx->GetCenter().y - bx->GetSize().y / 2;
+	//float right = bx->GetCenter().x + bx->GetSize().x / 2;
+	//float bottom = bx->GetCenter().y + bx->GetSize().y / 2;
+	//m_Engine.GetRenderer().DrawRectangle(left, top, right, bottom, D2D1::ColorF::Black);
 //   
 //   	trans = *m_Obstacle->RenderPosition();
 //   	pos = trans.GetPosition();
@@ -382,14 +350,14 @@ void GameApplication::Render()
 //   
 //  	m_Engine.GetRenderer().DrawBitmap(bmp, srcRect);
 //   
-//  	m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
-//   	bx = m_Obstacle->GetComponent<BoxColliderComponent>();
-//   	bx->SetSize({ srcSize.width, srcSize.height });
-//   	left = bx->GetCenter().x - bx->GetSize().x / 2;
-//   	top = bx->GetCenter().y - bx->GetSize().y / 2;
-//   	right = bx->GetCenter().x + bx->GetSize().x / 2;
-//   	bottom = bx->GetCenter().y + bx->GetSize().y / 2;
-//  	m_Engine.GetRenderer().DrawRectangle(left, top, right, bottom, D2D1::ColorF::Black);
+  	//m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
+   //	bx = m_Obstacle->GetComponent<BoxColliderComponent>();
+   //	bx->SetSize({ srcSize.width, srcSize.height });
+   //	left = bx->GetCenter().x - bx->GetSize().x / 2;
+   //	top = bx->GetCenter().y - bx->GetSize().y / 2;
+   //	right = bx->GetCenter().x + bx->GetSize().x / 2;
+   //	bottom = bx->GetCenter().y + bx->GetSize().y / 2;
+  	//m_Engine.GetRenderer().DrawRectangle(left, top, right, bottom, D2D1::ColorF::Black);
 
 	//m_Engine.GetRenderer().RenderEnd(false);
 
