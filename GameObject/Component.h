@@ -52,7 +52,7 @@ protected:
 
 using ComponentCreateFunc = std::function<std::unique_ptr<Component>()>;
 
-class ComponentFactory
+class ComponentFactory 
 {
 public:
 	static ComponentFactory& Instance()
