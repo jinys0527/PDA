@@ -96,6 +96,9 @@
     <ClInclude Include="UIObject.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
+    <ClInclude Include="ButtonUI.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp">
@@ -156,6 +159,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UIObject.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonUI.cpp">
       <Filter>Object\Source</Filter>
     </ClCompile>
   </ItemGroup>

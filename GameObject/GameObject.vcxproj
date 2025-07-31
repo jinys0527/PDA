@@ -130,6 +130,7 @@
     <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="AnimationController.h" />
     <ClInclude Include="Background.h" />
+    <ClInclude Include="ButtonUI.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="BoxColliderComponent.h" />
@@ -152,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="AnimationController.cpp" />
     <ClCompile Include="Background.cpp" />
+    <ClCompile Include="ButtonUI.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="CameraObject.cpp" />
     <ClCompile Include="BoxColliderComponent.cpp" />

@@ -22,6 +22,11 @@ public:
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;
 
+	void SetZoom(float zoom)
+	{
+		m_Zoom = zoom;
+	}
+
 	D2D1::Matrix3x2F GetViewMatrix();
 	
 protected:

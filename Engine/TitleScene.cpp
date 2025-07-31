@@ -7,7 +7,8 @@
 #include "TransformComponent.h"
 #include "SpriteRenderer.h"
 #include "PlayerObject.h"
-#include "UIObject.h"
+#include "ButtonUI.h"
+#include "CameraComponent.h"
 
 void TitleScene::Initialize()
 {
@@ -29,10 +30,11 @@ void TitleScene::Initialize()
 	cameraObject->m_Name = "Camera";
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
 	trans3->SetPosition({ 960.0f, 540.0f });
+	//cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5);
 	SetMainCamera(cameraObject);
 
 
-	auto testUIObject = std::make_shared<UIObject>(m_EventDispatcher);
+	auto testUIObject = std::make_shared<ButtonUI>(m_EventDispatcher);
 	testUIObject->m_Name = "UI";
 	auto uiTrans = testUIObject->GetComponent<TransformComponent>();
 	uiTrans->SetPosition({ 1600, 900 });
@@ -41,7 +43,7 @@ void TitleScene::Initialize()
 	sr->SetTexture(bitmap);
 	uiTrans->SetPivotPreset(TransformPivotPreset::Center, bitmap->GetSize());
 	sr->SetPivotPreset(SpritePivotPreset::Center, bitmap->GetSize());
-
+	testUIObject->GetComponent<UIButtonComponent>()->Start();
 
 
 	AddGameObject(gameObject);
@@ -68,6 +70,9 @@ void TitleScene::Update(float deltaTime)
 	{
 		gameObject.second->Update(deltaTime);
 	}
+
+	//Math::Vector2F pos = m_Camera->GetComponent<TransformComponent>()->GetPosition();
+	//m_Camera->GetComponent<TransformComponent>()->SetPosition({pos.x + 100 * deltaTime, pos.y});
 }
 
 void TitleScene::Render(std::vector<RenderInfo>& renderInfo)
