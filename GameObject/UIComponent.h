@@ -2,6 +2,7 @@
 #include "Component.h"
 #include <vector>
 #include "IEventListener.h"
+#include "Event.h"
 
 class RectTransformComponent;
 
@@ -23,6 +24,10 @@ protected:
 	enum class UIInteractionState {None, Hovered, Pressed, Released};
 	UIInteractionState m_State = UIInteractionState::None;
 
+	void IsHovered(POINT mousePos);
+	
+	bool m_IsClicked = false;
+	bool m_IsHovered = false;
 	bool m_Visible = true;
 	int m_ZOrder = 0;
 	float m_Opacity = 1.0f;

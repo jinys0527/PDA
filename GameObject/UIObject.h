@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "RectTransformComponent.h"
 #include "UIComponent.h"
 
 class UIObject : public GameObject

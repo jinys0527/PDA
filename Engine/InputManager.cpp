@@ -40,6 +40,9 @@ void InputManager::Update()
 		}
 	}
 
+	//버튼위에 호버됐는지 확인하기 위해 매번 보내야함
+	m_EventDispatcher.Dispatch(EventType::Hovered, &m_Mouse);
+
 	m_MousePrev = m_Mouse;
 }
 
