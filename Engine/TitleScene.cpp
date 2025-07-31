@@ -7,6 +7,7 @@
 #include "TransformComponent.h"
 #include "SpriteRenderer.h"
 #include "PlayerObject.h"
+#include "UIObject.h"
 
 void TitleScene::Initialize()
 {
@@ -31,12 +32,25 @@ void TitleScene::Initialize()
 	SetMainCamera(cameraObject);
 
 
+	auto testUIObject = std::make_shared<UIObject>(m_EventDispatcher);
+	testUIObject->m_Name = "UI";
+	auto transUI = testUIObject->GetComponent<TransformComponent>();
+	transUI->SetPosition({ 1600, 900 });
+	sr = testUIObject->AddComponent<SpriteRenderer>();
+	sr->SetAssetManager(&m_AssetManager);
+	sr->SetTexture(bitmap);
+	sr->SetPivotPreset(SpritePivotPreset::Center, bitmap->GetSize());
+
+
+
 	AddGameObject(gameObject);
 	AddGameObject(cameraObject);
+	AddGameObject(testUIObject);
 }
 
 void TitleScene::Finalize()
 {
+	
 }
 
 void TitleScene::Enter()
@@ -53,6 +67,10 @@ void TitleScene::Update(float deltaTime)
 	{
 		gameObject.second->Update(deltaTime);
 	}
+
+	Math::Vector2F pos = m_Camera->GetComponent<TransformComponent>()->GetPosition();
+
+	m_Camera->GetComponent<TransformComponent>()->SetPosition({ pos.x + 100 * deltaTime, pos.y });
 }
 
 void TitleScene::Render(std::vector<RenderInfo>& renderInfo)

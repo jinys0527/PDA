@@ -93,6 +93,9 @@
     <ClInclude Include="Background.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
+    <ClInclude Include="UIObject.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp">
@@ -150,6 +153,9 @@
       <Filter>Component\Source</Filter>
     </ClCompile>
     <ClCompile Include="Background.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UIObject.cpp">
       <Filter>Object\Source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -30,6 +30,17 @@ void InputManager::Update()
 	}
 
 	m_KeysDownPrev = m_KeysDown;
+
+	//마우스 클릭 이벤트
+	if (m_MousePrev.leftPressed == false)
+	{
+		if (m_Mouse.leftPressed == true)
+		{
+			m_EventDispatcher.Dispatch(EventType::MouseLeftClick, &m_Mouse);
+		}
+	}
+
+	m_MousePrev = m_Mouse;
 }
 
 void InputManager::OnKeyDown(char key)
@@ -64,19 +75,49 @@ bool InputManager::OnHandleMessage(const MSG& msg)
 	}
 	break;
 
-	//case WM_MOUSEMOVE:
-	//case WM_LBUTTONDOWN:
-	//case WM_LBUTTONUP:
-	//case WM_RBUTTONDOWN:
-	//case WM_RBUTTONUP:
-	//{
-	//	HandleMsgMouse(msg);
-	//}
-	//break;
+	case WM_MOUSEMOVE:
+	case WM_LBUTTONDOWN:
+	case WM_LBUTTONUP:
+	case WM_RBUTTONDOWN:
+	case WM_RBUTTONUP:
+	{
+		HandleMsgMouse(msg);
+	}
+	break;
 
 	default:
 		return false; // Unhandled message
 	}
 
 	return true;
+}
+
+void InputManager::HandleMsgMouse(const MSG& msg)
+{
+	int x = GetXFromLParam(msg.lParam);
+	int y = GetYFromLParam(msg.lParam); // [오류 수정]
+
+	m_Mouse.pos = { x, y };
+
+	if (msg.message == WM_LBUTTONDOWN)
+	{
+		m_Mouse.leftPressed = true;
+		SetCapture(msg.hwnd);
+	}
+	else if (msg.message == WM_RBUTTONDOWN)
+	{
+		m_Mouse.rightPressed = true;
+		SetCapture(msg.hwnd);
+	}
+	else if (msg.message == WM_LBUTTONUP)
+	{
+		m_Mouse.leftPressed = false;
+		ReleaseCapture();
+	}
+	else if (msg.message == WM_RBUTTONUP)
+	{
+		m_Mouse.rightPressed = false;
+		ReleaseCapture();
+	}
+
 }

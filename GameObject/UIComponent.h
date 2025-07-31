@@ -1,12 +1,14 @@
 #pragma once
 #include "Component.h"
 #include <vector>
+#include "IEventListener.h"
 
 class RectTransformComponent;
 
-class UIComponent : public Component
+class UIComponent : public Component, public IEventListener
 {
 public:
+	
 	static constexpr const char* StaticTypeName = "UIComponent";
 	const char* GetTypeName() const override { return StaticTypeName; }
 

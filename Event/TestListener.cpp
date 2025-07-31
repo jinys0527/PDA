@@ -18,7 +18,8 @@ void TestListener::OnEvent(EventType type, const void* data)
 		std::cout << "KeyUp 이벤트 받음: " << keyEvent->key << std::endl;
 		break;
 	}
-	case EventType::MouseClick:
+	case EventType::MouseLeftClick:
+
 		break;
 	case EventType::Pressed:
 		break;
