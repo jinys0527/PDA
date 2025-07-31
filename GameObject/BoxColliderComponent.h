@@ -1,7 +1,6 @@
 #pragma once
 #include "ColliderComponent.h"
 #include "SimpleMathHelper.h"
-#include <iostream>
 
 class BoxColliderComponent : public ColliderComponent
 {
@@ -21,7 +20,7 @@ public:
 	const Vec2F& GetSize() const {
 		return m_Size;
 	}
-
+	
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;
 
@@ -30,9 +29,6 @@ public:
 	void OnDestroy() override;
 protected:
 	Vec2F m_Size;
-	void OnCollisionEnter(const CollisionInfo* info) override { std::cout << "enter" << std::endl; }
-	void OnCollisionStay(const CollisionInfo* info) override { std::cout << "stay" << std::endl; }
-	void OnCollisionExit(const CollisionInfo* info) override { std::cout << "exit" << std::endl; }
 };
 
 REGISTER_COMPONENT(BoxColliderComponent);

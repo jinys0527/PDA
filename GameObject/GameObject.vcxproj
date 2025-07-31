@@ -137,8 +137,8 @@
     <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="CoreTypes.h" />
-    <ClInclude Include="FSMComponent.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Obstacle.h" />
     <ClInclude Include="RectTransformComponent.h" />
     <ClInclude Include="RigidbodyComponent.h" />
     <ClInclude Include="SpriteRenderer.h" />
@@ -157,9 +157,9 @@
     <ClCompile Include="CircleColliderComponent.cpp" />
     <ClCompile Include="ColliderComponent.cpp" />
     <ClCompile Include="Component.cpp" />
-    <ClCompile Include="FSMComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="AnimationComponent.cpp" />
+    <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="RectTransformComponent.cpp" />
     <ClCompile Include="RigidbodyComponent.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
