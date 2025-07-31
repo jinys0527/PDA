@@ -4,7 +4,7 @@
 #include "RectTransformComponent.h"
 #include "TransformComponent.h"
 #include "CameraObject.h"
-
+#include "CameraComponent.h"
 
 void D2DRenderer::Initialize(HWND hwnd)
 {
@@ -123,9 +123,9 @@ void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
 	std::vector<RenderInfo> sortedInfo = renderInfo;
 	std::sort(sortedInfo.begin(), sortedInfo.end(), [](const RenderInfo& a, const RenderInfo& b) {return a.layer < b.layer; });
 
-	auto cameraTrans = m_Camera->GetComponent<TransformComponent>();
-	D2D1::Matrix3x2F cameraMatrix = cameraTrans->GetWorldMatrix();
-	cameraMatrix.Invert();
+	D2D1::Matrix3x2F cameraMatrix = m_Camera->GetComponent<CameraComponent>()->GetViewMatrix();
+	//D2D1::Matrix3x2F cameraMatrix = cameraTrans->GetWorldMatrix();
+
 
 	for (const auto& info : sortedInfo)
 	{
@@ -137,8 +137,7 @@ void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
 		// 앵커 + 피벗 계산
 		D2D1_SIZE_F bmpSize = info.bitmap->GetSize();
 
-// 		Math::Vector2F pos = CalcAnchorOffset(info.parentSize, info.anchor, info.anchoredPosition, info.sizeDelta, info.pivot); // min/max 기준 위치
-// 		Math::Vector2F pivotOffset = { info.size.x * info.pivot.x, info.size.y * info.pivot.y };
+		Math::Vector2F pivot = info.pivot;
 
 		const auto& m = info.worldMatrix;
 		D2D1_MATRIX_3X2_F mat = {
@@ -146,16 +145,21 @@ void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
 			m.m21, m.m22,
 			m.dx,  m.dy
 		};
-
-		mat = cameraMatrix * mat;
+		
+		mat = D2D1::Matrix3x2F::Scale(1, -1) * mat * cameraMatrix;
 
 		m_d2dContext->SetTransform(mat); // 여기서 행렬 적용
 
 		D2D1_RECT_F destRect = {
-			0.0f, 0.0f,
-			bmpSize.width,
-			bmpSize.height
+					-pivot.x,                 // left
+					-pivot.y,                 // top
+					bmpSize.width - pivot.x, // right
+					bmpSize.height - pivot.y  // bottom
 		};
+
+		m_d2dContext->SetTransform(mat);
+
+		//m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());
 
 		m_d2dContext->DrawBitmap(
 			info.bitmap.Get(),
@@ -164,6 +168,8 @@ void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
 			D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
 			nullptr
 		);
+
+		m_d2dContext->DrawRectangle(&destRect, m_brush.Get());
 	}
 
 	m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());

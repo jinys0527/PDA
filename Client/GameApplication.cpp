@@ -34,12 +34,13 @@ bool GameApplication::Initialize()
 
 	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
 	m_SceneManager.Initialize();
-	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
 
-	assert(m_TestBitmap != nullptr && "Failed to load test bitmap.");
+ 	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
 
-	m_Background = m_Engine.GetAssetManager().LoadTexture(L"vecteezy", L"../Resource/vecteezy.png");
-	assert(m_Background != nullptr && "Failed to load background texture.");
+ 	assert(m_TestBitmap != nullptr && "Failed to load test bitmap.");
+ 
+ 	m_Background = m_Engine.GetAssetManager().LoadTexture(L"vecteezy", L"../Resource/vecteezy.png");
+ 	assert(m_Background != nullptr && "Failed to load background texture.");
 
 	ID3D11RenderTargetView* rtvs[] = { m_Engine.GetRenderer().GetD3DRenderTargetView() };
 
@@ -57,6 +58,7 @@ void GameApplication::Run()
 		{
 			if (false == m_Engine.GetInputManager().OnHandleMessage(msg))
 				TranslateMessage(&msg);
+
 			DispatchMessage(&msg);
 		}
 		else

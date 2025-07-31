@@ -37,15 +37,11 @@ private:
 	Microsoft::WRL::ComPtr<ID2D1Bitmap1>        m_Background;
 
 	GameObject* m_Player;
-	CameraObject* m_Camera;
 	GameObject* m_Obstacle;
 
 	std::array<GameObject*, 2> m_BackgroundObj;
 
-	// fixedupdate용 시간
 	float m_fFrameCount;
-
-	//Editor& m_Editor;
 
 	Engine& m_Engine;
 	SceneManager& m_SceneManager;
