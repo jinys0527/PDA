@@ -15,90 +15,31 @@
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+#include "PlayerObject.h"
+#include "RunPlayerController.h"
+
 bool GameApplication::Initialize()
 {
-	const wchar_t* className  = L"PDA";
+	const wchar_t* className = L"PDA";
 	const wchar_t* windowName = L"PDA";
 
 	if (false == Create(className, windowName, 1920, 1080))
 	{
 		return false;
 	}
-	
+
 	m_Engine.GetRenderer().Initialize(m_hwnd);
+
 	auto assetManager = m_Engine.GetAssetManager();
-
-	m_Player = new GameObject(m_Engine.GetEventDispatcher());
- 	auto sr = m_Player->AddComponent<SpriteRenderer>();
-	sr->SetAssetManager(&assetManager);
-
- 	TransformComponent* trans = m_Player->GetComponent<TransformComponent>();
- 	trans->SetPosition({ 200.0f, 300.0f });
-	m_Engine.GetEventDispatcher().AddListener(EventType::KeyDown, trans);
-	m_Engine.GetEventDispatcher().AddListener(EventType::KeyUp, trans);
- 	BoxColliderComponent* bx = m_Player->AddComponent<BoxColliderComponent>();
- 	bx->Start();
-	std::cout<< bx->GetCenter().x << " " << bx->GetCenter().y << std::endl;
-
-	bx->GetFSM().SetOnEnter("None", []() {std::cout << "None" << std::endl; });
-	bx->GetFSM().SetOnEnter("Enter", []() {std::cout << "Enter" << std::endl; });
-	bx->GetFSM().SetOnEnter("Stay", []() {std::cout << "Stay" << std::endl; });
-	bx->GetFSM().SetOnEnter("Exit", []() {std::cout << "Exit" << std::endl; });
-
-	// 카메라 
-	m_Camera = new CameraObject(m_Engine.GetEventDispatcher(), 1920, 1080);
-	trans = m_Camera->GetComponent<TransformComponent>();
-
-	Math::Vector2F pos = trans->GetPosition();
-	std::cout << pos.x << " " << pos.y << std::endl;
-
-	// end 카메라
-
- 	m_Obstacle = new GameObject(m_Engine.GetEventDispatcher());
- 	sr = m_Obstacle->AddComponent<SpriteRenderer>();
-	sr->SetAssetManager(&assetManager);
- 	trans = m_Obstacle->GetComponent<TransformComponent>();
- 	trans->SetPosition({ 700.0f, 300.0f });
- 	bx = m_Obstacle->AddComponent<BoxColliderComponent>();
- 	bx->Start();
-	std::cout << bx->GetCenter().x << " " << bx->GetCenter().y << std::endl;
 
 	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
 	m_SceneManager.Initialize();
-	//m_Camera = m_SceneManager.GetCamera();
-	//m_Engine.GetRenderer().SetCamera(m_Camera);
- 	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
+	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
 
- 	assert(m_TestBitmap != nullptr && "Failed to load test bitmap.");
- 
- 	m_Background = m_Engine.GetAssetManager().LoadTexture(L"vecteezy", L"../Resource/vecteezy.png");
- 	assert(m_Background != nullptr && "Failed to load background texture.");
- 
- 
- 	sr = m_Player->GetComponent<SpriteRenderer>();
- 	sr->SetTexture(m_TestBitmap);
- 
- 
- 	sr = m_Obstacle->GetComponent<SpriteRenderer>();
- 	sr->SetTexture(m_TestBitmap);
-	
+	assert(m_TestBitmap != nullptr && "Failed to load test bitmap.");
 
-	//백그라운드 두개
-	for (auto& obj : m_BackgroundObj)
-	{
-		obj = new Background(m_Engine.GetEventDispatcher());
-		obj->AddComponent<SpriteRenderer>();
-		sr = obj->GetComponent<SpriteRenderer>();
-		sr->SetTexture(m_Background);
-	}
-	m_BackgroundObj[0]->GetComponent<TransformComponent>()->SetPosition({ 0, 1080 });
-
-	m_BackgroundObj[1]->GetComponent<TransformComponent>()->SetPosition({ 1920, 1080 });
-
-	//ImGui::CreateContext();
-	//ImGui_ImplWin32_Init(m_hwnd);
-
-	//ImGui_ImplDX11_Init(m_Engine.GetRenderer().GetD3DDevice(), m_Engine.GetRenderer().GetD3DContext());
+	m_Background = m_Engine.GetAssetManager().LoadTexture(L"vecteezy", L"../Resource/vecteezy.png");
+	assert(m_Background != nullptr && "Failed to load background texture.");
 
 	ID3D11RenderTargetView* rtvs[] = { m_Engine.GetRenderer().GetD3DRenderTargetView() };
 
@@ -120,11 +61,11 @@ void GameApplication::Run()
 		}
 		else
 		{
- 			m_Engine.UpdateTime();
- 			Update();
- 			m_Engine.UpdateInput();
- 			UpdateLogic();
- 			Render();
+			m_Engine.UpdateTime();
+			Update();
+			m_Engine.UpdateInput();
+			UpdateLogic();
+			Render();
 		}
 	}
 }
@@ -139,11 +80,6 @@ void GameApplication::Finalize()
 	if (m_Obstacle)
 	{
 		delete m_Obstacle;
-	}
-
-	if (m_Camera)
-	{
-		delete m_Camera;
 	}
 
 	for (auto background : m_BackgroundObj)
@@ -179,191 +115,30 @@ void GameApplication::UpdateLogic()
 
 void GameApplication::Update()
 {
-
+	m_SceneManager.Update(m_Engine.GetTimer().DeltaTime());
 	// FixedUpdate
 	{
-		m_fFrameCount += m_Engine.GetTimer().DeltaTime();
-		
-		//std::cout << m_fFrameCount << std::endl;
 
 		while (m_fFrameCount >= 0.016f)
 		{
-			for (auto& obj : m_BackgroundObj)
-			{
-				obj->FixedUpdate();
-			}
 			m_fFrameCount -= 0.016f;
 		}
 
 	}
 
-	m_Player->Update(m_Engine.GetTimer().DeltaTime());
-	
-
-	Math::Vector2F pos = m_Camera->GetComponent<TransformComponent>()->GetPosition();
-
-	//m_Camera->GetComponent<TransformComponent>()->SetPosition({pos.x + 50.f * m_Engine.GetTimer().DeltaTime(), pos.y});
-
-	auto* playerCol = m_Player->GetComponent<BoxColliderComponent>();
-	auto* obsCol = m_Obstacle->GetComponent<BoxColliderComponent>();
-
-	bool isColliding = playerCol->BoxVsBox(*obsCol);
-	
-	if (isColliding)
-	{
-		if (playerCol->GetFSM().GetCurrentState() == "None")
-		{
-			playerCol->GetFSM().OnEvent("CollisionEnter");
-		}
-		else if (playerCol->GetFSM().GetCurrentState() == "Stay")
-		{
-			std::cout << "Stay" << std::endl;
-		}
-		else if(playerCol->GetFSM().GetCurrentState() == "Enter")
-		{
-			playerCol->GetFSM().OnEvent("CollisionStay");
-		}
-	}
-	else
-	{
-		if (playerCol->GetFSM().GetCurrentState() == "Stay")
-		{
-			playerCol->GetFSM().OnEvent("CollisionExit");
-			playerCol->GetFSM().OnEvent("None");
-		}
-	}
-
-	//백그라운드 업데이트
-	for (auto& obj : m_BackgroundObj)
-	{
-		obj->Update(m_Engine.GetTimer().DeltaTime());
-	}
 }
 
 void GameApplication::Render()
 {
-	D2D1_SIZE_F srcSize = m_TestBitmap->GetSize();
-	D2D1_RECT_F srcRect = D2D1::RectF(0.0f, 0.0f, srcSize.width, srcSize.height);
+	m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
 
-	m_Engine.GetRenderer().SetTarget();
-	m_Engine.GetRenderer().GetD2DContext()->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
 	m_Engine.GetRenderer().RenderBegin();
 
+	m_SceneManager.Render();
 
-	//------------------------------------
-	// 렌더용 행렬 계산
-	D2D1::Matrix3x2F cameraTM = m_Camera->GetComponent<CameraComponent>()->GetViewMatrix();
-	D2D1::Matrix3x2F renderTM = D2D1::Matrix3x2F::Scale(1, -1) * D2D1::Matrix3x2F::Translation(0, 1080);
-	D2D1::Matrix3x2F finalTM = renderTM * cameraTM;
+	m_Engine.GetRenderer().RenderEnd(false);
 
-	m_Engine.GetRenderer().SetTransform(finalTM);
-	//------------------------------------
-
-
-	//------------------------------------
-	// 배경 먼저 렌더
-	SpriteRenderer sp;
-	TransformComponent trans;
-	ID2D1Bitmap1* bmp;
-	Math::Vector2F pos;
-	srcRect = D2D1::RectF(0.0f, 0.0f, 1920, 1080);
-
-	for (auto& obj : m_BackgroundObj)
-	{
-
-		sp = *obj->RenderTexture();
-		bmp = *sp.GetTexture().GetAddressOf();
-		trans = *obj->RenderPosition();
-		pos = trans.GetPosition();
-
-
-		m_Engine.GetRenderer().DrawBitmap(bmp, srcRect, &trans, finalTM);
-	}
-
-	//------------------------------------
-
-	// 플레이어
-	//std::cout << m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dx
-	//	<< " " << m_Player->GetComponent<TransformComponent>()->GetWorldMatrix().dy
-	//	<< std::endl;
-
-	trans = *m_Player->RenderPosition();
-	pos = trans.GetPosition();
-
-	sp = *m_Player->RenderTexture();
-	bmp = *sp.GetTexture().GetAddressOf();
-
-	srcRect = D2D1::RectF(0.0f, 0.0f, srcSize.width, srcSize.height);
-	m_Engine.GetRenderer().DrawBitmap(bmp, srcRect, &trans, finalTM);
-
-	BoxColliderComponent* bx = m_Player->GetComponent<BoxColliderComponent>();
-	bx->SetSize({ srcSize.width, srcSize.height });
-
-	// 장애물
-	trans = *m_Obstacle->RenderPosition();
-	pos = trans.GetPosition();
-
-	m_Engine.GetRenderer().DrawBitmap(bmp, srcRect, &trans, finalTM);
-	bx = m_Obstacle->GetComponent<BoxColliderComponent>();
-	bx->SetSize({ srcSize.width, srcSize.height });
-
-	m_Engine.GetRenderer().RenderEnd();
- 
-	//m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
- 
-	//m_SceneManager.Render();
- 	//배경 그리기
-//   	if (m_Background != nullptr)
-//   	{
-//   		D2D1_SIZE_F bgSize = m_Background->GetSize();
-//   		D2D1_RECT_F bgRect = D2D1::RectF(0.f, 0.f, bgSize.width * 2, bgSize.height * 2);
-//   
-//  		m_Engine.GetRenderer().DrawBitmap(m_Background.Get(), bgRect);
-//   	}
-//   
-//   	TransformComponent trans = *m_Player->RenderPosition();
-//   	Math::Vector2F pos = trans.GetPosition();
-//   
-//  	m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Translation(pos.x - srcSize.width/2, pos.y - srcSize.height / 2));
-//   
-//   	SpriteRenderer sp = *m_Player->RenderTexture();
-//   	ID2D1Bitmap1* bmp = *sp.GetTexture().GetAddressOf();
-//   
-//  	m_Engine.GetRenderer().DrawBitmap(bmp, srcRect);
-//   
-	//m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
-	//bx = m_Player->GetComponent<BoxColliderComponent>();
-	//bx->SetSize({ srcSize.width, srcSize.height });
-	//float left = bx->GetCenter().x - bx->GetSize().x / 2;
-	//float top = bx->GetCenter().y - bx->GetSize().y / 2;
-	//float right = bx->GetCenter().x + bx->GetSize().x / 2;
-	//float bottom = bx->GetCenter().y + bx->GetSize().y / 2;
-	//m_Engine.GetRenderer().DrawRectangle(left, top, right, bottom, D2D1::ColorF::Black);
-//   
-//   	trans = *m_Obstacle->RenderPosition();
-//   	pos = trans.GetPosition();
-//   
-//  	m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Translation(pos.x - srcSize.width / 2, pos.y - srcSize.height / 2));
-//   
-//   	sp = *m_Obstacle->RenderTexture();
-//   	bmp = *sp.GetTexture().GetAddressOf();
-//   
-//  	m_Engine.GetRenderer().DrawBitmap(bmp, srcRect);
-//   
-  	//m_Engine.GetRenderer().SetTransform(D2D1::Matrix3x2F::Identity());
-   //	bx = m_Obstacle->GetComponent<BoxColliderComponent>();
-   //	bx->SetSize({ srcSize.width, srcSize.height });
-   //	left = bx->GetCenter().x - bx->GetSize().x / 2;
-   //	top = bx->GetCenter().y - bx->GetSize().y / 2;
-   //	right = bx->GetCenter().x + bx->GetSize().x / 2;
-   //	bottom = bx->GetCenter().y + bx->GetSize().y / 2;
-  	//m_Engine.GetRenderer().DrawRectangle(left, top, right, bottom, D2D1::ColorF::Black);
-
-	//m_Engine.GetRenderer().RenderEnd(false);
-
-	//RenderImGUI();
-
-	//m_Engine.GetRenderer().Present();
+	m_Engine.GetRenderer().Present();
 }
 
 void GameApplication::RenderImGUI()
