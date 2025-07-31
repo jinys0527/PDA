@@ -20,20 +20,21 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 bool GameApplication::Initialize()
 {
-	const wchar_t* className  = L"PDA";
+	const wchar_t* className = L"PDA";
 	const wchar_t* windowName = L"PDA";
 
 	if (false == Create(className, windowName, 1920, 1080))
 	{
 		return false;
 	}
-	
+
 	m_Engine.GetRenderer().Initialize(m_hwnd);
 
 	auto assetManager = m_Engine.GetAssetManager();
 
 	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
 	m_SceneManager.Initialize();
+
  	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
 
  	assert(m_TestBitmap != nullptr && "Failed to load test bitmap.");
@@ -56,16 +57,17 @@ void GameApplication::Run()
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
 			if (false == m_Engine.GetInputManager().OnHandleMessage(msg))
-			TranslateMessage(&msg);
+				TranslateMessage(&msg);
+
 			DispatchMessage(&msg);
 		}
 		else
 		{
- 			m_Engine.UpdateTime();
- 			Update();
- 			m_Engine.UpdateInput();
- 			UpdateLogic();
- 			Render();
+			m_Engine.UpdateTime();
+			Update();
+			m_Engine.UpdateInput();
+			UpdateLogic();
+			Render();
 		}
 	}
 }
@@ -137,7 +139,7 @@ void GameApplication::Render()
 	m_SceneManager.Render();
 
 	m_Engine.GetRenderer().RenderEnd(false);
-  
+
 	m_Engine.GetRenderer().Present();
 }
 

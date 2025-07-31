@@ -54,9 +54,6 @@
     <ClInclude Include="AnimationComponent.h">
       <Filter>Component\Header</Filter>
     </ClInclude>
-    <ClInclude Include="FSMComponent.h">
-      <Filter>Component\Header</Filter>
-    </ClInclude>
     <ClInclude Include="CameraObject.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
@@ -93,6 +90,9 @@
     <ClInclude Include="Background.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Obstacle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="UIObject.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
@@ -111,9 +111,6 @@
       <Filter>Component\Source</Filter>
     </ClCompile>
     <ClCompile Include="ColliderComponent.cpp">
-      <Filter>Component\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="FSMComponent.cpp">
       <Filter>Component\Source</Filter>
     </ClCompile>
     <ClCompile Include="TransformComponent.cpp">
@@ -154,6 +151,9 @@
     </ClCompile>
     <ClCompile Include="Background.cpp">
       <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Obstacle.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UIObject.cpp">
       <Filter>Object\Source</Filter>
