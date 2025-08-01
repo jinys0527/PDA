@@ -4,6 +4,10 @@
 #include "GameObject.h"
 #include "RigidbodyComponent.h"
 #include "TransformComponent.h"
+//#include "PlayerObject.h"
+
+
+class PlayerObject;
 
 // 뛰는 씬의 플레이어를 조종할 컴포넌트
 class RunPlayerController : public Component, public IEventListener
@@ -12,11 +16,7 @@ public:
 	static constexpr const char* StaticTypeName = "RunPlayerController";
 	virtual const char* GetTypeName() const override { return StaticTypeName; }
 
-	RunPlayerController() : Component() , IEventListener()
-	{
-		m_Z = 0;
-		m_Velocity = 0;
-	}
+	RunPlayerController();
 
 	virtual ~RunPlayerController()
 	{
@@ -38,8 +38,10 @@ public:
 private:
 	// 입력 처리
 	bool m_IsWPressed = false;
+	bool m_IsWPressedDown = false;
 	bool m_IsAPressed = false;
 	bool m_IsSPressed = false;
+	bool m_IsSPressedDown = false;
 	bool m_IsDPressed = false;
 	bool m_IsSpacePressed = false;
 	bool m_IsShiftPressed = false;
@@ -49,13 +51,27 @@ private:
 
 	bool m_IsJumpStart = false;
 
-	RigidbodyComponent* m_RigidBodyComponent;
-	TransformComponent* m_TransformComponent;
+	bool m_RailMoveUp = false;
+	bool m_RailMoveDown = false;
+
+	float m_RailMoveCool = 0;
+	float m_RailTargetZ = 0;
+
+	RigidbodyComponent* m_RigidBodyComponent = nullptr;
+	TransformComponent* m_TransformComponent = nullptr;
+
+	PlayerObject* m_PlayerOwner = nullptr; // 많이 접근 할거라서
 
 	float m_Z;
 	float m_Velocity;
 	float m_JumpPower = 10.0f;
-	float m_Gravity = 20;
 	float m_JumpCancelSpeed = 10.0f;
+
+	float m_RailHeight;
+
+	//Z축이 점프 Y 가 레인
+
+	int m_Hp = 3;
+
 };
 
