@@ -12,6 +12,7 @@ class AssetManager
 {
 public:
 	using AnimationClips = std::vector<std::pair<std::string, AnimationClip>>;
+	using Sounds = std::unordered_map<std::wstring, std::filesystem::path>;
 	AssetManager(D2DRenderer& renderer) : m_Renderer(renderer)
 	{
 	}
@@ -24,8 +25,15 @@ public:
 	const AnimationClips& GetClips(const std::wstring& key) const;
 	const UIData& GetUI(const std::wstring& key) const;
 	const MapData& GetMap(const std::wstring& key) const;
+	const Sounds& GetBGMPaths() const;
+	const Sounds& GetSFXPaths() const;
+	const Sounds& GetUISoundPaths() const;
+
 
 private:
+	std::unordered_map<std::wstring, std::filesystem::path> m_BGMs;
+	std::unordered_map<std::wstring, std::filesystem::path> m_SFXs;
+	std::unordered_map<std::wstring, std::filesystem::path> m_UISounds;
 	std::unordered_map<std::wstring, Microsoft::WRL::ComPtr<ID2D1Bitmap1>> m_Textures;
 	std::unordered_map<std::wstring, AnimationClips> m_Animations;
 	std::unordered_map<std::wstring, UIData> m_UIs;

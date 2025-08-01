@@ -88,3 +88,18 @@ const MapData& AssetManager::GetMap(const std::wstring& key) const
 	static const MapData empty;
 	return empty;
 }
+
+const AssetManager::Sounds& AssetManager::GetBGMPaths() const
+{
+	return m_BGMs;
+}
+
+const AssetManager::Sounds& AssetManager::GetSFXPaths() const
+{
+	return m_SFXs;
+}
+
+const AssetManager::Sounds& AssetManager::GetUISoundPaths() const
+{
+	return m_UISounds;
+}
