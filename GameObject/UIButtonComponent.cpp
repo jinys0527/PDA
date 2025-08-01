@@ -61,28 +61,48 @@ void UIButtonComponent::Update(float deltaTime)
 	{
 		//std::cout << "호버호버" << std::endl;
 	}
+	std::cout << m_FSM.GetCurrentState() << std::endl;
+
+
 
 }
 
 void UIButtonComponent::OnEvent(EventType type, const void* data)
 {
-	//아래는 버튼UI가 될 듯
-	if (type == EventType::MouseLeftClick)
-	{
-		auto mouseData = static_cast<const Events::MouseState*>(data);
-		//std::cout << mouseData->pos.x << " " << mouseData->pos.y << "에서 클릭됨 \n";
-
-	}
-
 	//마우스 위치 받기
 	if (type == EventType::Hovered)
 	{
 		auto mouseData = static_cast<const Events::MouseState*>(data);
 		IsHovered(mouseData->pos);
+		if (m_IsHovered)
+		{
+			if (m_FSM.GetCurrentState() == "None")
+			{
+				m_FSM.Trigger("NoneToHover");
+			}
+		}
+		else if (!m_IsHovered && m_FSM.GetCurrentState() == "Hover")
+		{
+			m_FSM.Trigger("HoverToNone");
+		}
+
 	}
 
+	//아래는 버튼UI가 될 듯
+	if (type == EventType::MouseLeftClick)
+	{
+		if (m_IsHovered)
+		{
+			auto mouseData = static_cast<const Events::MouseState*>(data);
+			std::cout << mouseData->pos.x << " " << mouseData->pos.y << "에서 클릭됨 \n";
+			m_IsClicked = true;
+			m_FSM.Trigger("HoverToClick");
 
+			m_FSM.Trigger("ClickToHover");
+			m_IsClicked = false;
 
+		}
+	}
 }
 
 void UIButtonComponent::Serialize(nlohmann::json& j) const
