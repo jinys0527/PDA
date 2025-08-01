@@ -37,3 +37,16 @@ D2D1::Matrix3x2F CameraComponent::GetViewMatrix()
 	return pan * scaleFlip * center;
 }
 
+D2D1::Matrix3x2F CameraComponent::GetViewMatrixForUI()
+{
+	Math::Vector2F position = m_Owner->GetComponent<TransformComponent>()->GetPosition();
+
+	auto pan = D2D1::Matrix3x2F::Translation(-(m_Width / 2), -(m_Height / 2));
+
+	auto scaleFlip = D2D1::Matrix3x2F::Scale(1, -1);
+
+	auto center = D2D1::Matrix3x2F::Translation(m_Width * 0.5f, m_Height * 0.5f);
+
+	return pan * scaleFlip * center;
+}
+

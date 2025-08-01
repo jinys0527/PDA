@@ -120,17 +120,28 @@ void D2DRenderer::DrawMessage(const wchar_t* text, float left, float top, float 
 
 void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
 {
+	//renderInfo에서 UI용이랑 게임 오브젝트용 따로 만들어서 받으면 될듯?
+
+	//게임 오브젝트 그리기
+	D2D1::Matrix3x2F cameraMatrix = m_Camera->GetComponent<CameraComponent>()->GetViewMatrix();
+	DrawInternal(renderInfo, cameraMatrix);
+
+	//UI 그리기
+	cameraMatrix = m_Camera->GetComponent<CameraComponent>()->GetViewMatrixForUI();
+	DrawInternal(renderInfo, cameraMatrix);
+
+}
+
+void D2DRenderer::DrawInternal(std::vector<RenderInfo>& renderInfo, D2D1::Matrix3x2F cameraMatrix)
+{
 	std::vector<RenderInfo> sortedInfo = renderInfo;
 	std::sort(sortedInfo.begin(), sortedInfo.end(), [](const RenderInfo& a, const RenderInfo& b) {return a.layer < b.layer; });
-
-	D2D1::Matrix3x2F cameraMatrix = m_Camera->GetComponent<CameraComponent>()->GetViewMatrix();
-	//D2D1::Matrix3x2F cameraMatrix = cameraTrans->GetWorldMatrix();
 
 
 	for (const auto& info : sortedInfo)
 	{
 		if (!info.bitmap)
-		{	
+		{
 			continue;
 		}
 
@@ -145,7 +156,7 @@ void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
 			m.m21, m.m22,
 			m.dx,  m.dy
 		};
-		
+
 		mat = D2D1::Matrix3x2F::Scale(1, -1) * mat * cameraMatrix;
 
 		m_d2dContext->SetTransform(mat); // 여기서 행렬 적용
@@ -174,7 +185,9 @@ void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
 
 	m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());
 
+
 }
+
 
 Math::Vector2F D2DRenderer::CalcAnchorOffset(const Math::Vector2F& parentSize,
 	const Anchor& anchor,

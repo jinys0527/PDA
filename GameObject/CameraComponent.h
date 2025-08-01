@@ -28,7 +28,8 @@ public:
 	}
 
 	D2D1::Matrix3x2F GetViewMatrix();
-	
+	D2D1::Matrix3x2F GetViewMatrixForUI();
+
 protected:
 	float m_Width;
 	float m_Height;

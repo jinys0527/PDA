@@ -59,7 +59,7 @@ void UIButtonComponent::Update(float deltaTime)
 {
 	if (m_IsHovered)
 	{
-		std::cout << "호버호버" << std::endl;
+		//std::cout << "호버호버" << std::endl;
 	}
 
 }
@@ -97,7 +97,7 @@ void UIButtonComponent::IsHovered(POINT mousePos)
 {
 	mousePos.y = 1080 - mousePos.y;
 
-	std::cout << mousePos.x << " " << mousePos.y << "에 위치함 \n";
+	//std::cout << mousePos.x << " " << mousePos.y << "에 위치함 \n";
 
 
 	auto objPos = m_Owner->GetComponent<TransformComponent>()->GetPosition();

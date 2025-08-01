@@ -24,13 +24,13 @@ void TitleScene::Initialize()
 	sr->SetTextureKey("cat_texture");
 	sr->SetTexture(bitmap);
 	sr->SetPivotPreset(SpritePivotPreset::Center, bitmap->GetSize());
-  
-  
+
+
 	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
 	cameraObject->m_Name = "Camera";
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
 	trans3->SetPosition({ 960.0f, 540.0f });
-	//cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5);
+	cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5);
 	SetMainCamera(cameraObject);
 
 
@@ -71,8 +71,10 @@ void TitleScene::Update(float deltaTime)
 		gameObject.second->Update(deltaTime);
 	}
 
-	//Math::Vector2F pos = m_Camera->GetComponent<TransformComponent>()->GetPosition();
-	//m_Camera->GetComponent<TransformComponent>()->SetPosition({pos.x + 100 * deltaTime, pos.y});
+	Math::Vector2F pos = m_Camera->GetComponent<TransformComponent>()->GetPosition();
+	m_Camera->GetComponent<TransformComponent>()->SetPosition({pos.x + 100 * deltaTime, pos.y});
+
+	//std::cout << pos.x << " " << pos.y << std::endl;
 }
 
 void TitleScene::Render(std::vector<RenderInfo>& renderInfo)
