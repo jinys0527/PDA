@@ -130,6 +130,7 @@
     <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="AnimationController.h" />
     <ClInclude Include="Background.h" />
+    <ClInclude Include="ButtonUI.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="BoxColliderComponent.h" />
@@ -146,11 +147,13 @@
     <ClInclude Include="UIButtonComponent.h" />
     <ClInclude Include="UIComponent.h" />
     <ClInclude Include="UIImageComponent.h" />
+    <ClInclude Include="UIObject.h" />
     <ClInclude Include="UITextComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationController.cpp" />
     <ClCompile Include="Background.cpp" />
+    <ClCompile Include="ButtonUI.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="CameraObject.cpp" />
     <ClCompile Include="BoxColliderComponent.cpp" />
@@ -167,6 +170,7 @@
     <ClCompile Include="UIButtonComponent.cpp" />
     <ClCompile Include="UIComponent.cpp" />
     <ClCompile Include="UIImageComponent.cpp" />
+    <ClCompile Include="UIObject.cpp" />
     <ClCompile Include="UITextComponent.cpp" />
   </ItemGroup>
   <ItemGroup>

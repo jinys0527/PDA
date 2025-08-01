@@ -37,7 +37,10 @@ public:
 
 	void DrawMessage(const wchar_t* text, float left, float top, float width, float height, const D2D1::ColorF& color);
 
+
 	void Draw(std::vector<RenderInfo>& renderInfo);
+	void DrawInternal(std::vector<RenderInfo>& renderInfo, D2D1::Matrix3x2F cameraMatrix);
+
 
 	Math::Vector2F CalcAnchorOffset(const Math::Vector2F& parentSize,
 		const Anchor& anchor,
