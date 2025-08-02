@@ -38,6 +38,7 @@ void SpriteRenderer::Serialize(nlohmann::json& j) const
 	j["path"] = m_Path;
 	j["filpX"] = m_FlipX;
 	j["filpY"] = m_FlipY;
+	j["opacity"] = m_Opacity;
 }
 
 void SpriteRenderer::Deserialize(const nlohmann::json& j)
@@ -46,6 +47,7 @@ void SpriteRenderer::Deserialize(const nlohmann::json& j)
 	m_Path = j["path"].get<std::string>();
 	m_FlipX = j["filpX"].get<bool>();
 	m_FlipY = j["filpY"].get<bool>();
+	m_Opacity = j["opacity"].get<float>();
 
 	std::wstring key(m_TextureKey.begin(), m_TextureKey.end());
 

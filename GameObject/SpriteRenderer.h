@@ -45,6 +45,18 @@ public:
 
 	void SetAssetManager(AssetManager* assetManager) { m_AssetManager = assetManager; }
 
+	void SetOpacity(float opacity)
+	{
+		if (opacity < 0.0f) opacity = 0.0f;
+		if (opacity > 1.0f) opacity = 1.0f;
+		m_Opacity = opacity;
+	}
+
+	float GetOpacity() 
+	{
+		return m_Opacity;
+	}
+
 	void SetFlipX(bool flipX);
 	bool GetFlipX() const;
 
@@ -59,6 +71,7 @@ public:
 	void SetPivotPreset(SpritePivotPreset spp, const D2D1_SIZE_F& size);
 
 private:
+	float m_Opacity = 1.0f;
 	AssetManager* m_AssetManager;
 	std::string m_TextureKey;
 	std::string m_Path;

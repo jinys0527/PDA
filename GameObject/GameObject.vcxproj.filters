@@ -90,13 +90,19 @@
     <ClInclude Include="Background.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
-    <ClInclude Include="Obstacle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="UIObject.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
     <ClInclude Include="ButtonUI.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RunPlayerController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerObject.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
   </ItemGroup>
@@ -155,13 +161,19 @@
     <ClCompile Include="Background.cpp">
       <Filter>Object\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Obstacle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="UIObject.cpp">
       <Filter>Object\Source</Filter>
     </ClCompile>
     <ClCompile Include="ButtonUI.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Obstacle.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerObject.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RunPlayerController.cpp">
       <Filter>Object\Source</Filter>
     </ClCompile>
   </ItemGroup>
