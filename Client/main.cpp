@@ -21,7 +21,14 @@ int main()
     Engine engine;
 	SceneManager sceneManager(engine.GetRenderer(), engine.GetEventDispatcher(), engine.GetAssetManager());
 
- 	g_pMainApp = new GameApplication(engine, sceneManager);
+#ifdef _EDITOR
+    Editor editor(sceneManager);
+
+    g_pMainApp = new GameApplication(engine, sceneManager, editor);
+#else
+    g_pMainApp = new GameApplication(engine, sceneManager);
+#endif
+ 	
  
  	if (!g_pMainApp->Initialize())
  	{

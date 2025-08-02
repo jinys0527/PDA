@@ -13,7 +13,11 @@ class GameApplication : public NzWndBase
 {
 
 public:
+#ifdef _EDITOR
+	GameApplication(Engine& engine, SceneManager& sceneManager, Editor& editor) : NzWndBase(), m_Engine(engine), m_SceneManager(sceneManager), m_Editor(editor) {}
+#else
 	GameApplication(Engine& engine, SceneManager& sceneManager) : NzWndBase(), m_Engine(engine), m_SceneManager(sceneManager) { }
+#endif
 	virtual ~GameApplication() = default;
 
 	bool Initialize();
@@ -38,6 +42,10 @@ private:
 
 	GameObject* m_Player;
 	GameObject* m_Obstacle;
+
+#ifdef _EDITOR
+	Editor& m_Editor;
+#endif
 
 	std::array<GameObject*, 2> m_BackgroundObj;
 

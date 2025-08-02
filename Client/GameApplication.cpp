@@ -42,8 +42,14 @@ bool GameApplication::Initialize()
  	m_Background = m_Engine.GetAssetManager().LoadTexture(L"vecteezy", L"../Resource/vecteezy.png");
  	assert(m_Background != nullptr && "Failed to load background texture.");
 
-	ID3D11RenderTargetView* rtvs[] = { m_Engine.GetRenderer().GetD3DRenderTargetView() };
+#ifdef _EDITOR
+	ImGui::CreateContext();
+	ImGui_ImplWin32_Init(m_hwnd);
 
+	ImGui_ImplDX11_Init(m_Engine.GetRenderer().GetD3DDevice(), m_Engine.GetRenderer().GetD3DContext());
+
+	ID3D11RenderTargetView* rtvs[] = { m_Engine.GetRenderer().GetD3DRenderTargetView() };
+#endif
 
 	return true;
 }
@@ -56,7 +62,9 @@ void GameApplication::Run()
 	{
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
+#ifndef _EDITOR
 			if (false == m_Engine.GetInputManager().OnHandleMessage(msg))
+#endif
 				TranslateMessage(&msg);
 
 			DispatchMessage(&msg);
@@ -91,19 +99,21 @@ void GameApplication::Finalize()
 
 	__super::Destroy();
 
-	/*ImGui_ImplDX11_Shutdown();
+#ifdef _EDITOR
+	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();*/
-
+	ImGui::DestroyContext();
+#endif
 }
 
 bool GameApplication::OnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
+#ifdef _EDITOR
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam))
 	{
 		return true; // ImGui가 메시지를 처리했으면 true 반환
 	}
-
+#endif
 	return false;
 }
 
@@ -117,6 +127,7 @@ void GameApplication::UpdateLogic()
 
 void GameApplication::Update()
 {
+#ifndef _EDITOR
 	m_SceneManager.Update(m_Engine.GetTimer().DeltaTime());
 	// FixedUpdate
 	{
@@ -127,7 +138,8 @@ void GameApplication::Update()
 		}
 
 	}
-
+#else
+#endif
 }
 
 void GameApplication::Render()
@@ -140,9 +152,14 @@ void GameApplication::Render()
 
 	m_Engine.GetRenderer().RenderEnd(false);
 
+#ifdef _EDITOR
+	RenderImGUI();
+#endif
+
 	m_Engine.GetRenderer().Present();
 }
 
+#ifdef _EDITOR
 void GameApplication::RenderImGUI()
 {
 	ID3D11DeviceContext* pd3dDeviceContext = nullptr;
@@ -159,12 +176,13 @@ void GameApplication::RenderImGUI()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	//m_Editor.Update();
+	m_Editor.Update();
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 }
+#endif
 
 void GameApplication::OnResize(int width, int height)
 {
