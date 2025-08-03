@@ -35,6 +35,8 @@ void GameObject::Render(std::vector<RenderInfo>& renderInfo)
 			info.bitmap = sprite->GetTexture();
 			info.worldMatrix = m_Transform->GetWorldMatrix();
 			info.pivot = sprite->GetPivot();
+			// Opacity 적용
+			info.opacity = sprite->GetOpacity();
 			// UI가 아닌 일반 오브젝트 위치로 설정
 			info.anchor = Anchor{ {0.0f, 0.0f}, {0.0f, 0.0f} }; // (0,0)-(0,0) 고정값
 			info.anchoredPosition = m_Transform->GetPosition();

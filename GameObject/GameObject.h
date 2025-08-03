@@ -57,7 +57,6 @@ public:
 	virtual void Render(std::vector<RenderInfo>& renderInfo);
 	virtual void FixedUpdate();
 
-
 	TransformComponent* RenderPosition();		//테스트용
 	SpriteRenderer* RenderTexture();
 
