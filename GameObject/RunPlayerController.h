@@ -36,6 +36,11 @@ public:
 	}
 
 private:
+
+	Math::Vector2F MoveCheck(float deltaTime); // 코드 길이 줄이기 위해
+	void JumpCheck();
+	void SlideCheck();
+
 	// 입력 처리
 	bool m_IsWPressed = false;
 	bool m_IsWPressedDown = false;
@@ -68,6 +73,9 @@ private:
 	float m_JumpCancelSpeed = 10.0f;
 
 	float m_RailHeight;
+
+	int m_maxZ = 2;
+	int m_minZ = 0;
 
 	//Z축이 점프 Y 가 레인
 

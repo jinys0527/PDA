@@ -14,7 +14,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 
 	m_RigidbodyComponent->SetGravity(Math::Vector2F(0, -20));
 
-	{
+	{ // 좀 많이 길어서 이걸로 닫아주시길
 		{
 
 			State idleState{
