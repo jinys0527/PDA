@@ -14,7 +14,7 @@ public:
 	static constexpr const char* StaticTypeName = "UIButtonComponent";
 	const char* GetTypeName() const override { return StaticTypeName; }
 
-	virtual ~UIButtonComponent() = default;
+	virtual ~UIButtonComponent();
 	void SetOnClick(std::function<void()> callback);
 	void Render(D2DRenderer* renderer);
 	void Update(float deltaTime) override;

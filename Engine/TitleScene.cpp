@@ -38,21 +38,22 @@ void TitleScene::Initialize()
 	auto testUIObject = std::make_shared<ButtonUI>(m_EventDispatcher);
 	testUIObject->m_Name = "UI";
 	auto uiTrans = testUIObject->GetComponent<TransformComponent>();
-	uiTrans->SetPosition({ 1600, 900 });
+	uiTrans->SetPosition({ 960, 540 });
 	//sr = testUIObject->AddComponent<SpriteRenderer>();
 	auto image = testUIObject->AddComponent<UIImageComponent>();
 	image->SetBitmap(bitmap);
 	//sr->SetAssetManager(&m_AssetManager);
 	//sr->SetTexture(bitmap);
-	uiTrans->SetPivotPreset(TransformPivotPreset::Center, bitmap->GetSize());
+	//uiTrans->SetPivotPreset(TransformPivotPreset::Center, bitmap->GetSize());
 	image->SetPivotPreset(ImagePivotPreset::Center, bitmap->GetSize());
 	testUIObject->GetComponent<UIButtonComponent>()->Start();
-	uiTrans->SetScale({ 2.0f, 2.0f });
+	//uiTrans->SetScale({ 2.0f, 2.0f });
+	
 
 
 	AddGameObject(gameObject);
 	AddGameObject(cameraObject);
-	AddGameObject(testUIObject);
+	//AddGameObject(testUIObject);
 }
 
 void TitleScene::Finalize()
@@ -86,5 +87,7 @@ void TitleScene::Render(std::vector<RenderInfo>& renderInfo)
 	for (auto gameObject : m_GameObjects)
 	{
 		gameObject.second->Render(renderInfo);
+
+		
 	}
 }

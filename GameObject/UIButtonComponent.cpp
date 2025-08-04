@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "TransformComponent.h"
 #include "SpriteRenderer.h"
+#include "UIImageComponent.h"
 
 UIButtonComponent::UIButtonComponent()
 {
@@ -42,6 +43,13 @@ void UIButtonComponent::Start()
 {
 	m_Owner->GetEventDispatcher().AddListener(EventType::Hovered, this);
 	m_Owner->GetEventDispatcher().AddListener(EventType::MouseLeftClick, this);
+
+}
+
+UIButtonComponent::~UIButtonComponent()
+{
+	m_Owner->GetEventDispatcher().RemoveListener(EventType::Hovered, this);
+	m_Owner->GetEventDispatcher().RemoveListener(EventType::MouseLeftClick, this);
 
 }
 
@@ -117,19 +125,19 @@ void UIButtonComponent::IsHovered(POINT mousePos)
 {
 	mousePos.y = 1080 - mousePos.y;
 
-	//std::cout << mousePos.x << " " << mousePos.y << "에 위치함 \n";
+	std::cout << mousePos.x << " " << mousePos.y << "에 위치함 \n";
 
 
 	auto objPos = m_Owner->GetComponent<TransformComponent>()->GetPosition();
-	//auto objSize = m_Owner->GetComponent<SpriteRenderer>()->GetTexture()->GetSize();
-	auto objPivot = m_Owner->GetComponent<TransformComponent>()->GetPivotPoint();
+	auto objSize = m_Owner->GetComponent<UIImageComponent>()->GetTexture()->GetSize();
+	auto objPivot = m_Owner->GetComponent<UIImageComponent>()->GetPivot();
 
 	Math::Vector2F topLeft;
 	topLeft.x = objPos.x - objPivot.x;
 	topLeft.y = objPos.y - objPivot.y;
 
-	if (mousePos.x >= topLeft.x && mousePos.x <= (topLeft.x + 360/*objSize.width*/) &&
-		mousePos.y >= topLeft.y && mousePos.y <= (topLeft.y + 360/*objSize.height*/))
+	if (mousePos.x >= topLeft.x && mousePos.x <= (topLeft.x + objSize.width) &&
+		mousePos.y >= topLeft.y && mousePos.y <= (topLeft.y + objSize.height))
 	{
 		m_IsHovered = true;
 	}
