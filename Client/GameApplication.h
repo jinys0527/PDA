@@ -43,11 +43,10 @@ private:
 	GameObject* m_Player;
 	GameObject* m_Obstacle;
 
+
 #ifdef _EDITOR
 	Editor& m_Editor;
 #endif
-
-	std::array<GameObject*, 2> m_BackgroundObj;
 
 	float m_fFrameCount;
 
