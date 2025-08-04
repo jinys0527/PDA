@@ -121,15 +121,15 @@ void UIButtonComponent::IsHovered(POINT mousePos)
 
 
 	auto objPos = m_Owner->GetComponent<TransformComponent>()->GetPosition();
-	auto objSize = m_Owner->GetComponent<SpriteRenderer>()->GetTexture()->GetSize();
+	//auto objSize = m_Owner->GetComponent<SpriteRenderer>()->GetTexture()->GetSize();
 	auto objPivot = m_Owner->GetComponent<TransformComponent>()->GetPivotPoint();
 
 	Math::Vector2F topLeft;
 	topLeft.x = objPos.x - objPivot.x;
 	topLeft.y = objPos.y - objPivot.y;
 
-	if (mousePos.x >= topLeft.x && mousePos.x <= (topLeft.x + objSize.width) &&
-		mousePos.y >= topLeft.y && mousePos.y <= (topLeft.y + objSize.height))
+	if (mousePos.x >= topLeft.x && mousePos.x <= (topLeft.x + 360/*objSize.width*/) &&
+		mousePos.y >= topLeft.y && mousePos.y <= (topLeft.y + 360/*objSize.height*/))
 	{
 		m_IsHovered = true;
 	}
