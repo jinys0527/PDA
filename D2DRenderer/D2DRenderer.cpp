@@ -192,6 +192,34 @@ void D2DRenderer::DrawInternal(std::vector<RenderInfo>& renderInfo, D2D1::Matrix
 
 }
 
+void D2DRenderer::DrawText(std::vector<TextInfo>& textInfo, D2D1::Matrix3x2F cameraMatrix)
+{
+	for (auto& info : textInfo)
+	{
+		if (!info.text || info.text[0] == L'\0') 
+		{
+			continue;
+		}
+
+
+		m_textBrush->SetColor(info.color);
+
+		//나중에 카메라 행렬 곱해야할 듯
+		D2D1::Matrix3x2F pos = info.worldMatrix;
+		D2D1_RECT_F layoutRect = D2D1::RectF(pos.dx, pos.dy, pos.dx + info.size.x, pos.dy + info.size.y);
+
+		m_d2dContext->DrawTextW(
+			info.text,
+			wcslen(info.text),
+			m_textFormat.Get(),
+			layoutRect,
+			m_textBrush.Get(),
+			D2D1_DRAW_TEXT_OPTIONS_NONE,
+			DWRITE_MEASURING_MODE_NATURAL
+		);
+	}
+}
+
 
 Math::Vector2F D2DRenderer::CalcAnchorOffset(const Math::Vector2F& parentSize,
 	const Anchor& anchor,

@@ -41,6 +41,8 @@ public:
 	void Draw(std::vector<RenderInfo>& renderInfo);
 	void DrawInternal(std::vector<RenderInfo>& renderInfo, D2D1::Matrix3x2F cameraMatrix);
 
+	void DrawText(std::vector<TextInfo>& textInfo, D2D1::Matrix3x2F cameraMatrix);
+
 
 	Math::Vector2F CalcAnchorOffset(const Math::Vector2F& parentSize,
 		const Anchor& anchor,
