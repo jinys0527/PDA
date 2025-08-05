@@ -17,4 +17,5 @@ struct RenderInfo
 	D2D1::Matrix3x2F worldMatrix;
 	float opacity = 1.0f;
 	int layer = 0;
+	bool draw = true;
 };

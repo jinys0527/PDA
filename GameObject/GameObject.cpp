@@ -3,6 +3,7 @@
 #include "TransformComponent.h"
 #include "SpriteRenderer.h"
 #include "UIImageComponent.h"
+#include "GraffitiComponent.h"
 
 GameObject::GameObject(EventDispatcher& eventDispatcher) : m_EventDispatcher(eventDispatcher)
 {
@@ -48,9 +49,19 @@ void GameObject::Render(std::vector<RenderInfo>& renderInfo)
 	else if (it2 != m_Components.end())
 	{
 		UIImageComponent* image = dynamic_cast<UIImageComponent*>(it2->second.get());
+
 		if (image)
 		{
 			RenderInfo info;
+			info.bitmap = image->GetTexture();
+			info.worldMatrix = m_Transform->GetWorldMatrix();
+			info.pivot = image->GetPivot();
+			info.opacity = image->GetOpacity();
+			info.anchor = Anchor{ {0.0f, 0.0f}, {0.0f, 0.0f} }; // (0,0)-(0,0) °íÁ¤°ª
+			info.anchoredPosition = m_Transform->GetPosition();
+			info.sizeDelta = { 0, 0 };
+			info.parentSize = { 0, 0 };
+
 			renderInfo.push_back(info);
 		}
 	}

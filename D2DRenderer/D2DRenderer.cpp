@@ -172,15 +172,19 @@ void D2DRenderer::DrawInternal(std::vector<RenderInfo>& renderInfo, D2D1::Matrix
 
 		//m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());
 
-		m_d2dContext->DrawBitmap(
-			info.bitmap.Get(),
-			&destRect,
-			info.opacity,
-			D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
-			nullptr
-		);
-
+		//비트맵을 그려야 할 경우에만
+		if (info.draw)
+		{
+			m_d2dContext->DrawBitmap(
+				info.bitmap.Get(),
+				&destRect,
+				info.opacity,
+				D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+				nullptr
+			);
+		}
 		m_d2dContext->DrawRectangle(&destRect, m_brush.Get());
+		//m_d2dContext->DrawRectangle({-10, 10, 10, -10}, m_brush.Get());
 	}
 
 	m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());
