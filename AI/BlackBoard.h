@@ -4,6 +4,7 @@
 #include <variant>
 #include <optional>
 
+
 // 행동트리 노드들이 공유하는 데이터 저장소
 // AI가 판단하거나 행동할 때 참고하는 모든 상태, 변수, 정보들을 담음
 class BlackBoard
@@ -12,7 +13,8 @@ public:
 	using BBValue = std::variant<int, float, bool, std::string>;
 
 public:
-	void SetVaule(const std::string& key, const BBValue& value);
+
+	void SetValue(const std::string& key, const BBValue& value);
 
     // 데이터 확인
     template<typename T>
@@ -31,7 +33,6 @@ public:
 
 private:
 	std::unordered_map<std::string, BBValue> m_Data;
-
 
 };
 

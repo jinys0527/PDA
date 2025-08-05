@@ -2,5 +2,5 @@
 
 void CompositeNode::AddChild(std::shared_ptr<BTNode> child)
 {
-	children.push_back(child);
+	m_Children.push_back(child);
 }
