@@ -13,15 +13,48 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Behavior Tree">
+      <UniqueIdentifier>{bdc8ccfd-6b75-48ad-8953-ff74d4739602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Behavior Tree\Header Files">
+      <UniqueIdentifier>{eda3602e-4a4b-4e68-a276-848cc748e780}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Behavior Tree\Resource Files">
+      <UniqueIdentifier>{c042e113-4ed9-4cf9-bc58-41b88da49cb4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Event\BTNode.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Event\CompositeNode.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="FSM.h">
-      <Filter>Header Files</Filter>
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Event\Selector.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Event\Sequence.h">
+      <Filter>Behavior Tree\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Event\BTNode.cpp">
+      <Filter>Behavior Tree\Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Event\CompositeNode.cpp">
+      <Filter>Behavior Tree\Resource Files</Filter>
+    </ClCompile>
     <ClCompile Include="FSM.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Behavior Tree\Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Event\Selector.cpp">
+      <Filter>Behavior Tree\Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Event\Sequence.cpp">
+      <Filter>Behavior Tree\Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -35,9 +35,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Event\BTNode.h" />
+    <ClInclude Include="..\Event\CompositeNode.h" />
+    <ClInclude Include="..\Event\Selector.h" />
+    <ClInclude Include="..\Event\Sequence.h" />
     <ClInclude Include="FSM.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Event\BTNode.cpp" />
+    <ClCompile Include="..\Event\CompositeNode.cpp" />
+    <ClCompile Include="..\Event\Selector.cpp" />
+    <ClCompile Include="..\Event\Sequence.cpp" />
     <ClCompile Include="FSM.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
