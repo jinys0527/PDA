@@ -1,11 +1,43 @@
 #include "Obstacle.h"
 #include "BoxColliderComponent.h"
+#include "TransformComponent.h"
 #include "SpriteRenderer.h"
 
 Obstacle::Obstacle(EventDispatcher& eventDispatcher) : GameObject(eventDispatcher)
 {
-	AddComponent<BoxColliderComponent>();
-	AddComponent<SpriteRenderer>();
+	m_Collider = AddComponent<BoxColliderComponent>();
+	m_Collider->Start();
+	m_Collider->SetSize(Vec2F(100, 100));
+	m_Sprite = GetComponent<SpriteRenderer>();
+	m_Z = 1;
+
+	//std::function<void(const CollisionInfo&)>
+	//using StateFunc = std::function<void()>;
+	//using StateFuncFloat = std::function<void(float)>;
+
+	/*
+					[this](float dt)
+				{
+					this->m_KickCool += dt;
+					if (this->m_KickCool >= 2.0f)
+					{
+						this->m_KickCool = 0;
+						this->GetFSM().Trigger("Kick");
+					}
+				}
+	*/
+
+	m_Collider->GetFSM().ChangeState("Stay");
+
+	m_Collider->SetOnStay(
+		[this](const CollisionInfo& info)
+		{
+			if (info.self != this->GetComponent<BoxColliderComponent>())
+				return;
+			auto trans = this->GetComponent<TransformComponent>();
+			trans->Translate(Vec2F(0.1f, 0));
+		}
+	);
 }
 
 void Obstacle::Serialize(nlohmann::json& j) const

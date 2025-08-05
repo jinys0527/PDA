@@ -3,6 +3,7 @@
 #include "TransformComponent.h"
 #include "SpriteRenderer.h"
 #include "UIImageComponent.h"
+#include "BoxColliderComponent.h"
 
 PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventDispatcher)
 {
@@ -11,8 +12,10 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 	eventDispatcher.AddListener(EventType::KeyUp, m_Controller);
 	m_RigidbodyComponent = AddComponent<RigidbodyComponent>();
 	m_RigidbodyComponent->Start();
-
 	m_RigidbodyComponent->SetGravity(Math::Vector2F(0, -20));
+
+	AddComponent<BoxColliderComponent>()->SetSize(Vec2F(100, 100));
+	GetComponent<BoxColliderComponent>()->Start();
 
 	{ // 좀 많이 길어서 이걸로 닫아주시길
 		{
@@ -212,7 +215,7 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 			info.bitmap = sprite->GetTexture();
 			info.worldMatrix = m_Transform->GetWorldMatrix(); // D2D1::Matrix3x2F::Translation(0, z * m_RailHeight) *  
 			info.size = { 1,1 };
-			info.pivot = Math::Vector2F(180, 360); // 바꾸어 놓음
+			info.pivot = sprite->GetPivot(); // 바꾸어 놓음
 			// UI가 아닌 일반 오브젝트 위치로 설정
 			info.anchor = Anchor{ {0.0f, 0.0f}, {0.0f, 0.0f} }; // (0,0)-(0,0) 고정값
 			info.anchoredPosition = m_Transform->GetPosition();
