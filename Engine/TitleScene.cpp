@@ -10,6 +10,8 @@
 #include "ButtonUI.h"
 #include "CameraComponent.h"
 #include "UIImageComponent.h"
+#include "GraffitiObject.h"
+#include "GraffitiComponent.h"
 
 void TitleScene::Initialize()
 {
@@ -50,10 +52,26 @@ void TitleScene::Initialize()
 	//uiTrans->SetScale({ 2.0f, 2.0f });
 	
 
+	//그래피티
+	auto graffiti = std::make_shared<GraffitiObject>(m_EventDispatcher);
+	graffiti->m_Name = "graffiti";
+	auto graffitiTrans = graffiti->GetComponent<TransformComponent>();
+	graffitiTrans->SetPosition({ 1600,900 });
+	sr = graffiti->AddComponent<SpriteRenderer>();
+	sr->SetAssetManager(&m_AssetManager);
+	bitmap = m_AssetManager.LoadTexture(L"bird_texture", L"../Resource/redbird1.png");
+	sr->SetPath("../Resource/redbird1.png");
+	sr->SetTextureKey("bird_texture");
+	sr->SetTexture(bitmap);
+	sr->SetPivotPreset(SpritePivotPreset::Center, bitmap->GetSize());
+	graffiti->GetComponent<GraffitiComponent>()->Start();
+
+
 
 	AddGameObject(gameObject);
 	AddGameObject(cameraObject);
 	//AddGameObject(testUIObject);
+	AddGameObject(graffiti);
 }
 
 void TitleScene::Finalize()

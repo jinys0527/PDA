@@ -105,6 +105,12 @@
     <ClInclude Include="Obstacle.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
+    <ClInclude Include="GraffitiComponent.h">
+      <Filter>Component\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GraffitiObject.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp">
@@ -175,6 +181,12 @@
     </ClCompile>
     <ClCompile Include="RunPlayerController.cpp">
       <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GraffitiObject.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GraffitiComponent.cpp">
+      <Filter>Component\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

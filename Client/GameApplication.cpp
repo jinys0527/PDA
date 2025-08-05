@@ -92,11 +92,6 @@ void GameApplication::Finalize()
 		delete m_Obstacle;
 	}
 
-	for (auto background : m_BackgroundObj)
-	{
-		delete background;
-	}
-
 	__super::Destroy();
 
 #ifdef _EDITOR
