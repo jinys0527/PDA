@@ -25,6 +25,7 @@ void TitleScene::Initialize()
 
 	BlackBoard bb;
 
+<<<<<<< Updated upstream
 	// 값 설정
 	bb.SetValue("HP", 100);
 	bb.SetValue("IsEnemyVisible", true);
@@ -34,14 +35,29 @@ void TitleScene::Initialize()
 	if (auto hp = bb.GetValue<int>("HP")) {
 		std::cout << "HP: " << *hp << "\n";
 	}
+=======
+
+	BlackBoard bb;
+
+	// 값 설정
+	bb.SetValue("AA", true);
+	bb.SetValue("BB", true);
+	bb.SetValue("A", true);
+	bb.SetValue("B", true);
+	bb.SetValue("C", true);
+	bb.SetValue("D", true);
+>>>>>>> Stashed changes
 
 	if (auto visible = bb.GetValue<bool>("IsEnemyVisible")) {
 		std::cout << "적이 보임? " << std::boolalpha << *visible << "\n";
 	}
 
+<<<<<<< Updated upstream
 	if (auto name = bb.GetValue<std::string>("EnemyName")) {
 		std::cout << "적 이름: " << *name << "\n";
 	}
+=======
+>>>>>>> Stashed changes
 	AddGameObject(cameraObject);
 }
 
