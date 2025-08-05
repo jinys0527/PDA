@@ -1,7 +1,5 @@
 #pragma once
 #include "BTNode.h"
-#include <vector>
-#include <memory>
 
 class CompositeNode : public BTNode
 {

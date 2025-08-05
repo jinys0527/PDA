@@ -42,6 +42,15 @@
     <ClInclude Include="Sequence.h">
       <Filter>Behavior Tree\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Inverter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Repeater.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BlackBoard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BTNode.cpp">
@@ -60,6 +69,15 @@
       <Filter>Behavior Tree\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FSM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Inverter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Repeater.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BlackBoard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
