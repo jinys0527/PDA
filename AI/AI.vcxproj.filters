@@ -19,42 +19,48 @@
     <Filter Include="Behavior Tree\Header Files">
       <UniqueIdentifier>{eda3602e-4a4b-4e68-a276-848cc748e780}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Behavior Tree\Resource Files">
+    <Filter Include="Behavior Tree\Source Files">
       <UniqueIdentifier>{c042e113-4ed9-4cf9-bc58-41b88da49cb4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Event\BTNode.h">
-      <Filter>Behavior Tree\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Event\CompositeNode.h">
-      <Filter>Behavior Tree\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FSM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BTNode.h">
       <Filter>Behavior Tree\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Event\Selector.h">
+    <ClInclude Include="CompositeNode.h">
       <Filter>Behavior Tree\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Event\Sequence.h">
+    <ClInclude Include="Decorator.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Selector.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sequence.h">
       <Filter>Behavior Tree\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Event\BTNode.cpp">
-      <Filter>Behavior Tree\Resource Files</Filter>
+    <ClCompile Include="BTNode.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Event\CompositeNode.cpp">
-      <Filter>Behavior Tree\Resource Files</Filter>
+    <ClCompile Include="CompositeNode.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Decorator.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Selector.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sequence.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FSM.cpp">
-      <Filter>Behavior Tree\Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Event\Selector.cpp">
-      <Filter>Behavior Tree\Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Event\Sequence.cpp">
-      <Filter>Behavior Tree\Resource Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

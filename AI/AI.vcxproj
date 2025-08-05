@@ -35,18 +35,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Event\BTNode.h" />
-    <ClInclude Include="..\Event\CompositeNode.h" />
-    <ClInclude Include="..\Event\Selector.h" />
-    <ClInclude Include="..\Event\Sequence.h" />
+    <ClInclude Include="BTNode.h" />
+    <ClInclude Include="CompositeNode.h" />
+    <ClInclude Include="Decorator.h" />
     <ClInclude Include="FSM.h" />
+    <ClInclude Include="Selector.h" />
+    <ClInclude Include="Sequence.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Event\BTNode.cpp" />
-    <ClCompile Include="..\Event\CompositeNode.cpp" />
-    <ClCompile Include="..\Event\Selector.cpp" />
-    <ClCompile Include="..\Event\Sequence.cpp" />
+    <ClCompile Include="BTNode.cpp" />
+    <ClCompile Include="CompositeNode.cpp" />
+    <ClCompile Include="Decorator.cpp" />
     <ClCompile Include="FSM.cpp" />
+    <ClCompile Include="Selector.cpp" />
+    <ClCompile Include="Sequence.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
