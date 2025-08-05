@@ -12,7 +12,14 @@
 #include "UIImageComponent.h"
 #include "GraffitiObject.h"
 #include "GraffitiComponent.h"
-#include "BlackBoard.h"
+//================================
+#include "TestNode.h"
+#include "Sequence.h"
+#include "Selector.h"
+#include "Repeater.h"
+#include "Inverter.h"
+
+//================================
 
 void TitleScene::Initialize()
 {
@@ -23,41 +30,37 @@ void TitleScene::Initialize()
 	cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5);
 	SetMainCamera(cameraObject);
 
-	BlackBoard bb;
-
-<<<<<<< Updated upstream
 	// 값 설정
-	bb.SetValue("HP", 100);
-	bb.SetValue("IsEnemyVisible", true);
-	bb.SetValue("EnemyName", std::string("Orc"));
+	m_BlackBoard.SetValue("AA", true);
+	m_BlackBoard.SetValue("BB", true);
+	m_BlackBoard.SetValue("A", true);
+	m_BlackBoard.SetValue("B", true);
+	m_BlackBoard.SetValue("C", true);
+	m_BlackBoard.SetValue("D", true);
 
-	// 값 가져오기
-	if (auto hp = bb.GetValue<int>("HP")) {
-		std::cout << "HP: " << *hp << "\n";
-	}
-=======
+	// Leaf 노드
+	auto A = std::make_shared<TestNode>("A");
+	auto B = std::make_shared<TestNode>("B");
+	auto C = std::make_shared<TestNode>("C");
+	auto D = std::make_shared<TestNode>("D");
 
-	BlackBoard bb;
+	// Selector AA
+	auto AA = std::make_shared<Selector>("AA");
+	AA->AddChild(A);
+	AA->AddChild(B);
 
-	// 값 설정
-	bb.SetValue("AA", true);
-	bb.SetValue("BB", true);
-	bb.SetValue("A", true);
-	bb.SetValue("B", true);
-	bb.SetValue("C", true);
-	bb.SetValue("D", true);
->>>>>>> Stashed changes
+	// Sequence BB
+	auto BB = std::make_shared<Sequence>("BB");
+	BB->AddChild(C);
+	BB->AddChild(D);
 
-	if (auto visible = bb.GetValue<bool>("IsEnemyVisible")) {
-		std::cout << "적이 보임? " << std::boolalpha << *visible << "\n";
-	}
+	// Root (Selector)
+	auto Root = std::make_shared<Selector>("Root");
+	Root->AddChild(AA);
+	Root->AddChild(BB);
 
-<<<<<<< Updated upstream
-	if (auto name = bb.GetValue<std::string>("EnemyName")) {
-		std::cout << "적 이름: " << *name << "\n";
-	}
-=======
->>>>>>> Stashed changes
+	m_BehaviorTree = Root;
+
 	AddGameObject(cameraObject);
 }
 
@@ -76,6 +79,20 @@ void TitleScene::Leave()
 
 void TitleScene::Update(float deltaTime)
 {
+	m_BTElapsedTime += deltaTime;
+
+	if (m_BTElapsedTime >= 1.0f)
+	{
+		std::cout << "cnt: " << cnt++ << std::endl;
+
+		m_BTElapsedTime = 0.0f;
+
+		if (m_BehaviorTree)
+			m_BehaviorTree->Tick(m_BlackBoard);
+
+
+	}
+
 	for (auto gameObject : m_GameObjects)
 	{
 		gameObject.second->Update(deltaTime);
@@ -85,6 +102,7 @@ void TitleScene::Update(float deltaTime)
 	//m_Camera->GetComponent<TransformComponent>()->SetPosition({pos.x + 100 * deltaTime, pos.y});
 
 	//std::cout << pos.x << " " << pos.y << std::endl;
+
 }
 
 void TitleScene::Render(std::vector<RenderInfo>& renderInfo)

@@ -4,6 +4,7 @@
 class Inverter : public Decorator
 {
 public:
-	NodeState Tick() override;
+	Inverter(std::string name) : Decorator(name) {}
+	NodeState Tick(BlackBoard& bb) override;
 };
 

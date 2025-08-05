@@ -1,10 +1,10 @@
 #include "Sequence.h"
 
-NodeState Sequence::Tick()
+NodeState Sequence::Tick(BlackBoard& bb)
 {
     // m_CurrentIndex부터 자식 실행
     while (m_CurrIndex < m_Children.size()) {
-        NodeState result = m_Children[m_CurrIndex]->Tick();
+        NodeState result = m_Children[m_CurrIndex]->Tick(bb);
 
         if (result == NodeState::Running) {
             return NodeState::Running;

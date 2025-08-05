@@ -44,6 +44,7 @@
     <ClInclude Include="Repeater.h" />
     <ClInclude Include="Selector.h" />
     <ClInclude Include="Sequence.h" />
+    <ClInclude Include="TestNode.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BlackBoard.cpp" />
@@ -55,6 +56,7 @@
     <ClCompile Include="Repeater.cpp" />
     <ClCompile Include="Selector.cpp" />
     <ClCompile Include="Sequence.cpp" />
+    <ClCompile Include="TestNode.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

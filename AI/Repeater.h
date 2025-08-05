@@ -4,9 +4,9 @@
 class Repeater : public Decorator
 {
 public:
-	Repeater(int repeat) : m_TimeToRepeat(repeat) {}
+	Repeater(std::string name, int repeat) : Decorator(name), m_TimeToRepeat(repeat) {}
 
-	NodeState Tick() override;
+	NodeState Tick(BlackBoard& bb) override;
 
 private:
 	int m_TimeToRepeat;

@@ -4,7 +4,8 @@
 class Selector : public CompositeNode
 {
 public:
-	NodeState Tick() override;
+	Selector(std::string name) : CompositeNode(name) {}
+	NodeState Tick(BlackBoard& bb) override;
 
 private:
 	int m_CurrIndex = 0;
