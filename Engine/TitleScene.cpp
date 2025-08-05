@@ -13,6 +13,7 @@
 #include "GraffitiObject.h"
 #include "GraffitiComponent.h"
 //================================
+#include "BlackBoard.h"
 #include "TestNode.h"
 #include "Sequence.h"
 #include "Selector.h"
@@ -30,13 +31,15 @@ void TitleScene::Initialize()
 	cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5);
 	SetMainCamera(cameraObject);
 
+	m_BlackBoard = new BlackBoard();
+
 	// 값 설정
-	m_BlackBoard.SetValue("AA", true);
-	m_BlackBoard.SetValue("BB", true);
-	m_BlackBoard.SetValue("A", true);
-	m_BlackBoard.SetValue("B", true);
-	m_BlackBoard.SetValue("C", true);
-	m_BlackBoard.SetValue("D", true);
+	m_BlackBoard->SetValue("AA", true);
+	m_BlackBoard->SetValue("BB", true);
+	m_BlackBoard->SetValue("A", true);
+	m_BlackBoard->SetValue("B", true);
+	m_BlackBoard->SetValue("C", true);
+	m_BlackBoard->SetValue("D", true);
 
 	// Leaf 노드
 	auto A = std::make_shared<TestNode>("A");
@@ -88,7 +91,7 @@ void TitleScene::Update(float deltaTime)
 		m_BTElapsedTime = 0.0f;
 
 		if (m_BehaviorTree)
-			m_BehaviorTree->Tick(m_BlackBoard);
+			m_BehaviorTree->Tick(*m_BlackBoard);
 
 
 	}

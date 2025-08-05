@@ -36,6 +36,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlackBoard.h" />
+    <ClInclude Include="BossBehaviorTree.h" />
+    <ClInclude Include="BossBlackBoard.h" />
+    <ClInclude Include="BossCoolDown.h" />
+    <ClInclude Include="BossSkillNode.h" />
     <ClInclude Include="BTNode.h" />
     <ClInclude Include="CompositeNode.h" />
     <ClInclude Include="Decorator.h" />
@@ -48,6 +52,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BlackBoard.cpp" />
+    <ClCompile Include="BossBehaviorTree.cpp" />
+    <ClCompile Include="BossBlackBoard.cpp" />
+    <ClCompile Include="BossCoolDown.cpp" />
+    <ClCompile Include="BossSkillNode.cpp" />
     <ClCompile Include="BTNode.cpp" />
     <ClCompile Include="CompositeNode.cpp" />
     <ClCompile Include="Decorator.cpp" />

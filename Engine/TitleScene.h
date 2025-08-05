@@ -1,8 +1,9 @@
 #pragma once
 #include "Scene.h"
-#include "BlackBoard.h"
+//#include "BlackBoard.h"
 
 class BTNode;
+class BlackBoard;
 
 class TitleScene : public Scene
 {
@@ -24,7 +25,7 @@ private:
 	//행동트리 테스트용도
 	float m_BTElapsedTime = 0.0f;
 	std::shared_ptr<BTNode> m_BehaviorTree;
-	BlackBoard m_BlackBoard;
+	BlackBoard* m_BlackBoard;
 	int cnt = 0;
 };
 

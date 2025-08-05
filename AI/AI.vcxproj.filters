@@ -54,6 +54,18 @@
     <ClInclude Include="Repeater.h">
       <Filter>Behavior Tree\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BossBehaviorTree.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BossBlackBoard.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BossSkillNode.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BossCoolDown.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BTNode.cpp">
@@ -85,6 +97,18 @@
     </ClCompile>
     <ClCompile Include="Repeater.cpp">
       <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BossBehaviorTree.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BossBlackBoard.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSkillNode.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BossCoolDown.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
