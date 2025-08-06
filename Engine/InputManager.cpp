@@ -37,8 +37,21 @@ void InputManager::Update()
 		if (m_Mouse.leftPressed == true)
 		{
 			m_EventDispatcher.Dispatch(EventType::MouseLeftClick, &m_Mouse);
+			m_EventDispatcher.Dispatch(EventType::Pressed, &m_Mouse);
 		}
 	}
+	else if (m_MousePrev.leftPressed == true)
+	{
+		if (m_Mouse.leftPressed == true)
+		{
+			m_EventDispatcher.Dispatch(EventType::Dragged, &m_Mouse);
+		}
+		else
+		{
+			m_EventDispatcher.Dispatch(EventType::Released, &m_Mouse);
+		}
+	}
+	
 
 	if (m_MousePrev.rightPressed == false)
 	{

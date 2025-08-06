@@ -105,6 +105,15 @@
     <ClInclude Include="Obstacle.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
+    <ClInclude Include="UISliderComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundUI.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="GraffitiComponent.h">
       <Filter>Component\Header</Filter>
     </ClInclude>
@@ -181,6 +190,15 @@
     </ClCompile>
     <ClCompile Include="RunPlayerController.cpp">
       <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundUI.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UISliderComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GraffitiObject.cpp">
       <Filter>Object\Source</Filter>

@@ -1,4 +1,7 @@
 #include "AnimationComponent.h"
+#include "GameObject.h"
+#include "SpriteRenderer.h"
+#include "AssetManager.h"
 
 void AnimationComponent::Play(const std::string& name, bool loop /*= true*/)
 {
@@ -13,8 +16,15 @@ void AnimationComponent::Play(const std::string& name, bool loop /*= true*/)
 void AnimationComponent::Update(float deltaTime)
 {
 	m_AnimationController.Update(deltaTime);
-
 	const Frame& frame = m_AnimationController.GetCurrentFrame();
+	
+	const AnimationClip* currentClip = m_Clips[m_CurrentClipName];
+	Microsoft::WRL::ComPtr<ID2D1Bitmap1> texture = m_AssetManager->GetTexture(currentClip->GetTextureKey());
+	if (!texture)
+		return;
+
+	auto sr = m_Owner->GetComponent<SpriteRenderer>();
+	sr->SetTexture(texture, frame.ToRectF());
 }
 
 void AnimationComponent::OnEvent(EventType type, const void* data)

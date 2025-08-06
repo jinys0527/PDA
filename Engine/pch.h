@@ -42,6 +42,8 @@
 #include <wincodec.h>                // WIC (이미지 로딩)
 
 
+#include "fmod.hpp"
+
 #define _USE_MATH_DEFINES
 #include <cmath>
 

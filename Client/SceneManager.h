@@ -6,22 +6,16 @@
 #include "D2DRenderer.h"
 #include "EventDispatcher.h"
 #include "AssetManager.h"
+#include "SoundAssetManager.h"
 #include "CameraObject.h"
-#include "GameManager.h"
+#include "SoundManager.h"
 
 class SceneManager
 {
 	friend class Editor;
 public:
-	SceneManager(D2DRenderer& renderer, EventDispatcher& eventDispatcher, AssetManager& assetManager) : m_Renderer(renderer), m_EventDispatcher(eventDispatcher), m_AssetManager(assetManager)
-	{ 
-		m_Camera = nullptr;
-		m_GameManager = new GameManager(eventDispatcher);
-	}
-	~SceneManager()
-	{
-		delete m_GameManager;
-	}
+	SceneManager(D2DRenderer& renderer, EventDispatcher& eventDispatcher, AssetManager& assetManager, SoundAssetManager& soundAssetManager, SoundManager& soundManager) : m_Renderer(renderer), m_EventDispatcher(eventDispatcher), m_AssetManager(assetManager), m_SoundAssetManager(soundAssetManager), m_SoundManager(soundManager) { }
+	~SceneManager() = default;
 
 	void Initialize();
 	void Update(float deltaTime);
@@ -34,13 +28,20 @@ public:
 	void SetCurrentScene(const std::string& name);
 	std::shared_ptr<Scene> GetCurrentScene() const;
 
+	void Reset()
+	{
+		m_Scenes.clear();
+		m_CurrentScene.reset();
+	}
+
 private:
 	std::unordered_map<std::string, std::shared_ptr<Scene>> m_Scenes;
 	std::shared_ptr<Scene> m_CurrentScene;
 	CameraObject* m_Camera;
 	D2DRenderer& m_Renderer;
 	AssetManager& m_AssetManager;
+	SoundAssetManager& m_SoundAssetManager;
 	EventDispatcher& m_EventDispatcher;
-	GameManager* m_GameManager;
+	SoundManager& m_SoundManager;
 };
 

@@ -13,7 +13,7 @@ enum class EventType
 	Pressed,
 	Released,
 	Moved,
-
+	Dragged,
 
 	//Collision
 	CollisionEnter,

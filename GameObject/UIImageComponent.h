@@ -26,6 +26,18 @@ public:
 	void SetUV(const D2D1_RECT_F& sourceRect);
 	void Render(D2DRenderer* renderer);
 
+	D2D1_RECT_F GetUV()
+	{
+		return m_SourceRect;
+	}
+
+	void SetOpacity(float opacity)
+	{
+		m_Opacity = std::clamp(opacity, 0.0f, 1.0f);
+	}
+
+	const float& GetOpacity() const { return m_Opacity; }
+
 	void SetPivotPreset(ImagePivotPreset spp, const D2D1_SIZE_F& size);
 
 	Microsoft::WRL::ComPtr<ID2D1Bitmap1> GetTexture() const;
@@ -44,7 +56,9 @@ public:
 private:
 	Microsoft::WRL::ComPtr<ID2D1Bitmap1> m_Bitmap;
 	D2D1_RECT_F m_SourceRect = {};
+
 	Math::Vector2F m_Pivot;
+
 	float m_Opacity = 1.0f;
 };
 

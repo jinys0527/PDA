@@ -4,6 +4,7 @@
 #include <d2d1helper.h>
 #include <vector>
 #include "RenderData.h"
+#include <iostream>
 using namespace Microsoft::WRL;
 
 
@@ -34,13 +35,12 @@ public:
 
 	void DrawBitmap(ID2D1Bitmap1* bitmap, D2D1_RECT_F dest, TransformComponent* trans, D2D1::Matrix3x2F viewTM);
 
-
 	void DrawMessage(const wchar_t* text, float left, float top, float width, float height, const D2D1::ColorF& color);
 
 
-	void Draw(std::vector<RenderInfo>& renderInfo);
-	void DrawInternal(std::vector<RenderInfo>& renderInfo, D2D1::Matrix3x2F cameraMatrix);
-
+	void Draw(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo);
+	void DrawGameObject(std::vector<RenderInfo>& renderInfo, D2D1::Matrix3x2F cameraMatrix);
+	void DrawUIObject(std::vector<UIRenderInfo>& uiRenderInfo, D2D1::Matrix3x2F cameraMatrix);
 
 	Math::Vector2F CalcAnchorOffset(const Math::Vector2F& parentSize,
 		const Anchor& anchor,

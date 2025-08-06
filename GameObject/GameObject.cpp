@@ -5,94 +5,32 @@
 #include "UIImageComponent.h"
 #include "GraffitiComponent.h"
 
-GameObject::GameObject(EventDispatcher& eventDispatcher) : m_EventDispatcher(eventDispatcher)
+GameObject::GameObject(EventDispatcher& eventDispatcher) : Object(eventDispatcher)
 {
 	m_Transform = AddComponent<TransformComponent>();
 }
 
-void GameObject::Update(float deltaTime)
-{
-	for (auto it = m_Components.begin(); it != m_Components.end(); it++)
-	{
-		it->second->Update(deltaTime);
-	}
-}
-
-void GameObject::FixedUpdate()
-{
-}
-
 void GameObject::Render(std::vector<RenderInfo>& renderInfo)
 {
-	auto it = m_Components.find(SpriteRenderer::StaticTypeName);
-	auto it2 = m_Components.find(UIImageComponent::StaticTypeName);
+	auto spriteRenderer = GetComponent<SpriteRenderer>();
 
-	if (it != m_Components.end())
+	if (spriteRenderer)
 	{
-		SpriteRenderer* sprite = dynamic_cast<SpriteRenderer*>(it->second.get());
-		if(sprite)
-		{
-			RenderInfo info;
-			info.bitmap = sprite->GetTexture();
-			info.worldMatrix = m_Transform->GetWorldMatrix();
-			info.pivot = sprite->GetPivot();
-			// Opacity 적용
-			info.opacity = sprite->GetOpacity();
-			// UI가 아닌 일반 오브젝트 위치로 설정
-			info.anchor = Anchor{ {0.0f, 0.0f}, {0.0f, 0.0f} }; // (0,0)-(0,0) 고정값
-			info.anchoredPosition = m_Transform->GetPosition();
-			info.sizeDelta = { 0, 0 };
-			info.parentSize = { 0, 0 };
-			renderInfo.push_back(info);
-		}
-	}
-	else if (it2 != m_Components.end())
-	{
-		UIImageComponent* image = dynamic_cast<UIImageComponent*>(it2->second.get());
-
-		if (image)
-		{
-			RenderInfo info;
-			info.bitmap = image->GetTexture();
-			info.worldMatrix = m_Transform->GetWorldMatrix();
-			info.pivot = image->GetPivot();
-			info.opacity = image->GetOpacity();
-			info.anchor = Anchor{ {0.0f, 0.0f}, {0.0f, 0.0f} }; // (0,0)-(0,0) 고정값
-			info.anchoredPosition = m_Transform->GetPosition();
-			info.sizeDelta = { 0, 0 };
-			info.parentSize = { 0, 0 };
-
-			renderInfo.push_back(info);
-		}
+		RenderInfo info;
+		info.bitmap = spriteRenderer->GetTexture();
+		info.worldMatrix = m_Transform->GetWorldMatrix();
+		info.pivot = spriteRenderer->GetPivot();
+		// Opacity 적용
+		info.opacity = spriteRenderer->GetOpacity();
+		// UI가 아닌 일반 오브젝트 위치로 설정
+		info.useSrcRect = spriteRenderer->GetUseSrcRect();
+		info.srcRect = spriteRenderer->GetSrcRect();
+		renderInfo.emplace_back(info);
 	}
 	else
 	{
 		return;
 	}
-}
-
-TransformComponent* GameObject::RenderPosition()
-{
-	SpriteRenderer* sr = GetComponent<SpriteRenderer>();
-	if (sr != nullptr)
-	{
-		//sr->Render();
-		auto it = m_Components.find(TransformComponent::StaticTypeName);
-		if (it != m_Components.end()) {
-			return dynamic_cast<TransformComponent*>(it->second.get());
-		}
-	}
-	return nullptr;
-}
-
-SpriteRenderer* GameObject::RenderTexture()
-{
-	auto it = m_Components.find(SpriteRenderer::StaticTypeName);
-	if (it != m_Components.end())
-	{
-		return dynamic_cast<SpriteRenderer*>(it->second.get());
-	}
-	return nullptr;
 }
 
 void GameObject::Serialize(nlohmann::json& j) const
@@ -101,10 +39,15 @@ void GameObject::Serialize(nlohmann::json& j) const
 	j["components"] = nlohmann::json::array();
 	for (const auto& component : m_Components)
 	{
-		nlohmann::json compJson;
-		compJson["type"] = component.second->GetTypeName();
-		component.second->Serialize(compJson["data"]);
-		j["components"].push_back(compJson);
+		const char* typeName = component.second->GetTypeName();
+
+		if(strcmp(typeName, "TransformComponent") == 0 || strcmp(typeName, "SpriteRenderer") == 0)
+		{
+			nlohmann::json compJson;		
+			compJson["type"] = typeName;
+			component.second->Serialize(compJson["data"]);
+			j["components"].push_back(compJson);
+		}
 	}
 }
 
@@ -137,22 +80,5 @@ void GameObject::Deserialize(const nlohmann::json& j)
 				AddComponent(std::move(comp));
 			}
 		}
-	}
-}
-
-void GameObject::SendMessages(const myCore::MessageID msg, void* data /* = nullptr */)
-{
-	for (auto it = m_Components.begin(); it != m_Components.end(); it++)
-	{
-		it->second->HandleMessage(msg, data);
-	}
-}
-
-
-void GameObject::SendEvent(const std::string& evt)
-{
-	for (auto it = m_Components.begin(); it != m_Components.end(); it++)
-	{
-		//it->second->OnEvent(evt);
 	}
 }

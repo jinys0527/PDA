@@ -2,6 +2,7 @@
 #include "Engine.h"
 #include "GameApplication.h"
 #include "SceneManager.h"
+#include "SoundManager.h"
 
 namespace
 {
@@ -19,14 +20,15 @@ int main()
 		return -1;
 
     Engine engine;
-	SceneManager sceneManager(engine.GetRenderer(), engine.GetEventDispatcher(), engine.GetAssetManager());
-
+    SoundManager soundManager(engine.GetSoundAssetManager());
+	SceneManager sceneManager(engine.GetRenderer(), engine.GetEventDispatcher(), engine.GetAssetManager(), engine.GetSoundAssetManager(), soundManager);
+   
 #ifdef _EDITOR
     Editor editor(sceneManager);
 
-    g_pMainApp = new GameApplication(engine, sceneManager, editor);
+    g_pMainApp = new GameApplication(engine, sceneManager, soundManager, editor);
 #else
-    g_pMainApp = new GameApplication(engine, sceneManager);
+    g_pMainApp = new GameApplication(engine, sceneManager, soundManager);
 #endif
  	
  
@@ -41,6 +43,9 @@ int main()
  	g_pMainApp->Finalize();
  
  	delete g_pMainApp;
+    
+    sceneManager.Reset();
+    engine.Reset();
 
 	CoUninitialize();
 

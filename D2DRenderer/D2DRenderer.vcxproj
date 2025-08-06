@@ -242,6 +242,7 @@
     <ClInclude Include="D2DRenderer.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="RenderData.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D2DRenderer.cpp" />

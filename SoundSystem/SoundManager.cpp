@@ -1,4 +1,3 @@
-#include "pch.h"
 #include <filesystem>
 #include "SoundManager.h"
 #include "Fmod_Error.h"
@@ -24,9 +23,9 @@ bool SoundManager::Init()
 	m_MasterGroup->addGroup(m_SFXGroup);
 	m_MasterGroup->addGroup(m_UIGroup);
 
-	CreateBGMSource(m_AssetManager.GetBGMPaths());
-	CreateSFXSource(m_AssetManager.GetSFXPaths());
-	CreateUISource(m_AssetManager.GetUISoundPaths());
+	CreateBGMSource(m_SoundAssetManager.GetBGMPaths());
+	CreateSFXSource(m_SoundAssetManager.GetSFXPaths());
+	CreateUISource(m_SoundAssetManager.GetUISoundPaths());
 
 	return true;
 }
@@ -99,19 +98,15 @@ void SoundManager::Shutdown()
 
 void SoundManager::BGM_Shot(const std::wstring& fileName)
 {
-	//std::cout << fileName << std::endl;
-
 	bool isBGMPlaying = false;
 	if (m_BGMGroup->isPlaying(&isBGMPlaying))
 	{
 		m_BGMGroup->stop();
 	}
-	//fade in,out 만들거여?
 
 	FMOD::Channel* channel = nullptr;
 	auto it = m_BGMs.find(fileName);
 
-	//std::cout << "it 찾음?: " << it->first << std::endl;
 
 	if (it != m_BGMs.end())
 	{
@@ -143,7 +138,7 @@ void SoundManager::UI_Shot(const std::wstring& fileName)
 }
 
 
-void SoundManager::SetVolume_Main(float volume)
+void SoundManager::SetVolume_Master(float volume)
 {
 	if (m_SoundDirty == false) return;
 	if (volume < 0) { volume = 0; }

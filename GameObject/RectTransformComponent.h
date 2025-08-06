@@ -93,6 +93,11 @@ public:
 		return m_Scale;
 	}
 
+	Vec2F GetPivot() const
+	{
+		return m_Pivot;
+	}
+
 	const Mat3X2F& GetWorldMatrix();
 	const Mat3X2F& GetLocalMatrix();
 
@@ -111,7 +116,7 @@ private:
 private:
 	Vec2F m_Position;
 	Anchor m_Anchor;
-	D2D1_POINT_2F m_Pivot = { 0.5f, 0.5f };			// 0.0 ~ 1.0
+	Vec2F m_Pivot = { 0.5f, 0.5f };			// 0.0 ~ 1.0
 	Vec2F m_Size;
 	float m_Rotation;
 	Vec2F m_Scale;

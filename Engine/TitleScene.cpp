@@ -12,7 +12,8 @@
 #include "UIImageComponent.h"
 #include "GraffitiObject.h"
 #include "GraffitiComponent.h"
-
+#include "BoxColliderComponent.h"
+#include "Obstacle.h"
 //================================
 #include "BlackBoard.h"
 #include "TestNode.h"
@@ -233,12 +234,17 @@ void TitleScene::Update(float deltaTime)
 
 }
 
-void TitleScene::Render(std::vector<RenderInfo>& renderInfo)
+void TitleScene::Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo)
 {
 	for (auto gameObject : m_GameObjects)
 	{
 		gameObject.second->Render(renderInfo);
 
 		
+	}
+
+	for (auto uiObject : m_UIObjects)
+	{
+		uiObject.second->Render(uiRenderInfo);
 	}
 }

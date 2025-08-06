@@ -2,11 +2,14 @@
 #include "Scene.h"
 #include "json.hpp"
 #include "GameObject.h"
+#include "UIObject.h"
 #include "CameraObject.h"
 #include <unordered_set>
 
 Scene::~Scene()
 {
+	m_GameObjects.clear();
+	m_Camera = nullptr; // ÇÊ¿ä ½Ã
 }
 
 void Scene::AddGameObject(std::shared_ptr<GameObject> gameObject)
@@ -24,6 +27,20 @@ void Scene::RemoveGameObject(std::shared_ptr<GameObject> gameObject)
 	if (it != m_GameObjects.end())
 	{
 		m_GameObjects.erase(gameObject->m_Name);
+	}
+}
+
+void Scene::AddUIObject(std::shared_ptr<UIObject> uiObject)
+{
+	m_UIObjects[uiObject->m_Name] = uiObject;
+}
+
+void Scene::RemoveUIObject(std::shared_ptr<UIObject> uiObject)
+{
+	auto it = m_UIObjects.find(uiObject->m_Name);
+	if (it != m_UIObjects.end())
+	{
+		m_UIObjects.erase(uiObject->m_Name);
 	}
 }
 

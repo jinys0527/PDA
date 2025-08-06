@@ -23,10 +23,7 @@ void GraffitiObject::Render(std::vector<RenderInfo>& renderInfo)
 			// Opacity 적용
 			info.opacity = sprite->GetOpacity();
 			// UI가 아닌 일반 오브젝트 위치로 설정
-			info.anchor = Anchor{ {0.0f, 0.0f}, {0.0f, 0.0f} }; // (0,0)-(0,0) 고정값
-			info.anchoredPosition = m_Transform->GetPosition();
-			info.sizeDelta = { 0, 0 };
-			info.parentSize = { 0, 0 };
+
 			if (m_GraffitiComponent->GetIsClicked())
 			{
 				info.draw = true;
