@@ -13,15 +13,114 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Behavior Tree">
+      <UniqueIdentifier>{bdc8ccfd-6b75-48ad-8953-ff74d4739602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Behavior Tree\Header Files">
+      <UniqueIdentifier>{eda3602e-4a4b-4e68-a276-848cc748e780}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Behavior Tree\Source Files">
+      <UniqueIdentifier>{c042e113-4ed9-4cf9-bc58-41b88da49cb4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FSM.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BTNode.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CompositeNode.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Decorator.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Selector.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sequence.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BlackBoard.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestNode.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Inverter.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Repeater.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BossBehaviorTree.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BossBlackBoard.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillCondition.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillNode.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhaseChecker.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BossCoolDown.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BTNode.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CompositeNode.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Decorator.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Selector.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sequence.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="FSM.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BlackBoard.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestNode.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Inverter.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Repeater.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BossBehaviorTree.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BossBlackBoard.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillCondition.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BossCoolDown.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhaseChecker.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillNode.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
