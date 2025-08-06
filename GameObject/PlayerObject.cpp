@@ -214,10 +214,6 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 			info.size = { 1,1 };
 			info.pivot = Math::Vector2F(180, 360); // 바꾸어 놓음
 			// UI가 아닌 일반 오브젝트 위치로 설정
-			info.anchor = Anchor{ {0.0f, 0.0f}, {0.0f, 0.0f} }; // (0,0)-(0,0) 고정값
-			info.anchoredPosition = m_Transform->GetPosition();
-			info.sizeDelta = { 0, 0 };
-			info.parentSize = { 0, 0 };
 			renderInfo.push_back(info);
 		}
 		{
@@ -234,10 +230,6 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 
 			info.pivot = Math::Vector2F(180, 180);// 잠시 바꾸어놓음
 			// UI가 아닌 일반 오브젝트 위치로 설정
-			info.anchor = Anchor{ {0.0f, 0.0f}, {0.0f, 0.0f} }; // (0,0)-(0,0) 고정값
-			info.anchoredPosition = m_Transform->GetPosition();
-			info.sizeDelta = { 0, 0 };
-			info.parentSize = { 0, 0 };
 			//float opacity = sprite->GetTexture().Get()->GetSize().height / (y + 1);
 			float forSin = (y - m_Z*m_RailHeight) / (sprite->GetTexture().Get()->GetSize().height);
 			forSin = forSin > asin(1) ? asin(1) : forSin;

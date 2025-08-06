@@ -10,7 +10,7 @@
 #include "IEventListener.h"
 #include "json.hpp"
 
-class GameObject;
+class Object;
 
 class Component
 {
@@ -42,10 +42,10 @@ public:
 		m_MessageHandlers[msg].emplace_back(std::move(handler));
 	}
 
-	void SetOwner(GameObject* owner) { m_Owner = owner; }
+	void SetOwner(Object* owner) { m_Owner = owner; }
 
 protected:
-	GameObject* m_Owner = nullptr;
+	Object* m_Owner = nullptr;
 	std::unordered_map<myCore::MessageID, std::vector<HandlerType>> m_MessageHandlers;
 	EventDispatcher& GetEventDispatcher() const;
 };

@@ -21,27 +21,6 @@ void D2DRenderer::Initialize(HWND hwnd)
 	DX::ThrowIfFailed(hr);
 
 	m_wicFactory = wicFactory;
-
-	// 즉시 상태 점검
-	ULONG refCount = m_wicFactory->AddRef();
-	refCount = m_wicFactory->Release();
-	std::cout << "m_wicFactory RefCount after init: " << refCount << std::endl;
-}
-void D2DRenderer::LogInternalComStates()
-{
-	std::cout << "[D2DRenderer] Logging internal COM states:\n";
-	LogComObjectRefCount(m_d2dDevice.Get(), "m_d2dDevice");
-	LogComObjectRefCount(m_d2dContext.Get(), "m_d2dContext");
-	LogComObjectRefCount(m_swapChain.Get(), "m_swapChain");
-	if (m_wicFactory)
-	{
-		LogComObjectRefCount(m_wicFactory.Get(), "m_wicFactory");
-	}
-	else
-	{
-		std::cout << "m_wicFactory is nullptr\n";
-	}
-	// 필요하면 더 추가
 }
 
 void D2DRenderer::UnInitialize()
@@ -96,21 +75,21 @@ void D2DRenderer::DrawBitmap(ID2D1Bitmap1* bitmap, D2D1_RECT_F dest)
 void D2DRenderer::DrawBitmap(ID2D1Bitmap1* bitmap, D2D1_RECT_F destRect, D2D1_RECT_F srcRect, float opacity /*= 1.0f*/)
 {
 	m_d2dContext->DrawBitmap(
-		bitmap, 
-		destRect, 
-		opacity, 
-		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, 
+		bitmap,
+		destRect,
+		opacity,
+		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
 		srcRect
 	);
 }
 
-void D2DRenderer::DrawBitmap(ID2D1Bitmap1* bitmap, D2D1_RECT_F dest, 
+void D2DRenderer::DrawBitmap(ID2D1Bitmap1* bitmap, D2D1_RECT_F dest,
 	TransformComponent* trans, D2D1::Matrix3x2F viewTM)
 {
 
 	D2D1::Matrix3x2F worldTM = trans->GetWorldMatrix();
 	D2D1::Matrix3x2F renderTM = TM::MakeRenderMatrix(true);
-	D2D1::Matrix3x2F finalTM = renderTM* worldTM * viewTM;
+	D2D1::Matrix3x2F finalTM = renderTM * worldTM * viewTM;
 
 	SetTransform(finalTM);
 
@@ -138,21 +117,21 @@ void D2DRenderer::DrawMessage(const wchar_t* text, float left, float top, float 
 	);
 }
 
-void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
+void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo)
 {
 	//renderInfo에서 UI용이랑 게임 오브젝트용 따로 만들어서 받으면 될듯?
 
 	//게임 오브젝트 그리기
 	D2D1::Matrix3x2F cameraMatrix = m_Camera->GetComponent<CameraComponent>()->GetViewMatrix();
-	DrawInternal(renderInfo, cameraMatrix);
+	DrawGameObject(renderInfo, cameraMatrix);
 
-	////UI 그리기
-	//cameraMatrix = m_Camera->GetComponent<CameraComponent>()->GetViewMatrixForUI();
-	//DrawInternal(renderInfo, cameraMatrix);
+	//UI 그리기
+	cameraMatrix = m_Camera->GetComponent<CameraComponent>()->GetViewMatrixForUI();
+	DrawUIObject(uiRenderInfo, cameraMatrix);
 
 }
 
-void D2DRenderer::DrawInternal(std::vector<RenderInfo>& renderInfo, D2D1::Matrix3x2F cameraMatrix)
+void D2DRenderer::DrawGameObject(std::vector<RenderInfo>& renderInfo, D2D1::Matrix3x2F cameraMatrix)
 {
 	std::vector<RenderInfo> sortedInfo = renderInfo;
 	std::sort(sortedInfo.begin(), sortedInfo.end(), [](const RenderInfo& a, const RenderInfo& b) {return a.layer < b.layer; });
@@ -165,7 +144,7 @@ void D2DRenderer::DrawInternal(std::vector<RenderInfo>& renderInfo, D2D1::Matrix
 			continue;
 		}
 
-		// 앵커 + 피벗 계산
+		// 피벗 계산
 		D2D1_SIZE_F bmpSize = info.bitmap->GetSize();
 
 		Math::Vector2F pivot = info.pivot;
@@ -187,8 +166,6 @@ void D2DRenderer::DrawInternal(std::vector<RenderInfo>& renderInfo, D2D1::Matrix
 					bmpSize.width - pivot.x, // right
 					bmpSize.height - pivot.y  // bottom
 		};
-
-		m_d2dContext->SetTransform(mat);
 
 		//m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());
 
@@ -230,6 +207,61 @@ void D2DRenderer::DrawInternal(std::vector<RenderInfo>& renderInfo, D2D1::Matrix
 	m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());
 
 
+}
+
+void D2DRenderer::DrawUIObject(std::vector<UIRenderInfo>& uiRenderInfo, D2D1::Matrix3x2F cameraMatrix)
+{
+	std::vector<UIRenderInfo> sortedUIInfo = uiRenderInfo;
+	std::sort(sortedUIInfo.begin(), sortedUIInfo.end(), [](const UIRenderInfo& a, const UIRenderInfo& b) {return a.layer < b.layer; });
+
+	for (const auto& info : sortedUIInfo)
+	{
+		if (!info.bitmap)
+		{
+			continue;
+		}
+
+		// 앵커 + 피벗 계산
+		D2D1_SIZE_F bmpSize = info.bitmap->GetSize();
+
+		// 앵커 기준 최종 위치 계산
+		Math::Vector2F finalPos = CalcAnchorOffset(
+			info.parentSize,
+			info.anchor,
+			info.anchoredPosition,
+			info.sizeDelta,
+			info.pivot
+		);
+
+		// 최종 사이즈 계산
+		Math::Vector2F size = {
+			info.parentSize.x * (info.anchor.maxPoint.x - info.anchor.minPoint.x) + info.sizeDelta.x,
+			info.parentSize.y * (info.anchor.maxPoint.y - info.anchor.minPoint.y) + info.sizeDelta.y
+		};
+
+		// 월드 변환 없이, 그냥 위치만 적용
+		D2D1_MATRIX_3X2_F mat = D2D1::Matrix3x2F::Translation(finalPos.x, finalPos.y);
+		mat = D2D1::Matrix3x2F::Scale(1, -1) * mat * cameraMatrix;
+
+		m_d2dContext->SetTransform(mat);
+
+		D2D1_RECT_F destRect = {
+					-info.pivot.x,                 // left
+					-info.pivot.y,                 // top
+					size.x - info.pivot.x, // right
+					size.y - info.pivot.y  // bottom
+		};
+
+		m_d2dContext->DrawBitmap(
+			info.bitmap.Get(),
+			&destRect,
+			info.opacity,
+			D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+			nullptr
+		);
+	}
+
+	m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());
 }
 
 
@@ -329,7 +361,7 @@ void D2DRenderer::CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1*& outBi
 		GUID_WICPixelFormat32bppPBGRA,
 		WICBitmapDitherTypeNone,
 		nullptr,
-		0.0f, 
+		0.0f,
 		WICBitmapPaletteTypeCustom
 	);
 
@@ -350,15 +382,15 @@ void D2DRenderer::CreateDeviceAndSwapChain(HWND hwnd)
 	ComPtr<ID3D11DeviceContext> d3dContext;
 
 	HRESULT hr = D3D11CreateDevice(
-		nullptr, 
-		D3D_DRIVER_TYPE_HARDWARE, 
-		nullptr, 
-		D3D11_CREATE_DEVICE_BGRA_SUPPORT, 
-		featureLevels, 
-		ARRAYSIZE(featureLevels), 
-		D3D11_SDK_VERSION, 
-		&d3dDevice, 
-		nullptr, 
+		nullptr,
+		D3D_DRIVER_TYPE_HARDWARE,
+		nullptr,
+		D3D11_CREATE_DEVICE_BGRA_SUPPORT,
+		featureLevels,
+		ARRAYSIZE(featureLevels),
+		D3D11_SDK_VERSION,
+		&d3dDevice,
+		nullptr,
 		&d3dContext
 	);
 
@@ -498,7 +530,7 @@ void D2DRenderer::ReleaseRenderTargets()
 	}
 
 	m_d3dRenderTargetView.Reset();
-	
+
 	m_targetBitmap.Reset();
 	m_brush.Reset();
 	m_textBrush.Reset();

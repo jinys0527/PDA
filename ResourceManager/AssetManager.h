@@ -17,21 +17,7 @@ public:
 	AssetManager(D2DRenderer& renderer) : m_Renderer(renderer)
 	{
 	}
-	~AssetManager() {
-		std::cout << "AssetManager destructor called, clearing textures\n";
-		m_Renderer.LogInternalComStates();
-		for (const auto& [key, texture] : m_Textures)
-		{
-			if (texture)
-			{
-				ULONG count = texture->AddRef();
-				std::wcout << L"Releasing texture: " << key << L" | RefCount before Release: " << count << std::endl;
-				texture->Release(); // º¸Á¤
-			}
-		}
-		m_Textures.clear();
-		std::cout << "Textures cleared\n";
-	}
+	~AssetManager() = default;
 
 	void Init(const std::filesystem::path& rootPath);
 

@@ -1,6 +1,6 @@
 #include "SoundUI.h"
 
-SoundUI::SoundUI(SoundManager& soundManager) : m_SoundManager(soundManager)
+SoundUI::SoundUI(SoundManager& soundManager, EventDispatcher& eventDispatcher) : UIObject(eventDispatcher), m_SoundManager(soundManager)
 {
 	m_Master = std::make_unique<UISliderComponent>();
 	m_BGM = std::make_unique<UISliderComponent>();

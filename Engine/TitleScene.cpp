@@ -77,10 +77,15 @@ void TitleScene::Update(float deltaTime)
 	//std::cout << pos.x << " " << pos.y << std::endl;
 }
 
-void TitleScene::Render(std::vector<RenderInfo>& renderInfo)
+void TitleScene::Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo)
 {
 	for (auto gameObject : m_GameObjects)
 	{
 		gameObject.second->Render(renderInfo);
+	}
+
+	for (auto uiObject : m_UIObjects)
+	{
+		uiObject.second->Render(uiRenderInfo);
 	}
 }

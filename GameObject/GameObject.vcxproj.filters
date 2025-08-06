@@ -111,6 +111,9 @@
     <ClInclude Include="SoundUI.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp">
@@ -187,6 +190,9 @@
     </ClCompile>
     <ClCompile Include="UISliderComponent.cpp">
       <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -4,27 +4,14 @@
 #include "SpriteRenderer.h"
 #include "UIImageComponent.h"
 
-GameObject::GameObject(EventDispatcher& eventDispatcher) : m_EventDispatcher(eventDispatcher)
+GameObject::GameObject(EventDispatcher& eventDispatcher) : Object(eventDispatcher)
 {
 	m_Transform = AddComponent<TransformComponent>();
-}
-
-void GameObject::Update(float deltaTime)
-{
-	for (auto it = m_Components.begin(); it != m_Components.end(); it++)
-	{
-		it->second->Update(deltaTime);
-	}
-}
-
-void GameObject::FixedUpdate()
-{
 }
 
 void GameObject::Render(std::vector<RenderInfo>& renderInfo)
 {
 	auto spriteRenderer = GetComponent<SpriteRenderer>();
-	auto uiImage = GetComponent<UIImageComponent>();
 
 	if (spriteRenderer)
 	{
@@ -35,18 +22,9 @@ void GameObject::Render(std::vector<RenderInfo>& renderInfo)
 		// Opacity 적용
 		info.opacity = spriteRenderer->GetOpacity();
 		// UI가 아닌 일반 오브젝트 위치로 설정
-		info.anchor = Anchor{ {0.0f, 0.0f}, {0.0f, 0.0f} }; // (0,0)-(0,0) 고정값
-		info.anchoredPosition = m_Transform->GetPosition();
-		info.sizeDelta = { 0, 0 };
-		info.parentSize = { 0, 0 };
 		info.useSrcRect = spriteRenderer->GetUseSrcRect();
 		info.srcRect = spriteRenderer->GetSrcRect();
-		renderInfo.push_back(info);
-	}
-	if (uiImage)
-	{
-		RenderInfo info;
-		renderInfo.push_back(info);
+		renderInfo.emplace_back(info);
 	}
 	else
 	{
@@ -101,22 +79,5 @@ void GameObject::Deserialize(const nlohmann::json& j)
 				AddComponent(std::move(comp));
 			}
 		}
-	}
-}
-
-void GameObject::SendMessages(const myCore::MessageID msg, void* data /* = nullptr */)
-{
-	for (auto it = m_Components.begin(); it != m_Components.end(); it++)
-	{
-		it->second->HandleMessage(msg, data);
-	}
-}
-
-
-void GameObject::SendEvent(const std::string& evt)
-{
-	for (auto it = m_Components.begin(); it != m_Components.end(); it++)
-	{
-		//it->second->OnEvent(evt);
 	}
 }

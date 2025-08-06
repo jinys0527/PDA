@@ -246,7 +246,6 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="RenderData.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="TitleScene.h" />

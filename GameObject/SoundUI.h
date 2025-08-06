@@ -2,10 +2,12 @@
 #include "UISliderComponent.h"
 #include "memory"
 #include "SoundManager.h"
-class SoundUI
+#include "UIObject.h"
+
+class SoundUI : public UIObject
 {
 public:
-	SoundUI(SoundManager& soundManager);
+	SoundUI(SoundManager& soundManager, EventDispatcher& eventDispatcher);
 	~SoundUI() = default;
 
 	UISliderComponent* GetMaster() { return m_Master.get(); }

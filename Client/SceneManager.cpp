@@ -25,8 +25,9 @@ void SceneManager::Update(float deltaTime)
 void SceneManager::Render()
 {
 	std::vector<RenderInfo> renderInfo;
-	m_CurrentScene->Render(renderInfo);
-	m_Renderer.Draw(renderInfo);
+	std::vector<UIRenderInfo> uiRenderInfo;
+	m_CurrentScene->Render(renderInfo, uiRenderInfo);
+	m_Renderer.Draw(renderInfo, uiRenderInfo);
 }
 
 std::shared_ptr<Scene> SceneManager::AddScene(const std::string& name, std::shared_ptr<Scene> scene)

@@ -15,6 +15,6 @@ public:
 
 	void FixedUpdate() override;
 	void Update(float deltaTime) override;
-	void Render(std::vector<RenderInfo>& renderInfo) override;
+	void Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo) override;
 };
 

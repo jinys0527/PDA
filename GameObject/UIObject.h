@@ -1,15 +1,20 @@
 #pragma once
-#include "GameObject.h"
-#include "RectTransformComponent.h"
-#include "UIComponent.h"
+#include "Object.h"
 
-class UIObject : public GameObject
+class RectTransformComponent;
+
+class UIObject : public Object
 {
+	friend class Scene;
+	friend class TestScene;
+	friend class TitleScene;
 public:
 	UIObject(EventDispatcher& eventDispatcher);
-	virtual ~UIObject();
+	virtual ~UIObject() = default;
 
-private:
-	UIComponent* m_UI = nullptr;
+	void Render(std::vector<UIRenderInfo>& renderInfo);
+
+protected:
+	RectTransformComponent* m_RectTransform;
 };
 
