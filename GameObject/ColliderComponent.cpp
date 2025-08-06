@@ -31,6 +31,7 @@ ColliderComponent::ColliderComponent()
 
 	m_Fsm.AddTransition("None", "Enter", "CollisionEnter");
 	m_Fsm.AddTransition("Enter", "Stay", "CollisionStay");
+	m_Fsm.AddTransition("Enter", "Exit", "CollisionExit");
 	m_Fsm.AddTransition("Stay", "Exit", "CollisionExit");
 	m_Fsm.AddTransition("Exit", "None", "None");
 

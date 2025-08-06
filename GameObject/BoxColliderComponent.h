@@ -29,6 +29,7 @@ public:
 	void OnDestroy() override;
 protected:
 	Vec2F m_Size;
+	Vec2F m_SizeRatio;
 };
 
 REGISTER_COMPONENT(BoxColliderComponent);

@@ -16,8 +16,10 @@ public:
 	~PlayerObject()
 	{
 		// 이벤트 제거
-		m_EventDispatcher.RemoveListener(EventType::KeyDown, m_Controller);
-		m_EventDispatcher.RemoveListener(EventType::KeyUp, m_Controller);
+		for (auto it = m_Components.begin(); it != m_Components.end(); it++)
+		{
+			//getcomponent
+		}
 	}
 
 	virtual void Update(float deltaTime);// 아직 기본 게임 오브젝트랑 다를게 없음
@@ -41,6 +43,12 @@ public:
 
 	void SetSlide(bool value) { isSlide = value; }
 
+	float GetInvincibleTime() { return m_InvincibleTime; }
+
+	int GetHp() { return m_Hp; }
+	
+	void SetHp(int value) { m_Hp = value; }
+
 protected:
 
 	FSM m_Fsm;
@@ -57,6 +65,10 @@ protected:
 
 	//float m_SprayCool = 0;
 
+	float m_InvincibleTime = 0;
+
 	float m_Z = 0;
+
+	int m_Hp = 3;
 };
 

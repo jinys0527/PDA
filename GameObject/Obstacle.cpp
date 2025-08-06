@@ -1,11 +1,57 @@
 #include "Obstacle.h"
 #include "BoxColliderComponent.h"
+#include "TransformComponent.h"
 #include "SpriteRenderer.h"
+#include <iostream>
 
 Obstacle::Obstacle(EventDispatcher& eventDispatcher) : GameObject(eventDispatcher)
 {
-	AddComponent<BoxColliderComponent>();
-	AddComponent<SpriteRenderer>();
+	m_Collider = AddComponent<BoxColliderComponent>();
+	m_Collider->Start();
+	m_Collider->SetSize(Vec2F(100, 100));
+	m_Sprite = GetComponent<SpriteRenderer>();
+	m_Z = 1;
+
+
+	// 충돌 순서 ( Enter -> (아직도 Exit 안되었으면) -> Stay -> (충돌 나가면) -> Exit -> (즉시 호출 Exit은 사실상 나가졌다는 state를 확인할 시간도 없음) -> None )
+
+	m_Collider->GetFSM().SetOnEnter("Exit", [this]() 
+		{
+			this->m_Collider->GetFSM().Trigger("None");
+			std::cout << "Exit " << "나감" << std::endl;	
+		});
+
+	
+
+	m_Collider->SetOnEnter(
+		[this](const CollisionInfo& info)
+		{
+			if (info.self != this->GetComponent<BoxColliderComponent>())
+				return;
+			info.self->GetFSM().Trigger("CollisionEnter");
+		}
+	);
+
+	m_Collider->SetOnStay(
+		[this](const CollisionInfo& info)
+		{
+			if (info.self != this->GetComponent<BoxColliderComponent>())
+				return;
+			info.self->GetFSM().Trigger("CollisionStay");
+			auto trans = this->GetComponent<TransformComponent>();
+			trans->Translate(Vec2F(0.1f, 0));
+			this->GetEventDispatcher().Dispatch(EventType::OnPlayerCollisonOccur, (const void*)1);
+		}
+	);
+
+	m_Collider->SetOnExit(
+		[this](const CollisionInfo& info)
+		{
+			if (info.self != this->GetComponent<BoxColliderComponent>())
+				return;
+			info.self->GetFSM().Trigger("CollisionExit");
+		}
+	);
 }
 
 void Obstacle::Serialize(nlohmann::json& j) const

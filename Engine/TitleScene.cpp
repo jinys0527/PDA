@@ -12,6 +12,7 @@
 #include "UIImageComponent.h"
 #include "GraffitiObject.h"
 #include "GraffitiComponent.h"
+
 //================================
 #include "BlackBoard.h"
 #include "TestNode.h"
@@ -27,6 +28,7 @@
 
 void TitleScene::Initialize()
 {
+
 	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
 	cameraObject->m_Name = "Camera";
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
@@ -35,10 +37,11 @@ void TitleScene::Initialize()
 	SetMainCamera(cameraObject);
 
 
-	//// BT�׽�Ʈ
+
+	//// BT테스트
 	//m_BlackBoard = new BlackBoard();
 
-	//// �� ����
+	//// 값 설정
 	//m_BlackBoard->SetValue("AA", true);
 	//m_BlackBoard->SetValue("BB", true);
 	//m_BlackBoard->SetValue("A", true);
@@ -46,7 +49,7 @@ void TitleScene::Initialize()
 	//m_BlackBoard->SetValue("C", true);
 	//m_BlackBoard->SetValue("D", true);
 
-	//// Leaf ���
+	//// Leaf 노드
 	//auto A = std::make_shared<TestNode>("A");
 	//auto B = std::make_shared<TestNode>("B");
 	//auto C = std::make_shared<TestNode>("C");
@@ -68,17 +71,18 @@ void TitleScene::Initialize()
 	//Root->AddChild(BB);
 
 	//m_BehaviorTree = Root;
-	//// BT�׽�Ʈ ��================
+	//// BT테스트 끝================
 
 
 
-	// ����BT �׽�Ʈ
+	// 보스BT 테스트
 
 	m_BlackBoard = std::make_unique<BossBlackBoard>();
 	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
 
 
 	AddGameObject(cameraObject);
+
 }
 
 void TitleScene::Finalize()
@@ -92,6 +96,97 @@ void TitleScene::Enter()
 
 void TitleScene::Leave()
 {
+}
+
+void ObjectCollisionLeave(EventDispatcher &eventDispatcher, BoxColliderComponent *enemy, BoxColliderComponent* player)
+{
+	if (enemy->GetFSM().GetCurrentState() == "None")
+		return;
+
+	CollisionInfo info;
+	info.self = enemy;
+	info.other = player;
+	info.normal;
+	info.contactPoint;
+	info.penetrationDepth;
+
+	eventDispatcher.Dispatch(EventType::CollisionExit, &info);
+}
+
+void TitleScene::FixedUpdate()
+{
+	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("test")->second.get()); // 나중에 플레이어로 바꿀듯
+	if (player == nullptr)
+		return;
+	BoxColliderComponent* playerBox = player->GetComponent<BoxColliderComponent>();
+	if (playerBox == nullptr)
+		return;
+	Vec2F playerPos = playerBox->GetCenter();
+	float playerZ = player->GetZ();
+	Obstacle* enemy;
+	BoxColliderComponent* enemyBox;
+	Vec2F enemyPos;
+
+
+	for (auto gameObject : m_GameObjects)
+	{
+		if (player == gameObject.second.get())
+			continue;
+		enemyBox = gameObject.second->GetComponent<BoxColliderComponent>();
+		if (enemyBox)
+		{
+			auto state = enemyBox->GetFSM().GetCurrentState();
+
+			enemyPos = enemyBox->GetCenter();
+
+			if (enemyPos.x < playerPos.x - 500 || enemyPos.x > playerPos.x + 500)
+			{
+				continue;
+			}
+
+			enemy = (Obstacle*)gameObject.second.get();
+			float enemyZ = enemy->GetZ();
+			if (enemyZ - 0.5f > playerZ || enemyZ + 0.5f < playerZ) // 질문 Z 축 검사를 먼저하는게 비용이 좋을까요 X 축 검사를 먼저하는게 비용이 좋을까요
+			{
+				ObjectCollisionLeave(m_EventDispatcher, enemyBox, playerBox);
+				continue;
+			}
+
+
+			if (enemyBox->BoxVsBox(*playerBox))
+			{
+				CollisionInfo info;
+				info.self = enemyBox;
+				info.other = playerBox;
+				info.normal = enemyPos - playerPos;
+				info.contactPoint;
+				info.penetrationDepth;
+			
+
+				
+				if (state == "None")
+				{
+					m_EventDispatcher.Dispatch(EventType::CollisionEnter, &info);
+				}
+				else if(state == "Enter")
+				{
+					m_EventDispatcher.Dispatch(EventType::CollisionStay, &info);
+				}
+				else if (state == "Stay")
+				{
+					m_EventDispatcher.Dispatch(EventType::CollisionStay, &info);
+				}
+				else if (state == "Exit")
+				{
+					m_EventDispatcher.Dispatch(EventType::CollisionEnter, &info);
+				}
+
+				continue;
+			}
+
+			ObjectCollisionLeave(m_EventDispatcher, enemyBox, playerBox);
+		}
+	}
 }
 
 void TitleScene::Update(float deltaTime)
@@ -115,10 +210,10 @@ void TitleScene::Update(float deltaTime)
 		m_OneSecondTimer = 0.0f;
 
 		float curHP = m_BlackBoard->GetValue<float>("BossCurrHP").value();
-		//std::cout << "���� HP: " << curHP << std::endl;
+		//std::cout << "현재 HP: " << curHP << std::endl;
 		m_BlackBoard->SetValue("BossCurrHP", curHP - 5);
 
-		// ����ġ �α� ���
+		// 가중치 로그 출력
 		//float w1 = m_BlackBoard->GetValue<float>("SkillWeight_1").value();
 		//float w2 = m_BlackBoard->GetValue<float>("SkillWeight_2").value();
 		//float w3 = m_BlackBoard->GetValue<float>("SkillWeight_3").value();
