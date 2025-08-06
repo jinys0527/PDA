@@ -16,6 +16,7 @@ enum class SpritePivotPreset
 	TopLeft,
 	TopRight,
 	BottomLeft,
+	BottomCenter,
 	BottomRight,
 	Center
 };

@@ -202,6 +202,7 @@ void D2DRenderer::DrawGameObject(std::vector<RenderInfo>& renderInfo, D2D1::Matr
 		}
 
 		m_d2dContext->DrawRectangle(&destRect, m_brush.Get());
+		//m_d2dContext->DrawRectangle({-10, 10, 10, -10}, m_brush.Get());
 	}
 
 	m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());

@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "TransformComponent.h"
 #include "SpriteRenderer.h"
+#include "UIImageComponent.h"
 
 UIButtonComponent::UIButtonComponent()
 {
@@ -67,7 +68,7 @@ void UIButtonComponent::Update(float deltaTime)
 	{
 		//std::cout << "호버호버" << std::endl;
 	}
-	std::cout << m_FSM.GetCurrentState() << std::endl;
+	//std::cout << m_FSM.GetCurrentState() << std::endl;
 
 
 
@@ -100,7 +101,7 @@ void UIButtonComponent::OnEvent(EventType type, const void* data)
 		if (m_IsHovered)
 		{
 			auto mouseData = static_cast<const Events::MouseState*>(data);
-			std::cout << mouseData->pos.x << " " << mouseData->pos.y << "에서 클릭됨 \n";
+			//std::cout << mouseData->pos.x << " " << mouseData->pos.y << "에서 클릭됨 \n";
 			m_IsClicked = true;
 			m_FSM.Trigger("HoverToClick");
 
@@ -123,12 +124,12 @@ void UIButtonComponent::IsHovered(POINT mousePos)
 {
 	mousePos.y = 1080 - mousePos.y;
 
-	//std::cout << mousePos.x << " " << mousePos.y << "에 위치함 \n";
+	std::cout << mousePos.x << " " << mousePos.y << "에 위치함 \n";
 
 
 	auto objPos = m_Owner->GetComponent<TransformComponent>()->GetPosition();
-	auto objSize = m_Owner->GetComponent<SpriteRenderer>()->GetTexture()->GetSize();
-	auto objPivot = m_Owner->GetComponent<TransformComponent>()->GetPivotPoint();
+	auto objSize = m_Owner->GetComponent<UIImageComponent>()->GetTexture()->GetSize();
+	auto objPivot = m_Owner->GetComponent<UIImageComponent>()->GetPivot();
 
 	Math::Vector2F topLeft;
 	topLeft.x = objPos.x - objPivot.x;

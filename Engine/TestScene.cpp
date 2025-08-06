@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "SpriteRenderer.h"
 #include "TransformComponent.h"
+#include "BoxColliderComponent.h"
 #include "CameraObject.h"
 #include "CameraComponent.h"
 #include "AnimationComponent.h"
@@ -83,6 +84,7 @@ void TestScene::Leave()
 
 void TestScene::FixedUpdate()
 {
+
 }
 
 void TestScene::Update(float deltaTime)

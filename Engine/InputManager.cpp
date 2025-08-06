@@ -31,7 +31,7 @@ void InputManager::Update()
 
 	m_KeysDownPrev = m_KeysDown;
 
-	//마우스 클릭 이벤트
+	//마우스 좌클릭 이벤트
 	if (m_MousePrev.leftPressed == false)
 	{
 		if (m_Mouse.leftPressed == true)
@@ -52,6 +52,15 @@ void InputManager::Update()
 		}
 	}
 	
+
+	if (m_MousePrev.rightPressed == false)
+	{
+		if (m_Mouse.rightPressed == true)
+		{
+			m_EventDispatcher.Dispatch(EventType::MouseRightClick, &m_Mouse);
+		}
+	}
+
 
 	//버튼위에 호버됐는지 확인하기 위해 매번 보내야함
 	m_EventDispatcher.Dispatch(EventType::Hovered, &m_Mouse);

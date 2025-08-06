@@ -15,6 +15,7 @@ struct RenderInfo
 	int layer = 0;
 	bool useSrcRect = false;
 	D2D1_RECT_F srcRect = {};
+	bool draw = true;
 };
 
 struct UIRenderInfo

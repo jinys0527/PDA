@@ -3,6 +3,7 @@
 #include "TransformComponent.h"
 #include "SpriteRenderer.h"
 #include "UIImageComponent.h"
+#include "GraffitiComponent.h"
 
 GameObject::GameObject(EventDispatcher& eventDispatcher) : Object(eventDispatcher)
 {

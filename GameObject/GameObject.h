@@ -22,7 +22,7 @@ public:
 		m_Components[comp->GetTypeName()] = std::move(comp);
 	}
 
-	void Render(std::vector<RenderInfo>& renderInfo);
+	virtual void Render(std::vector<RenderInfo>& renderInfo);
 
 	void Serialize(nlohmann::json& j) const;
 	void Deserialize(const nlohmann::json& j);

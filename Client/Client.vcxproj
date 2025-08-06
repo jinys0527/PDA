@@ -285,6 +285,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameApplication.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -300,6 +301,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameApplication.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SceneManager.h" />
   </ItemGroup>

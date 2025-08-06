@@ -17,10 +17,19 @@ void BoxColliderComponent::Start()
 
 bool BoxColliderComponent::BoxVsBox(const BoxColliderComponent& other) const
 {
-    Vec2F thisMin = m_Center - m_Size / 2;
-    Vec2F thisMax = m_Center + m_Size / 2;;
-    Vec2F otherMin = other.m_Center - other.m_Size / 2;
-    Vec2F otherMax = other.m_Center + other.m_Size / 2;
+	Vec2F size;
+	size.x =		m_Size.x * m_SizeRatio.x;
+	size.y =		m_Size.y * m_SizeRatio.y;
+	Vec2F otherSize;
+	otherSize.x =	other.m_Size.x * m_SizeRatio.x;
+	otherSize.y =	other.m_Size.y * m_SizeRatio.y;
+
+    Vec2F thisMin = m_Center - size / 2;
+    Vec2F thisMax = m_Center + size / 2;
+    Vec2F otherMin = other.m_Center - otherSize / 2;
+    Vec2F otherMax = other.m_Center + otherSize / 2;
+
+
 
     return (thisMax.x >= otherMin.x && thisMin.x <= otherMax.x) &&
            (thisMax.y >= otherMin.y && thisMin.y <= otherMax.y);
@@ -40,6 +49,7 @@ void BoxColliderComponent::Update(float deltaTime)
 	if (transform)
 	{
 		m_Center = transform->GetPosition();
+		m_SizeRatio = transform->GetScale();
 	}
 
 	m_CurrentCollisions.clear();
