@@ -18,10 +18,8 @@ public:
 
 	RunPlayerController();
 
-	virtual ~RunPlayerController()
-	{
-		// 아직 없음
-	}
+	virtual ~RunPlayerController();
+
 
 	void OnEvent(EventType type, const void* data) override;// 입력 받을 곳
 	virtual void Update(float deltaTime) override;// 추후 더 추가할 업데이트
@@ -36,6 +34,11 @@ public:
 	}
 
 private:
+
+	Math::Vector2F MoveCheck(float deltaTime); // 코드 길이 줄이기 위해
+	void JumpCheck();
+	void SlideCheck();
+
 	// 입력 처리
 	bool m_IsWPressed = false;
 	bool m_IsWPressedDown = false;
@@ -69,9 +72,10 @@ private:
 
 	float m_RailHeight;
 
-	//Z축이 점프 Y 가 레인
+	int m_maxZ = 2;
+	int m_minZ = 0;
 
-	int m_Hp = 3;
+	//Z축이 점프 Y 가 레인
 
 };
 

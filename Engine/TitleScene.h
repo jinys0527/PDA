@@ -13,7 +13,7 @@ public:
 	void Enter() override;
 	void Leave() override;
 
-	void FixedUpdate() override {}
+	void FixedUpdate() override;
 	void Update(float deltaTime) override;
 	void Render(std::vector<RenderInfo>& renderInfo) override;
 	

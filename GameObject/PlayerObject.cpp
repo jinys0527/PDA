@@ -3,18 +3,22 @@
 #include "TransformComponent.h"
 #include "SpriteRenderer.h"
 #include "UIImageComponent.h"
+#include "BoxColliderComponent.h"
 
 PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventDispatcher)
 {
 	m_Controller = AddComponent<RunPlayerController>();// 플레이어 조종 컴포넌트 추가
 	eventDispatcher.AddListener(EventType::KeyDown, m_Controller);// 이벤트 추가
 	eventDispatcher.AddListener(EventType::KeyUp, m_Controller);
+	eventDispatcher.AddListener(EventType::OnPlayerCollisonOccur, m_Controller);
 	m_RigidbodyComponent = AddComponent<RigidbodyComponent>();
 	m_RigidbodyComponent->Start();
-
 	m_RigidbodyComponent->SetGravity(Math::Vector2F(0, -20));
 
-	{
+	AddComponent<BoxColliderComponent>()->SetSize(Vec2F(100, 100));
+	GetComponent<BoxColliderComponent>()->Start();
+
+	{ // 좀 많이 길어서 이걸로 닫아주시길
 		{
 
 			State idleState{
@@ -138,14 +142,15 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 		}
 		{
 			State hurtState{
-				[]() {std::cout << "hurt 들어옴" << std::endl; },
+				[this]() {
+					std::cout << "hurt 들어옴" << std::endl; 
+					this->m_InvincibleTime = 3.0f;
+				},
 				[this](float dt)
 				{
-										static float time = 0; // 나중에 애니메이션을 쓰게 될때 애니메이션 끝 프레임이라면 탈출을 넣을것이다
-					time += dt;
-					if (time >= 3)
+					if (m_InvincibleTime <= 0)
 					{
-						time = 0;
+						m_InvincibleTime = 0;
 						this->GetFSM().Trigger("Idle");
 					}
 				},
@@ -195,6 +200,9 @@ void PlayerObject::Update(float deltaTime)
 {
 	//float temp = m_Transform->GetPosition().y;
 
+	if (m_InvincibleTime > 0)
+		m_InvincibleTime -= deltaTime;
+
 	GameObject::Update(deltaTime);
 
 	m_Fsm.Update(deltaTime);
@@ -212,12 +220,14 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 			info.bitmap = sprite->GetTexture();
 			info.worldMatrix = m_Transform->GetWorldMatrix(); // D2D1::Matrix3x2F::Translation(0, z * m_RailHeight) *  
 			info.size = { 1,1 };
-			info.pivot = Math::Vector2F(180, 360); // 바꾸어 놓음
+			info.pivot = sprite->GetPivot(); // 바꾸어 놓음
 			// UI가 아닌 일반 오브젝트 위치로 설정
 			info.anchor = Anchor{ {0.0f, 0.0f}, {0.0f, 0.0f} }; // (0,0)-(0,0) 고정값
 			info.anchoredPosition = m_Transform->GetPosition();
 			info.sizeDelta = { 0, 0 };
 			info.parentSize = { 0, 0 };
+			float opacity = abs(cos(m_InvincibleTime * 5));
+			info.opacity = opacity;
 			renderInfo.push_back(info);
 		}
 		{

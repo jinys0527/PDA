@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "SpriteRenderer.h"
 #include "TransformComponent.h"
+#include "BoxColliderComponent.h"
 #include "CameraObject.h"
 
 void TestScene::Initialize()
@@ -53,6 +54,7 @@ void TestScene::Leave()
 
 void TestScene::FixedUpdate()
 {
+
 }
 
 void TestScene::Update(float deltaTime)
@@ -61,6 +63,8 @@ void TestScene::Update(float deltaTime)
 	{
 		gameObject.second->Update(deltaTime);
 	}
+
+
 }
 
 void TestScene::Render(std::vector<RenderInfo>& renderInfo)

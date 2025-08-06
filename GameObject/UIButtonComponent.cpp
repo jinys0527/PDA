@@ -69,7 +69,7 @@ void UIButtonComponent::Update(float deltaTime)
 	{
 		//std::cout << "호버호버" << std::endl;
 	}
-	std::cout << m_FSM.GetCurrentState() << std::endl;
+	//std::cout << m_FSM.GetCurrentState() << std::endl;
 
 
 
@@ -102,7 +102,7 @@ void UIButtonComponent::OnEvent(EventType type, const void* data)
 		if (m_IsHovered)
 		{
 			auto mouseData = static_cast<const Events::MouseState*>(data);
-			std::cout << mouseData->pos.x << " " << mouseData->pos.y << "에서 클릭됨 \n";
+			//std::cout << mouseData->pos.x << " " << mouseData->pos.y << "에서 클릭됨 \n";
 			m_IsClicked = true;
 			m_FSM.Trigger("HoverToClick");
 

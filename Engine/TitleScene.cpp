@@ -12,6 +12,10 @@
 #include "UIImageComponent.h"
 #include "GraffitiObject.h"
 #include "GraffitiComponent.h"
+#include "BoxColliderComponent.h"
+#include "Obstacle.h"
+#include "AnimationComponent.h"
+#include "FSM.h"
 
 void TitleScene::Initialize()
 {
@@ -26,7 +30,7 @@ void TitleScene::Initialize()
 	sr->SetPath("../Resource/cat.png");
 	sr->SetTextureKey("cat_texture");
 	sr->SetTexture(bitmap);
-	sr->SetPivotPreset(SpritePivotPreset::Center, bitmap->GetSize());
+	sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
 
 
 	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
@@ -66,12 +70,49 @@ void TitleScene::Initialize()
 	sr->SetPivotPreset(SpritePivotPreset::Center, bitmap->GetSize());
 	graffiti->GetComponent<GraffitiComponent>()->Start();
 
-
-
 	AddGameObject(gameObject);
 	AddGameObject(cameraObject);
 	//AddGameObject(testUIObject);
 	AddGameObject(graffiti);
+
+
+	{
+		auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
+		obstacle->m_Name = "obstacle";
+		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+		obstacleTrans->SetPosition({ 1460.0f, 350.0f });
+		sr = obstacle->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+
+		obstacle.get()->SetZ(1);
+
+		AddGameObject(obstacle);
+	}
+
+	{
+		auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
+		obstacle->m_Name = "obstacle2";
+		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+		obstacleTrans->SetPosition({ 1000.0f, 700.0f });
+		sr = obstacle->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+
+		obstacle.get()->SetZ(2);
+
+		AddGameObject(obstacle);
+	}
+
+
 }
 
 void TitleScene::Finalize()
@@ -85,6 +126,97 @@ void TitleScene::Enter()
 
 void TitleScene::Leave()
 {
+}
+
+void ObjectCollisionLeave(EventDispatcher &eventDispatcher, BoxColliderComponent *enemy, BoxColliderComponent* player)
+{
+	if (enemy->GetFSM().GetCurrentState() == "None")
+		return;
+
+	CollisionInfo info;
+	info.self = enemy;
+	info.other = player;
+	info.normal;
+	info.contactPoint;
+	info.penetrationDepth;
+
+	eventDispatcher.Dispatch(EventType::CollisionExit, &info);
+}
+
+void TitleScene::FixedUpdate()
+{
+	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("test")->second.get()); // 나중에 플레이어로 바꿀듯
+	if (player == nullptr)
+		return;
+	BoxColliderComponent* playerBox = player->GetComponent<BoxColliderComponent>();
+	if (playerBox == nullptr)
+		return;
+	Vec2F playerPos = playerBox->GetCenter();
+	float playerZ = player->GetZ();
+	Obstacle* enemy;
+	BoxColliderComponent* enemyBox;
+	Vec2F enemyPos;
+
+
+	for (auto gameObject : m_GameObjects)
+	{
+		if (player == gameObject.second.get())
+			continue;
+		enemyBox = gameObject.second->GetComponent<BoxColliderComponent>();
+		if (enemyBox)
+		{
+			auto state = enemyBox->GetFSM().GetCurrentState();
+
+			enemyPos = enemyBox->GetCenter();
+
+			if (enemyPos.x < playerPos.x - 500 || enemyPos.x > playerPos.x + 500)
+			{
+				continue;
+			}
+
+			enemy = (Obstacle*)gameObject.second.get();
+			float enemyZ = enemy->GetZ();
+			if (enemyZ - 0.5f > playerZ || enemyZ + 0.5f < playerZ) // 질문 Z 축 검사를 먼저하는게 비용이 좋을까요 X 축 검사를 먼저하는게 비용이 좋을까요
+			{
+				ObjectCollisionLeave(m_EventDispatcher, enemyBox, playerBox);
+				continue;
+			}
+
+
+			if (enemyBox->BoxVsBox(*playerBox))
+			{
+				CollisionInfo info;
+				info.self = enemyBox;
+				info.other = playerBox;
+				info.normal = enemyPos - playerPos;
+				info.contactPoint;
+				info.penetrationDepth;
+			
+
+				
+				if (state == "None")
+				{
+					m_EventDispatcher.Dispatch(EventType::CollisionEnter, &info);
+				}
+				else if(state == "Enter")
+				{
+					m_EventDispatcher.Dispatch(EventType::CollisionStay, &info);
+				}
+				else if (state == "Stay")
+				{
+					m_EventDispatcher.Dispatch(EventType::CollisionStay, &info);
+				}
+				else if (state == "Exit")
+				{
+					m_EventDispatcher.Dispatch(EventType::CollisionEnter, &info);
+				}
+
+				continue;
+			}
+
+			ObjectCollisionLeave(m_EventDispatcher, enemyBox, playerBox);
+		}
+	}
 }
 
 void TitleScene::Update(float deltaTime)

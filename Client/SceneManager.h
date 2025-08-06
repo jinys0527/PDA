@@ -7,13 +7,21 @@
 #include "EventDispatcher.h"
 #include "AssetManager.h"
 #include "CameraObject.h"
+#include "GameManager.h"
 
 class SceneManager
 {
 	friend class Editor;
 public:
-	SceneManager(D2DRenderer& renderer, EventDispatcher& eventDispatcher, AssetManager& assetManager) : m_Renderer(renderer), m_EventDispatcher(eventDispatcher), m_AssetManager(assetManager){ }
-	~SceneManager() = default;
+	SceneManager(D2DRenderer& renderer, EventDispatcher& eventDispatcher, AssetManager& assetManager) : m_Renderer(renderer), m_EventDispatcher(eventDispatcher), m_AssetManager(assetManager)
+	{ 
+		m_Camera = nullptr;
+		m_GameManager = new GameManager(eventDispatcher);
+	}
+	~SceneManager()
+	{
+		delete m_GameManager;
+	}
 
 	void Initialize();
 	void Update(float deltaTime);
@@ -33,5 +41,6 @@ private:
 	D2DRenderer& m_Renderer;
 	AssetManager& m_AssetManager;
 	EventDispatcher& m_EventDispatcher;
+	GameManager* m_GameManager;
 };
 

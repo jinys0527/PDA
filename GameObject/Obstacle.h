@@ -4,6 +4,12 @@
 class BoxColliderComponent;
 class SpriteRenderer;
 
+//struct DamageInfo
+//{
+//	int damage;
+//	
+//};
+
 class Obstacle : public GameObject
 {
 public:
