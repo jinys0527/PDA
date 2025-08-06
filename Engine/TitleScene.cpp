@@ -191,13 +191,7 @@ void TitleScene::FixedUpdate()
 				info.normal = enemyPos - playerPos;
 				info.contactPoint;
 				info.penetrationDepth;
-				
-				/*
-					m_Fsm.AddState("None", noneState);
-					m_Fsm.AddState("Enter", enterState);
-					m_Fsm.AddState("Stay", stayState);
-					m_Fsm.AddState("Exit", exitState);
-				*/
+			
 
 				
 				if (state == "None")

@@ -12,21 +12,8 @@ Obstacle::Obstacle(EventDispatcher& eventDispatcher) : GameObject(eventDispatche
 	m_Sprite = GetComponent<SpriteRenderer>();
 	m_Z = 1;
 
-	//std::function<void(const CollisionInfo&)>
-	//using StateFunc = std::function<void()>;
-	//using StateFuncFloat = std::function<void(float)>;
 
-	/*
-					[this](float dt)
-				{
-					this->m_KickCool += dt;
-					if (this->m_KickCool >= 2.0f)
-					{
-						this->m_KickCool = 0;
-						this->GetFSM().Trigger("Kick");
-					}
-				}
-	*/
+	// 충돌 순서 ( Enter -> (아직도 Exit 안되었으면) -> Stay -> (충돌 나가면) -> Exit -> (즉시 호출 Exit은 사실상 나가졌다는 state를 확인할 시간도 없음) -> None )
 
 	m_Collider->GetFSM().SetOnEnter("Exit", [this]() 
 		{
