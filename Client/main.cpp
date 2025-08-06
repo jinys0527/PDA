@@ -43,6 +43,9 @@ int main()
  	g_pMainApp->Finalize();
  
  	delete g_pMainApp;
+    
+    sceneManager.Reset();
+    engine.Reset();
 
 	CoUninitialize();
 

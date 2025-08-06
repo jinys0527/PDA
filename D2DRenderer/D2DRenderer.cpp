@@ -46,7 +46,6 @@ void D2DRenderer::LogInternalComStates()
 
 void D2DRenderer::UnInitialize()
 {
-	LogInternalComStates();
 	ReleaseRenderTargets();
 
 	m_wicFactory = nullptr;

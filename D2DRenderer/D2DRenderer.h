@@ -15,7 +15,7 @@ class D2DRenderer
 {
 public:
 	D2DRenderer() = default;
-	~D2DRenderer() { LogInternalComStates(); std::cout << "D2DRenderer destroyed\n"; UnInitialize(); }
+	~D2DRenderer() { std::cout << "D2DRenderer destroyed\n"; UnInitialize(); }
 
 	void Initialize(HWND hwnd);
 

@@ -24,6 +24,15 @@ public:
 
 	GameTimer& GetTimer() { return m_GameTimer; }
 
+	void Reset()
+	{
+		m_SoundAssetManager.reset();
+		m_AssetManager.reset();
+		m_Renderer.reset();
+		m_InputManager.reset();
+		m_EventDispatcher.reset();
+	}
+
 private:
 	void Initailize();
 

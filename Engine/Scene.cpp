@@ -7,6 +7,8 @@
 
 Scene::~Scene()
 {
+	m_GameObjects.clear();
+	m_Camera = nullptr; // ÇÊ¿ä ½Ã
 }
 
 void Scene::AddGameObject(std::shared_ptr<GameObject> gameObject)

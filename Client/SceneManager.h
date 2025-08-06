@@ -15,7 +15,7 @@ class SceneManager
 	friend class Editor;
 public:
 	SceneManager(D2DRenderer& renderer, EventDispatcher& eventDispatcher, AssetManager& assetManager, SoundAssetManager& soundAssetManager, SoundManager& soundManager) : m_Renderer(renderer), m_EventDispatcher(eventDispatcher), m_AssetManager(assetManager), m_SoundAssetManager(soundAssetManager), m_SoundManager(soundManager) { }
-	~SceneManager() { m_Renderer.LogInternalComStates(); }
+	~SceneManager() = default;
 
 	void Initialize();
 	void Update(float deltaTime);
@@ -27,6 +27,12 @@ public:
 	std::shared_ptr<Scene> AddScene(const std::string& name, std::shared_ptr<Scene> scene);
 	void SetCurrentScene(const std::string& name);
 	std::shared_ptr<Scene> GetCurrentScene() const;
+
+	void Reset()
+	{
+		m_Scenes.clear();
+		m_CurrentScene.reset();
+	}
 
 private:
 	std::unordered_map<std::string, std::shared_ptr<Scene>> m_Scenes;
