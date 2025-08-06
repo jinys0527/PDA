@@ -11,29 +11,10 @@
 #include "SoundUI.h"
 #include "UIImageComponent.h"
 #include "UISliderComponent.h"
+#include "Telegraph.h"
 
 void TestScene::Initialize()
 {
-	auto gameObject = std::make_shared<GameObject>(m_EventDispatcher);
-	gameObject->m_Name = "test";
-	auto trans = gameObject->GetComponent<TransformComponent>();
-	trans->SetPosition({ 300.0f, 300.0f });
-	auto sr = gameObject->AddComponent<SpriteRenderer>();
-	sr->SetAssetManager(&m_AssetManager);
-	auto& clips = m_AssetManager.LoadAnimation(L"boss", L"../Resource/Character/Boss/Boss_Arm_Right_Hit/boss.json");
-
-	auto animComp = gameObject->AddComponent<AnimationComponent>();
-	animComp->SetAssetManager(&m_AssetManager);
-
-	for (const auto& [clipName, clip] : clips)
-	{
-		animComp->AddClip(clipName, &clip);
-	}
-
-	animComp->Play("attack");
-	sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
-	sr->SetTextureKey("boss");
-
 	auto soundUI = std::make_shared<SoundUI>(m_SoundManager, m_EventDispatcher);
 	soundUI->m_Name = "sound";
 	auto rect = soundUI->GetComponent<RectTransformComponent>();
@@ -42,19 +23,6 @@ void TestScene::Initialize()
 	uiImage->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
 	soundUI->GetBGM()->SetFrame(uiImage.get());
 
-
-	/*sr->SetPath("../Resource/cat.png");
-	sr->SetTextureKey("cat_texture");*/
-
-	//auto gameObject2 = std::make_shared<GameObject>(m_EventDispatcher);
-	//gameObject2->m_Name = "test2";
-	//auto trans2 = gameObject2->GetComponent<TransformComponent>();
-	//trans2->SetPosition({ 800.0f, 500.0f });
-	//auto sr2 = gameObject2->AddComponent<SpriteRenderer>();
-	//sr2->SetAssetManager(&m_AssetManager);
-	//sr2->SetPath("../Resource/cat.png");
-	//sr2->SetTextureKey("cat_texture");
-
 	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
 	cameraObject->m_Name = "Camera";
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
@@ -62,12 +30,26 @@ void TestScene::Initialize()
 	cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5f);
 	SetMainCamera(cameraObject);
 
-	/*sr->SetTexture(bitmap);
-	sr2->SetTexture(bitmap);*/
-	AddGameObject(gameObject);
-	//AddGameObject(gameObject2);
+
+
+	auto teleobj = std::make_shared<Telegraph>(m_EventDispatcher);
+	auto sr = teleobj->AddComponent<SpriteRenderer>();
+	sr->SetTexture(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
+	sr->SetPivotPreset(SpritePivotPreset::Center, sr->GetTexture()->GetSize());
+	sr->SetOpacity(0.0f);
+	//teleobj->SetActive();
+
+
+
+
+
+
+
+
+
 	AddUIObject(soundUI);
 	AddGameObject(cameraObject);
+	AddGameObject(teleobj);
 }
 
 void TestScene::Finalize()
