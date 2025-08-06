@@ -120,6 +120,9 @@
     <ClInclude Include="GraffitiObject.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Telegraph.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp">
@@ -205,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="GraffitiComponent.cpp">
       <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Telegraph.cpp">
+      <Filter>Object\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

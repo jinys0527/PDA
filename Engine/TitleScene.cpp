@@ -101,93 +101,10 @@ void TitleScene::Leave()
 
 void ObjectCollisionLeave(EventDispatcher &eventDispatcher, BoxColliderComponent *enemy, BoxColliderComponent* player)
 {
-	if (enemy->GetFSM().GetCurrentState() == "None")
-		return;
-
-	CollisionInfo info;
-	info.self = enemy;
-	info.other = player;
-	info.normal;
-	info.contactPoint;
-	info.penetrationDepth;
-
-	eventDispatcher.Dispatch(EventType::CollisionExit, &info);
 }
 
 void TitleScene::FixedUpdate()
 {
-	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("test")->second.get()); // 나중에 플레이어로 바꿀듯
-	if (player == nullptr)
-		return;
-	BoxColliderComponent* playerBox = player->GetComponent<BoxColliderComponent>();
-	if (playerBox == nullptr)
-		return;
-	Vec2F playerPos = playerBox->GetCenter();
-	float playerZ = player->GetZ();
-	Obstacle* enemy;
-	BoxColliderComponent* enemyBox;
-	Vec2F enemyPos;
-
-
-	for (auto gameObject : m_GameObjects)
-	{
-		if (player == gameObject.second.get())
-			continue;
-		enemyBox = gameObject.second->GetComponent<BoxColliderComponent>();
-		if (enemyBox)
-		{
-			auto state = enemyBox->GetFSM().GetCurrentState();
-
-			enemyPos = enemyBox->GetCenter();
-
-			if (enemyPos.x < playerPos.x - 500 || enemyPos.x > playerPos.x + 500)
-			{
-				continue;
-			}
-
-			enemy = (Obstacle*)gameObject.second.get();
-			float enemyZ = enemy->GetZ();
-			if (enemyZ - 0.5f > playerZ || enemyZ + 0.5f < playerZ) // 질문 Z 축 검사를 먼저하는게 비용이 좋을까요 X 축 검사를 먼저하는게 비용이 좋을까요
-			{
-				ObjectCollisionLeave(m_EventDispatcher, enemyBox, playerBox);
-				continue;
-			}
-
-
-			if (enemyBox->BoxVsBox(*playerBox))
-			{
-				CollisionInfo info;
-				info.self = enemyBox;
-				info.other = playerBox;
-				info.normal = enemyPos - playerPos;
-				info.contactPoint;
-				info.penetrationDepth;
-			
-
-				
-				if (state == "None")
-				{
-					m_EventDispatcher.Dispatch(EventType::CollisionEnter, &info);
-				}
-				else if(state == "Enter")
-				{
-					m_EventDispatcher.Dispatch(EventType::CollisionStay, &info);
-				}
-				else if (state == "Stay")
-				{
-					m_EventDispatcher.Dispatch(EventType::CollisionStay, &info);
-				}
-				else if (state == "Exit")
-				{
-					m_EventDispatcher.Dispatch(EventType::CollisionEnter, &info);
-				}
-
-				continue;
-			}
-
-			ObjectCollisionLeave(m_EventDispatcher, enemyBox, playerBox);
-		}
-	}
 }
 
 void TitleScene::Update(float deltaTime)
