@@ -12,43 +12,43 @@
 
 void TitleScene::Initialize()
 {
-	auto gameObject = std::make_shared<PlayerObject>(m_EventDispatcher);
-	gameObject->m_Name = "test";
-	//m_EventDispatcher.AddListener()
-	auto trans = gameObject->GetComponent<TransformComponent>();
-	trans->SetPosition({ 960.0f, 540.0f });
-	auto sr = gameObject->AddComponent<SpriteRenderer>();
-	sr->SetAssetManager(&m_AssetManager);
-	auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
-	sr->SetPath("../Resource/cat.png");
-	sr->SetTextureKey("cat_texture");
-	sr->SetTexture(bitmap);
-	sr->SetPivotPreset(SpritePivotPreset::Center, bitmap->GetSize());
+	//auto gameObject = std::make_shared<PlayerObject>(m_EventDispatcher);
+	//gameObject->m_Name = "test";
+	////m_EventDispatcher.AddListener()
+	//auto trans = gameObject->GetComponent<TransformComponent>();
+	//trans->SetPosition({ 960.0f, 540.0f });
+	//auto sr = gameObject->AddComponent<SpriteRenderer>();
+	//sr->SetAssetManager(&m_AssetManager);
+	//auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+	//sr->SetPath("../Resource/cat.png");
+	//sr->SetTextureKey("cat_texture");
+	//sr->SetTexture(bitmap);
+	//sr->SetPivotPreset(SpritePivotPreset::Center, bitmap->GetSize());
 
 
-	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
-	cameraObject->m_Name = "Camera";
-	auto trans3 = cameraObject->GetComponent<TransformComponent>();
-	trans3->SetPosition({ 960.0f, 540.0f });
-	cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5);
-	SetMainCamera(cameraObject);
+	//auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
+	//cameraObject->m_Name = "Camera";
+	//auto trans3 = cameraObject->GetComponent<TransformComponent>();
+	//trans3->SetPosition({ 960.0f, 540.0f });
+	//cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5);
+	//SetMainCamera(cameraObject);
 
 
-	auto testUIObject = std::make_shared<ButtonUI>(m_EventDispatcher);
-	testUIObject->m_Name = "UI";
-	auto uiTrans = testUIObject->GetComponent<TransformComponent>();
-	uiTrans->SetPosition({ 1600, 900 });
-	sr = testUIObject->AddComponent<SpriteRenderer>();
-	sr->SetAssetManager(&m_AssetManager);
-	sr->SetTexture(bitmap);
-	uiTrans->SetPivotPreset(TransformPivotPreset::Center, bitmap->GetSize());
-	sr->SetPivotPreset(SpritePivotPreset::Center, bitmap->GetSize());
-	testUIObject->GetComponent<UIButtonComponent>()->Start();
+	//auto testUIObject = std::make_shared<ButtonUI>(m_EventDispatcher);
+	//testUIObject->m_Name = "UI";
+	//auto uiTrans = testUIObject->GetComponent<TransformComponent>();
+	//uiTrans->SetPosition({ 1600, 900 });
+	//sr = testUIObject->AddComponent<SpriteRenderer>();
+	//sr->SetAssetManager(&m_AssetManager);
+	//sr->SetTexture(bitmap);
+	//uiTrans->SetPivotPreset(TransformPivotPreset::Center, bitmap->GetSize());
+	//sr->SetPivotPreset(SpritePivotPreset::Center, bitmap->GetSize());
+	//testUIObject->GetComponent<UIButtonComponent>()->Start();
 
 
-	AddGameObject(gameObject);
-	AddGameObject(cameraObject);
-	AddGameObject(testUIObject);
+	//AddGameObject(gameObject);
+	//AddGameObject(cameraObject);
+	//AddGameObject(testUIObject);
 }
 
 void TitleScene::Finalize()

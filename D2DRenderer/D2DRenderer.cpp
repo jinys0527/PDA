@@ -21,11 +21,32 @@ void D2DRenderer::Initialize(HWND hwnd)
 	DX::ThrowIfFailed(hr);
 
 	m_wicFactory = wicFactory;
-}
 
+	// 즉시 상태 점검
+	ULONG refCount = m_wicFactory->AddRef();
+	refCount = m_wicFactory->Release();
+	std::cout << "m_wicFactory RefCount after init: " << refCount << std::endl;
+}
+void D2DRenderer::LogInternalComStates()
+{
+	std::cout << "[D2DRenderer] Logging internal COM states:\n";
+	LogComObjectRefCount(m_d2dDevice.Get(), "m_d2dDevice");
+	LogComObjectRefCount(m_d2dContext.Get(), "m_d2dContext");
+	LogComObjectRefCount(m_swapChain.Get(), "m_swapChain");
+	if (m_wicFactory)
+	{
+		LogComObjectRefCount(m_wicFactory.Get(), "m_wicFactory");
+	}
+	else
+	{
+		std::cout << "m_wicFactory is nullptr\n";
+	}
+	// 필요하면 더 추가
+}
 
 void D2DRenderer::UnInitialize()
 {
+	LogInternalComStates();
 	ReleaseRenderTargets();
 
 	m_wicFactory = nullptr;
@@ -126,9 +147,9 @@ void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo)
 	D2D1::Matrix3x2F cameraMatrix = m_Camera->GetComponent<CameraComponent>()->GetViewMatrix();
 	DrawInternal(renderInfo, cameraMatrix);
 
-	//UI 그리기
-	cameraMatrix = m_Camera->GetComponent<CameraComponent>()->GetViewMatrixForUI();
-	DrawInternal(renderInfo, cameraMatrix);
+	////UI 그리기
+	//cameraMatrix = m_Camera->GetComponent<CameraComponent>()->GetViewMatrixForUI();
+	//DrawInternal(renderInfo, cameraMatrix);
 
 }
 
@@ -172,13 +193,37 @@ void D2DRenderer::DrawInternal(std::vector<RenderInfo>& renderInfo, D2D1::Matrix
 
 		//m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());
 
-		m_d2dContext->DrawBitmap(
-			info.bitmap.Get(),
-			&destRect,
-			info.opacity,
-			D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
-			nullptr
-		);
+		if (info.useSrcRect)
+		{
+			// srcRect 기반 크기 적용
+			float srcWidth = info.srcRect.right - info.srcRect.left;
+			float srcHeight = info.srcRect.bottom - info.srcRect.top;
+
+			destRect = {
+				-pivot.x,              // left
+				-pivot.y,              // top
+				srcWidth - pivot.x,    // right
+				srcHeight - pivot.y    // bottom
+			};
+
+			m_d2dContext->DrawBitmap(
+				info.bitmap.Get(),
+				&destRect,
+				info.opacity,
+				D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+				&info.srcRect              // <- source rect 사용
+			);
+		}
+		else
+		{
+			m_d2dContext->DrawBitmap(
+				info.bitmap.Get(),
+				&destRect,
+				info.opacity,
+				D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+				nullptr
+			);
+		}
 
 		m_d2dContext->DrawRectangle(&destRect, m_brush.Get());
 	}
@@ -292,12 +337,11 @@ void D2DRenderer::CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1*& outBi
 	DX::ThrowIfFailed(hr);
 
 	D2D1_BITMAP_PROPERTIES1 bmpProps = D2D1::BitmapProperties1(
-		D2D1_BITMAP_OPTIONS_NONE, 
+		D2D1_BITMAP_OPTIONS_NONE,
 		D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)
 	);
 
 	hr = m_d2dContext->CreateBitmapFromWicBitmap(converter.Get(), &bmpProps, &outBitmap);
-
 }
 
 void D2DRenderer::CreateDeviceAndSwapChain(HWND hwnd)

@@ -30,17 +30,10 @@ bool GameApplication::Initialize()
 
 	m_Engine.GetRenderer().Initialize(m_hwnd);
 
-	auto assetManager = m_Engine.GetAssetManager();
+	m_Engine.GetAssetManager().Init(L"../Resource");
+	m_Engine.GetSoundAssetManager().Init(L"../Sound");
 
-	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
 	m_SceneManager.Initialize();
-
- 	m_TestBitmap = m_Engine.GetAssetManager().LoadTexture(L"cat_texture", L"../Resource/cat.png");
-
- 	assert(m_TestBitmap != nullptr && "Failed to load test bitmap.");
- 
- 	m_Background = m_Engine.GetAssetManager().LoadTexture(L"vecteezy", L"../Resource/vecteezy.png");
- 	assert(m_Background != nullptr && "Failed to load background texture.");
 
 #ifdef _EDITOR
 	ImGui::CreateContext();
@@ -82,21 +75,6 @@ void GameApplication::Run()
 
 void GameApplication::Finalize()
 {
-	if (m_Player)
-	{
-		delete m_Player;
-	}
-
-	if (m_Obstacle)
-	{
-		delete m_Obstacle;
-	}
-
-	for (auto background : m_BackgroundObj)
-	{
-		delete background;
-	}
-
 	__super::Destroy();
 
 #ifdef _EDITOR
@@ -116,10 +94,6 @@ bool GameApplication::OnWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 #endif
 	return false;
 }
-
-
-
-
 
 void GameApplication::UpdateLogic()
 {

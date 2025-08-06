@@ -5,6 +5,7 @@
 #include "AnimationController.h"
 
 class AnimationClip;
+class AssetManager;
 
 class AnimationComponent : public Component
 {
@@ -23,6 +24,11 @@ public:
 
 	void OnEvent(EventType type, const void* data) override;
 
+	void SetAssetManager(AssetManager* assetManager)
+	{
+		m_AssetManager = assetManager;
+	}
+
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json & j) override;
 
@@ -32,6 +38,7 @@ private:
 	AnimationMap m_Clips;
 	AnimationController m_AnimationController;
 	std::string m_CurrentClipName;
+	AssetManager* m_AssetManager;
 };
 
 REGISTER_COMPONENT(AnimationComponent);

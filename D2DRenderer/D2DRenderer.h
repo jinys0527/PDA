@@ -4,6 +4,7 @@
 #include <d2d1helper.h>
 #include <vector>
 #include "RenderData.h"
+#include <iostream>
 using namespace Microsoft::WRL;
 
 
@@ -14,7 +15,7 @@ class D2DRenderer
 {
 public:
 	D2DRenderer() = default;
-	~D2DRenderer() { UnInitialize(); }
+	~D2DRenderer() { LogInternalComStates(); std::cout << "D2DRenderer destroyed\n"; UnInitialize(); }
 
 	void Initialize(HWND hwnd);
 
@@ -34,13 +35,35 @@ public:
 
 	void DrawBitmap(ID2D1Bitmap1* bitmap, D2D1_RECT_F dest, TransformComponent* trans, D2D1::Matrix3x2F viewTM);
 
+	template<typename T>
+	void LogComObjectRefCount(T* comObject, const char* name)
+	{
+		if (!comObject)
+		{
+			std::cout << name << " is nullptr\n";
+			return;
+		}
+
+		ULONG refCount = 0;
+		__try
+		{
+			refCount = comObject->AddRef();
+			refCount = comObject->Release();
+			std::cout << name << " RefCount = " << refCount << "\n";
+		}
+		__except (EXCEPTION_EXECUTE_HANDLER)
+		{
+			std::cout << "[Exception] Access violation when calling AddRef/Release on " << name << "\n";
+		}
+	}
+
+	void LogInternalComStates();
 
 	void DrawMessage(const wchar_t* text, float left, float top, float width, float height, const D2D1::ColorF& color);
 
 
 	void Draw(std::vector<RenderInfo>& renderInfo);
 	void DrawInternal(std::vector<RenderInfo>& renderInfo, D2D1::Matrix3x2F cameraMatrix);
-
 
 	Math::Vector2F CalcAnchorOffset(const Math::Vector2F& parentSize,
 		const Anchor& anchor,

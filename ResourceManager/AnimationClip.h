@@ -52,7 +52,7 @@ public:
 
 	const std::vector<Frame>& GetFrames() const { return m_Frames; }
 	float GetTotalDuration() const { return m_TotalDuration; }
-	const std::wstring GetTextureKey() const { return m_TextureKey; }
+	const std::wstring& GetTextureKey() const { return m_TextureKey; }
 
 private:
 	std::vector<Frame> m_Frames;

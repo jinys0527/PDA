@@ -16,6 +16,11 @@ public:
 	void SetUV(const D2D1_RECT_F& sourceRect);
 	void Render(D2DRenderer* renderer);
 
+	D2D1_RECT_F GetUV()
+	{
+		return m_SourceRect;
+	}
+
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;
 private:

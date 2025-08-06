@@ -4,7 +4,7 @@
 class TestScene : public Scene
 {
 public:
-	TestScene(EventDispatcher& eventDispatcher, AssetManager& assetManager) : Scene(eventDispatcher, assetManager) {}
+	TestScene(EventDispatcher& eventDispatcher, AssetManager& assetManager, SoundAssetManager& soundAssetManager,SoundManager& soundManager) : Scene(eventDispatcher, assetManager, soundAssetManager, soundManager) {}
 	virtual ~TestScene() = default;
 
 	void Initialize() override;

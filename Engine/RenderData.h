@@ -14,7 +14,9 @@ struct RenderInfo
 	Math::Vector2F sizeDelta;
 	Math::Vector2F pivot;
 	Anchor anchor;
-	D2D1::Matrix3x2F worldMatrix;
+	D2D1::Matrix3x2F worldMatrix; 
 	float opacity = 1.0f;
 	int layer = 0;
+	bool useSrcRect = false;
+	D2D1_RECT_F srcRect = {};
 };

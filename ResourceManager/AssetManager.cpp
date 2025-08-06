@@ -3,15 +3,40 @@
 #include "JsonParser.h"
 #include "AssetManager.h"
 
-ID2D1Bitmap1* AssetManager::LoadTexture(std::wstring keyWide, std::filesystem::path fullPath)
+void AssetManager::Init(const std::filesystem::path& rootPath)	// 폴더 자동 로드
+{
+	for (const auto& entry : std::filesystem::recursive_directory_iterator(rootPath))
+	{
+		if (!entry.is_regular_file())
+			continue;
+
+		const auto& path = entry.path();
+		const auto& ext = path.extension().wstring();
+		const auto key = path.stem().wstring();
+		
+		/*if (ext == L".json")
+		{
+			LoadAnimation(key, path);
+		}
+		else */if (ext == L".png" || ext == L".jpg" || ext == L".bmp")
+		{
+			LoadTexture(key, path);
+		}
+	}
+}
+
+
+Microsoft::WRL::ComPtr<ID2D1Bitmap1> AssetManager::LoadTexture(std::wstring keyWide, std::filesystem::path fullPath)
 {
 	auto it = m_Textures.find(keyWide);
+	if (it != m_Textures.end())
+		return it->second;
 
-	if (it != m_Textures.end()) return it->second.Get();
+	Microsoft::WRL::ComPtr<ID2D1Bitmap1> texture;
+	m_Renderer.CreateBitmapFromFile(fullPath.c_str(), *texture.GetAddressOf()); // 아래 방식으로 오버로드 바꿔야 함
 
-	m_Renderer.CreateBitmapFromFile(fullPath.c_str(), *m_Textures[keyWide].GetAddressOf());
-	
-	return m_Textures[keyWide].Get();
+	m_Textures.emplace(keyWide, texture);
+	return texture;
 }
 
 const AnimationClips& AssetManager::LoadAnimation(std::wstring keyWide, std::filesystem::path fullPath)
@@ -22,10 +47,9 @@ const AnimationClips& AssetManager::LoadAnimation(std::wstring keyWide, std::fil
 		return it->second;
 	}
 
-	Microsoft::WRL::ComPtr<ID2D1Bitmap1> sheet = GetTexture(keyWide);
-	std::wstring keyW = keyWide + L".png";
-
-	m_Renderer.CreateBitmapFromFile(keyW.c_str(), *sheet.GetAddressOf());
+	std::filesystem::path texPath = fullPath;
+	texPath.replace_extension(L".png");
+	LoadTexture(keyWide, texPath);
 
 	auto tempMap = JsonParser::LoadAnimation(fullPath);
 
@@ -33,7 +57,7 @@ const AnimationClips& AssetManager::LoadAnimation(std::wstring keyWide, std::fil
 	clips.reserve(tempMap.size());
 	for (auto& [name, clip] : tempMap)
 	{
-		clip.SetTextureKey(keyW);
+		clip.SetTextureKey(keyWide);
 		clips.emplace_back(std::move(name), std::move(clip));
 	}
 
@@ -42,12 +66,12 @@ const AnimationClips& AssetManager::LoadAnimation(std::wstring keyWide, std::fil
 	return res.first->second;
 }
 
-const Microsoft::WRL::ComPtr<ID2D1Bitmap1> AssetManager::GetTexture(const std::wstring& key) const
+Microsoft::WRL::ComPtr<ID2D1Bitmap1> AssetManager::GetTexture(const std::wstring& key) const
 {
 	auto it = m_Textures.find(key);
 	if (it != m_Textures.end())
 	{
-		return it->second.Get();
+		return it->second;
 	}
 
 	return nullptr;
@@ -87,19 +111,4 @@ const MapData& AssetManager::GetMap(const std::wstring& key) const
 
 	static const MapData empty;
 	return empty;
-}
-
-const AssetManager::Sounds& AssetManager::GetBGMPaths() const
-{
-	return m_BGMs;
-}
-
-const AssetManager::Sounds& AssetManager::GetSFXPaths() const
-{
-	return m_SFXs;
-}
-
-const AssetManager::Sounds& AssetManager::GetUISoundPaths() const
-{
-	return m_UISounds;
 }

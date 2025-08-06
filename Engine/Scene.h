@@ -4,6 +4,8 @@
 #include <vector>
 #include "RenderData.h"
 #include "AssetManager.h"
+#include "SoundAssetManager.h"
+#include "SoundManager.h"
 
 class NzWndBase;
 class GameObject;
@@ -14,7 +16,7 @@ class Scene
 public:
 	friend class Editor;
 
-	Scene(EventDispatcher& eventDispatcher, AssetManager& assetManager) : m_EventDispatcher(eventDispatcher), m_AssetManager(assetManager) {}
+	Scene(EventDispatcher& eventDispatcher, AssetManager& assetManager, SoundAssetManager& soundAssetManager, SoundManager& soundManager) : m_EventDispatcher(eventDispatcher), m_AssetManager(assetManager), m_SoundAssetManager(soundAssetManager), m_SoundManager(soundManager) {}
 	virtual ~Scene();
 	virtual void Initialize() = 0;
 	virtual void Finalize() = 0;
@@ -42,6 +44,8 @@ protected:
 	std::unordered_map<std::string, std::shared_ptr<GameObject>> m_GameObjects;
 	EventDispatcher& m_EventDispatcher;
 	AssetManager& m_AssetManager;
+	SoundAssetManager& m_SoundAssetManager;
+	SoundManager& m_SoundManager;
 	CameraObject* m_Camera;
 	std::string m_Name;
 private:

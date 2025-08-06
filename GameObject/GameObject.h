@@ -57,9 +57,6 @@ public:
 	virtual void Render(std::vector<RenderInfo>& renderInfo);
 	virtual void FixedUpdate();
 
-	TransformComponent* RenderPosition();		//테스트용
-	SpriteRenderer* RenderTexture();
-
 	void SendMessages(const myCore::MessageID msg, void* data = nullptr);
 	
 	void SendEvent(const std::string& evt);

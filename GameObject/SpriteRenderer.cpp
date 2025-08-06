@@ -57,6 +57,14 @@ void SpriteRenderer::Deserialize(const nlohmann::json& j)
 void SpriteRenderer::SetTexture(Microsoft::WRL::ComPtr<ID2D1Bitmap1> texture)
 {
 	m_Sprite = texture;
+	m_UseSrcRect = false;
+}
+
+void SpriteRenderer::SetTexture(Microsoft::WRL::ComPtr<ID2D1Bitmap1> texture, D2D1_RECT_F srcRect)
+{
+	m_Sprite = texture;
+	m_SrcRect = srcRect;
+	m_UseSrcRect = true;
 }
 
 Microsoft::WRL::ComPtr<ID2D1Bitmap1> SpriteRenderer::GetTexture() const
