@@ -89,6 +89,76 @@ void TitleScene::Initialize()
 
 	AddGameObject(cameraObject);
 
+	{
+
+		auto gameObject = std::make_shared<PlayerObject>(m_EventDispatcher);
+		gameObject->m_Name = "test";
+		//m_EventDispatcher.AddListener()
+		auto trans = gameObject->GetComponent<TransformComponent>();
+		trans->SetPosition({ 960.0f, 540.0f });
+		auto sr = gameObject->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+		//그래피티
+		auto graffiti = std::make_shared<GraffitiObject>(m_EventDispatcher);
+		graffiti->m_Name = "graffiti";
+		auto graffitiTrans = graffiti->GetComponent<TransformComponent>();
+		graffitiTrans->SetPosition({ 1600,900 });
+		sr = graffiti->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::Center, bitmap->GetSize());
+		graffiti->GetComponent<GraffitiComponent>()->Start();
+
+		AddGameObject(gameObject);
+		AddGameObject(graffiti);
+
+
+		{
+			auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
+			obstacle->m_Name = "obstacle";
+			auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+			obstacleTrans->SetPosition({ 1460.0f, 350.0f });
+			sr = obstacle->AddComponent<SpriteRenderer>();
+			sr->SetAssetManager(&m_AssetManager);
+			bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+			sr->SetPath("../Resource/cat.png");
+			sr->SetTextureKey("cat_texture");
+			sr->SetTexture(bitmap);
+			sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+
+			obstacle.get()->SetZ(1);
+
+			AddGameObject(obstacle);
+		}
+
+		{
+			auto obstacle = std::make_shared<ItemObject>(m_EventDispatcher);
+			obstacle->m_Name = "obstacle2";
+			auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+			obstacleTrans->SetPosition({ 1000.0f, 700.0f });
+			sr = obstacle->AddComponent<SpriteRenderer>();
+			sr->SetAssetManager(&m_AssetManager);
+			bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+			sr->SetPath("../Resource/cat.png");
+			sr->SetTextureKey("cat_texture");
+			sr->SetTexture(bitmap);
+			sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+
+			obstacle.get()->SetZ(2);
+
+			AddGameObject(obstacle);
+		}
+
+
+	}
 
 }
 
@@ -105,20 +175,22 @@ void TitleScene::Leave()
 {
 }
 
-void ObjectCollisionLeave(EventDispatcher &eventDispatcher, BoxColliderComponent *enemy, BoxColliderComponent* player)
-{
-	if (enemy->GetFSM().GetCurrentState() == "None")
-		return;
+//void ObjectCollisionLeave(EventDispatcher &eventDispatcher, BoxColliderComponent *enemy, BoxColliderComponent* player)
+//{
+//	if (enemy->GetFSM().GetCurrentState() == "None")
+//		return;
+//
+//	CollisionInfo info;
+//	info.self = enemy;
+//	info.other = player;
+//	info.normal;
+//	info.contactPoint;
+//	info.penetrationDepth;
+//
+//	eventDispatcher.Dispatch(EventType::CollisionExit, &info);
+//}
 
-	CollisionInfo info;
-	info.self = enemy;
-	info.other = player;
-	info.normal;
-	info.contactPoint;
-	info.penetrationDepth;
-
-	eventDispatcher.Dispatch(EventType::CollisionExit, &info);
-}
+void ObjectCollisionLeave(EventDispatcher& eventDispatcher, BoxColliderComponent* enemy, BoxColliderComponent* player);
 
 void TitleScene::FixedUpdate()
 {

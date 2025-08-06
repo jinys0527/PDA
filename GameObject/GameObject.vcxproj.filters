@@ -117,10 +117,10 @@
     <ClInclude Include="GraffitiObject.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
-    <ClInclude Include="ItemObject.h">
+    <ClInclude Include="RunPlayerController.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
-    <ClInclude Include="RunPlayerController.h">
+    <ClInclude Include="ItemObject.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
   </ItemGroup>

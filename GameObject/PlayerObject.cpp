@@ -223,6 +223,8 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 			info.size = { 1,1 };
 			info.pivot = sprite->GetPivot(); // 바꾸어 놓음
 			// UI가 아닌 일반 오브젝트 위치로 설정
+			float opacity = abs(cos(m_InvincibleTime * 5));
+			info.opacity = opacity;
 			renderInfo.push_back(info);
 		}
 		{
