@@ -7,10 +7,16 @@ RunPlayerController::RunPlayerController() : Component(), IEventListener()
 {
 	m_Z = 0;
 	m_Velocity = 0;
-
-	//m_PlayerOwner = (PlayerObject*)(m_Owner);
-
 	m_RailHeight = 200;
+}
+
+void RunPlayerController::Start()
+{
+	GetEventDispatcher().AddListener(EventType::KeyDown, this);// 이벤트 추가
+	GetEventDispatcher().AddListener(EventType::KeyUp, this);
+	GetEventDispatcher().AddListener(EventType::OnPlayerCollisonOccur, this);
+
+	m_PlayerOwner = (PlayerObject*)(m_Owner);
 
 
 }

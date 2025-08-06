@@ -18,6 +18,8 @@ public:
 
 	RunPlayerController();
 
+	void Start();
+
 	virtual ~RunPlayerController();
 
 

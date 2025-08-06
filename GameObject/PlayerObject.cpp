@@ -8,9 +8,7 @@
 PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventDispatcher)
 {
 	m_Controller = AddComponent<RunPlayerController>();// 플레이어 조종 컴포넌트 추가
-	eventDispatcher.AddListener(EventType::KeyDown, m_Controller);// 이벤트 추가
-	eventDispatcher.AddListener(EventType::KeyUp, m_Controller);
-	eventDispatcher.AddListener(EventType::OnPlayerCollisonOccur, m_Controller);
+	m_Controller->Start();
 	m_RigidbodyComponent = AddComponent<RigidbodyComponent>();
 	m_RigidbodyComponent->Start();
 	m_RigidbodyComponent->SetGravity(Math::Vector2F(0, -20));
