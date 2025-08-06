@@ -15,6 +15,13 @@ RunPlayerController::RunPlayerController() : Component(), IEventListener()
 
 }
 
+RunPlayerController::~RunPlayerController()
+{
+	m_PlayerOwner->GetEventDispatcher().RemoveListener(EventType::KeyDown, this);// 이벤트 추가
+	m_PlayerOwner->GetEventDispatcher().RemoveListener(EventType::KeyUp, this);
+	m_PlayerOwner->GetEventDispatcher().RemoveListener(EventType::OnPlayerCollisonOccur, this);
+}
+
 
 void RunPlayerController::Update(float deltaTime)
 {
@@ -115,11 +122,7 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 		case 'D': m_IsDPressed = isDown; break;
 		case 'P':
 		{
-			m_Hp -= 1; 
-			if (m_Hp > 0)
-				m_PlayerOwner->GetFSM().ChangeState("Hurt");
-			else
-				m_PlayerOwner->GetFSM().ChangeState("Death");
+			m_PlayerOwner->GetEventDispatcher().Dispatch(EventType::OnPlayerCollisonOccur, (const void*)1);
 		}
 		break;
 		case VK_SPACE : m_IsSpacePressed = isDown; break;
@@ -127,7 +130,7 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 		default: break;
 		}
 	}
-	else
+	else if(type == EventType::KeyUp)
 	{
 		auto keyData = static_cast<const Events::KeyEvent*>(data);
 		if (!keyData) return;
@@ -143,6 +146,26 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 		case VK_SPACE : m_IsSpacePressed = isDown; break;
 		case VK_SHIFT : m_IsShiftPressed = isDown; break;
 		default: break;
+		}
+	}
+
+	if (type == EventType::OnPlayerCollisonOccur)
+	{
+		if (m_PlayerOwner->GetInvincibleTime() == 0)
+		{
+			int hp = m_PlayerOwner->GetHp();
+			hp -= (int)data;
+			m_PlayerOwner->SetHp(hp);
+			m_PlayerOwner->GetEventDispatcher().Dispatch(EventType::OnPlayerHit, (const void*)hp);// 현재 hp를 보냄
+			if (hp > 0)
+			{
+				m_PlayerOwner->GetFSM().ChangeState("Hurt");
+			}
+			else
+			{
+				m_PlayerOwner->GetEventDispatcher().Dispatch(EventType::OnPlayerDeath, nullptr);// 데미지 유형 구조 만들어서 데미지랑 데미지 타입 보낼려 했지만 포기라기 보단 미룸
+				m_PlayerOwner->GetFSM().ChangeState("Death");
+			}
 		}
 	}
 }

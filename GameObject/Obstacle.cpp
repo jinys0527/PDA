@@ -2,6 +2,7 @@
 #include "BoxColliderComponent.h"
 #include "TransformComponent.h"
 #include "SpriteRenderer.h"
+#include <iostream>
 
 Obstacle::Obstacle(EventDispatcher& eventDispatcher) : GameObject(eventDispatcher)
 {
@@ -27,15 +28,41 @@ Obstacle::Obstacle(EventDispatcher& eventDispatcher) : GameObject(eventDispatche
 				}
 	*/
 
-	m_Collider->GetFSM().ChangeState("Stay");
+	m_Collider->GetFSM().SetOnEnter("Exit", [this]() 
+		{
+			this->m_Collider->GetFSM().Trigger("None");
+			std::cout << "Exit " << "³ª°¨" << std::endl;	
+		});
+
+	
+
+	m_Collider->SetOnEnter(
+		[this](const CollisionInfo& info)
+		{
+			if (info.self != this->GetComponent<BoxColliderComponent>())
+				return;
+			info.self->GetFSM().Trigger("CollisionEnter");
+		}
+	);
 
 	m_Collider->SetOnStay(
 		[this](const CollisionInfo& info)
 		{
 			if (info.self != this->GetComponent<BoxColliderComponent>())
 				return;
+			info.self->GetFSM().Trigger("CollisionStay");
 			auto trans = this->GetComponent<TransformComponent>();
 			trans->Translate(Vec2F(0.1f, 0));
+			this->GetEventDispatcher().Dispatch(EventType::OnPlayerCollisonOccur, (const void*)1);
+		}
+	);
+
+	m_Collider->SetOnExit(
+		[this](const CollisionInfo& info)
+		{
+			if (info.self != this->GetComponent<BoxColliderComponent>())
+				return;
+			info.self->GetFSM().Trigger("CollisionExit");
 		}
 	);
 }

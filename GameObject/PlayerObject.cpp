@@ -10,6 +10,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 	m_Controller = AddComponent<RunPlayerController>();// 플레이어 조종 컴포넌트 추가
 	eventDispatcher.AddListener(EventType::KeyDown, m_Controller);// 이벤트 추가
 	eventDispatcher.AddListener(EventType::KeyUp, m_Controller);
+	eventDispatcher.AddListener(EventType::OnPlayerCollisonOccur, m_Controller);
 	m_RigidbodyComponent = AddComponent<RigidbodyComponent>();
 	m_RigidbodyComponent->Start();
 	m_RigidbodyComponent->SetGravity(Math::Vector2F(0, -20));
@@ -141,14 +142,15 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 		}
 		{
 			State hurtState{
-				[]() {std::cout << "hurt 들어옴" << std::endl; },
+				[this]() {
+					std::cout << "hurt 들어옴" << std::endl; 
+					this->m_InvincibleTime = 3.0f;
+				},
 				[this](float dt)
 				{
-										static float time = 0; // 나중에 애니메이션을 쓰게 될때 애니메이션 끝 프레임이라면 탈출을 넣을것이다
-					time += dt;
-					if (time >= 3)
+					if (m_InvincibleTime <= 0)
 					{
-						time = 0;
+						m_InvincibleTime = 0;
 						this->GetFSM().Trigger("Idle");
 					}
 				},
@@ -198,6 +200,9 @@ void PlayerObject::Update(float deltaTime)
 {
 	//float temp = m_Transform->GetPosition().y;
 
+	if (m_InvincibleTime > 0)
+		m_InvincibleTime -= deltaTime;
+
 	GameObject::Update(deltaTime);
 
 	m_Fsm.Update(deltaTime);
@@ -221,6 +226,8 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 			info.anchoredPosition = m_Transform->GetPosition();
 			info.sizeDelta = { 0, 0 };
 			info.parentSize = { 0, 0 };
+			float opacity = abs(cos(m_InvincibleTime * 5));
+			info.opacity = opacity;
 			renderInfo.push_back(info);
 		}
 		{

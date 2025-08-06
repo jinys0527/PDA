@@ -24,6 +24,8 @@ enum class EventType
 	OnPlayerCollisonOccur, // 플레이어 충돌 플레이어 피격 전 무적 판정 등 체크
 	OnPlayerHit, // 플레이어 진짜 피격
 	OnPlayerDeath, // 플레이어 죽음
+	OnScoreChange,
+	OnBossScene
 
 };
 

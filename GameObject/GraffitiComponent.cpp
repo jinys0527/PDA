@@ -26,8 +26,8 @@ void GraffitiComponent::Start()
 
 void GraffitiComponent::Update(float deltatime)
 {
-	std::cout << "m_IsHovered: " << m_IsHovered << std::endl;
-	std::cout << "m_IsClicked: " << m_IsClicked << std::endl;
+	//std::cout << "m_IsHovered: " << m_IsHovered << std::endl;
+	//std::cout << "m_IsClicked: " << m_IsClicked << std::endl;
 
 }
 
@@ -41,7 +41,7 @@ void GraffitiComponent::OnEvent(EventType type, const void* data)
 		if (m_IsHovered)
 		{
 			auto mouseData = static_cast<const Events::MouseState*>(data);
-			std::cout << mouseData->pos.x << " " << mouseData->pos.y << "¿¡¼­ Å¬¸¯µÊ \n";
+			//std::cout << mouseData->pos.x << " " << mouseData->pos.y << "¿¡¼­ Å¬¸¯µÊ \n";
 			m_IsClicked = true;
 		}
 	}
