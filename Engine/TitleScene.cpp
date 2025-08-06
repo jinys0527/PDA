@@ -12,6 +12,7 @@
 #include "UIImageComponent.h"
 #include "GraffitiObject.h"
 #include "GraffitiComponent.h"
+
 #include "BoxColliderComponent.h"
 #include "Obstacle.h"
 #include "ItemObject.h"
@@ -43,10 +44,10 @@ void TitleScene::Initialize()
 
 
 
-	//// BTí…ŒìŠ¤íŠ¸
+	//// BT?ŒìŠ¤??
 	//m_BlackBoard = new BlackBoard();
 
-	//// ê°’ ì„¤ì •
+	//// ê°??¤ì •
 	//m_BlackBoard->SetValue("AA", true);
 	//m_BlackBoard->SetValue("BB", true);
 	//m_BlackBoard->SetValue("A", true);
@@ -54,7 +55,7 @@ void TitleScene::Initialize()
 	//m_BlackBoard->SetValue("C", true);
 	//m_BlackBoard->SetValue("D", true);
 
-	//// Leaf ë…¸ë“œ
+	//// Leaf ?¸ë“œ
 	//auto A = std::make_shared<TestNode>("A");
 	//auto B = std::make_shared<TestNode>("B");
 	//auto C = std::make_shared<TestNode>("C");
@@ -76,17 +77,18 @@ void TitleScene::Initialize()
 	//Root->AddChild(BB);
 
 	//m_BehaviorTree = Root;
-	//// BTí…ŒìŠ¤íŠ¸ ë================
+	//// BT?ŒìŠ¤????===============
 
 
 
-	// ë³´ìŠ¤BT í…ŒìŠ¤íŠ¸
+	// ë³´ìŠ¤BT ?ŒìŠ¤??
 
 	m_BlackBoard = std::make_unique<BossBlackBoard>();
 	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
 
 
 	AddGameObject(cameraObject);
+
 
 }
 
@@ -120,7 +122,9 @@ void ObjectCollisionLeave(EventDispatcher &eventDispatcher, BoxColliderComponent
 
 void TitleScene::FixedUpdate()
 {
-	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("test")->second.get()); // ë‚˜ì¤‘ì— í”Œë ˆì´ì–´ë¡œ ë°”ê¿€ë“¯
+	if (m_GameObjects.find("test") == m_GameObjects.end())
+		return;
+	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("test")->second.get()); // ?˜ì¤‘???Œë ˆ?´ì–´ë¡?ë°”ê???
 	if (player == nullptr)
 		return;
 	BoxColliderComponent* playerBox = player->GetComponent<BoxColliderComponent>();
@@ -156,13 +160,14 @@ void TitleScene::FixedUpdate()
 				continue;
 			}
 
+
 			if (enemy = dynamic_cast<Obstacle*>(gameObject->second.get()))
 				opponentZ = enemy->GetZ();
 			else if (ally = dynamic_cast<ItemObject*>(gameObject->second.get()))
 				opponentZ = ally->GetZ();
 			else
 				continue;
-			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // ì§ˆë¬¸ Z ì¶• ê²€ì‚¬ë¥¼ ë¨¼ì €í•˜ëŠ”ê²Œ ë¹„ìš©ì´ ì¢‹ì„ê¹Œìš” X ì¶• ê²€ì‚¬ë¥¼ ë¨¼ì €í•˜ëŠ”ê²Œ ë¹„ìš©ì´ ì¢‹ì„ê¹Œìš”
+			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // Áú¹® Z Ãà °Ë»ç¸¦ ¸ÕÀúÇÏ´Â°Ô ºñ¿ëÀÌ ÁÁÀ»±î¿ä X Ãà °Ë»ç¸¦ ¸ÕÀúÇÏ´Â°Ô ºñ¿ëÀÌ ÁÁÀ»±î¿ä
 			{
 				ObjectCollisionLeave(m_EventDispatcher, opponentBox, playerBox);
 				continue;
@@ -238,7 +243,7 @@ void TitleScene::Update(float deltaTime)
 		m_OneSecondTimer = 0.0f;
 
 		float curHP = m_BlackBoard->GetValue<float>("BossCurrHP").value();
-		//std::cout << "í˜„ì¬ HP: " << curHP << std::endl;
+		//std::cout << "?„ì¬ HP: " << curHP << std::endl;
 		m_BlackBoard->SetValue("BossCurrHP", curHP - 5);
 
 		// ê°€ì¤‘ì¹˜ ë¡œê·¸ ì¶œë ¥
