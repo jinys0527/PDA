@@ -1,8 +1,8 @@
 #include "Inverter.h"
 
-NodeState Inverter::Tick(BlackBoard& bb)
+NodeState Inverter::Tick(BlackBoard& bb, float deltaTime)
 {
-    NodeState result = m_Children->Tick(bb);
+    NodeState result = m_Children->Tick(bb, deltaTime);
 
     switch (result) 
     {

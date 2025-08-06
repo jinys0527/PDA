@@ -39,32 +39,36 @@
     <ClInclude Include="BossBehaviorTree.h" />
     <ClInclude Include="BossBlackBoard.h" />
     <ClInclude Include="BossCoolDown.h" />
-    <ClInclude Include="BossSkillNode.h" />
+    <ClInclude Include="SkillCondition.h" />
     <ClInclude Include="BTNode.h" />
     <ClInclude Include="CompositeNode.h" />
     <ClInclude Include="Decorator.h" />
     <ClInclude Include="FSM.h" />
     <ClInclude Include="Inverter.h" />
+    <ClInclude Include="PhaseChecker.h" />
     <ClInclude Include="Repeater.h" />
     <ClInclude Include="Selector.h" />
     <ClInclude Include="Sequence.h" />
     <ClInclude Include="TestNode.h" />
+    <ClInclude Include="SkillNode.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BlackBoard.cpp" />
     <ClCompile Include="BossBehaviorTree.cpp" />
     <ClCompile Include="BossBlackBoard.cpp" />
     <ClCompile Include="BossCoolDown.cpp" />
-    <ClCompile Include="BossSkillNode.cpp" />
+    <ClCompile Include="SkillCondition.cpp" />
     <ClCompile Include="BTNode.cpp" />
     <ClCompile Include="CompositeNode.cpp" />
     <ClCompile Include="Decorator.cpp" />
     <ClCompile Include="FSM.cpp" />
     <ClCompile Include="Inverter.cpp" />
+    <ClCompile Include="PhaseChecker.cpp" />
     <ClCompile Include="Repeater.cpp" />
     <ClCompile Include="Selector.cpp" />
     <ClCompile Include="Sequence.cpp" />
     <ClCompile Include="TestNode.cpp" />
+    <ClCompile Include="SkillNode.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

@@ -60,11 +60,17 @@
     <ClInclude Include="BossBlackBoard.h">
       <Filter>Behavior Tree\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BossSkillNode.h">
+    <ClInclude Include="SkillCondition.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillNode.h">
+      <Filter>Behavior Tree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhaseChecker.h">
       <Filter>Behavior Tree\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BossCoolDown.h">
-      <Filter>Header Files</Filter>
+      <Filter>Behavior Tree\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -104,11 +110,17 @@
     <ClCompile Include="BossBlackBoard.cpp">
       <Filter>Behavior Tree\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BossSkillNode.cpp">
+    <ClCompile Include="SkillCondition.cpp">
       <Filter>Behavior Tree\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BossCoolDown.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhaseChecker.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillNode.cpp">
+      <Filter>Behavior Tree\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

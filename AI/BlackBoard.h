@@ -28,6 +28,7 @@ public:
         return std::nullopt;
     }
 
+
     // 데이터 존재 여부
     bool HasKey(const std::string& key) const;
 

@@ -3,6 +3,7 @@
 
 class BossBlackBoard : public BlackBoard
 {
+public:
 	BossBlackBoard();
 
 private:

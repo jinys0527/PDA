@@ -1,10 +1,10 @@
 #include "Selector.h"
 
-NodeState Selector::Tick(BlackBoard& bb)
+NodeState Selector::Tick(BlackBoard& bb, float deltaTime)
 {
     while (m_CurrIndex < m_Children.size())
     {
-        NodeState result = m_Children[m_CurrIndex]->Tick(bb);
+        NodeState result = m_Children[m_CurrIndex]->Tick(bb, deltaTime);
 
         if (result == NodeState::Running) {
             return NodeState::Running;  // currentIndex 그대로 유지

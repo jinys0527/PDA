@@ -18,13 +18,13 @@ enum class NodeState
 class BTNode
 {
 public :
-	BTNode(std::string name) : m_name(name) {}
+	BTNode(std::string name) : m_Name(name) {}
 
 	virtual ~BTNode() = default;
-	virtual NodeState Tick(BlackBoard& bb) = 0;
+	virtual NodeState Tick(BlackBoard& bb, float deltaTime) = 0;
 
 protected:
-	std::string m_name;
+	std::string m_Name;
 
 };
 
