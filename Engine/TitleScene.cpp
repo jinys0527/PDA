@@ -14,6 +14,7 @@
 #include "GraffitiComponent.h"
 #include "BoxColliderComponent.h"
 #include "Obstacle.h"
+#include "ItemObject.h"
 #include "AnimationComponent.h"
 #include "FSM.h"
 
@@ -95,7 +96,7 @@ void TitleScene::Initialize()
 	}
 
 	{
-		auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
+		auto obstacle = std::make_shared<ItemObject>(m_EventDispatcher);
 		obstacle->m_Name = "obstacle2";
 		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
 		obstacleTrans->SetPosition({ 1000.0f, 700.0f });
@@ -151,44 +152,55 @@ void TitleScene::FixedUpdate()
 	BoxColliderComponent* playerBox = player->GetComponent<BoxColliderComponent>();
 	if (playerBox == nullptr)
 		return;
+	BoxColliderComponent* opponentBox;
 	Vec2F playerPos = playerBox->GetCenter();
+	Vec2F opponentPos;
 	float playerZ = player->GetZ();
-	Obstacle* enemy;
-	BoxColliderComponent* enemyBox;
-	Vec2F enemyPos;
+	float opponentZ;
+	Obstacle* enemy = nullptr;
+	ItemObject* ally = nullptr;
+
+	std::list<std::shared_ptr<GameObject>> removeList;
 
 
-	for (auto gameObject : m_GameObjects)
+
+	for (auto gameObject = m_GameObjects.begin(); gameObject != m_GameObjects.end(); gameObject++)
 	{
-		if (player == gameObject.second.get())
+		auto something = gameObject->second.get();
+		if (player == gameObject->second.get())
 			continue;
-		enemyBox = gameObject.second->GetComponent<BoxColliderComponent>();
-		if (enemyBox)
+		opponentZ = -1;
+		opponentBox = gameObject->second->GetComponent<BoxColliderComponent>();
+		if (opponentBox)
 		{
-			auto state = enemyBox->GetFSM().GetCurrentState();
+			auto state = opponentBox->GetFSM().GetCurrentState();
 
-			enemyPos = enemyBox->GetCenter();
+			opponentPos = opponentBox->GetCenter();
 
-			if (enemyPos.x < playerPos.x - 500 || enemyPos.x > playerPos.x + 500)
+			if (opponentPos.x < playerPos.x - 500 || opponentPos.x > playerPos.x + 500)
 			{
 				continue;
 			}
 
-			enemy = (Obstacle*)gameObject.second.get();
-			float enemyZ = enemy->GetZ();
-			if (enemyZ - 0.5f > playerZ || enemyZ + 0.5f < playerZ) // 질문 Z 축 검사를 먼저하는게 비용이 좋을까요 X 축 검사를 먼저하는게 비용이 좋을까요
+			if (enemy = dynamic_cast<Obstacle*>(gameObject->second.get()))
+				opponentZ = enemy->GetZ();
+			else if (ally = dynamic_cast<ItemObject*>(gameObject->second.get()))
+				opponentZ = ally->GetZ();
+			else
+				continue;
+			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // 질문 Z 축 검사를 먼저하는게 비용이 좋을까요 X 축 검사를 먼저하는게 비용이 좋을까요
 			{
-				ObjectCollisionLeave(m_EventDispatcher, enemyBox, playerBox);
+				ObjectCollisionLeave(m_EventDispatcher, opponentBox, playerBox);
 				continue;
 			}
 
 
-			if (enemyBox->BoxVsBox(*playerBox))
+			if (opponentBox->BoxVsBox(*playerBox))
 			{
 				CollisionInfo info;
-				info.self = enemyBox;
+				info.self = opponentBox;
 				info.other = playerBox;
-				info.normal = enemyPos - playerPos;
+				info.normal = opponentPos - playerPos;
 				info.contactPoint;
 				info.penetrationDepth;
 			
@@ -211,11 +223,23 @@ void TitleScene::FixedUpdate()
 					m_EventDispatcher.Dispatch(EventType::CollisionEnter, &info);
 				}
 
+				if (ally)
+				{
+					removeList.push_back(gameObject->second);
+					//RemoveGameObject(gameObject->second);
+					//m_GameObjects.erase(gameObject->first);
+					//gameObject--;
+				}
 				continue;
 			}
 
-			ObjectCollisionLeave(m_EventDispatcher, enemyBox, playerBox);
+			ObjectCollisionLeave(m_EventDispatcher, opponentBox, playerBox);
 		}
+	}
+
+	for (auto it = removeList.begin(); it != removeList.end(); ++it)
+	{
+		RemoveGameObject(*it);
 	}
 }
 

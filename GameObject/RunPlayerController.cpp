@@ -71,7 +71,7 @@ void RunPlayerController::Update(float deltaTime)
 	pos.y += m_Z * m_RailHeight;
 	m_TransformComponent->SetPosition(pos);
 
-
+	//pos = pos;
 
 
 	//{		//보기 전용 y를 z로 설정
@@ -90,9 +90,27 @@ void RunPlayerController::Update(float deltaTime)
 
 	//}
 
+	m_IsBoss != m_IsBoss;
+
 	if (delta.x != 0 || delta.y != 0)
 	{
 		m_Owner->GetComponent<TransformComponent>()->Translate(delta);// 실제론 이거 써야해요
+		if (m_IsBoss)
+		{
+			std::string state = m_PlayerOwner->GetFSM().GetCurrentState();
+			if (state == "Idle" || state == "Kick" || state == "Hurt")
+			{
+				if (delta.x > 0)
+				{
+					m_PlayerOwner->SetIsFlip(false);
+				}
+				else
+				{
+					m_PlayerOwner->SetIsFlip(true);
+				}
+			}
+			
+		}
 		//m_Owner->GetComponent<TransformComponent>()->SetPosition(delta);// 보기 전용(z가 잘 되는지 y로 보는거)
 	}
 
@@ -121,10 +139,11 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 		case 'S': m_IsSPressedDown = isDown; m_IsSPressed = isDown; break;
 		case 'D': m_IsDPressed = isDown; break;
 		case 'P':
-		{
 			m_PlayerOwner->GetEventDispatcher().Dispatch(EventType::OnPlayerCollisonOccur, (const void*)1);
-		}
-		break;
+			break;
+		case 'Q':
+			m_IsBoss = !m_IsBoss;
+			break;
 		case VK_SPACE : m_IsSpacePressed = isDown; break;
 		case VK_SHIFT : m_IsShiftPressed = isDown; break;
 		default: break;
@@ -151,20 +170,23 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 
 	if (type == EventType::OnPlayerCollisonOccur)
 	{
-		if (m_PlayerOwner->GetInvincibleTime() == 0)
+		if (m_PlayerOwner->GetInvincibleTime() == 0 || (int)data <= 0)
 		{
 			int hp = m_PlayerOwner->GetHp();
 			hp -= (int)data;
 			m_PlayerOwner->SetHp(hp);
 			m_PlayerOwner->GetEventDispatcher().Dispatch(EventType::OnPlayerHit, (const void*)hp);// 현재 hp를 보냄
-			if (hp > 0)
+			if ((int)data > 0)
 			{
-				m_PlayerOwner->GetFSM().ChangeState("Hurt");
-			}
-			else
-			{
-				m_PlayerOwner->GetEventDispatcher().Dispatch(EventType::OnPlayerDeath, nullptr);// 데미지 유형 구조 만들어서 데미지랑 데미지 타입 보낼려 했지만 포기라기 보단 미룸
-				m_PlayerOwner->GetFSM().ChangeState("Death");
+				if (hp > 0)
+				{
+					m_PlayerOwner->GetFSM().ChangeState("Hurt");
+				}
+				else
+				{
+					m_PlayerOwner->GetEventDispatcher().Dispatch(EventType::OnPlayerDeath, nullptr);// 데미지 유형 구조 만들어서 데미지랑 데미지 타입 보낼려 했지만 포기라기 보단 미룸
+					m_PlayerOwner->GetFSM().ChangeState("Death");
+				}
 			}
 		}
 	}
@@ -182,12 +204,69 @@ Math::Vector2F RunPlayerController::MoveCheck(float deltaTime)
 {
 	Math::Vector2F delta = { 0.0f, 0.0f };
 
-	constexpr float moveSpeed = 500.0f; // 초당 이동 속도
+	if (m_IsBoss)
+		BossPhaseZProc(deltaTime);
+	else
+		RunPhaseZProc(deltaTime);
 
+	if (m_IsAPressed) delta.x -= m_MoveSpeed * deltaTime;
+	if (m_IsDPressed) delta.x += m_MoveSpeed * deltaTime;
+
+	return delta;
+}
+
+void RunPlayerController::JumpCheck()
+{
+	if (m_IsSpacePressed && m_IsShiftPressed == false)
+	{
+		if (m_IsJump == false)
+		{
+			m_IsJumpStart = true;
+			m_IsJump = true;
+		}
+	}
+
+	if (m_IsJumpStart)
+	{
+		//Math::Vector2F jumpPower = { 0, m_JumpPower };
+		//Math::Vector2F jumpPower = { 0, 100 };
+		//m_RigidBodyComponent->AddForce(jumpPower);// 나중에 점프력 변수 만들듯
+		m_RigidBodyComponent->SetVelocity(Math::Vector2F(0.0f, m_JumpPower));
+		m_IsJumpStart = false;
+		m_IsSlide = false;
+		m_PlayerOwner->GetFSM().Trigger("JumpUp");
+		m_PlayerOwner->SetIsGround(false);
+	}
+}
+
+void RunPlayerController::SlideCheck()
+{
+	if (m_IsJump)
+	{
+		if (m_IsShiftPressed)
+		{
+			//m_Velocity = -5.0f;// 나중에 JumpCancelSpeed 변수 만들듯
+			m_RigidBodyComponent->SetVelocity(Math::Vector2F(0.0f, -m_JumpCancelSpeed));
+		}
+	}
+	else
+	{
+		if (m_IsShiftPressed)
+		{
+			//m_IsSlide = true; // 바닥에서 shift 하면 웅크림
+			m_PlayerOwner->GetFSM().Trigger("Slide");
+		}
+		//else
+		//{
+		//	m_IsSlide = false;
+		//}
+	}
+}
+
+void RunPlayerController::RunPhaseZProc(float deltaTime)
+{
 	if (m_IsWPressed && m_RailMoveDown == false && m_RailMoveUp == false) m_RailMoveCool += deltaTime;
-	if (m_IsAPressed) delta.x -= moveSpeed * deltaTime;
 	if (m_IsSPressed && m_RailMoveDown == false && m_RailMoveUp == false) m_RailMoveCool -= deltaTime;
-	if (m_IsDPressed) delta.x += moveSpeed * deltaTime;
 
 	if (m_RailMoveCool >= 0.15f)// 홀드 0.15초 마다 레인 바뀜
 	{
@@ -261,54 +340,12 @@ Math::Vector2F RunPlayerController::MoveCheck(float deltaTime)
 			m_Z = m_RailTargetZ;
 		}
 	}
-
-	return delta;
 }
 
-void RunPlayerController::JumpCheck()
+void RunPlayerController::BossPhaseZProc(float deltaTime)
 {
-	if (m_IsSpacePressed && m_IsShiftPressed == false)
-	{
-		if (m_IsJump == false)
-		{
-			m_IsJumpStart = true;
-			m_IsJump = true;
-		}
-	}
+	if (m_IsWPressed) m_Z += m_MoveSpeed * deltaTime * 0.01f;
+	if (m_IsSPressed) m_Z -= m_MoveSpeed * deltaTime * 0.01f;
 
-	if (m_IsJumpStart)
-	{
-		//Math::Vector2F jumpPower = { 0, m_JumpPower };
-		//Math::Vector2F jumpPower = { 0, 100 };
-		//m_RigidBodyComponent->AddForce(jumpPower);// 나중에 점프력 변수 만들듯
-		m_RigidBodyComponent->SetVelocity(Math::Vector2F(0.0f, m_JumpPower));
-		m_IsJumpStart = false;
-		m_IsSlide = false;
-		m_PlayerOwner->GetFSM().Trigger("JumpUp");
-		m_PlayerOwner->SetIsGround(false);
-	}
-}
-
-void RunPlayerController::SlideCheck()
-{
-	if (m_IsJump)
-	{
-		if (m_IsShiftPressed)
-		{
-			//m_Velocity = -5.0f;// 나중에 JumpCancelSpeed 변수 만들듯
-			m_RigidBodyComponent->SetVelocity(Math::Vector2F(0.0f, -m_JumpCancelSpeed));
-		}
-	}
-	else
-	{
-		if (m_IsShiftPressed)
-		{
-			//m_IsSlide = true; // 바닥에서 shift 하면 웅크림
-			m_PlayerOwner->GetFSM().Trigger("Slide");
-		}
-		//else
-		//{
-		//	m_IsSlide = false;
-		//}
-	}
+	m_Z = Math::Clamp(m_Z, 0, 2);
 }
