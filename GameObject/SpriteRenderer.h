@@ -39,6 +39,7 @@ public:
 	void Deserialize(const nlohmann::json& j) override;
 
 	void SetTexture(Microsoft::WRL::ComPtr<ID2D1Bitmap1> texture);
+	void SetTexture(Microsoft::WRL::ComPtr<ID2D1Bitmap1> texture, D2D1_RECT_F srcRect);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap1> GetTexture() const;
 
 	void SetTextureKey(std::string key) { m_TextureKey = key; }
@@ -64,6 +65,12 @@ public:
 	void SetFlipY(bool flipY);
 	bool GetFlipY() const;
 
+	void SetUseSrcRect(bool useSrcRect) { m_UseSrcRect = useSrcRect; }
+	bool GetUseSrcRect() const { return m_UseSrcRect; }
+
+	void SetSrcRect(const D2D1_RECT_F& rect) { m_SrcRect = rect; }
+	D2D1_RECT_F GetSrcRect() const { return m_SrcRect; }
+
 	const Vec2F& GetPivot() const
 	{
 		return m_Pivot;
@@ -80,6 +87,8 @@ private:
 	bool m_FlipX;
 	bool m_FlipY;
 	Vec2F m_Pivot;
+	D2D1_RECT_F m_SrcRect = {};       // 사용할 텍스처 영역
+	bool m_UseSrcRect = false;        // 전체 텍스처 쓸지, 일부 영역 쓸지
 };
 
 REGISTER_COMPONENT(SpriteRenderer);

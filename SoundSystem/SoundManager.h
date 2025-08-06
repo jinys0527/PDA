@@ -1,10 +1,11 @@
 #pragma once
-#include "AssetManager.h"
+#include "SoundAssetManager.h"
+#include "fmod.hpp"
 
 class SoundManager
 {
 public:
-	SoundManager() = default;
+	SoundManager(SoundAssetManager& soundAssetManager) : m_SoundAssetManager(soundAssetManager) {}
 	~SoundManager();
 	bool Init();
 	void Update();
@@ -14,7 +15,7 @@ public:
 	void SFX_Shot(const std::wstring& eventPath);
 	void UI_Shot(const std::wstring& eventPath);
 
-	void SetVolume_Main(float volume); //other volume = mainV * otherV;
+	void SetVolume_Master(float volume); //other volume = mainV * otherV;
 	void SetVolume_BGM(float volume);
 	void SetVolume_SFX(float volume);
 	void SetVolume_UI(float volume);
@@ -26,7 +27,7 @@ public:
 	void CreateUISource(const std::unordered_map<std::wstring, std::filesystem::path>& container);
 
 private:
-	AssetManager& m_AssetManager;
+	SoundAssetManager& m_SoundAssetManager;
 
 	/*SoundManager            (const SoundManager&) = delete;
 	SoundManager& operator= (const SoundManager&) = delete;

@@ -4,6 +4,7 @@
 #include <wrl/client.h>
 #include "Engine.h"
 #include "SceneManager.h"
+#include "SoundManager.h"
 #include "Editor.h"
 
 class GameObject;
@@ -14,9 +15,9 @@ class GameApplication : public NzWndBase
 
 public:
 #ifdef _EDITOR
-	GameApplication(Engine& engine, SceneManager& sceneManager, Editor& editor) : NzWndBase(), m_Engine(engine), m_SceneManager(sceneManager), m_Editor(editor) {}
+	GameApplication(Engine& engine, SceneManager& sceneManager, SoundManager& soundManager, Editor& editor) : NzWndBase(), m_Engine(engine), m_SceneManager(sceneManager), m_Editor(editor) {}
 #else
-	GameApplication(Engine& engine, SceneManager& sceneManager) : NzWndBase(), m_Engine(engine), m_SceneManager(sceneManager) { }
+	GameApplication(Engine& engine, SceneManager& sceneManager, SoundManager& soundManager) : NzWndBase(), m_Engine(engine), m_SceneManager(sceneManager), m_SoundManager(soundManager) { }
 #endif
 	virtual ~GameApplication() = default;
 
@@ -37,9 +38,6 @@ private:
 	void OnResize(int width, int height) override;
 	void OnClose() override;
 
-	Microsoft::WRL::ComPtr<ID2D1Bitmap1>        m_TestBitmap;
-	Microsoft::WRL::ComPtr<ID2D1Bitmap1>        m_Background;
-
 	GameObject* m_Player;
 	GameObject* m_Obstacle;
 
@@ -52,5 +50,6 @@ private:
 
 	Engine& m_Engine;
 	SceneManager& m_SceneManager;
+	SoundManager& m_SoundManager;
 };
 

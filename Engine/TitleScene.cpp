@@ -44,10 +44,10 @@ void TitleScene::Initialize()
 
 
 
-	//// BT?ŒìŠ¤??
+	//// BTÅ×½ºÆ®
 	//m_BlackBoard = new BlackBoard();
 
-	//// ê°??¤ì •
+	//// °ª ¼³Á¤
 	//m_BlackBoard->SetValue("AA", true);
 	//m_BlackBoard->SetValue("BB", true);
 	//m_BlackBoard->SetValue("A", true);
@@ -55,7 +55,7 @@ void TitleScene::Initialize()
 	//m_BlackBoard->SetValue("C", true);
 	//m_BlackBoard->SetValue("D", true);
 
-	//// Leaf ?¸ë“œ
+	//// Leaf ³ëµå
 	//auto A = std::make_shared<TestNode>("A");
 	//auto B = std::make_shared<TestNode>("B");
 	//auto C = std::make_shared<TestNode>("C");
@@ -77,11 +77,11 @@ void TitleScene::Initialize()
 	//Root->AddChild(BB);
 
 	//m_BehaviorTree = Root;
-	//// BT?ŒìŠ¤????===============
+	//// BTÅ×½ºÆ® ³¡================
 
 
 
-	// ë³´ìŠ¤BT ?ŒìŠ¤??
+	// º¸½ºBT Å×½ºÆ®
 
 	m_BlackBoard = std::make_unique<BossBlackBoard>();
 	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
@@ -124,7 +124,7 @@ void TitleScene::FixedUpdate()
 {
 	if (m_GameObjects.find("test") == m_GameObjects.end())
 		return;
-	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("test")->second.get()); // ?˜ì¤‘???Œë ˆ?´ì–´ë¡?ë°”ê???
+	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("test")->second.get()); // ??ì¨·????? …??ë¼±æ¿?è«›ë¶½???
 	if (player == nullptr)
 		return;
 	BoxColliderComponent* playerBox = player->GetComponent<BoxColliderComponent>();
@@ -167,7 +167,7 @@ void TitleScene::FixedUpdate()
 				opponentZ = ally->GetZ();
 			else
 				continue;
-			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // Áú¹® Z Ãà °Ë»ç¸¦ ¸ÕÀúÇÏ´Â°Ô ºñ¿ëÀÌ ÁÁÀ»±î¿ä X Ãà °Ë»ç¸¦ ¸ÕÀúÇÏ´Â°Ô ºñ¿ëÀÌ ÁÁÀ»±î¿ä
+			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // ì§ˆë¬¸ Z ì¶?ê²€?¬ë? ë¨¼ì??˜ëŠ”ê²?ë¹„ìš©??ì¢‹ì„ê¹Œìš” X ì¶?ê²€?¬ë? ë¨¼ì??˜ëŠ”ê²?ë¹„ìš©??ì¢‹ì„ê¹Œìš”
 			{
 				ObjectCollisionLeave(m_EventDispatcher, opponentBox, playerBox);
 				continue;
@@ -243,10 +243,10 @@ void TitleScene::Update(float deltaTime)
 		m_OneSecondTimer = 0.0f;
 
 		float curHP = m_BlackBoard->GetValue<float>("BossCurrHP").value();
-		//std::cout << "?„ìž¬ HP: " << curHP << std::endl;
+		//std::cout << "ÇöÀç HP: " << curHP << std::endl;
 		m_BlackBoard->SetValue("BossCurrHP", curHP - 5);
 
-		// ê°€ì¤‘ì¹˜ ë¡œê·¸ ì¶œë ¥
+		// °¡ÁßÄ¡ ·Î±× Ãâ·Â
 		//float w1 = m_BlackBoard->GetValue<float>("SkillWeight_1").value();
 		//float w2 = m_BlackBoard->GetValue<float>("SkillWeight_2").value();
 		//float w3 = m_BlackBoard->GetValue<float>("SkillWeight_3").value();
@@ -266,12 +266,17 @@ void TitleScene::Update(float deltaTime)
 
 }
 
-void TitleScene::Render(std::vector<RenderInfo>& renderInfo)
+void TitleScene::Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo)
 {
 	for (auto gameObject : m_GameObjects)
 	{
 		gameObject.second->Render(renderInfo);
 
 		
+	}
+
+	for (auto uiObject : m_UIObjects)
+	{
+		uiObject.second->Render(uiRenderInfo);
 	}
 }

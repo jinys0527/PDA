@@ -50,7 +50,6 @@ UIButtonComponent::~UIButtonComponent()
 {
 	m_Owner->GetEventDispatcher().RemoveListener(EventType::Hovered, this);
 	m_Owner->GetEventDispatcher().RemoveListener(EventType::MouseLeftClick, this);
-
 }
 
 void UIButtonComponent::SetOnClick(std::function<void()> callback)

@@ -246,6 +246,7 @@
     <ClInclude Include="JsonParser.h" />
     <ClInclude Include="MapData.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="SoundAssetManager.h" />
     <ClInclude Include="UIData.h" />
   </ItemGroup>
   <ItemGroup>
@@ -257,6 +258,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugEditor|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SoundAssetManager.cpp" />
     <ClCompile Include="UIData.cpp" />
   </ItemGroup>
   <ItemGroup>

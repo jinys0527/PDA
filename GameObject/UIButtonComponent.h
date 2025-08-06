@@ -27,7 +27,6 @@ public:
 private:
 	void IsHovered(POINT mousePos);
 
-
 	std::function<void()> m_OnClick;
 	bool m_IsClicked = false;
 	bool m_IsHovered = false;

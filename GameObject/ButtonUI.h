@@ -1,8 +1,8 @@
 #pragma once
-#include "GameObject.h"
+#include "UIObject.h"
 #include "UIButtonComponent.h"
 
-class ButtonUI : public GameObject
+class ButtonUI : public UIObject
 {
 public:
 	ButtonUI(EventDispatcher& eventDispatcher);

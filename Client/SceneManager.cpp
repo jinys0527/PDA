@@ -6,15 +6,15 @@
 
 void SceneManager::Initialize()
 {
-	auto testScene = AddScene("TestScene", std::make_shared<TestScene>(m_EventDispatcher, m_AssetManager));
-	auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher, m_AssetManager));
+	auto testScene = AddScene("TestScene", std::make_shared<TestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager));
+	auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager));
 	
 	testScene->Initialize();
 	titleScene->Initialize();
 	titleScene->SetName("TitleScene");
 	testScene->SetName("TestScene");
 
-	SetCurrentScene("TitleScene");
+	SetCurrentScene("TestScene");
 }
 
 void SceneManager::Update(float deltaTime)
@@ -29,8 +29,9 @@ void SceneManager::Update(float deltaTime)
 void SceneManager::Render()
 {
 	std::vector<RenderInfo> renderInfo;
-	m_CurrentScene->Render(renderInfo);
-	m_Renderer.Draw(renderInfo);
+	std::vector<UIRenderInfo> uiRenderInfo;
+	m_CurrentScene->Render(renderInfo, uiRenderInfo);
+	m_Renderer.Draw(renderInfo, uiRenderInfo);
 }
 
 std::shared_ptr<Scene> SceneManager::AddScene(const std::string& name, std::shared_ptr<Scene> scene)

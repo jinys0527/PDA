@@ -4,7 +4,7 @@
 class TestScene : public Scene
 {
 public:
-	TestScene(EventDispatcher& eventDispatcher, AssetManager& assetManager) : Scene(eventDispatcher, assetManager) {}
+	TestScene(EventDispatcher& eventDispatcher, AssetManager& assetManager, SoundAssetManager& soundAssetManager,SoundManager& soundManager) : Scene(eventDispatcher, assetManager, soundAssetManager, soundManager) {}
 	virtual ~TestScene() = default;
 
 	void Initialize() override;
@@ -15,6 +15,6 @@ public:
 
 	void FixedUpdate() override;
 	void Update(float deltaTime) override;
-	void Render(std::vector<RenderInfo>& renderInfo) override;
+	void Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo) override;
 };
 

@@ -7,7 +7,7 @@
 class TitleScene : public Scene
 {
 public:
-	TitleScene(EventDispatcher& eventDispatcher, AssetManager& assetManager) : Scene(eventDispatcher, assetManager) {}
+	TitleScene(EventDispatcher& eventDispatcher, AssetManager& assetManager, SoundAssetManager& soundAssetManager, SoundManager& soundManager) : Scene(eventDispatcher, assetManager, soundAssetManager, soundManager) {}
 	virtual ~TitleScene() = default;
 
 	void Initialize() override;
@@ -18,7 +18,7 @@ public:
 
 	void FixedUpdate() override;
 	void Update(float deltaTime) override;
-	void Render(std::vector<RenderInfo>& renderInfo) override;
+	void Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo) override;
 	
 private:
 	//행동트리 테스트용도
