@@ -1,7 +1,7 @@
 #pragma once
-#include "GameObject.h"
+#include "Obstacle.h"
 
-class Telegraph : public GameObject
+class Telegraph : public Obstacle
 {
 public:
 	Telegraph(EventDispatcher& eventDispatcher);

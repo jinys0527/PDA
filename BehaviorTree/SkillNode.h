@@ -1,5 +1,7 @@
 #pragma once
 #include "BTNode.h"
+#include "Telegraph.h"
+
 
 class SkillNode : public BTNode
 {
@@ -17,5 +19,9 @@ private:
 	float m_ElapsedTime = 0.f;
 
 	bool m_HasStarted = false;
+	bool m_Initialized = false;
+
+	std::vector<std::shared_ptr<Telegraph>> m_Telegraphs;
+	std::vector<int> m_AttackRange;
 };
 

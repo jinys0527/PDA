@@ -3,7 +3,7 @@
 #include "SpriteRenderer.h"
 #include <cmath>
 
-Telegraph::Telegraph(EventDispatcher& eventDispatcher) : GameObject(eventDispatcher)
+Telegraph::Telegraph(EventDispatcher& eventDispatcher) : Obstacle(eventDispatcher)
 {
 	auto box = AddComponent<BoxColliderComponent>();
 	box->SetSize({ 100.f, 100.f });
