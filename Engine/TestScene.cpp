@@ -22,7 +22,11 @@
 #include "Obstacle.h"
 #include "ItemObject.h"
 #include "FSM.h"
-//=======================
+#include "FlyingObstacleComponent.h"
+//---
+
+
+//================================
 #include "BlackBoard.h"
 #include "TestNode.h"
 #include "Sequence.h"
@@ -38,6 +42,7 @@
 
 void TestScene::Initialize()
 {
+
 	auto soundUI = std::make_shared<SoundUI>(m_SoundManager, m_EventDispatcher);
 	soundUI->m_Name = "sound";
 	auto rect = soundUI->GetComponent<RectTransformComponent>();
@@ -53,10 +58,9 @@ void TestScene::Initialize()
 	cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5f);
 	SetMainCamera(cameraObject);
 
-
-
+#pragma region telegraph
 	std::vector<std::shared_ptr<Telegraph>> m_Telegraphs;
-	m_Telegraphs.reserve(12); // ¸Þ¸ð¸® ÀçÇÒ´ç ¹æÁö
+	m_Telegraphs.reserve(12); // ¸Þ¸ð¸® ?çÇÒ´ç ¹æÁö
 
 	const int columns = 4;
 	const int rows = 3;
@@ -94,6 +98,7 @@ void TestScene::Initialize()
 		std::cout << "posx: " << posX << " posy: " << posY << std::endl;
 		teleobj->GetComponent<TransformComponent>()->SetPosition({ posX, posY });
 		sr->SetOpacity(0.0f);
+		teleobj->SetZ(row);
 
 		AddGameObject(teleobj);
 		m_Telegraphs.push_back(teleobj);
@@ -102,14 +107,143 @@ void TestScene::Initialize()
 
 
 
+#pragma endregion
+
 	m_BlackBoard = std::make_unique<BossBlackBoard>(m_Telegraphs);
 	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
 
 
 
-
 	AddUIObject(soundUI);
 	AddGameObject(cameraObject);
+
+	{
+		auto gameObject = std::make_shared<PlayerObject>(m_EventDispatcher);
+		gameObject->m_Name = "player";
+		//m_EventDispatcher.AddListener()
+		auto trans = gameObject->GetComponent<TransformComponent>();
+		trans->SetPosition({ 960.0f, 540.0f });
+		auto sr = gameObject->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto& clips = m_AssetManager.LoadAnimation(L"boss", L"../Resource/Character/Boss/Boss_Arm_Right_Hit/boss.json");
+		auto animComp = gameObject->AddComponent<AnimationComponent>();
+		animComp->SetAssetManager(&m_AssetManager);
+
+		for (const auto& [clipName, clip] : clips)
+		{
+			animComp->AddClip(clipName, &clip);
+		}
+
+		//sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+		animComp->Play("attack");
+		sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+		sr->SetTextureKey("boss");
+		//�׷���Ƽ
+		auto graffiti = std::make_shared<GraffitiObject>(m_EventDispatcher);
+		graffiti->m_Name = "graffiti";
+		auto graffitiTrans = graffiti->GetComponent<TransformComponent>();
+		graffitiTrans->SetPosition({ 1600,900 });
+		sr = graffiti->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::Center, bitmap->GetSize());
+		graffiti->GetComponent<GraffitiComponent>()->Start();
+
+		AddGameObject(gameObject);
+		AddGameObject(graffiti);
+
+
+		{
+			auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
+			obstacle->m_Name = "obstacle";
+			auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+			obstacleTrans->SetPosition({ 1460.0f, 350.0f });
+			sr = obstacle->AddComponent<SpriteRenderer>();
+			sr->SetAssetManager(&m_AssetManager);
+			bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+			sr->SetPath("../Resource/cat.png");
+			sr->SetTextureKey("cat_texture");
+			sr->SetTexture(bitmap);
+			sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+
+			obstacle->SetZ(1);
+			obstacle->SetSlide(true);
+
+			AddGameObject(obstacle);
+		}
+
+		{
+			auto obstacle = std::make_shared<ItemObject>(m_EventDispatcher);
+			obstacle->m_Name = "obstacle2";
+			auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+			obstacleTrans->SetPosition({ 1000.0f, 700.0f });
+			sr = obstacle->AddComponent<SpriteRenderer>();
+			sr->SetAssetManager(&m_AssetManager);
+			bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+			sr->SetPath("../Resource/cat.png");
+			sr->SetTextureKey("cat_texture");
+			sr->SetTexture(bitmap);
+			sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+
+			obstacle.get()->SetZ(2);
+
+			AddGameObject(obstacle);
+		}
+
+
+	}
+
+
+	auto gameObject = std::make_shared<GameObject>(m_EventDispatcher);
+	gameObject->m_Name = "test";
+	auto trans = gameObject->GetComponent<TransformComponent>();
+	trans->SetPosition({ 300.0f, 300.0f });
+	auto sr = gameObject->AddComponent<SpriteRenderer>();
+	sr->SetAssetManager(&m_AssetManager);
+	auto& clips = m_AssetManager.LoadAnimation(L"boss", L"../Resource/Character/Boss/Boss_Arm_Right_Hit/boss.json");
+
+	auto animComp = gameObject->AddComponent<AnimationComponent>();
+	animComp->SetAssetManager(&m_AssetManager);
+
+	for (const auto& [clipName, clip] : clips)
+	{
+		animComp->AddClip(clipName, &clip);
+	}
+
+	animComp->Play("attack");
+
+	sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+	sr->SetTextureKey("boss");
+
+
+	AddGameObject(gameObject);
+
+	{
+		auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
+		obstacle->m_Name = "obstacle3";
+		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+		obstacleTrans->SetPosition({ 2000.0f, 350.0f });
+		obstacleTrans->SetParent(trans3);
+		sr = obstacle->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+
+		obstacle->SetZ(1);
+		obstacle->SetSlide(false);
+
+		auto component = obstacle->AddComponent<FlyingObstacleComponent>();
+		component->Start();
+
+		AddGameObject(obstacle);
+	}
+
 }
 
 void TestScene::Finalize()
@@ -144,7 +278,7 @@ void TestScene::FixedUpdate()
 
 	if (m_GameObjects.find("player") == m_GameObjects.end())
 		return;
-	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("player")->second.get()); // ??ì¨·????? …??ë¼±æ¿?è«›ë¶½???
+	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("player")->second.get()); // ??ì¨·????? ???ë¼±æ¿?è«?�ë¶�???
 	if (player == nullptr)
 		return;
 	BoxColliderComponent* playerBox = player->GetComponent<BoxColliderComponent>();
@@ -167,6 +301,11 @@ void TestScene::FixedUpdate()
 		auto something = gameObject->second.get();
 		if (player == gameObject->second.get())
 			continue;
+		if (gameObject->first == "tele3")
+		{
+			gameObject = gameObject;
+		}
+
 		opponentZ = -1;
 		opponentBox = gameObject->second->GetComponent<BoxColliderComponent>();
 		if (opponentBox)
@@ -187,10 +326,19 @@ void TestScene::FixedUpdate()
 				opponentZ = ally->GetZ();
 			else
 				continue;
-			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // ì§ˆë¬¸ Z ì¶?ê²€?¬ë? ë¨¼ì??˜ëŠ”ê²?ë¹„ìš©??ì¢‹ì„ê¹Œìš” X ì¶?ê²€?¬ë? ë¨¼ì??˜ëŠ”ê²?ë¹„ìš©??ì¢‹ì„ê¹Œìš”
+			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // ì§?ë¬¸ Z ì¶?ê²??¬ë? ë¨¼ì???ëŠ?�ê�?ë¹?��?��??ì¢?��?�„ê¹Œ�?��?X ì¶?ê²??¬ë? ë¨¼ì???ëŠ?�ê�?ë¹?��?��??ì¢?��?�„ê¹Œ�?��?
 			{
 				ObjectCollisionLeave(m_EventDispatcher, opponentBox, playerBox);
 				continue;
+			}
+
+			if (enemy)
+			{
+				if (enemy->GetSlide() && player->GetSlide())
+				{
+					ObjectCollisionLeave(m_EventDispatcher, opponentBox, playerBox);
+					continue;
+				}
 			}
 
 
@@ -247,6 +395,11 @@ void TestScene::Update(float deltaTime)
 	m_BTElapsedTime += deltaTime;
 	m_OneSecondTimer += deltaTime;
 
+	Vec2F move = { 0, 0 };
+	move.x += 300 * deltaTime;
+	//m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->Translate(move);
+	//m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->Translate(move);
+
 	if (m_BTElapsedTime >= 0.016f)
 	{
 		if (m_BehaviorTree)
@@ -263,7 +416,7 @@ void TestScene::Update(float deltaTime)
 		m_OneSecondTimer = 0.0f;
 
 		float curHP = m_BlackBoard->GetValue<float>("BossCurrHP").value();
-		//std::cout << "ÇöÀç HP: " << curHP << std::endl;
+		//std::cout << "Çö?ç HP: " << curHP << std::endl;
 		m_BlackBoard->SetValue("BossCurrHP", curHP - 5);
 
 		// °¡ÁßÄ¡ ·Î±× Ãâ·Â

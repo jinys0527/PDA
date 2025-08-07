@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "UIObject.h"
 #include "CameraObject.h"
+#include "GameManager.h"
 #include <unordered_set>
 
 Scene::~Scene()
@@ -99,4 +100,9 @@ void Scene::Deserialize(const nlohmann::json& j)
 			m_GameObjects[name] = std::move(gameObject);
 		}
 	}
+}
+
+void Scene::SetGameManager(GameManager* gameManager)
+{
+	m_GameManager = gameManager;
 }
