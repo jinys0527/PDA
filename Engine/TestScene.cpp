@@ -23,6 +23,7 @@
 #include "ItemObject.h"
 #include "FSM.h"
 #include "FlyingObstacleComponent.h"
+#include "DroneComponent.h"
 //---
 
 
@@ -56,6 +57,9 @@ void TestScene::Initialize()
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
 	trans3->SetPosition({ 960.0f, 540.0f });
 	cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5f);
+	BoxColliderComponent* cameraCol = cameraObject->AddComponent<BoxColliderComponent>();
+	cameraCol->Start();
+	cameraCol->SetSize({1920, 1080});
 	SetMainCamera(cameraObject);
 
 #pragma region telegraph
@@ -225,8 +229,7 @@ void TestScene::Initialize()
 		auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
 		obstacle->m_Name = "obstacle3";
 		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
-		obstacleTrans->SetPosition({ 2000.0f, 350.0f });
-		obstacleTrans->SetParent(trans3);
+		obstacleTrans->SetPosition({ 3000.0f, 350.0f });
 		sr = obstacle->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
 		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
@@ -238,8 +241,54 @@ void TestScene::Initialize()
 		obstacle->SetZ(1);
 		obstacle->SetSlide(false);
 
-		auto component = obstacle->AddComponent<FlyingObstacleComponent>();
-		component->Start();
+		auto rect = obstacle->GetComponent<BoxColliderComponent>();
+		rect->SetCenter(obstacleTrans->GetPosition());
+		m_EventDispatcher.AddListener(EventType::CollisionTrigger, rect);
+		rect->SetOnTrigger(
+			[obstacle, cameraObject](const CollisionInfo& info)
+			{
+				if (info.self != obstacle->GetComponent<BoxColliderComponent>())
+					return;
+				obstacle->GetComponent<TransformComponent>()->SetParent(cameraObject->GetComponent<TransformComponent>());
+				auto component = obstacle->AddComponent<FlyingObstacleComponent>();
+				component->Start();
+				obstacle->GetComponent<BoxColliderComponent>()->OnTrigger();
+			}
+		);
+
+
+
+		AddGameObject(obstacle);
+	}
+	{
+		auto obstacle = std::make_shared<GameObject>(m_EventDispatcher);
+		obstacle->m_Name = "obstacle4";
+		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+		obstacleTrans->SetPosition({ 3000.0f, 350.0f });
+		sr = obstacle->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+
+		auto rect = obstacle->AddComponent<BoxColliderComponent>();
+		m_EventDispatcher.AddListener(EventType::CollisionTrigger, rect);
+		rect->SetSize({ 100, 100 });
+		rect->Start();
+		rect->SetOnTrigger(
+			[obstacle, cameraObject](const CollisionInfo& info)
+			{
+				if (info.self != obstacle->GetComponent<BoxColliderComponent>())
+					return;
+				obstacle->GetComponent<TransformComponent>()->SetParent(cameraObject->GetComponent<TransformComponent>());
+				auto component = obstacle->AddComponent<DroneComponent>();
+				component->Start();
+				obstacle->GetComponent<BoxColliderComponent>()->OnTrigger();
+			}
+		);
+
 
 		AddGameObject(obstacle);
 	}
@@ -278,14 +327,19 @@ void TestScene::FixedUpdate()
 
 	if (m_GameObjects.find("player") == m_GameObjects.end())
 		return;
+	if (m_GameObjects.find("Camera") == m_GameObjects.end())
+		return;
 	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("player")->second.get()); // ??ì¨·????? ???ë¼±æ¿?è«?�ë¶�???
+	GameObject* cameraObject = m_GameObjects.find("Camera")->second.get();
 	if (player == nullptr)
 		return;
 	BoxColliderComponent* playerBox = player->GetComponent<BoxColliderComponent>();
 	if (playerBox == nullptr)
 		return;
+	BoxColliderComponent* cameraBox = cameraObject->GetComponent<BoxColliderComponent>();
 	BoxColliderComponent* opponentBox;
 	Vec2F playerPos = playerBox->GetCenter();
+	Vec2F cameraPos = cameraObject->GetComponent<BoxColliderComponent>()->GetCenter();
 	Vec2F opponentPos;
 	float playerZ = player->GetZ();
 	float opponentZ;
@@ -301,10 +355,13 @@ void TestScene::FixedUpdate()
 		auto something = gameObject->second.get();
 		if (player == gameObject->second.get())
 			continue;
-		if (gameObject->first == "tele3")
-		{
-			gameObject = gameObject;
-		}
+		if (cameraObject == gameObject->second.get())
+			continue;
+		//if (gameObject->first == "tele3")
+		//{
+		//	gameObject = gameObject;
+		//}
+		cameraObject->GetComponent<BoxColliderComponent>();
 
 		opponentZ = -1;
 		opponentBox = gameObject->second->GetComponent<BoxColliderComponent>();
@@ -313,6 +370,25 @@ void TestScene::FixedUpdate()
 			auto state = opponentBox->GetFSM().GetCurrentState();
 
 			opponentPos = opponentBox->GetCenter();
+
+			if (opponentBox->BoxVsBox(*cameraBox))
+			{
+				CollisionInfo info;
+				info.self = opponentBox;
+				info.other = cameraBox;
+				info.normal = opponentPos - playerPos;
+				info.contactPoint;
+				info.penetrationDepth;
+
+				if (gameObject->first == "obstacle3")
+					gameObject = gameObject;
+				if (gameObject->first == "obstacle4")
+					gameObject = gameObject;
+
+				m_EventDispatcher.Dispatch(EventType::CollisionTrigger, &info);
+
+			}
+
 
 			if (opponentPos.x < playerPos.x - 500 || opponentPos.x > playerPos.x + 500)
 			{
@@ -397,8 +473,8 @@ void TestScene::Update(float deltaTime)
 
 	Vec2F move = { 0, 0 };
 	move.x += 300 * deltaTime;
-	//m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->Translate(move);
-	//m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->Translate(move);
+	m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->Translate(move);
+	m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->Translate(move);
 
 	if (m_BTElapsedTime >= 0.016f)
 	{

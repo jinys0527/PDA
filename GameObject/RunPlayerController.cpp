@@ -100,9 +100,15 @@ void RunPlayerController::Update(float deltaTime)
 
 	if (delta.x != 0 || delta.y != 0)
 	{
-		m_Owner->GetComponent<TransformComponent>()->Translate(delta);// 실제론 이거 써야해요
 		if (m_IsBoss)
 		{
+			Math::Vector2F normal = { delta.x, (m_Z - prevZ)*100 };
+			normal.Normalize();
+			//m_Z -= normal.y;
+
+			delta.x *= abs(normal.x);
+			m_Z -= normal.y * 0.01f;
+
 			std::string state = m_PlayerOwner->GetFSM().GetCurrentState();
 			if (state == "Idle" || state == "Kick" || state == "Hurt")
 			{
@@ -117,7 +123,8 @@ void RunPlayerController::Update(float deltaTime)
 			}
 			
 		}
-		//m_Owner->GetComponent<TransformComponent>()->SetPosition(delta);// 보기 전용(z가 잘 되는지 y로 보는거)
+
+		m_Owner->GetComponent<TransformComponent>()->Translate(delta);// 실제론 이거 써야해요
 	}
 
 	m_PlayerOwner->SetZ(m_Z);

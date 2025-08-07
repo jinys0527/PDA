@@ -23,6 +23,8 @@ public:
 	void SetSlide(bool value) { m_IsSlide = value; }
 	bool GetSlide() { return m_IsSlide; }
 
+	virtual void Render(std::vector<RenderInfo>& renderInfo);
+
 	void Serialize(nlohmann::json& j) const;
 	void Deserialize(const nlohmann::json& j);
 private:

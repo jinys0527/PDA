@@ -46,6 +46,7 @@ int main()
  
  	delete g_pMainApp;
     
+    gameManager.Reset();
     sceneManager.Reset();
     engine.Reset();
 

@@ -19,6 +19,7 @@ enum class EventType
 	CollisionEnter,
 	CollisionStay,
 	CollisionExit,
+	CollisionTrigger,
 
 	//Game
 	OnPlayerCollisonOccur, // 플레이어 충돌 플레이어 피격 전 무적 판정 등 체크

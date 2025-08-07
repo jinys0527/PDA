@@ -71,6 +71,9 @@ void BoxColliderComponent::OnEvent(EventType type, const void* data)
 	case EventType::CollisionExit:
 		OnCollisionExit(static_cast<const CollisionInfo*>(data));
 		break;
+	case EventType::CollisionTrigger:
+		OnCollisionTrigger(static_cast<const CollisionInfo*>(data));
+		break;
 	}
 }
 
@@ -79,4 +82,6 @@ void BoxColliderComponent::OnDestroy()
 	GetEventDispatcher().RemoveListener(EventType::CollisionEnter, this);
 	GetEventDispatcher().RemoveListener(EventType::CollisionStay, this);
 	GetEventDispatcher().RemoveListener(EventType::CollisionExit, this);
+	if(!m_isTriggered)
+		GetEventDispatcher().RemoveListener(EventType::CollisionTrigger, this);
 }

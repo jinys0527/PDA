@@ -21,7 +21,7 @@ void SceneManager::Update(float deltaTime)
 {
 	static float totalTime = 0;
 	totalTime += deltaTime;
-	if (totalTime >= 0.2f)
+	if (totalTime >= 0.016f)
 		m_CurrentScene->FixedUpdate();
 	m_CurrentScene->Update(deltaTime);
 }
