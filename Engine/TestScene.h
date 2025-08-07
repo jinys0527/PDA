@@ -1,5 +1,8 @@
 #pragma once
 #include "Scene.h"
+#include <memory>
+#include "BlackBoard.h"
+#include "BossBehaviorTree.h"
 
 class BossBehaviorTree;
 class BlackBoard;
@@ -21,7 +24,7 @@ public:
 	void Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo) override;
 
 private:
-	//�ൿƮ�� �׽�Ʈ�뵵
+	//Çàµ¿Æ®¸® Å×½ºÆ®¿ëµµ
 	float m_BTElapsedTime = 0.0f;
 	float m_OneSecondTimer = 0.0f;
 	std::unique_ptr<BossBehaviorTree> m_BehaviorTree;

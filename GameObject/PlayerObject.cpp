@@ -8,9 +8,7 @@
 PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventDispatcher)
 {
 	m_Controller = AddComponent<RunPlayerController>();// 플레이어 조종 컴포넌트 추가
-	eventDispatcher.AddListener(EventType::KeyDown, m_Controller);// 이벤트 추가
-	eventDispatcher.AddListener(EventType::KeyUp, m_Controller);
-	eventDispatcher.AddListener(EventType::OnPlayerCollisonOccur, m_Controller);
+	m_Controller->Start();
 	m_RigidbodyComponent = AddComponent<RigidbodyComponent>();
 	m_RigidbodyComponent->Start();
 	m_RigidbodyComponent->SetGravity(Math::Vector2F(0, -20));
@@ -62,7 +60,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 						this->GetFSM().Trigger("JumpDown");
 					else if (this->GetComponent<RigidbodyComponent>()->GetVelocity().y < 3)
 						this->GetFSM().Trigger("JumpPose");
-					else if (this->isGround)
+					else if (this->m_IsGround)
 						this->GetFSM().Trigger("Idle");
 				},
 				[]() { std::cout << "jumpUp 나감" << std::endl; }
@@ -77,7 +75,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 				{
 					if (this->GetComponent<RigidbodyComponent>()->GetVelocity().y < -3)
 						this->GetFSM().Trigger("JumpDown");
-					else if (this->isGround)
+					else if (this->m_IsGround)
 						this->GetFSM().Trigger("Idle");
 				},
 				[]() { std::cout << "jumpPose 나감" << std::endl; }
@@ -90,7 +88,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 				[]() {std::cout << "jumpDown 들어옴" << std::endl; },
 				[this](float dt)
 				{
-					if (this->isGround)
+					if (this->m_IsGround)
 						this->GetFSM().Trigger("Idle");
 				},
 				[]() { std::cout << "jumpDown 나감" << std::endl; }
@@ -218,10 +216,15 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 		{
 			RenderInfo info;
 			info.bitmap = sprite->GetTexture();
-			info.worldMatrix = m_Transform->GetWorldMatrix(); // D2D1::Matrix3x2F::Translation(0, z * m_RailHeight) *  
+			D2D1::Matrix3x2F flip = D2D1::Matrix3x2F::Identity();
+			if(m_IsFlip)
+				flip.m11 = -1;
+			info.worldMatrix = flip * m_Transform->GetWorldMatrix(); // D2D1::Matrix3x2F::Translation(0, z * m_RailHeight) *  
 			info.size = { 1,1 };
 			info.pivot = sprite->GetPivot(); // 바꾸어 놓음
 			// UI가 아닌 일반 오브젝트 위치로 설정
+			float opacity = abs(cos(m_InvincibleTime * 5));
+			info.opacity = opacity;
 			renderInfo.push_back(info);
 		}
 		{

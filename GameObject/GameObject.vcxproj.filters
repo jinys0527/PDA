@@ -96,9 +96,6 @@
     <ClInclude Include="ButtonUI.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
-    <ClInclude Include="RunPlayerController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerObject.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
@@ -121,6 +118,10 @@
       <Filter>Object\Header</Filter>
     </ClInclude>
     <ClInclude Include="Telegraph.h">
+    <ClInclude Include="RunPlayerController.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemObject.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
   </ItemGroup>
@@ -210,6 +211,7 @@
       <Filter>Component\Source</Filter>
     </ClCompile>
     <ClCompile Include="Telegraph.cpp">
+    <ClCompile Include="ItemObject.cpp">
       <Filter>Object\Source</Filter>
     </ClCompile>
   </ItemGroup>

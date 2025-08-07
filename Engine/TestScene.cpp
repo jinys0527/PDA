@@ -13,7 +13,16 @@
 #include "UISliderComponent.h"
 #include "Telegraph.h"
 
-//================================
+#include "InputManager.h"
+#include "TestListener.h"
+#include "PlayerObject.h"
+#include "ButtonUI.h"
+#include "GraffitiObject.h"
+#include "GraffitiComponent.h"
+#include "Obstacle.h"
+#include "ItemObject.h"
+#include "FSM.h"
+//=======================
 #include "BlackBoard.h"
 #include "TestNode.h"
 #include "Sequence.h"
@@ -47,7 +56,7 @@ void TestScene::Initialize()
 
 
 	std::vector<std::shared_ptr<Telegraph>> m_Telegraphs;
-	m_Telegraphs.reserve(12); // �޸� ���Ҵ� ����
+	m_Telegraphs.reserve(12); // ¸Þ¸ð¸® ÀçÇÒ´ç ¹æÁö
 
 	const int columns = 4;
 	const int rows = 3;
@@ -55,9 +64,9 @@ void TestScene::Initialize()
 	const float startX = 0.0f;
 	const float startY = 0.0f;
 
-	// ����(margin) ����
-	const float marginX = 20.0f; // ���� ����
-	const float marginY = 20.0f; // ���� ����
+	// ¿©¹é(margin) ¼³Á¤
+	const float marginX = 20.0f; // °¡·Î °£°Ý
+	const float marginY = 20.0f; // ¼¼·Î °£°Ý
 
 	D2D1_SIZE_F tileSize = { 0 };
 
@@ -78,7 +87,7 @@ void TestScene::Initialize()
 		int col = i % columns;
 		int row = i / columns;
 
-		// ���� ���� ��ǥ ���
+		// °£°Ý Æ÷ÇÔ ÁÂÇ¥ °è»ê
 		float posX = startX + col * (tileSize.width + marginX);
 		float posY = startY + row * (tileSize.height + marginY);
 
@@ -115,9 +124,122 @@ void TestScene::Leave()
 {
 }
 
+void ObjectCollisionLeave(EventDispatcher& eventDispatcher, BoxColliderComponent* enemy, BoxColliderComponent* player)
+{
+	if (enemy->GetFSM().GetCurrentState() == "None")
+		return;
+
+	CollisionInfo info;
+	info.self = enemy;
+	info.other = player;
+	info.normal;
+	info.contactPoint;
+	info.penetrationDepth;
+
+	eventDispatcher.Dispatch(EventType::CollisionExit, &info);
+}
+
 void TestScene::FixedUpdate()
 {
 
+	if (m_GameObjects.find("player") == m_GameObjects.end())
+		return;
+	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("player")->second.get()); // ??ì¨·????? …??ë¼±æ¿?è«›ë¶½???
+	if (player == nullptr)
+		return;
+	BoxColliderComponent* playerBox = player->GetComponent<BoxColliderComponent>();
+	if (playerBox == nullptr)
+		return;
+	BoxColliderComponent* opponentBox;
+	Vec2F playerPos = playerBox->GetCenter();
+	Vec2F opponentPos;
+	float playerZ = player->GetZ();
+	float opponentZ;
+	Obstacle* enemy = nullptr;
+	ItemObject* ally = nullptr;
+
+	std::list<std::shared_ptr<GameObject>> removeList;
+
+
+
+	for (auto gameObject = m_GameObjects.begin(); gameObject != m_GameObjects.end(); gameObject++)
+	{
+		auto something = gameObject->second.get();
+		if (player == gameObject->second.get())
+			continue;
+		opponentZ = -1;
+		opponentBox = gameObject->second->GetComponent<BoxColliderComponent>();
+		if (opponentBox)
+		{
+			auto state = opponentBox->GetFSM().GetCurrentState();
+
+			opponentPos = opponentBox->GetCenter();
+
+			if (opponentPos.x < playerPos.x - 500 || opponentPos.x > playerPos.x + 500)
+			{
+				continue;
+			}
+
+
+			if (enemy = dynamic_cast<Obstacle*>(gameObject->second.get()))
+				opponentZ = enemy->GetZ();
+			else if (ally = dynamic_cast<ItemObject*>(gameObject->second.get()))
+				opponentZ = ally->GetZ();
+			else
+				continue;
+			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // ì§ˆë¬¸ Z ì¶?ê²€?¬ë? ë¨¼ì??˜ëŠ”ê²?ë¹„ìš©??ì¢‹ì„ê¹Œìš” X ì¶?ê²€?¬ë? ë¨¼ì??˜ëŠ”ê²?ë¹„ìš©??ì¢‹ì„ê¹Œìš”
+			{
+				ObjectCollisionLeave(m_EventDispatcher, opponentBox, playerBox);
+				continue;
+			}
+
+
+			if (opponentBox->BoxVsBox(*playerBox))
+			{
+				CollisionInfo info;
+				info.self = opponentBox;
+				info.other = playerBox;
+				info.normal = opponentPos - playerPos;
+				info.contactPoint;
+				info.penetrationDepth;
+
+
+
+				if (state == "None")
+				{
+					m_EventDispatcher.Dispatch(EventType::CollisionEnter, &info);
+				}
+				else if (state == "Enter")
+				{
+					m_EventDispatcher.Dispatch(EventType::CollisionStay, &info);
+				}
+				else if (state == "Stay")
+				{
+					m_EventDispatcher.Dispatch(EventType::CollisionStay, &info);
+				}
+				else if (state == "Exit")
+				{
+					m_EventDispatcher.Dispatch(EventType::CollisionEnter, &info);
+				}
+
+				if (ally)
+				{
+					removeList.push_back(gameObject->second);
+					//RemoveGameObject(gameObject->second);
+					//m_GameObjects.erase(gameObject->first);
+					//gameObject--;
+				}
+				continue;
+			}
+
+			ObjectCollisionLeave(m_EventDispatcher, opponentBox, playerBox);
+		}
+	}
+
+	for (auto it = removeList.begin(); it != removeList.end(); ++it)
+	{
+		RemoveGameObject(*it);
+	}
 }
 
 void TestScene::Update(float deltaTime)
@@ -141,18 +263,16 @@ void TestScene::Update(float deltaTime)
 		m_OneSecondTimer = 0.0f;
 
 		float curHP = m_BlackBoard->GetValue<float>("BossCurrHP").value();
-		//std::cout << "���� HP: " << curHP << std::endl;
+		//std::cout << "ÇöÀç HP: " << curHP << std::endl;
 		m_BlackBoard->SetValue("BossCurrHP", curHP - 5);
 
-		// ����ġ �α� ���
+		// °¡ÁßÄ¡ ·Î±× Ãâ·Â
 		//float w1 = m_BlackBoard->GetValue<float>("SkillWeight_1").value();
 		//float w2 = m_BlackBoard->GetValue<float>("SkillWeight_2").value();
 		//float w3 = m_BlackBoard->GetValue<float>("SkillWeight_3").value();
 
 		//std::cout << "Skill Weights: [1] " << w1 << "  [2] " << w2 << "  [3] " << w3 << std::endl;
 	}
-
-
 	for (auto gameObject : m_GameObjects)
 	{
 		gameObject.second->Update(deltaTime);
