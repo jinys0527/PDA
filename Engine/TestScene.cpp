@@ -22,6 +22,7 @@
 #include "Obstacle.h"
 #include "ItemObject.h"
 #include "FSM.h"
+#include "FlyingObstacleComponent.h"
 //---
 
 
@@ -52,11 +53,19 @@ void TestScene::Initialize()
 		trans->SetPosition({ 960.0f, 540.0f });
 		auto sr = gameObject->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
-		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
-		sr->SetPath("../Resource/cat.png");
-		sr->SetTextureKey("cat_texture");
-		sr->SetTexture(bitmap);
-		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+		auto& clips = m_AssetManager.LoadAnimation(L"boss", L"../Resource/Character/Boss/Boss_Arm_Right_Hit/boss.json");
+		auto animComp = gameObject->AddComponent<AnimationComponent>();
+		animComp->SetAssetManager(&m_AssetManager);
+
+		for (const auto& [clipName, clip] : clips)
+		{
+			animComp->AddClip(clipName, &clip);
+		}
+
+		//sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+		animComp->Play("attack");
+		sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+		sr->SetTextureKey("boss");
 		//그래피티
 		auto graffiti = std::make_shared<GraffitiObject>(m_EventDispatcher);
 		graffiti->m_Name = "graffiti";
@@ -64,7 +73,7 @@ void TestScene::Initialize()
 		graffitiTrans->SetPosition({ 1600,900 });
 		sr = graffiti->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
-		bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
 		sr->SetPath("../Resource/cat.png");
 		sr->SetTextureKey("cat_texture");
 		sr->SetTexture(bitmap);
@@ -88,7 +97,8 @@ void TestScene::Initialize()
 			sr->SetTexture(bitmap);
 			sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
 
-			obstacle.get()->SetZ(1);
+			obstacle->SetZ(1);
+			obstacle->SetSlide(true);
 
 			AddGameObject(obstacle);
 		}
@@ -169,6 +179,29 @@ void TestScene::Initialize()
 	//AddGameObject(gameObject2);
 	AddUIObject(soundUI);
 	AddGameObject(cameraObject);
+
+	{
+		auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
+		obstacle->m_Name = "obstacle3";
+		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+		obstacleTrans->SetPosition({ 2000.0f, 350.0f });
+		obstacleTrans->SetParent(trans3);
+		sr = obstacle->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+
+		obstacle->SetZ(1);
+		obstacle->SetSlide(false);
+
+		auto component = obstacle->AddComponent<FlyingObstacleComponent>();
+		component->Start();
+
+		AddGameObject(obstacle);
+	}
 }
 
 void TestScene::Finalize()
@@ -226,6 +259,11 @@ void TestScene::FixedUpdate()
 		auto something = gameObject->second.get();
 		if (player == gameObject->second.get())
 			continue;
+		if (gameObject->first == "obstacle3")
+		{
+			gameObject = gameObject;
+		}
+
 		opponentZ = -1;
 		opponentBox = gameObject->second->GetComponent<BoxColliderComponent>();
 		if (opponentBox)
@@ -250,6 +288,15 @@ void TestScene::FixedUpdate()
 			{
 				ObjectCollisionLeave(m_EventDispatcher, opponentBox, playerBox);
 				continue;
+			}
+
+			if (enemy)
+			{
+				if (enemy->GetSlide() && player->GetSlide())
+				{
+					ObjectCollisionLeave(m_EventDispatcher, opponentBox, playerBox);
+					continue;
+				}
 			}
 
 
@@ -306,6 +353,11 @@ void TestScene::Update(float deltaTime)
 
 	m_BTElapsedTime += deltaTime;
 	m_OneSecondTimer += deltaTime;
+
+	Vec2F move = { 0, 0 };
+	move.x += 300 * deltaTime;
+	m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->Translate(move);
+	m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->Translate(move);
 
 	if (m_BTElapsedTime >= 0.016f)
 	{

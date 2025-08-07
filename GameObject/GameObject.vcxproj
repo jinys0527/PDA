@@ -247,6 +247,8 @@
     <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="CoreTypes.h" />
+    <ClInclude Include="DropObstacle.h" />
+    <ClInclude Include="FlyingObstacleComponent.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ItemObject.h" />
     <ClInclude Include="Object.h" />
@@ -277,6 +279,8 @@
     <ClCompile Include="CircleColliderComponent.cpp" />
     <ClCompile Include="ColliderComponent.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="DropObstacle.cpp" />
+    <ClCompile Include="FlyingObstacleComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="ItemObject.cpp" />

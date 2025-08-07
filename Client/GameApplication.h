@@ -15,7 +15,7 @@ class GameApplication : public NzWndBase
 
 public:
 #ifdef _EDITOR
-	GameApplication(Engine& engine, SceneManager& sceneManager, SoundManager& soundManager, Editor& editor) : NzWndBase(), m_Engine(engine), m_SceneManager(sceneManager), m_Editor(editor) {}
+	GameApplication(Engine& engine, SceneManager& sceneManager, SoundManager& soundManager), Editor& editor) : NzWndBase(), m_Engine(engine), m_SceneManager(sceneManager), m_Editor(editor) {}
 #else
 	GameApplication(Engine& engine, SceneManager& sceneManager, SoundManager& soundManager) : NzWndBase(), m_Engine(engine), m_SceneManager(sceneManager), m_SoundManager(soundManager) { }
 #endif
@@ -38,8 +38,8 @@ private:
 	void OnResize(int width, int height) override;
 	void OnClose() override;
 
-	GameObject* m_Player;
-	GameObject* m_Obstacle;
+	//GameObject* m_Player;
+	//GameObject* m_Obstacle;
 
 
 #ifdef _EDITOR

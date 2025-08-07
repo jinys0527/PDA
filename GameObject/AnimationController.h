@@ -11,6 +11,7 @@ public:
 	virtual ~AnimationController() = default;
 
 	bool IsValid() const { return m_Clip != nullptr; }
+	bool IsEnd() { if (m_Clip->GetTotalDuration() <= m_Elapsed) return true; return false; }
 
 	void SetClip(const AnimationClip* clip);
 	const AnimationClip* GetClip() const { return m_Clip; }
