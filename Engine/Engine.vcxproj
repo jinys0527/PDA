@@ -183,7 +183,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer;$(SolutionDir)ImGUIDX11;$(SolutionDir)Event;$(SolutionDir)ResourceManager;$(SolutionDir)GameObject;$(SolutionDir)Client;$(SolutionDir)AI; $(SolutionDir)SoundSystem; $(SolutionDir)ThirdParty\FMOD\inc;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer;$(SolutionDir)ImGUIDX11;$(SolutionDir)Event;$(SolutionDir)ResourceManager;$(SolutionDir)GameObject;$(SolutionDir)Client;$(SolutionDir)AI;$(SolutionDir)SoundSystem;$(SolutionDir)ThirdParty\FMOD\inc;$(SolutionDir)BehaviorTree</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>

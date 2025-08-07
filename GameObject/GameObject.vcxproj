@@ -259,6 +259,7 @@
     <ClInclude Include="RunPlayerController.h" />
     <ClInclude Include="SoundUI.h" />
     <ClInclude Include="SpriteRenderer.h" />
+    <ClInclude Include="Telegraph.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="UIButtonComponent.h" />
     <ClInclude Include="UIComponent.h" />
@@ -290,6 +291,7 @@
     <ClCompile Include="RunPlayerController.cpp" />
     <ClCompile Include="SoundUI.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
+    <ClCompile Include="Telegraph.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="UIButtonComponent.cpp" />
     <ClCompile Include="UIComponent.cpp" />

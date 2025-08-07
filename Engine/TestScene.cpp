@@ -11,8 +11,8 @@
 #include "SoundUI.h"
 #include "UIImageComponent.h"
 #include "UISliderComponent.h"
+#include "Telegraph.h"
 
-//----
 #include "InputManager.h"
 #include "TestListener.h"
 #include "PlayerObject.h"
@@ -22,10 +22,7 @@
 #include "Obstacle.h"
 #include "ItemObject.h"
 #include "FSM.h"
-//---
-
-
-//================================
+//=======================
 #include "BlackBoard.h"
 #include "TestNode.h"
 #include "Sequence.h"
@@ -38,103 +35,9 @@
 #include "BossBlackBoard.h"
 //================================
 
+
 void TestScene::Initialize()
 {
-	
-	{
-		m_BlackBoard = std::make_unique<BossBlackBoard>();
-		m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
-
-		auto gameObject = std::make_shared<PlayerObject>(m_EventDispatcher);
-		gameObject->m_Name = "player";
-		//m_EventDispatcher.AddListener()
-		auto trans = gameObject->GetComponent<TransformComponent>();
-		trans->SetPosition({ 960.0f, 540.0f });
-		auto sr = gameObject->AddComponent<SpriteRenderer>();
-		sr->SetAssetManager(&m_AssetManager);
-		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
-		sr->SetPath("../Resource/cat.png");
-		sr->SetTextureKey("cat_texture");
-		sr->SetTexture(bitmap);
-		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
-		//�׷���Ƽ
-		auto graffiti = std::make_shared<GraffitiObject>(m_EventDispatcher);
-		graffiti->m_Name = "graffiti";
-		auto graffitiTrans = graffiti->GetComponent<TransformComponent>();
-		graffitiTrans->SetPosition({ 1600,900 });
-		sr = graffiti->AddComponent<SpriteRenderer>();
-		sr->SetAssetManager(&m_AssetManager);
-		bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
-		sr->SetPath("../Resource/cat.png");
-		sr->SetTextureKey("cat_texture");
-		sr->SetTexture(bitmap);
-		sr->SetPivotPreset(SpritePivotPreset::Center, bitmap->GetSize());
-		graffiti->GetComponent<GraffitiComponent>()->Start();
-
-		AddGameObject(gameObject);
-		AddGameObject(graffiti);
-
-
-		{
-			auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
-			obstacle->m_Name = "obstacle";
-			auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
-			obstacleTrans->SetPosition({ 1460.0f, 350.0f });
-			sr = obstacle->AddComponent<SpriteRenderer>();
-			sr->SetAssetManager(&m_AssetManager);
-			bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
-			sr->SetPath("../Resource/cat.png");
-			sr->SetTextureKey("cat_texture");
-			sr->SetTexture(bitmap);
-			sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
-
-			obstacle.get()->SetZ(1);
-
-			AddGameObject(obstacle);
-		}
-
-		{
-			auto obstacle = std::make_shared<ItemObject>(m_EventDispatcher);
-			obstacle->m_Name = "obstacle2";
-			auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
-			obstacleTrans->SetPosition({ 1000.0f, 700.0f });
-			sr = obstacle->AddComponent<SpriteRenderer>();
-			sr->SetAssetManager(&m_AssetManager);
-			bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
-			sr->SetPath("../Resource/cat.png");
-			sr->SetTextureKey("cat_texture");
-			sr->SetTexture(bitmap);
-			sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
-
-			obstacle.get()->SetZ(2);
-
-			AddGameObject(obstacle);
-		}
-
-
-	}
-	
-
-	auto gameObject = std::make_shared<GameObject>(m_EventDispatcher);
-	gameObject->m_Name = "test";
-	auto trans = gameObject->GetComponent<TransformComponent>();
-	trans->SetPosition({ 300.0f, 300.0f });
-	auto sr = gameObject->AddComponent<SpriteRenderer>();
-	sr->SetAssetManager(&m_AssetManager);
-	auto& clips = m_AssetManager.LoadAnimation(L"boss", L"../Resource/Character/Boss/Boss_Arm_Right_Hit/boss.json");
-
-	auto animComp = gameObject->AddComponent<AnimationComponent>();
-	animComp->SetAssetManager(&m_AssetManager);
-
-	for (const auto& [clipName, clip] : clips)
-	{
-		animComp->AddClip(clipName, &clip);
-	}
-
-	animComp->Play("attack");
-	sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
-	sr->SetTextureKey("boss");
-
 	auto soundUI = std::make_shared<SoundUI>(m_SoundManager, m_EventDispatcher);
 	soundUI->m_Name = "sound";
 	auto rect = soundUI->GetComponent<RectTransformComponent>();
@@ -143,19 +46,6 @@ void TestScene::Initialize()
 	uiImage->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
 	soundUI->GetBGM()->SetFrame(uiImage.get());
 
-
-	/*sr->SetPath("../Resource/cat.png");
-	sr->SetTextureKey("cat_texture");*/
-
-	//auto gameObject2 = std::make_shared<GameObject>(m_EventDispatcher);
-	//gameObject2->m_Name = "test2";
-	//auto trans2 = gameObject2->GetComponent<TransformComponent>();
-	//trans2->SetPosition({ 800.0f, 500.0f });
-	//auto sr2 = gameObject2->AddComponent<SpriteRenderer>();
-	//sr2->SetAssetManager(&m_AssetManager);
-	//sr2->SetPath("../Resource/cat.png");
-	//sr2->SetTextureKey("cat_texture");
-
 	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
 	cameraObject->m_Name = "Camera";
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
@@ -163,10 +53,61 @@ void TestScene::Initialize()
 	cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5f);
 	SetMainCamera(cameraObject);
 
-	/*sr->SetTexture(bitmap);
-	sr2->SetTexture(bitmap);*/
-	AddGameObject(gameObject);
-	//AddGameObject(gameObject2);
+
+
+	std::vector<std::shared_ptr<Telegraph>> m_Telegraphs;
+	m_Telegraphs.reserve(12); // ¸Þ¸ð¸® ÀçÇÒ´ç ¹æÁö
+
+	const int columns = 4;
+	const int rows = 3;
+
+	const float startX = 0.0f;
+	const float startY = 0.0f;
+
+	// ¿©¹é(margin) ¼³Á¤
+	const float marginX = 20.0f; // °¡·Î °£°Ý
+	const float marginY = 20.0f; // ¼¼·Î °£°Ý
+
+	D2D1_SIZE_F tileSize = { 0 };
+
+	for (int i = 0; i < 12; ++i)
+	{
+		auto teleobj = std::make_shared<Telegraph>(m_EventDispatcher);
+		teleobj->m_Name = "tele" + std::to_string(i);
+		auto sr = teleobj->AddComponent<SpriteRenderer>();
+		auto texture = m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png");
+		sr->SetTexture(texture);
+		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
+
+		if (i == 0)
+		{
+			tileSize = texture->GetSize();
+		}
+
+		int col = i % columns;
+		int row = i / columns;
+
+		// °£°Ý Æ÷ÇÔ ÁÂÇ¥ °è»ê
+		float posX = startX + col * (tileSize.width + marginX);
+		float posY = startY + row * (tileSize.height + marginY);
+
+		std::cout << "posx: " << posX << " posy: " << posY << std::endl;
+		teleobj->GetComponent<TransformComponent>()->SetPosition({ posX, posY });
+		sr->SetOpacity(0.0f);
+
+		AddGameObject(teleobj);
+		m_Telegraphs.push_back(teleobj);
+	}
+
+
+
+
+	m_BlackBoard = std::make_unique<BossBlackBoard>(m_Telegraphs);
+	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
+
+
+
+
 	AddUIObject(soundUI);
 	AddGameObject(cameraObject);
 }
@@ -203,7 +144,7 @@ void TestScene::FixedUpdate()
 
 	if (m_GameObjects.find("player") == m_GameObjects.end())
 		return;
-	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("player")->second.get()); // ??�쨷?????��??�뼱�?諛붽???
+	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("player")->second.get()); // ??ì¨·????? …??ë¼±æ¿?è«›ë¶½???
 	if (player == nullptr)
 		return;
 	BoxColliderComponent* playerBox = player->GetComponent<BoxColliderComponent>();
@@ -246,7 +187,7 @@ void TestScene::FixedUpdate()
 				opponentZ = ally->GetZ();
 			else
 				continue;
-			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // 질문 Z �?검?��? 먼�??�는�?비용??좋을까요 X �?검?��? 먼�??�는�?비용??좋을까요
+			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // ì§ˆë¬¸ Z ì¶?ê²€?¬ë? ë¨¼ì??˜ëŠ”ê²?ë¹„ìš©??ì¢‹ì„ê¹Œìš” X ì¶?ê²€?¬ë? ë¨¼ì??˜ëŠ”ê²?ë¹„ìš©??ì¢‹ì„ê¹Œìš”
 			{
 				ObjectCollisionLeave(m_EventDispatcher, opponentBox, playerBox);
 				continue;
@@ -303,7 +244,6 @@ void TestScene::FixedUpdate()
 
 void TestScene::Update(float deltaTime)
 {
-
 	m_BTElapsedTime += deltaTime;
 	m_OneSecondTimer += deltaTime;
 
@@ -323,17 +263,16 @@ void TestScene::Update(float deltaTime)
 		m_OneSecondTimer = 0.0f;
 
 		float curHP = m_BlackBoard->GetValue<float>("BossCurrHP").value();
-		//std::cout << "���� HP: " << curHP << std::endl;
+		//std::cout << "ÇöÀç HP: " << curHP << std::endl;
 		m_BlackBoard->SetValue("BossCurrHP", curHP - 5);
 
-		// ����ġ �α� ���
+		// °¡ÁßÄ¡ ·Î±× Ãâ·Â
 		//float w1 = m_BlackBoard->GetValue<float>("SkillWeight_1").value();
 		//float w2 = m_BlackBoard->GetValue<float>("SkillWeight_2").value();
 		//float w3 = m_BlackBoard->GetValue<float>("SkillWeight_3").value();
 
 		//std::cout << "Skill Weights: [1] " << w1 << "  [2] " << w2 << "  [3] " << w3 << std::endl;
 	}
-
 	for (auto gameObject : m_GameObjects)
 	{
 		gameObject.second->Update(deltaTime);
