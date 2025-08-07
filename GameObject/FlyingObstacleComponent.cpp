@@ -11,7 +11,7 @@ FlyingObstacleComponent::FlyingObstacleComponent()
 void FlyingObstacleComponent::Start()
 {
 	m_TransformComponent = m_Owner->GetComponent<TransformComponent>();
-	Math::Vector2F delta = { -2000, 500 };
+	Math::Vector2F delta = { 3000, 500 };
 	m_TransformComponent->SetPosition(delta);
 }
 
@@ -20,9 +20,9 @@ void FlyingObstacleComponent::Update(float deltaTime)
 	if (isDone)
 		return;
 	Math::Vector2F delta = { 0, 0 };
-	if (m_TransformComponent->GetPosition().x <= 1500)
+	if (m_TransformComponent->GetPosition().x >= 1500)
 	{
-		delta.x = deltaTime * 1000;
+		delta.x = -deltaTime * 1000;
 	}
 	else if(m_TransformComponent->GetPosition().y >= -500)
 	{

@@ -5,9 +5,7 @@
 
 Telegraph::Telegraph(EventDispatcher& eventDispatcher) : Obstacle(eventDispatcher)
 {
-	auto box = AddComponent<BoxColliderComponent>();
-	box->SetSize({ 100.f, 100.f });
-	box->Start();
+	auto box = GetComponent<BoxColliderComponent>();
     box->SetIsActive(false);
 }
 
