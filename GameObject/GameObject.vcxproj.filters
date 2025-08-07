@@ -117,17 +117,12 @@
     <ClInclude Include="GraffitiObject.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Telegraph.h">
+    <ClInclude Include="RunPlayerController.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
     <ClInclude Include="ItemObject.h">
       <Filter>Object\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="RunPlayerController.h">
-      <Filter>Component\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="DropObstacle.h">
-      <Filter>Object\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="FlyingObstacleComponent.h">
-      <Filter>Component\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +192,9 @@
     <ClCompile Include="PlayerObject.cpp">
       <Filter>Object\Source</Filter>
     </ClCompile>
+    <ClCompile Include="RunPlayerController.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
     <ClCompile Include="SoundUI.cpp">
       <Filter>Object\Source</Filter>
     </ClCompile>
@@ -212,17 +210,9 @@
     <ClCompile Include="GraffitiComponent.cpp">
       <Filter>Component\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Telegraph.cpp">
     <ClCompile Include="ItemObject.cpp">
       <Filter>Object\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="RunPlayerController.cpp">
-      <Filter>Component\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="DropObstacle.cpp">
-      <Filter>Object\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="FlyingObstacleComponent.cpp">
-      <Filter>Component\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

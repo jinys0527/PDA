@@ -182,7 +182,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer;$(SolutionDir)ImGUIDX11;$(SolutionDir)Event;$(SolutionDir)ResourceManager;$(SolutionDir)GameObject;$(SolutionDir)Engine;$(SolutionDir)AI; $(SolutionDir)ThirdParty\FMOD\inc; $(SolutionDir)SoundSystem;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer;$(SolutionDir)ImGUIDX11;$(SolutionDir)Event;$(SolutionDir)ResourceManager;$(SolutionDir)GameObject;$(SolutionDir)Engine;$(SolutionDir)AI;$(SolutionDir)ThirdParty\FMOD\inc;$(SolutionDir)SoundSystem;$(SolutionDir)BehaviorTree</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -257,6 +257,9 @@
   <ItemGroup>
     <ProjectReference Include="..\AI\AI.vcxproj">
       <Project>{caef7820-a7a9-4733-b1b2-c39189190480}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\BehaviorTree\BehaviorTree.vcxproj">
+      <Project>{9e5bf2b6-0b60-488a-bd4d-35bd608d5e9f}</Project>
     </ProjectReference>
     <ProjectReference Include="..\D2DCommon\D2DCommon.vcxproj">
       <Project>{2a34c5ab-2844-40c0-8720-9745743e797b}</Project>

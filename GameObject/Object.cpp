@@ -8,7 +8,10 @@ void Object::Update(float deltaTime)
 {
 	for (auto it = m_Components.begin(); it != m_Components.end(); it++)
 	{
-		it->second->Update(deltaTime);
+		if (it->second->GetIsActive())
+		{
+			it->second->Update(deltaTime);
+		}
 	}
 }
 

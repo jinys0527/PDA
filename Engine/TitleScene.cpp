@@ -44,10 +44,10 @@ void TitleScene::Initialize()
 
 
 
-	//// BT�׽�Ʈ
+	//// BTÅ×½ºÆ®
 	//m_BlackBoard = new BlackBoard();
 
-	//// �� ����
+	//// °ª ¼³Á¤
 	//m_BlackBoard->SetValue("AA", true);
 	//m_BlackBoard->SetValue("BB", true);
 	//m_BlackBoard->SetValue("A", true);
@@ -55,7 +55,7 @@ void TitleScene::Initialize()
 	//m_BlackBoard->SetValue("C", true);
 	//m_BlackBoard->SetValue("D", true);
 
-	//// Leaf ���
+	//// Leaf ³ëµå
 	//auto A = std::make_shared<TestNode>("A");
 	//auto B = std::make_shared<TestNode>("B");
 	//auto C = std::make_shared<TestNode>("C");
@@ -77,14 +77,12 @@ void TitleScene::Initialize()
 	//Root->AddChild(BB);
 
 	//m_BehaviorTree = Root;
-	//// BT�׽�Ʈ ��================
+	//// BTÅ×½ºÆ® ³¡================
 
 
 
-	// ����BT �׽�Ʈ
+	// º¸½ºBT Å×½ºÆ®
 
-	m_BlackBoard = std::make_unique<BossBlackBoard>();
-	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
 
 
 	AddGameObject(cameraObject);
@@ -103,7 +101,7 @@ void TitleScene::Initialize()
 		sr->SetTextureKey("cat_texture");
 		sr->SetTexture(bitmap);
 		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
-		//�׷���Ƽ
+		//±×·¡ÇÇÆ¼
 		auto graffiti = std::make_shared<GraffitiObject>(m_EventDispatcher);
 		graffiti->m_Name = "graffiti";
 		auto graffitiTrans = graffiti->GetComponent<TransformComponent>();
@@ -175,6 +173,7 @@ void TitleScene::Leave()
 {
 }
 
+
 //void ObjectCollisionLeave(EventDispatcher &eventDispatcher, BoxColliderComponent *enemy, BoxColliderComponent* player)
 //{
 //	if (enemy->GetFSM().GetCurrentState() == "None")
@@ -196,7 +195,7 @@ void TitleScene::FixedUpdate()
 {
 	if (m_GameObjects.find("test") == m_GameObjects.end())
 		return;
-	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("test")->second.get()); // ??�쨷?????��??�뼱�?諛붽???
+	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("test")->second.get()); // ??ì¨·????? …??ë¼±æ¿?è«›ë¶½???
 	if (player == nullptr)
 		return;
 	BoxColliderComponent* playerBox = player->GetComponent<BoxColliderComponent>();
@@ -239,7 +238,7 @@ void TitleScene::FixedUpdate()
 				opponentZ = ally->GetZ();
 			else
 				continue;
-			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // 질문 Z �?검?��? 먼�??�는�?비용??좋을까요 X �?검?��? 먼�??�는�?비용??좋을까요
+			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // ì§ˆë¬¸ Z ì¶?ê²€?¬ë? ë¨¼ì??˜ëŠ”ê²?ë¹„ìš©??ì¢‹ì„ê¹Œìš” X ì¶?ê²€?¬ë? ë¨¼ì??˜ëŠ”ê²?ë¹„ìš©??ì¢‹ì„ê¹Œìš”
 			{
 				ObjectCollisionLeave(m_EventDispatcher, opponentBox, playerBox);
 				continue;
@@ -315,10 +314,10 @@ void TitleScene::Update(float deltaTime)
 		m_OneSecondTimer = 0.0f;
 
 		float curHP = m_BlackBoard->GetValue<float>("BossCurrHP").value();
-		//std::cout << "���� HP: " << curHP << std::endl;
+		//std::cout << "ÇöÀç HP: " << curHP << std::endl;
 		m_BlackBoard->SetValue("BossCurrHP", curHP - 5);
 
-		// ����ġ �α� ���
+		// °¡ÁßÄ¡ ·Î±× Ãâ·Â
 		//float w1 = m_BlackBoard->GetValue<float>("SkillWeight_1").value();
 		//float w2 = m_BlackBoard->GetValue<float>("SkillWeight_2").value();
 		//float w3 = m_BlackBoard->GetValue<float>("SkillWeight_3").value();
@@ -335,7 +334,6 @@ void TitleScene::Update(float deltaTime)
 	//m_Camera->GetComponent<TransformComponent>()->SetPosition({pos.x + 100 * deltaTime, pos.y});
 
 	//std::cout << pos.x << " " << pos.y << std::endl;
-
 }
 
 void TitleScene::Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo)
