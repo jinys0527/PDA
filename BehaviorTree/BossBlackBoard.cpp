@@ -1,6 +1,6 @@
 #include "BossBlackBoard.h"
 
-BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegraphs)
+BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegraphs, std::vector<std::shared_ptr<GameObject>>& anim)
 {
 	SetValue("BossMaxHP", 100.0f);
 	SetValue("BossCurrHP", GetValue<float>("BossMaxHP").value());
@@ -8,6 +8,7 @@ BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegrap
 
 	//보스 공격 장판 전체
 	SetValue("BossTelegraph", telegraphs);
+	SetValue("BossAnims", anim);
 
 	//보스 패턴 활성화 지정?
 	// 나중에 패턴 이름있으면 여기에 Skill_1 대신 입력
