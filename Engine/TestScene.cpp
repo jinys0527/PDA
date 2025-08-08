@@ -14,7 +14,7 @@
 #include "UIObject.h"
 #include "UIImageComponent.h"
 #include "UISliderComponent.h"
-
+#include "UIGridComponent.h"
 #include "UITextComponent.h"
 
 #include "Telegraph.h"
@@ -22,7 +22,6 @@
 #include "InputManager.h"
 #include "TestListener.h"
 #include "PlayerObject.h"
-#include "ButtonUI.h"
 #include "GraffitiObject.h"
 #include "GraffitiComponent.h"
 #include "Obstacle.h"
@@ -288,21 +287,70 @@ void TestScene::Initialize()
 	soundUI->GetUI()->SetFill(uiObj4);
 
 
-	/*auto buttonUI = std::make_shared<ButtonUI>(m_EventDispatcher);
-	auto uiButton = buttonUI->GetComponent<UIButtonComponent>();
-	uiButton->Start();
-	uiButton->GetFSM().SetOnEnter("Click", []() {std::cout << "Click" << std::endl; });
-	auto uiImage5 = buttonUI->AddComponent<UIImageComponent>();
-	uiImage5->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
-	uiImage5->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
-	uiImage5->SetPivotPreset(ImagePivotPreset::Center, uiImage5->GetTexture()->GetSize());
-	auto rect5 = buttonUI->GetComponent<RectTransformComponent>();
-	rect5->SetAnchorPreset(AnchorPrset::FullStretch);
-	rect5->SetPivotPreset(RectTransformPivotPreset::Center);
-	rect5->SetSize({ 300.0f, 200.0f });
-	rect5->SetPosition({ 0.0f, 0.0f });*/
-	/*sr->SetPath("../Resource/cat.png");
-	sr->SetTextureKey("cat_texture");*/
+		/*auto buttonUI = std::make_shared<ButtonUI>(m_EventDispatcher);
+		auto uiButton = buttonUI->GetComponent<UIButtonComponent>();
+		uiButton->Start();
+		uiButton->GetFSM().SetOnEnter("Click", []() {std::cout << "Click" << std::endl; });
+		auto uiImage5 = buttonUI->AddComponent<UIImageComponent>();
+		uiImage5->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
+		uiImage5->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
+		uiImage5->SetPivotPreset(ImagePivotPreset::Center, uiImage5->GetTexture()->GetSize());
+		auto rect5 = buttonUI->GetComponent<RectTransformComponent>();
+		rect5->SetAnchorPreset(AnchorPrset::FullStretch);
+		rect5->SetPivotPreset(RectTransformPivotPreset::Center);
+		rect5->SetSize({ 300.0f, 200.0f });
+		rect5->SetPosition({ 0.0f, 0.0f });*/
+		/*sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");*/
+
+
+#pragma region Grid
+	auto uiObject = std::make_shared<UIObject>(m_EventDispatcher);
+	auto uiRect = uiObject->GetComponent<RectTransformComponent>();
+	uiRect->SetPosition({ 0.0f, 0.0f });
+	uiRect->SetAnchorPreset(AnchorPrset::FullStretch);
+	uiRect->SetPivotPreset(RectTransformPivotPreset::Center);
+	auto grid = uiObject->AddComponent<UIGridComponent>();
+	grid->SetCellSize({ 64, 64 });
+	grid->SetPadding({ 10, 10 });
+	grid->SetSpacing({ 5, 5 });
+	grid->SetRowColumn(1, 3); // 1�� 3��
+
+	auto heartUI = std::make_shared<UIObject>(m_EventDispatcher);
+	auto heart = heartUI->AddComponent<UIImageComponent>();
+	heart->SetBitmap(m_AssetManager.LoadTexture(L"heart", "../Resource/HEART.png"));
+	heart->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
+	heart->SetPivotPreset(ImagePivotPreset::Center, heart->GetTexture()->GetSize());
+	auto rect = heartUI->GetComponent<RectTransformComponent>();
+	rect->SetAnchorPreset(AnchorPrset::FullStretch);
+	rect->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	grid->AddItem(heartUI);
+	auto heartUI2 = std::make_shared<UIObject>(m_EventDispatcher);
+	heart = heartUI2->AddComponent<UIImageComponent>();
+	heart->SetBitmap(m_AssetManager.LoadTexture(L"heart", "../Resource/HEART.png"));
+	heart->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
+	heart->SetPivotPreset(ImagePivotPreset::Center, heart->GetTexture()->GetSize());
+	rect = heartUI2->GetComponent<RectTransformComponent>();
+	rect->SetAnchorPreset(AnchorPrset::FullStretch);
+	rect->SetPivotPreset(RectTransformPivotPreset::Center);
+	grid->AddItem(heartUI2);
+	auto heartUI3 = std::make_shared<UIObject>(m_EventDispatcher);
+	heart = heartUI3->AddComponent<UIImageComponent>();
+	heart->SetBitmap(m_AssetManager.LoadTexture(L"heart", "../Resource/HEART.png"));
+	heart->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
+	heart->SetPivotPreset(ImagePivotPreset::Center, heart->GetTexture()->GetSize());
+	rect = heartUI3->GetComponent<RectTransformComponent>();
+	rect->SetAnchorPreset(AnchorPrset::FullStretch);
+	rect->SetPivotPreset(RectTransformPivotPreset::Center);
+	grid->AddItem(heartUI3);
+
+
+	grid->UpdateLayout();
+
+#pragma endregion
+
+
 	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
 	cameraObject->m_Name = "Camera";
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
@@ -312,14 +360,15 @@ void TestScene::Initialize()
 	cameraCol->Start();
 	cameraCol->SetSize({ 1920, 1080 });
 	SetMainCamera(cameraObject);
-  
+
 	//AddGameObject(gameObject);
   /*sr->SetTexture(bitmap);
 	sr2->SetTexture(bitmap);*/
 	//AddGameObject(gameObject);
 	//AddGameObject(gameObject2);
-	AddUIObject(soundUI);
+	//AddUIObject(soundUI);
 	//AddUIObject(buttonUI);
+	AddUIObject(uiObject);
 	AddGameObject(cameraObject);
 
 	{
@@ -393,7 +442,7 @@ void TestScene::Initialize()
 		);
 
 
-		//AddGameObject(obstacle);
+		AddGameObject(obstacle);
 	}
 
 }
@@ -572,40 +621,40 @@ void TestScene::FixedUpdate()
 
 void TestScene::Update(float deltaTime)
 {
-	m_BTElapsedTime += deltaTime;
-	m_OneSecondTimer += deltaTime;
+	//m_BTElapsedTime += deltaTime;
+	//m_OneSecondTimer += deltaTime;
 
-	Vec2F move = { 0, 0 };
-	move.x += 300 * deltaTime;
+	//Vec2F move = { 0, 0 };
+	//move.x += 300 * deltaTime;
 	//m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->Translate(move);
 	//m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->Translate(move);
 
-	if (m_BTElapsedTime >= 0.016f)
-	{
-		if (m_BehaviorTree)
-		{
-			m_BehaviorTree->Tick(m_BTElapsedTime);
-		}
+	//if (m_BTElapsedTime >= 0.016f)
+	//{
+	//	if (m_BehaviorTree)
+	//	{
+	//		m_BehaviorTree->Tick(m_BTElapsedTime);
+	//	}
 
-		m_BTElapsedTime = 0.0f;
+	//	m_BTElapsedTime = 0.0f;
 
-	}
+	//}
 
-	if (m_OneSecondTimer >= 1.0f)
-	{
-		m_OneSecondTimer = 0.0f;
+	//if (m_OneSecondTimer >= 1.0f)
+	//{
+	//	m_OneSecondTimer = 0.0f;
 
-		float curHP = m_BlackBoard->GetValue<float>("BossCurrHP").value();
-		//std::cout << "Ã?�Ã�?Ã§ HP: " << curHP << std::endl;
-		m_BlackBoard->SetValue("BossCurrHP", curHP - 5);
+	//	float curHP = m_BlackBoard->GetValue<float>("BossCurrHP").value();
+	//	//std::cout << "Ã?�Ã�?Ã§ HP: " << curHP << std::endl;
+	//	m_BlackBoard->SetValue("BossCurrHP", curHP - 5);
 
-		// Â°Â¡ÃÃŸÃ?�Â�?Â·ÃŽÂ±Ã??Ã?Ã¢Â·Ã??
-		//float w1 = m_BlackBoard->GetValue<float>("SkillWeight_1").value();
-		//float w2 = m_BlackBoard->GetValue<float>("SkillWeight_2").value();
-		//float w3 = m_BlackBoard->GetValue<float>("SkillWeight_3").value();
+	//	// Â°Â¡ÃÃŸÃ?�Â�?Â·ÃŽÂ±Ã??Ã?Ã¢Â·Ã??
+	//	//float w1 = m_BlackBoard->GetValue<float>("SkillWeight_1").value();
+	//	//float w2 = m_BlackBoard->GetValue<float>("SkillWeight_2").value();
+	//	//float w3 = m_BlackBoard->GetValue<float>("SkillWeight_3").value();
 
-		//std::cout << "Skill Weights: [1] " << w1 << "  [2] " << w2 << "  [3] " << w3 << std::endl;
-	}
+	//	//std::cout << "Skill Weights: [1] " << w1 << "  [2] " << w2 << "  [3] " << w3 << std::endl;
+	//}
 	for (auto gameObject : m_GameObjects)
 	{
 		gameObject.second->Update(deltaTime);

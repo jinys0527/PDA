@@ -22,7 +22,7 @@ namespace TM
 		outScale.x = sqrtf(matrix._11 * matrix._11 + matrix._12 * matrix._12);
 		outScale.y = sqrtf(matrix._21 * matrix._21 + matrix._22 * matrix._22);
 
-		const float radians = atan2(matrix._12, matrix._11);
+		const float radians = static_cast<float>(atan2(matrix._12, matrix._11));
 
 		outRotation = Math::RadToDeg(radians);
 	}
