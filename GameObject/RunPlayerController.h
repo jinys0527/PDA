@@ -44,6 +44,11 @@ public:
 	{
 		return m_IsMoving;
 	}
+	
+	bool GetIsHoldingAttack()
+	{
+		return m_IsHoldingAttack;
+	}
 
 private:
 
@@ -76,6 +81,8 @@ private:
 
 	float m_RailMoveCool = 0;
 	float m_RailTargetZ = 0;
+
+	bool m_IsHoldingAttack = false;
 
 	RigidbodyComponent* m_RigidBodyComponent = nullptr;
 	TransformComponent* m_TransformComponent = nullptr;

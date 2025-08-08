@@ -15,6 +15,9 @@ public:
 
 	void Serialize(nlohmann::json& j) const;
 	void Deserialize(const nlohmann::json& j);
+
+	bool m_isBullet = false;
+
 private:
 	float m_Z;
 	BoxColliderComponent* m_Collider;

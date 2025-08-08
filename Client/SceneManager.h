@@ -29,6 +29,8 @@ public:
 	void SetCurrentScene(const std::string& name);
 	std::shared_ptr<Scene> GetCurrentScene() const;
 
+	void ChangeScene(const std::string& name);
+
 	void Reset()
 	{
 		m_Scenes.clear();

@@ -86,3 +86,8 @@ void GraffitiObject::SetGravitti(AssetManager* assetManager)
 
 	m_RandTexture = m_RandTexture % m_GraffitiTextures.size();
 }
+
+void GraffitiObject::SetCameraObject(GameObject* gameObject)
+{
+	m_GraffitiComponent->SetCameraObject(gameObject);
+}

@@ -44,6 +44,10 @@
 #include "BossBehaviorTree.h"
 #include "BossBlackBoard.h"
 //================================
+
+#include "GameManager.h"
+
+
 void TestScene::Initialize()
 {
 #pragma region telegraph
@@ -100,6 +104,19 @@ void TestScene::Initialize()
 	m_BlackBoard = std::make_unique<BossBlackBoard>(m_Telegraphs);
 	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
 
+	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
+	cameraObject->m_Name = "Camera";
+	auto trans3 = cameraObject->GetComponent<TransformComponent>();
+	trans3->SetPosition({ 960.0f, 540.0f });
+	//cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5f);
+	BoxColliderComponent* cameraCol = cameraObject->AddComponent<BoxColliderComponent>();
+	cameraCol->Start();
+	//cameraCol->SetSize({ 1920, 1080 });
+	cameraCol->SetSize({ 2120, 1080 });
+	SetMainCamera(cameraObject);
+
+	AddGameObject(cameraObject);
+
 	{
 		auto gameObject = std::make_shared<PlayerObject>(m_EventDispatcher);
 		gameObject->m_Name = "player";
@@ -111,7 +128,6 @@ void TestScene::Initialize()
 		auto& clips = m_AssetManager.LoadAnimation(L"boss", L"../Resource/Character/Boss/Boss_Arm_Right_Hit/boss.json");
 		auto animComp = gameObject->AddComponent<AnimationComponent>();
 		animComp->SetAssetManager(&m_AssetManager);
-
 		gameObject->SetShadowBitmap(m_AssetManager.LoadTexture(L"cat", L"../Resource/cat.png"));
 
 		for (const auto& [clipName, clip] : clips)
@@ -124,7 +140,7 @@ void TestScene::Initialize()
 		sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 		sr->SetTextureKey("boss");
 
-		//AddGameObject(gameObject);
+		AddGameObject(gameObject);
 
 		//±×·¡ÇÇÆ¼
 		auto graffiti = std::make_shared<GraffitiObject>(m_EventDispatcher);
@@ -141,6 +157,7 @@ void TestScene::Initialize()
 		graffiti->GetComponent<GraffitiComponent>()->Start();
 
 		graffiti->SetGravitti(&m_AssetManager);
+		graffiti->SetCameraObject(GetMainCamera());
 
 		AddGameObject(graffiti);
 
@@ -166,7 +183,7 @@ void TestScene::Initialize()
 
 		{
 			auto obstacle = std::make_shared<ItemObject>(m_EventDispatcher);
-			obstacle->m_Name = "obstacle2";
+			obstacle->m_Name = "item";
 			auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
 			obstacleTrans->SetPosition({ 1000.0f, 700.0f });
 			sr = obstacle->AddComponent<SpriteRenderer>();
@@ -179,10 +196,28 @@ void TestScene::Initialize()
 
 			obstacle.get()->SetZ(2);
 
-			//AddGameObject(obstacle);
+			AddGameObject(obstacle);
 		}
 
+		{
+			auto obstacle = std::make_shared<ItemObject>(m_EventDispatcher);
+			obstacle->m_Name = "item2";
+			auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+			obstacleTrans->SetPosition({ 1000.0f, 700.0f });
+			sr = obstacle->AddComponent<SpriteRenderer>();
+			sr->SetAssetManager(&m_AssetManager);
+			bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+			sr->SetPath("../Resource/cat.png");
+			sr->SetTextureKey("cat_texture");
+			sr->SetTexture(bitmap);
+			sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
 
+			obstacle->m_isBullet = true;
+
+			obstacle.get()->SetZ(2);
+
+			AddGameObject(obstacle);
+		}
 	}
 
 
@@ -212,79 +247,81 @@ void TestScene::Initialize()
 		//AddGameObject(gameObject);
 	}
 
+	{
 
-	auto soundUI = std::make_shared<SoundUI>(m_SoundManager, m_EventDispatcher);
-	soundUI->m_Name = "sound";
-	soundUI->SetSlider();
-	auto uiText = soundUI->AddComponent<UITextComponent>();
-	uiText->SetDWriteFactory(m_Renderer.GetDWriteFactory());
-	uiText->SetText(L"UI ÅØ½ºÆ® ¿¹½Ã");
-	uiText->SetFontName(L"Segoe UI");
-	uiText->SetFontSize(24.0f);
-	uiText->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-	uiText->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	uiText->SetLayoutSize(500.0f, 100.0f);
-	m_SoundManager.BGM_Shot(L"bgm");
-	m_SoundManager.SFX_Shot(L"sfx_b2b");
-	m_SoundManager.UI_Shot(L"play");
-	
-	auto rect = soundUI->GetComponent<RectTransformComponent>();
-	rect->SetAnchorPreset(AnchorPrset::FullStretch);
-	rect->SetPivotPreset(RectTransformPivotPreset::Center);
-	rect->SetPosition({ 0.0f, 0.0f });
-	rect->SetSize({ 600.f, 600.f });
+		auto soundUI = std::make_shared<SoundUI>(m_SoundManager, m_EventDispatcher);
+		soundUI->m_Name = "sound";
+		soundUI->SetSlider();
+		auto uiText = soundUI->AddComponent<UITextComponent>();
+		uiText->SetDWriteFactory(m_Renderer.GetDWriteFactory());
+		uiText->SetText(L"UI ÅØ½ºÆ® ¿¹½Ã");
+		uiText->SetFontName(L"Segoe UI");
+		uiText->SetFontSize(24.0f);
+		uiText->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+		uiText->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+		uiText->SetLayoutSize(500.0f, 100.0f);
+		m_SoundManager.BGM_Shot(L"bgm");
+		m_SoundManager.SFX_Shot(L"sfx_b2b");
+		m_SoundManager.UI_Shot(L"play");
 
-	auto uiObj1 = std::make_shared<UIObject>(m_EventDispatcher);
-	auto uiImage1 = uiObj1->AddComponent<UIImageComponent>();
-	uiImage1->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
-	uiImage1->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
-	uiImage1->SetPivotPreset(ImagePivotPreset::Center, uiImage1->GetTexture()->GetSize());
-	auto rect1 = uiObj1->GetComponent<RectTransformComponent>();
-	rect1->SetAnchorPreset(AnchorPrset::FullStretch);
-	rect1->SetPivotPreset(RectTransformPivotPreset::Center);
-	rect1->SetSize({ 300.0f, 200.0f });
-	rect1->SetPosition({ 0.0f, -410.0f });
-	soundUI->GetMaster()->SetFrame(uiObj1);
-	soundUI->GetMaster()->SetFill(uiObj1);
+		auto rect = soundUI->GetComponent<RectTransformComponent>();
+		rect->SetAnchorPreset(AnchorPrset::FullStretch);
+		rect->SetPivotPreset(RectTransformPivotPreset::Center);
+		rect->SetPosition({ 0.0f, 0.0f });
+		rect->SetSize({ 600.f, 600.f });
 
-	auto uiObj2 = std::make_shared<UIObject>(m_EventDispatcher);
-	auto uiImage2 = uiObj2->AddComponent<UIImageComponent>();
-	uiImage2->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
-	uiImage2->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
-	uiImage2->SetPivotPreset(ImagePivotPreset::Center, uiImage2->GetTexture()->GetSize());
-	auto rect2 = uiObj2->GetComponent<RectTransformComponent>();
-	rect2->SetAnchorPreset(AnchorPrset::FullStretch);
-	rect2->SetPivotPreset(RectTransformPivotPreset::Center);
-	rect2->SetSize({ 300.0f, 200.0f });
-	rect2->SetPosition({ 0.0f, -160.0f }); 
-	soundUI->GetBGM()->SetFrame(uiObj2);
-	soundUI->GetBGM()->SetFill(uiObj2);
+		auto uiObj1 = std::make_shared<UIObject>(m_EventDispatcher);
+		auto uiImage1 = uiObj1->AddComponent<UIImageComponent>();
+		uiImage1->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
+		uiImage1->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
+		uiImage1->SetPivotPreset(ImagePivotPreset::Center, uiImage1->GetTexture()->GetSize());
+		auto rect1 = uiObj1->GetComponent<RectTransformComponent>();
+		rect1->SetAnchorPreset(AnchorPrset::FullStretch);
+		rect1->SetPivotPreset(RectTransformPivotPreset::Center);
+		rect1->SetSize({ 300.0f, 200.0f });
+		rect1->SetPosition({ 0.0f, -410.0f });
+		soundUI->GetMaster()->SetFrame(uiObj1);
+		soundUI->GetMaster()->SetFill(uiObj1);
 
-	auto uiObj3 = std::make_shared<UIObject>(m_EventDispatcher);
-	auto uiImage3 = uiObj3->AddComponent<UIImageComponent>();
-	uiImage3->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
-	uiImage3->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
-	uiImage3->SetPivotPreset(ImagePivotPreset::Center, uiImage3->GetTexture()->GetSize());
-	auto rect3 = uiObj3->GetComponent<RectTransformComponent>();
-	rect3->SetAnchorPreset(AnchorPrset::FullStretch);
-	rect3->SetPivotPreset(RectTransformPivotPreset::Center);
-	rect3->SetSize({ 300.0f, 200.0f });
-	rect3->SetPosition({ 0.0f, 00.0f });
-	soundUI->GetSFX()->SetFrame(uiObj3);
-	soundUI->GetSFX()->SetFill(uiObj3);
+		auto uiObj2 = std::make_shared<UIObject>(m_EventDispatcher);
+		auto uiImage2 = uiObj2->AddComponent<UIImageComponent>();
+		uiImage2->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
+		uiImage2->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
+		uiImage2->SetPivotPreset(ImagePivotPreset::Center, uiImage2->GetTexture()->GetSize());
+		auto rect2 = uiObj2->GetComponent<RectTransformComponent>();
+		rect2->SetAnchorPreset(AnchorPrset::FullStretch);
+		rect2->SetPivotPreset(RectTransformPivotPreset::Center);
+		rect2->SetSize({ 300.0f, 200.0f });
+		rect2->SetPosition({ 0.0f, -160.0f });
+		soundUI->GetBGM()->SetFrame(uiObj2);
+		soundUI->GetBGM()->SetFill(uiObj2);
 
-	auto uiObj4 = std::make_shared<UIObject>(m_EventDispatcher);
-	auto uiImage4 = uiObj4->AddComponent<UIImageComponent>();
-	uiImage4->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
-	uiImage4->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
-	uiImage4->SetPivotPreset(ImagePivotPreset::Center, uiImage4->GetTexture()->GetSize());
-	auto rect4 = uiObj4->GetComponent<RectTransformComponent>();
-	rect4->SetAnchorPreset(AnchorPrset::FullStretch);
-	rect4->SetPivotPreset(RectTransformPivotPreset::Center);
-	rect4->SetSize({ 300.0f, 200.0f });
-	rect4->SetPosition({ 0.0f, 340.0f });
-	soundUI->GetUI()->SetFrame(uiObj4);
-	soundUI->GetUI()->SetFill(uiObj4);
+		auto uiObj3 = std::make_shared<UIObject>(m_EventDispatcher);
+		auto uiImage3 = uiObj3->AddComponent<UIImageComponent>();
+		uiImage3->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
+		uiImage3->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
+		uiImage3->SetPivotPreset(ImagePivotPreset::Center, uiImage3->GetTexture()->GetSize());
+		auto rect3 = uiObj3->GetComponent<RectTransformComponent>();
+		rect3->SetAnchorPreset(AnchorPrset::FullStretch);
+		rect3->SetPivotPreset(RectTransformPivotPreset::Center);
+		rect3->SetSize({ 300.0f, 200.0f });
+		rect3->SetPosition({ 0.0f, 00.0f });
+		soundUI->GetSFX()->SetFrame(uiObj3);
+		soundUI->GetSFX()->SetFill(uiObj3);
+
+		auto uiObj4 = std::make_shared<UIObject>(m_EventDispatcher);
+		auto uiImage4 = uiObj4->AddComponent<UIImageComponent>();
+		uiImage4->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
+		uiImage4->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
+		uiImage4->SetPivotPreset(ImagePivotPreset::Center, uiImage4->GetTexture()->GetSize());
+		auto rect4 = uiObj4->GetComponent<RectTransformComponent>();
+		rect4->SetAnchorPreset(AnchorPrset::FullStretch);
+		rect4->SetPivotPreset(RectTransformPivotPreset::Center);
+		rect4->SetSize({ 300.0f, 200.0f });
+		rect4->SetPosition({ 0.0f, 340.0f });
+		soundUI->GetUI()->SetFrame(uiObj4);
+		soundUI->GetUI()->SetFill(uiObj4);
+	}
 
 
 		/*auto buttonUI = std::make_shared<ButtonUI>(m_EventDispatcher);
@@ -351,15 +388,6 @@ void TestScene::Initialize()
 #pragma endregion
 
 
-	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
-	cameraObject->m_Name = "Camera";
-	auto trans3 = cameraObject->GetComponent<TransformComponent>();
-	trans3->SetPosition({ 960.0f, 540.0f });
-	//cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5f);
-	BoxColliderComponent* cameraCol = cameraObject->AddComponent<BoxColliderComponent>();
-	cameraCol->Start();
-	cameraCol->SetSize({ 1920, 1080 });
-	SetMainCamera(cameraObject);
 
 	//AddGameObject(gameObject);
   /*sr->SetTexture(bitmap);
@@ -369,7 +397,7 @@ void TestScene::Initialize()
 	//AddUIObject(soundUI);
 	//AddUIObject(buttonUI);
 	AddUIObject(uiObject);
-	AddGameObject(cameraObject);
+
 
 	{
 		auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
@@ -407,7 +435,7 @@ void TestScene::Initialize()
 
 
 
-		//AddGameObject(obstacle);
+		AddGameObject(obstacle);
 	}
 	{
 		auto obstacle = std::make_shared<GameObject>(m_EventDispatcher);
@@ -444,7 +472,38 @@ void TestScene::Initialize()
 
 		AddGameObject(obstacle);
 	}
+	{
+		auto obstacle = std::make_shared<GameObject>(m_EventDispatcher);
+		obstacle->m_Name = "savepoint";
+		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+		obstacleTrans->SetPosition({ 3000.0f, 350.0f });
+		auto sr = obstacle->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
 
+		auto lambdaObstacle = obstacle.get();
+		auto lambdaCamera = cameraObject.get();
+
+		auto rect = obstacle->AddComponent<BoxColliderComponent>();
+		//m_EventDispatcher.AddListener(EventType::CollisionTrigger, rect);
+		rect->SetSize({ 100, 10000 });
+		rect->Start();
+		rect->SetOnTrigger(
+			[lambdaObstacle, this](const CollisionInfo& info)
+			{
+				if (info.self != lambdaObstacle->GetComponent<BoxColliderComponent>())
+					return;
+				this->SavePlayerInfo();
+			}
+		);
+
+
+		AddGameObject(obstacle);
+	}
 }
 
 void TestScene::Finalize()
@@ -453,6 +512,7 @@ void TestScene::Finalize()
 
 void TestScene::Enter()
 {
+	LoadPlayerInfo();
 }
 
 void TestScene::Leave()
@@ -524,7 +584,7 @@ void TestScene::FixedUpdate()
 
 			opponentPos = opponentBox->GetCenter();
 
-			if (opponentPos.x > cameraPos.x + 1500 || cameraPos.x > opponentPos.x)
+			if (opponentPos.x > cameraPos.x + 1500 || cameraPos.x-1500 > opponentPos.x)
 			{
 				continue;
 			}
@@ -624,10 +684,14 @@ void TestScene::Update(float deltaTime)
 	//m_BTElapsedTime += deltaTime;
 	//m_OneSecondTimer += deltaTime;
 
-	//Vec2F move = { 0, 0 };
-	//move.x += 300 * deltaTime;
-	//m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->Translate(move);
-	//m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->Translate(move);
+	m_GameManager->m_scrollSpeed += deltaTime;
+	if (m_GameManager->m_scrollSpeed >= 500)
+		m_GameManager->m_scrollSpeed = 500;
+
+	Vec2F move = { 0, 0 };
+	move.x += m_GameManager->m_scrollSpeed;
+	m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->Translate(move);
+	m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->Translate(move);
 
 	//if (m_BTElapsedTime >= 0.016f)
 	//{
@@ -676,4 +740,21 @@ void TestScene::Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRender
 		uiObject.second->Render(uiRenderInfo);
 		uiObject.second->Render(uiTextInfo);
 	}
+}
+
+void TestScene::SavePlayerInfo()
+{
+	auto player = dynamic_cast<PlayerObject*>(m_GameObjects.find("player")->second.get());
+	m_GameManager->m_playerHp = player->GetHp();
+	m_GameManager->m_playerReinforcedAttack = player->GetBullet();
+	m_GameManager->m_playerXLoc = player->GetComponent<TransformComponent>()->GetPosition().x+500;
+}
+
+void TestScene::LoadPlayerInfo()
+{
+	auto player = dynamic_cast<PlayerObject*>(m_GameObjects.find("player")->second.get());
+	player->SetHp(m_GameManager->m_playerHp);
+	player->SetBullet(m_GameManager->m_playerReinforcedAttack);
+	player->GetComponent<TransformComponent>()->SetPosition({ m_GameManager->m_playerXLoc, 0 });
+	GetMainCamera()->GetComponent<TransformComponent>()->SetPosition({ m_GameManager->m_playerXLoc+500, 540.0f });
 }

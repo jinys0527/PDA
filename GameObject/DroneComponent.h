@@ -26,5 +26,7 @@ public:
 private:
 	TransformComponent* m_TransformComponent;
 
+	float m_Delay;
+
 };
 
