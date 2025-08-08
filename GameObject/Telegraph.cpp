@@ -51,8 +51,8 @@ void Telegraph::SetInactive()
         sr->SetOpacity(0.0f);
 }
 
-void Telegraph::SetColliderActive()
+void Telegraph::SetColliderActive(bool active)
 {
 	auto box = GetComponent<BoxColliderComponent>();
-	box->SetIsActive(true);
+	box->SetIsActive(active);
 }

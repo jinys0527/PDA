@@ -94,7 +94,7 @@ void TestScene::Initialize()
 	std::vector<std::shared_ptr<Telegraph>> m_Telegraphs;
 	m_Telegraphs.reserve(12);
 
-	const int columns = 4;
+	const int columns = 5;
 	const int rows = 3;
 
 	const float startX = 300.0f;
@@ -105,7 +105,7 @@ void TestScene::Initialize()
 
 	D2D1_SIZE_F tileSize = { 0 };
 
-	for (int i = 0; i < 12; ++i)
+	for (int i = 0; i < columns * rows; ++i)
 	{
 		auto teleobj = std::make_shared<Telegraph>(m_EventDispatcher);
 		teleobj->m_Name = "tele" + std::to_string(i);

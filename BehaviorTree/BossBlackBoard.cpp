@@ -12,9 +12,21 @@ BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegrap
 
 	//보스 패턴 활성화 지정?
 	// 나중에 패턴 이름있으면 여기에 Skill_1 대신 입력
-	SetValue("Skill_1", std::vector<int>{0, 1, 2, 3});
-	SetValue("Skill_2", std::vector<int>{4, 5, 6, 7});
-	SetValue("Skill_3", std::vector<int>{8, 9, 10, 11});
+	SetValue("Row_1", std::vector<int>{0, 1, 2, 3, 4});
+	SetValue("Row_2", std::vector<int>{5, 6, 7, 8, 9});
+	SetValue("Row_3", std::vector<int>{10, 11, 12, 13, 14});
+
+	SetValue("Pick_0", std::vector<int>{0});
+	SetValue("Pick_4", std::vector<int>{4});
+	SetValue("Pick_5", std::vector<int>{5});
+	SetValue("Pick_7", std::vector<int>{7});
+	SetValue("Pick_9", std::vector<int>{9});
+	SetValue("Pick_10", std::vector<int>{10});
+	SetValue("Pick_14", std::vector<int>{14});
+
+	SetValue("Swip_L", std::vector<int>{0, 1, 2, 5, 6, 7, 10, 11, 12});
+	SetValue("Swip_R", std::vector<int>{2, 3, 4, 7, 8, 9, 12, 13, 14});
+
 
 	//쿨다운 경과 시간
 	SetValue("ElapsedIdleTime", 0.0f);
@@ -24,7 +36,7 @@ BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegrap
 	SetValue("3Phase", false);
 	SetValue("RandomValue", 0.0f);
 
-	SetValue("SkillWeight_1", 1.0f);
+	SetValue("SkillWeight_1", 5000.0f);
 	SetValue("SkillWeight_2", 1.0f);
 	SetValue("SkillWeight_3", 1.0f);
 

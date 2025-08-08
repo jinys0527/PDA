@@ -11,16 +11,19 @@ NodeState ArmSmash::Tick(BlackBoard& bb, float deltaTime)
 #pragma region Initialize
     if (!m_Initialized)
     {
-        m_Telegraphs = bb.GetValue<std::vector<std::shared_ptr<Telegraph>>>("BossTelegraph").value();
-        m_Anims = bb.GetValue<std::vector<std::shared_ptr<GameObject>>>("BossAnims").value();
+        if (!m_Initialized)
+        {
+            m_Telegraphs = bb.GetValue<std::vector<std::shared_ptr<Telegraph>>>("BossTelegraph").value();
+            m_Anims = bb.GetValue<std::vector<std::shared_ptr<GameObject>>>("BossAnims").value();
+        }
         //m_MoveDuration = m_Anims[0]->GetComponent<AnimationComponent>()->GetTotalDuration("attack");
 
-        if (m_Name == "Skill_1_ArmSmash")
-            m_AttackRange = bb.GetValue<std::vector<int>>("Skill_1").value();
-        else if (m_Name == "Skill_2_ArmSmash")
-            m_AttackRange = bb.GetValue<std::vector<int>>("Skill_2").value();
-        else if (m_Name == "Skill_3_ArmSmash")
-            m_AttackRange = bb.GetValue<std::vector<int>>("Skill_3").value();
+        if (m_Name == "ArmSmash_1")
+            m_AttackRange = bb.GetValue<std::vector<int>>("Row_1").value();
+        else if (m_Name == "ArmSmash_2")
+            m_AttackRange = bb.GetValue<std::vector<int>>("Row_2").value();
+        else if (m_Name == "ArmSmash_3")
+            m_AttackRange = bb.GetValue<std::vector<int>>("Row_3").value();
 
         m_Initialized = true;
     }
@@ -81,6 +84,7 @@ NodeState ArmSmash::Tick(BlackBoard& bb, float deltaTime)
         if (t >= 1.0f)
         {
             m_IsMoving = false; // 이동 완료
+            m_Telegraphs[m_maxIndex]->SetColliderActive(false);
         }
     }
 
@@ -125,7 +129,7 @@ void ArmSmash::EndWarning(BlackBoard& bb)
         }
     }
 
-    m_Telegraphs[m_maxIndex]->SetColliderActive();
+    m_Telegraphs[m_maxIndex]->SetColliderActive(true);
 
     m_MoveStartPos = m_Telegraphs[m_maxIndex]->GetInitPos();
     m_MoveTargetPos = m_Telegraphs[m_minIndex]->GetInitPos();

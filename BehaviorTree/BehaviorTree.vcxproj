@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ArmSmash.h" />
+    <ClInclude Include="ArmSwip.h" />
     <ClInclude Include="BlackBoard.h" />
     <ClInclude Include="BossBehaviorTree.h" />
     <ClInclude Include="BossBlackBoard.h" />
@@ -151,17 +152,22 @@
     <ClInclude Include="Decorator.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Inverter.h" />
+    <ClInclude Include="Lazer.h" />
+    <ClInclude Include="ParallelNode.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PhaseChecker.h" />
+    <ClInclude Include="Pick.h" />
     <ClInclude Include="Repeater.h" />
     <ClInclude Include="Selector.h" />
     <ClInclude Include="Sequence.h" />
     <ClInclude Include="SkillCondition.h" />
     <ClInclude Include="SkillNode.h" />
     <ClInclude Include="TestNode.h" />
+    <ClInclude Include="WaitNode.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArmSmash.cpp" />
+    <ClCompile Include="ArmSwip.cpp" />
     <ClCompile Include="BlackBoard.cpp" />
     <ClCompile Include="BossBehaviorTree.cpp" />
     <ClCompile Include="BossBlackBoard.cpp" />
@@ -170,6 +176,8 @@
     <ClCompile Include="CompositeNode.cpp" />
     <ClCompile Include="Decorator.cpp" />
     <ClCompile Include="Inverter.cpp" />
+    <ClCompile Include="Lazer.cpp" />
+    <ClCompile Include="ParallelNode.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -177,6 +185,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PhaseChecker.cpp" />
+    <ClCompile Include="Pick.cpp" />
     <ClCompile Include="Repeater.cpp" />
     <ClCompile Include="Selector.cpp" />
     <ClCompile Include="Sequence.cpp" />

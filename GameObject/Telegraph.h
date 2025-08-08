@@ -11,7 +11,7 @@ public:
 	void SetActive();
 	void SetInactive();
 
-	void SetColliderActive();
+	void SetColliderActive(bool active);
 
 	Math::Vector2F GetInitPos()
 	{
