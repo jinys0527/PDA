@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Event.h"
 #include "TransformComponent.h"
+#include "CameraComponent.h"
 #include "SpriteRenderer.h"
 #include "iostream"
 
@@ -43,24 +44,44 @@ void GraffitiComponent::OnEvent(EventType type, const void* data)
 			auto mouseData = static_cast<const Events::MouseState*>(data);
 			//std::cout << mouseData->pos.x << " " << mouseData->pos.y << "¿¡¼­ Å¬¸¯µÊ \n";
 			m_IsClicked = true;
+			if (!m_IsFirst)
+			{
+				m_IsFirst = true;
+				int one = 1;
+				GetEventDispatcher().Dispatch(EventType::OnPlayerReinforcedCollisionOccur, (const void*)one);
+			}
 		}
 	}
 }
 
+void GraffitiComponent::SetCameraObject(GameObject* cameraObject)
+{
+	m_CameraObject = cameraObject;
+}
+
 void GraffitiComponent::IsHovered(POINT mousePos)
 {
-	mousePos.y = 1080 - mousePos.y;
+	//mousePos.y = 1080 - mousePos.y;
 
 	auto objPos = m_Owner->GetComponent<TransformComponent>()->GetPosition();
 	auto objSize = m_Owner->GetComponent<SpriteRenderer>()->GetTexture()->GetSize();
 	auto objPivot = m_Owner->GetComponent<SpriteRenderer>()->GetPivot();
 
-	Math::Vector2F topLeft;
+	D2D1_POINT_2F topLeft;
 	topLeft.x = objPos.x - objPivot.x;
 	topLeft.y = objPos.y - objPivot.y;
 
-	if (mousePos.x >= topLeft.x && mousePos.x <= (topLeft.x + objSize.width) &&
-		mousePos.y >= topLeft.y && mousePos.y <= (topLeft.y + objSize.height))
+	D2D1_POINT_2F mouse;
+	mouse.x = mousePos.x;
+	mouse.y = mousePos.y;
+
+	D2D1::Matrix3x2F viewMatrix = m_CameraObject->GetComponent<CameraComponent>()->GetViewMatrix();
+	viewMatrix.Invert();
+	mouse = viewMatrix.TransformPoint(mouse);
+	//std::cout << "x : " << mouse.x << " y : " << mouse.y << std::endl;
+
+	if (mouse.x >= topLeft.x && mouse.x <= (topLeft.x + objSize.width) &&
+		mouse.y >= topLeft.y && mouse.y <= (topLeft.y + objSize.height))
 	{
 		m_IsHovered = true;
 	}

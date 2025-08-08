@@ -28,7 +28,10 @@ ItemObject::ItemObject(EventDispatcher& eventDispatcher) : GameObject(eventDispa
 		{
 			if (info.self != this->GetComponent<BoxColliderComponent>())
 				return;
-			this->GetEventDispatcher().Dispatch(EventType::OnPlayerCollisonOccur, (const void*)-1);
+            if(m_isBullet)
+                this->GetEventDispatcher().Dispatch(EventType::OnPlayerReinforcedCollisionOccur, (const void*)-1);
+            else
+			    this->GetEventDispatcher().Dispatch(EventType::OnPlayerCollisonOccur, (const void*)-1);
 			info.self->GetFSM().Trigger("CollisionEnter");
 		}
 	);

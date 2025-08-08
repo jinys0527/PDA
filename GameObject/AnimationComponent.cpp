@@ -5,7 +5,7 @@
 
 void AnimationComponent::Play(const std::string& name, bool loop /*= true*/)
 {
-	if (m_CurrentClipName == name) return;
+	//if (m_CurrentClipName == name) return;
 
 	m_AnimationController.SetClip(m_Clips[name]);
 	m_AnimationController.SetLooping(loop);

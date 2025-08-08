@@ -150,7 +150,7 @@ void D2DRenderer::DrawGameObject(std::vector<RenderInfo>& renderInfo, D2D1::Matr
 
 	for (const auto& info : sortedInfo)
 	{
-		if (!info.bitmap)
+		if (!info.bitmap || !info.draw)
 		{
 			continue;
 		}

@@ -30,6 +30,7 @@ private:
 
 	float m_MaxFallingSpeed = 1500;
 	float m_FallingSpeed = 0;
+	float m_Delay = 0;
 
 	bool isDone = false;
 };
