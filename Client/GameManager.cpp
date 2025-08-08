@@ -12,6 +12,11 @@ GameManager::GameManager(EventDispatcher& eventDispatcher) : m_EventDispatcher(e
 
 GameManager::~GameManager()
 {
+
+}
+
+void GameManager::Reset()
+{
 	m_EventDispatcher.RemoveListener(EventType::OnPlayerHit, this);
 	m_EventDispatcher.RemoveListener(EventType::OnPlayerDeath, this);
 	m_EventDispatcher.RemoveListener(EventType::OnScoreChange, this);

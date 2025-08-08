@@ -35,6 +35,7 @@ public:
 
 	float GetRailHeight() { return m_RailHeight; }
 
+	void SetShadowBitmap(Microsoft::WRL::ComPtr<ID2D1Bitmap1> shadow);
 
 	void SetZ(float value) { m_Z = value; }
 	float GetZ() { return m_Z; }
@@ -76,5 +77,7 @@ protected:
 	float m_Z = 0;
 
 	int m_Hp = 3;
+
+	Microsoft::WRL::ComPtr<ID2D1Bitmap1> m_ShadowBitmap;
 };
 

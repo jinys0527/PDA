@@ -345,7 +345,7 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 		}
 		{
 			RenderInfo info;
-			info.bitmap = sprite->GetTexture();
+			info.bitmap = m_ShadowBitmap;
 			Math::Vector2F pos = m_Transform->GetPosition();
 			float y = pos.y;
 			pos.y = m_Z * m_RailHeight;
@@ -355,23 +355,22 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 			size._22 = 0.5f;
 			info.worldMatrix = size * m_Transform->GetWorldMatrix();
 
-			D2D1_SIZE_F rectSize;
-			rectSize.width = sprite->GetSrcRect().right - sprite->GetSrcRect().left;
-			rectSize.height = sprite->GetSrcRect().bottom - sprite->GetSrcRect().top;
-			sprite->SetPivotPreset(SpritePivotPreset::Center, rectSize);
-			info.pivot = sprite->GetPivot(); // 바꾸어 놓음
+			info.pivot = { m_ShadowBitmap.Get()->GetSize().width*0.5f, m_ShadowBitmap.Get()->GetSize().height*0.5f }; // 바꾸어 놓음
 			// UI가 아닌 일반 오브젝트 위치로 설정
 			//float opacity = sprite->GetTexture().Get()->GetSize().height / (y + 1);
 			float forSin = (y - m_Z*m_RailHeight) / (sprite->GetTexture().Get()->GetSize().height);
 			forSin = forSin > asin(1) ? asin(1) : forSin;
 			float opacity = sin(forSin);
 			info.opacity = 1.0f - opacity;
-			info.useSrcRect = sprite->GetUseSrcRect();
-			info.srcRect = sprite->GetSrcRect();
 			renderInfo.push_back(info);
 			pos.y = y;
 			m_Transform->SetPosition(pos);
 		}
 	}
 
+}
+
+void PlayerObject::SetShadowBitmap(Microsoft::WRL::ComPtr<ID2D1Bitmap1> shadow)
+{
+	m_ShadowBitmap = shadow;
 }

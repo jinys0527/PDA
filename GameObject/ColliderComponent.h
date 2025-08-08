@@ -42,6 +42,7 @@ public:
 	void SetOnEnter(CollisionCallback cb) { m_OnEnter = cb; }
 	void SetOnStay(CollisionCallback cb) { m_OnStay = cb; }
 	void SetOnExit(CollisionCallback cb) { m_OnExit = cb; }
+	void SetOnTrigger(CollisionCallback cb) { m_OnTrigger = cb; }
 
 	void Update(float deltaTime) override;
 	void OnEvent(EventType type, const void* data) override;
@@ -52,13 +53,15 @@ public:
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;
 protected:
-	void OnCollisionEnter(const CollisionInfo* info) { if (m_OnEnter) m_OnEnter(*info); }
-	void OnCollisionStay(const CollisionInfo* info)  { if (m_OnStay) m_OnStay(*info); }
-	void OnCollisionExit(const CollisionInfo* info)  { if (m_OnExit) m_OnExit(*info); }
+	void OnCollisionEnter(const CollisionInfo* info)	{ if (m_OnEnter) m_OnEnter(*info); }
+	void OnCollisionStay(const CollisionInfo* info)		{ if (m_OnStay) m_OnStay(*info); }
+	void OnCollisionExit(const CollisionInfo* info)		{ if (m_OnExit) m_OnExit(*info); }
+	void OnCollisionTrigger(const CollisionInfo* info)	{ if (m_OnTrigger) m_OnTrigger(*info); }
 
 	CollisionCallback m_OnEnter = nullptr;
 	CollisionCallback m_OnStay = nullptr;
 	CollisionCallback m_OnExit = nullptr;
+	CollisionCallback m_OnTrigger = nullptr;
 
 	bool m_IsTrigger;
 	Vec2F m_Center;

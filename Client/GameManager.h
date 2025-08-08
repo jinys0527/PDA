@@ -18,6 +18,8 @@ public:
 	GameManager(EventDispatcher& eventDispatcher);
 	~GameManager();
 
+	void Reset();
+
 	void OnEvent(EventType type, const void* data);
 
 private:

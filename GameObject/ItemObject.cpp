@@ -60,47 +60,49 @@ ItemObject::~ItemObject()
 
 void ItemObject::Serialize(nlohmann::json& j) const
 {
-	j["name"] = m_Name;
-	j["components"] = nlohmann::json::array();
-	j["lane"] = m_Z;
-	for (const auto& component : m_Components)
-	{
-		nlohmann::json compJson;
-		compJson["type"] = component.second->GetTypeName();
-		component.second->Serialize(compJson["data"]);
-		j["components"].push_back(compJson);
-	}
+    j["name"] = m_Name;
+    j["components"] = nlohmann::json::array();
+    j["lane"] = m_Z;
+    for (const auto& component : m_Components)
+    {
+        for (const auto& comp : component.second)
+        {
+            nlohmann::json compJson;
+            compJson["type"] = comp->GetTypeName();
+            comp->Serialize(compJson["data"]);
+            j["components"].push_back(compJson);
+        }
+    }
 }
 
 void ItemObject::Deserialize(const nlohmann::json& j)
 {
-	m_Name = j.at("name");
-	m_Z = j.at("lane");
+    m_Name = j.at("name");
+    m_Z = j.at("lane");
 
-	for (const auto& compJson : j.at("components"))
-	{
-		std::string typeName = compJson.at("type");
+    for (const auto& compJson : j.at("components"))
+    {
+        std::string typeName = compJson.at("type");
 
-		// 기존 컴포넌트가 있으면 찾아서 갱신
-		auto it = std::find_if(m_Components.begin(), m_Components.end(),
-			[&](const auto& pair)
-			{
-				return pair.second->GetTypeName() == typeName;
-			});
-
-		if (it != m_Components.end())
-		{
-			it->second->Deserialize(compJson.at("data"));
-		}
-		else
-		{
-			// 없으면 새로 생성 후 추가
-			auto comp = ComponentFactory::Instance().Create(typeName);
-			if (comp)
-			{
-				comp->Deserialize(compJson.at("data"));
-				AddComponent(std::move(comp));
-			}
-		}
-	}
+        // 기존 컴포넌트가 있으면 찾아서 갱신
+        auto it = m_Components.find(typeName);
+        if (it != m_Components.end() && !it->second.empty())
+        {
+            // 해당 타입의 모든 컴포넌트에 대해 Deserialize 시도
+            for (auto& comp : it->second)
+            {
+                comp->Deserialize(compJson.at("data"));
+            }
+        }
+        else
+        {
+            // 없으면 새로 생성 후 추가
+            auto comp = ComponentFactory::Instance().Create(typeName);
+            if (comp)
+            {
+                comp->Deserialize(compJson.at("data"));
+                AddComponent(std::move(comp));
+            }
+        }
+    }
 }

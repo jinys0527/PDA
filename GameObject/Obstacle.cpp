@@ -54,6 +54,27 @@ Obstacle::Obstacle(EventDispatcher& eventDispatcher) : GameObject(eventDispatche
 	);
 }
 
+void Obstacle::Render(std::vector<RenderInfo>& renderInfo)
+{
+	GameObject::Render(renderInfo);
+
+	auto spriteRenderer = GetComponent<SpriteRenderer>();
+
+	if (spriteRenderer)
+	{
+		RenderInfo info;
+		info.bitmap = spriteRenderer->GetTexture();
+		info.worldMatrix = m_Transform->GetWorldMatrix();
+		info.pivot = spriteRenderer->GetPivot();
+		// Opacity 적용
+		info.opacity = spriteRenderer->GetOpacity();
+		// UI가 아닌 일반 오브젝트 위치로 설정
+		info.useSrcRect = spriteRenderer->GetUseSrcRect();
+		info.srcRect = spriteRenderer->GetSrcRect();
+		renderInfo.emplace_back(info);
+	}
+}
+
 void Obstacle::Serialize(nlohmann::json& j) const
 {
 	j["name"] = m_Name;

@@ -29,6 +29,7 @@
 #include "ItemObject.h"
 #include "FSM.h"
 #include "FlyingObstacleComponent.h"
+#include "DroneComponent.h"
 //---
 
 
@@ -46,27 +47,9 @@
 //================================
 void TestScene::Initialize()
 {
-	/*auto gameObject = std::make_shared<GameObject>(m_EventDispatcher);
-
-
-	auto soundUI = std::make_shared<SoundUI>(m_SoundManager, m_EventDispatcher);
-	soundUI->m_Name = "sound";
-	auto rect = soundUI->GetComponent<RectTransformComponent>();
-	rect->SetPosition({ 0.0f, 0.0f });
-	auto uiImage = std::make_shared<UIImageComponent>();
-	uiImage->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
-	soundUI->GetBGM()->SetFrame(uiImage.get());
-
-	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
-	cameraObject->m_Name = "Camera";
-	auto trans3 = cameraObject->GetComponent<TransformComponent>();
-	trans3->SetPosition({ 960.0f, 540.0f });
-	cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5f);
-	SetMainCamera(cameraObject);
-
 #pragma region telegraph
 	std::vector<std::shared_ptr<Telegraph>> m_Telegraphs;
-	m_Telegraphs.reserve(12); // Â¸ÃžÂ¸Ã°Â¸Â® ?Ã§Ã‡Ã’Â´Ã§ Â¹Ã¦ÃÃ¶
+	m_Telegraphs.reserve(12); // Â¸ÃžÂ¸Ã°Â¸Â® ?Ã§Ã?�Ã’Â´Ã�?Â¹Ã¦ÃÃ¶
 
 	const int columns = 4;
 	const int rows = 3;
@@ -97,7 +80,7 @@ void TestScene::Initialize()
 		int col = i % columns;
 		int row = i / columns;
 
-		// Â°Â£Â°Ã Ã†Ã·Ã‡Ã” ÃÃ‚Ã‡Â¥ Â°Ã¨Â»Ãª
+		// Â°Â£Â°Ã Ã?�Ã·Ã‡Ã�?ÃÃ?�Ã‡Â�?Â°Ã¨Â»Ãª
 		float posX = startX + col * (tileSize.width + marginX);
 		float posY = startY + row * (tileSize.height + marginY);
 
@@ -118,11 +101,6 @@ void TestScene::Initialize()
 	m_BlackBoard = std::make_unique<BossBlackBoard>(m_Telegraphs);
 	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
 
-
-
-	AddUIObject(soundUI);
-	AddGameObject(cameraObject);
-
 	{
 		auto gameObject = std::make_shared<PlayerObject>(m_EventDispatcher);
 		gameObject->m_Name = "player";
@@ -134,6 +112,8 @@ void TestScene::Initialize()
 		auto& clips = m_AssetManager.LoadAnimation(L"boss", L"../Resource/Character/Boss/Boss_Arm_Right_Hit/boss.json");
 		auto animComp = gameObject->AddComponent<AnimationComponent>();
 		animComp->SetAssetManager(&m_AssetManager);
+
+		gameObject->SetShadowBitmap(m_AssetManager.LoadTexture(L"cat", L"../Resource/cat.png"));
 
 		for (const auto& [clipName, clip] : clips)
 		{
@@ -203,27 +183,31 @@ void TestScene::Initialize()
 	}
 
 
-	auto gameObject = std::make_shared<GameObject>(m_EventDispatcher);
-
-	gameObject->m_Name = "test";
-	auto trans = gameObject->GetComponent<TransformComponent>();
-	trans->SetPosition({ 300.0f, 300.0f });
-	auto sr = gameObject->AddComponent<SpriteRenderer>();
-	sr->SetAssetManager(&m_AssetManager);
-	auto& clips = m_AssetManager.LoadAnimation(L"boss", L"../Resource/Character/Boss/Boss_Arm_Right_Hit/boss.json");
-
-	auto animComp = gameObject->AddComponent<AnimationComponent>();
-	animComp->SetAssetManager(&m_AssetManager);
-
-	for (const auto& [clipName, clip] : clips)
 	{
-		animComp->AddClip(clipName, &clip);
+		auto gameObject = std::make_shared<GameObject>(m_EventDispatcher);
+		gameObject->m_Name = "test";
+		auto trans = gameObject->GetComponent<TransformComponent>();
+		trans->SetPosition({ 300.0f, 300.0f });
+		auto sr = gameObject->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto& clips = m_AssetManager.LoadAnimation(L"boss", L"../Resource/Character/Boss/Boss_Arm_Right_Hit/boss.json");
+
+		auto animComp = gameObject->AddComponent<AnimationComponent>();
+		animComp->SetAssetManager(&m_AssetManager);
+
+		for (const auto& [clipName, clip] : clips)
+		{
+			animComp->AddClip(clipName, &clip);
+		}
+
+		animComp->Play("attack");
+
+		sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+		sr->SetTextureKey("boss");
+
+
+		AddGameObject(gameObject);
 	}
-
-	animComp->Play("attack");
-
-	sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
-	sr->SetTextureKey("boss");*/
 
 
 	auto soundUI = std::make_shared<SoundUI>(m_SoundManager, m_EventDispatcher);
@@ -319,6 +303,10 @@ void TestScene::Initialize()
 	cameraObject->m_Name = "Camera";
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
 	trans3->SetPosition({ 960.0f, 540.0f });
+	cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5f);
+	BoxColliderComponent* cameraCol = cameraObject->AddComponent<BoxColliderComponent>();
+	cameraCol->Start();
+	cameraCol->SetSize({ 1920, 1080 });
 	SetMainCamera(cameraObject);
   
 	//AddGameObject(gameObject);
@@ -334,9 +322,8 @@ void TestScene::Initialize()
 		auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
 		obstacle->m_Name = "obstacle3";
 		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
-		obstacleTrans->SetPosition({ 2000.0f, 350.0f });
-		obstacleTrans->SetParent(trans3);
-		sr = obstacle->AddComponent<SpriteRenderer>();
+		obstacleTrans->SetPosition({ 3000.0f, 350.0f });
+		auto sr = obstacle->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
 		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
 		sr->SetPath("../Resource/cat.png");
@@ -347,8 +334,60 @@ void TestScene::Initialize()
 		obstacle->SetZ(1);
 		obstacle->SetSlide(false);
 
-		auto component = obstacle->AddComponent<FlyingObstacleComponent>();
-		component->Start();
+		auto lambdaObstacle = obstacle.get();
+		auto lambdaCamera = cameraObject.get();
+
+		auto rect = obstacle->GetComponent<BoxColliderComponent>();
+		rect->SetCenter(obstacleTrans->GetPosition());
+		m_EventDispatcher.AddListener(EventType::CollisionTrigger, rect);
+		rect->SetOnTrigger(
+			[lambdaObstacle, lambdaCamera](const CollisionInfo& info)
+			{
+				if (info.self != lambdaObstacle->GetComponent<BoxColliderComponent>())
+					return;
+				lambdaObstacle->GetComponent<TransformComponent>()->SetParent(lambdaCamera->GetComponent<TransformComponent>());
+				auto component = lambdaObstacle->AddComponent<FlyingObstacleComponent>();
+				component->Start();
+				lambdaObstacle->GetComponent<BoxColliderComponent>()->OnTrigger();
+			}
+		);
+
+
+
+		AddGameObject(obstacle);
+	}
+	{
+		auto obstacle = std::make_shared<GameObject>(m_EventDispatcher);
+		obstacle->m_Name = "drone3";
+		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+		obstacleTrans->SetPosition({ 3000.0f, 350.0f });
+		auto sr = obstacle->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+
+		auto lambdaObstacle = obstacle.get();
+		auto lambdaCamera = cameraObject.get();
+
+		auto rect = obstacle->AddComponent<BoxColliderComponent>();
+		//m_EventDispatcher.AddListener(EventType::CollisionTrigger, rect);
+		rect->SetSize({ 100, 100 });
+		rect->Start();
+		rect->SetOnTrigger(
+			[lambdaObstacle, lambdaCamera](const CollisionInfo& info)
+			{
+				if (info.self != lambdaObstacle->GetComponent<BoxColliderComponent>())
+					return;
+				lambdaObstacle->GetComponent<TransformComponent>()->SetParent(lambdaCamera->GetComponent<TransformComponent>());
+				auto component = lambdaObstacle->AddComponent<DroneComponent>();
+				component->Start();
+				lambdaObstacle->GetComponent<BoxColliderComponent>()->OnTrigger();
+			}
+		);
+
 
 		AddGameObject(obstacle);
 	}
@@ -387,14 +426,20 @@ void TestScene::FixedUpdate()
 
 	if (m_GameObjects.find("player") == m_GameObjects.end())
 		return;
-	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("player")->second.get()); // ??ÂÃ¬Â¨Â·?????Â ???ÂÃ«Â¼Â±Ã¦Â¿?Ã¨Â«?ºÃ«Â¶Â???
+	if (m_GameObjects.find("Camera") == m_GameObjects.end())
+		return;
+	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("player")->second.get()); // ??ì¨·????? ???ë¼±æ¿?è«?�ë¶�???
+	GameObject* cameraObject = m_GameObjects.find("Camera")->second.get();
+
 	if (player == nullptr)
 		return;
 	BoxColliderComponent* playerBox = player->GetComponent<BoxColliderComponent>();
 	if (playerBox == nullptr)
 		return;
+	BoxColliderComponent* cameraBox = cameraObject->GetComponent<BoxColliderComponent>();
 	BoxColliderComponent* opponentBox;
 	Vec2F playerPos = playerBox->GetCenter();
+	Vec2F cameraPos = cameraObject->GetComponent<BoxColliderComponent>()->GetCenter();
 	Vec2F opponentPos;
 	float playerZ = player->GetZ();
 	float opponentZ;
@@ -410,10 +455,13 @@ void TestScene::FixedUpdate()
 		auto something = gameObject->second.get();
 		if (player == gameObject->second.get())
 			continue;
-		if (gameObject->first == "tele3")
-		{
-			gameObject = gameObject;
-		}
+		if (cameraObject == gameObject->second.get())
+			continue;
+		//if (gameObject->first == "tele3")
+		//{
+		//	gameObject = gameObject;
+		//}
+		cameraObject->GetComponent<BoxColliderComponent>();
 
 		opponentZ = -1;
 		opponentBox = gameObject->second->GetComponent<BoxColliderComponent>();
@@ -422,6 +470,30 @@ void TestScene::FixedUpdate()
 			auto state = opponentBox->GetFSM().GetCurrentState();
 
 			opponentPos = opponentBox->GetCenter();
+
+			if (opponentPos.x > cameraPos.x + 1500 || cameraPos.x > opponentPos.x)
+			{
+				continue;
+			}
+
+			if (opponentBox->BoxVsBox(*cameraBox))
+			{
+				CollisionInfo info;
+				info.self = opponentBox;
+				info.other = cameraBox;
+				info.normal = opponentPos - playerPos;
+				info.contactPoint;
+				info.penetrationDepth;
+
+				if (gameObject->first == "obstacle3")
+					gameObject = gameObject;
+				if (gameObject->first == "obstacle4")
+					gameObject = gameObject;
+
+				m_EventDispatcher.Dispatch(EventType::CollisionTrigger, &info);
+
+			}
+
 
 			if (opponentPos.x < playerPos.x - 500 || opponentPos.x > playerPos.x + 500)
 			{
@@ -435,7 +507,7 @@ void TestScene::FixedUpdate()
 				opponentZ = ally->GetZ();
 			else
 				continue;
-			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // Ã¬Â§?Ã«Â¬Â¸ Z Ã¬Â¶?ÃªÂ²??Â¬Ã«? Ã«Â¨Â¼Ã¬???Ã«Å ?ÃªÂ?Ã«Â¹?žÃ?¡Â??Ã¬Â¢?¹Ã?â€žÃªÂ¹Å’Ã?¡â€?X Ã¬Â¶?ÃªÂ²??Â¬Ã«? Ã«Â¨Â¼Ã¬???Ã«Å ?ÃªÂ?Ã«Â¹?žÃ?¡Â??Ã¬Â¢?¹Ã?â€žÃªÂ¹Å’Ã?¡â€?
+			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // Ã¬Â§?Ã«Â¬Â¸ Z Ã¬Â¶?ÃªÂ²??Â¬Ã«? Ã«Â¨Â¼Ã¬???Ã«Å ?ÃªÂ?Ã«Â¹?žÃ?¡Â??Ã¬Â¢?¹Ã?â??�ÃªÂ¹Å’�?¡â??X Ã¬Â¶?ÃªÂ²??Â¬Ã«? Ã«Â¨Â¼Ã¬???Ã«Å ?ÃªÂ?Ã«Â¹?žÃ?¡Â??Ã¬Â¢?¹Ã?â??�ÃªÂ¹Å’�?¡â??
 			{
 				ObjectCollisionLeave(m_EventDispatcher, opponentBox, playerBox);
 				continue;
@@ -506,8 +578,8 @@ void TestScene::Update(float deltaTime)
 
 	Vec2F move = { 0, 0 };
 	move.x += 300 * deltaTime;
-	//m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->Translate(move);
-	//m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->Translate(move);
+	m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->Translate(move);
+	m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->Translate(move);
 
 	if (m_BTElapsedTime >= 0.016f)
 	{
@@ -525,10 +597,10 @@ void TestScene::Update(float deltaTime)
 		m_OneSecondTimer = 0.0f;
 
 		float curHP = m_BlackBoard->GetValue<float>("BossCurrHP").value();
-		//std::cout << "Ã‡Ã¶?Ã§ HP: " << curHP << std::endl;
+		//std::cout << "Ã?�Ã�?Ã§ HP: " << curHP << std::endl;
 		m_BlackBoard->SetValue("BossCurrHP", curHP - 5);
 
-		// Â°Â¡ÃÃŸÃ„Â¡ Â·ÃŽÂ±Ã— ÃƒÃ¢Â·Ã‚
+		// Â°Â¡ÃÃŸÃ?�Â�?Â·ÃŽÂ±Ã??Ã?Ã¢Â·Ã??
 		//float w1 = m_BlackBoard->GetValue<float>("SkillWeight_1").value();
 		//float w2 = m_BlackBoard->GetValue<float>("SkillWeight_2").value();
 		//float w3 = m_BlackBoard->GetValue<float>("SkillWeight_3").value();
