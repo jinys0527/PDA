@@ -133,6 +133,8 @@ void TestScene::Initialize()
 		auto animComp = gameObject->AddComponent<AnimationComponent>();
 		animComp->SetAssetManager(&m_AssetManager);
 
+		gameObject->SetShadowBitmap(m_AssetManager.LoadTexture(L"cat", L"../Resource/cat.png"));
+
 		for (const auto& [clipName, clip] : clips)
 		{
 			animComp->AddClip(clipName, &clip);
@@ -200,37 +202,37 @@ void TestScene::Initialize()
 
 	}
 
-
-	auto gameObject = std::make_shared<GameObject>(m_EventDispatcher);
-	gameObject->m_Name = "test";
-	auto trans = gameObject->GetComponent<TransformComponent>();
-	trans->SetPosition({ 300.0f, 300.0f });
-	auto sr = gameObject->AddComponent<SpriteRenderer>();
-	sr->SetAssetManager(&m_AssetManager);
-	auto& clips = m_AssetManager.LoadAnimation(L"boss", L"../Resource/Character/Boss/Boss_Arm_Right_Hit/boss.json");
-
-	auto animComp = gameObject->AddComponent<AnimationComponent>();
-	animComp->SetAssetManager(&m_AssetManager);
-
-	for (const auto& [clipName, clip] : clips)
 	{
-		animComp->AddClip(clipName, &clip);
+		auto gameObject = std::make_shared<GameObject>(m_EventDispatcher);
+		gameObject->m_Name = "test";
+		auto trans = gameObject->GetComponent<TransformComponent>();
+		trans->SetPosition({ 300.0f, 300.0f });
+		auto sr = gameObject->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto& clips = m_AssetManager.LoadAnimation(L"boss", L"../Resource/Character/Boss/Boss_Arm_Right_Hit/boss.json");
+
+		auto animComp = gameObject->AddComponent<AnimationComponent>();
+		animComp->SetAssetManager(&m_AssetManager);
+
+		for (const auto& [clipName, clip] : clips)
+		{
+			animComp->AddClip(clipName, &clip);
+		}
+
+		animComp->Play("attack");
+
+		sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+		sr->SetTextureKey("boss");
+
+
+		AddGameObject(gameObject);
 	}
-
-	animComp->Play("attack");
-
-	sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
-	sr->SetTextureKey("boss");
-
-
-	AddGameObject(gameObject);
-
 	{
 		auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
 		obstacle->m_Name = "obstacle3";
 		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
 		obstacleTrans->SetPosition({ 3000.0f, 350.0f });
-		sr = obstacle->AddComponent<SpriteRenderer>();
+		auto sr = obstacle->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
 		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
 		sr->SetPath("../Resource/cat.png");
@@ -241,18 +243,21 @@ void TestScene::Initialize()
 		obstacle->SetZ(1);
 		obstacle->SetSlide(false);
 
+		auto lambdaObstacle = obstacle.get();
+		auto lambdaCamera = cameraObject.get();
+
 		auto rect = obstacle->GetComponent<BoxColliderComponent>();
 		rect->SetCenter(obstacleTrans->GetPosition());
 		m_EventDispatcher.AddListener(EventType::CollisionTrigger, rect);
 		rect->SetOnTrigger(
-			[obstacle, cameraObject](const CollisionInfo& info)
+			[lambdaObstacle, lambdaCamera](const CollisionInfo& info)
 			{
-				if (info.self != obstacle->GetComponent<BoxColliderComponent>())
+				if (info.self != lambdaObstacle->GetComponent<BoxColliderComponent>())
 					return;
-				obstacle->GetComponent<TransformComponent>()->SetParent(cameraObject->GetComponent<TransformComponent>());
-				auto component = obstacle->AddComponent<FlyingObstacleComponent>();
+				lambdaObstacle->GetComponent<TransformComponent>()->SetParent(lambdaCamera->GetComponent<TransformComponent>());
+				auto component = lambdaObstacle->AddComponent<DroneComponent>();
 				component->Start();
-				obstacle->GetComponent<BoxColliderComponent>()->OnTrigger();
+				lambdaObstacle->GetComponent<BoxColliderComponent>()->OnTrigger();
 			}
 		);
 
@@ -265,7 +270,7 @@ void TestScene::Initialize()
 		obstacle->m_Name = "obstacle4";
 		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
 		obstacleTrans->SetPosition({ 3000.0f, 350.0f });
-		sr = obstacle->AddComponent<SpriteRenderer>();
+		auto sr = obstacle->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
 		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
 		sr->SetPath("../Resource/cat.png");
@@ -273,19 +278,22 @@ void TestScene::Initialize()
 		sr->SetTexture(bitmap);
 		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
 
+		auto lambdaObstacle = obstacle.get();
+		auto lambdaCamera = cameraObject.get();
+
 		auto rect = obstacle->AddComponent<BoxColliderComponent>();
-		m_EventDispatcher.AddListener(EventType::CollisionTrigger, rect);
+		//m_EventDispatcher.AddListener(EventType::CollisionTrigger, rect);
 		rect->SetSize({ 100, 100 });
 		rect->Start();
 		rect->SetOnTrigger(
-			[obstacle, cameraObject](const CollisionInfo& info)
+			[lambdaObstacle, lambdaCamera](const CollisionInfo& info)
 			{
-				if (info.self != obstacle->GetComponent<BoxColliderComponent>())
+				if (info.self != lambdaObstacle->GetComponent<BoxColliderComponent>())
 					return;
-				obstacle->GetComponent<TransformComponent>()->SetParent(cameraObject->GetComponent<TransformComponent>());
-				auto component = obstacle->AddComponent<DroneComponent>();
+				lambdaObstacle->GetComponent<TransformComponent>()->SetParent(lambdaCamera->GetComponent<TransformComponent>());
+				auto component = lambdaObstacle->AddComponent<DroneComponent>();
 				component->Start();
-				obstacle->GetComponent<BoxColliderComponent>()->OnTrigger();
+				lambdaObstacle->GetComponent<BoxColliderComponent>()->OnTrigger();
 			}
 		);
 
@@ -370,6 +378,11 @@ void TestScene::FixedUpdate()
 			auto state = opponentBox->GetFSM().GetCurrentState();
 
 			opponentPos = opponentBox->GetCenter();
+
+			if (opponentPos.x > cameraPos.x + 1500)
+			{
+				continue;
+			}
 
 			if (opponentBox->BoxVsBox(*cameraBox))
 			{
@@ -473,8 +486,8 @@ void TestScene::Update(float deltaTime)
 
 	Vec2F move = { 0, 0 };
 	move.x += 300 * deltaTime;
-	m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->Translate(move);
-	m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->Translate(move);
+	//m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->Translate(move);
+	//m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->Translate(move);
 
 	if (m_BTElapsedTime >= 0.016f)
 	{

@@ -8,6 +8,7 @@ void BoxColliderComponent::Start()
 	GetEventDispatcher().AddListener(EventType::CollisionEnter, this);
 	GetEventDispatcher().AddListener(EventType::CollisionStay, this);
 	GetEventDispatcher().AddListener(EventType::CollisionExit, this);
+	GetEventDispatcher().AddListener(EventType::CollisionTrigger, this);
 	auto* transform = m_Owner->GetComponent<TransformComponent>();
 	if (transform)
 	{
@@ -82,6 +83,5 @@ void BoxColliderComponent::OnDestroy()
 	GetEventDispatcher().RemoveListener(EventType::CollisionEnter, this);
 	GetEventDispatcher().RemoveListener(EventType::CollisionStay, this);
 	GetEventDispatcher().RemoveListener(EventType::CollisionExit, this);
-	if(!m_isTriggered)
-		GetEventDispatcher().RemoveListener(EventType::CollisionTrigger, this);
+	GetEventDispatcher().RemoveListener(EventType::CollisionTrigger, this);
 }

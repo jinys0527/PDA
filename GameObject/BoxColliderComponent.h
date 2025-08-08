@@ -19,8 +19,7 @@ public:
 
 	void OnTrigger()
 	{
-		GetEventDispatcher().RemoveListener(EventType::CollisionTrigger, this);
-		m_isTriggered = true;
+		m_OnTrigger = nullptr;
 	}
 
 	const Vec2F& GetSize() const {
@@ -36,8 +35,6 @@ public:
 protected:
 	Vec2F m_Size;
 	Vec2F m_SizeRatio;
-
-	bool m_isTriggered;
 };
 
 REGISTER_COMPONENT(BoxColliderComponent);
