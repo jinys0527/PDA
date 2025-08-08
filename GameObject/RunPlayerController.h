@@ -18,6 +18,8 @@ public:
 
 	RunPlayerController();
 
+	void Start();
+
 	virtual ~RunPlayerController();
 
 
@@ -38,6 +40,8 @@ private:
 	Math::Vector2F MoveCheck(float deltaTime); // 코드 길이 줄이기 위해
 	void JumpCheck();
 	void SlideCheck();
+	void RunPhaseZProc(float deltaTime);
+	void BossPhaseZProc(float deltaTime);
 
 	// 입력 처리
 	bool m_IsWPressed = false;
@@ -56,6 +60,8 @@ private:
 
 	bool m_RailMoveUp = false;
 	bool m_RailMoveDown = false;
+	
+	bool m_IsBoss = false;
 
 	float m_RailMoveCool = 0;
 	float m_RailTargetZ = 0;
@@ -74,6 +80,8 @@ private:
 
 	int m_maxZ = 2;
 	int m_minZ = 0;
+
+	float m_MoveSpeed = 500.0f;
 
 	//Z축이 점프 Y 가 레인
 

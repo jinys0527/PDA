@@ -12,6 +12,7 @@ class NzWndBase;
 class GameObject;
 class UIObject;
 class CameraObject;
+class GameManager;
 
 class Scene
 {
@@ -45,6 +46,8 @@ public:
 	void SetName(std::string name) { m_Name = name; }
 	std::string GetName() const { return m_Name; }
 
+	void SetGameManager(GameManager* gameManager);
+
 protected:
 	std::unordered_map<std::string, std::shared_ptr<GameObject>> m_GameObjects;
 	std::unordered_map<std::string, std::shared_ptr<UIObject>> m_UIObjects;
@@ -53,6 +56,7 @@ protected:
 	AssetManager& m_AssetManager;
 	SoundAssetManager& m_SoundAssetManager;
 	SoundManager& m_SoundManager;
+	GameManager* m_GameManager = nullptr;
 	CameraObject* m_Camera;
 	std::string m_Name;
 private:

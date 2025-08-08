@@ -12,6 +12,7 @@ void BoxColliderComponent::Start()
 	if (transform)
 	{
 		m_Center = transform->GetPosition();
+		m_SizeRatio = transform->GetScale();
 	}
 }
 

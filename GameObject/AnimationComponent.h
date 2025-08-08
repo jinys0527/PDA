@@ -18,6 +18,11 @@ public:
 		m_Clips[name] = clip;
 	}
 
+	bool IsAnimationFinished()
+	{
+		return m_AnimationController.IsEnd();
+	}
+
 	void Play(const std::string& name, bool loop = true);
 
 	void Update(float deltaTime) override;

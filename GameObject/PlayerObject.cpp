@@ -4,13 +4,12 @@
 #include "SpriteRenderer.h"
 #include "UIImageComponent.h"
 #include "BoxColliderComponent.h"
+#include "AnimationComponent.h"
 
 PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventDispatcher)
 {
 	m_Controller = AddComponent<RunPlayerController>();// 플레이어 조종 컴포넌트 추가
-	eventDispatcher.AddListener(EventType::KeyDown, m_Controller);// 이벤트 추가
-	eventDispatcher.AddListener(EventType::KeyUp, m_Controller);
-	eventDispatcher.AddListener(EventType::OnPlayerCollisonOccur, m_Controller);
+	m_Controller->Start();
 	m_RigidbodyComponent = AddComponent<RigidbodyComponent>();
 	m_RigidbodyComponent->Start();
 	m_RigidbodyComponent->SetGravity(Math::Vector2F(0, -20));
@@ -18,12 +17,22 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 	AddComponent<BoxColliderComponent>()->SetSize(Vec2F(100, 100));
 	GetComponent<BoxColliderComponent>()->Start();
 
+	//AddComponent<AnimationComponent>()->AddClip("Idle");
+
 	{ // 좀 많이 길어서 이걸로 닫아주시길
 		{
 
 			State idleState{
 				[this]()
 				{
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
+					{
+						anim->Play("attack");
+						auto sr = this->GetComponent<SpriteRenderer>();
+						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+						sr->SetTextureKey("boss");
+					}
 					std::cout << "idle 들어옴" << std::endl;
 					this->m_KickCool = 0;
 				},
@@ -45,10 +54,29 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 			State kickState{
 				[this]()
 				{
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
+					{
+						anim->Play("attack", false);
+						auto sr = this->GetComponent<SpriteRenderer>();
+						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+						sr->SetTextureKey("boss");
+					}
 					std::cout << "kick 들어옴" << std::endl;
-					this->GetFSM().Trigger("Idle");// 나중에 애니메이션을 쓰게 될때 애니메이션 끝 프레임이라면 탈출을 넣을것이다
+					//this->GetFSM().Trigger("Idle");// 나중에 애니메이션을 쓰게 될때 애니메이션 끝 프레임이라면 탈출을 넣을것이다
 				},
-				[](float dt) {},
+				[this](float dt) 
+				{
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
+					{
+						if (anim->IsAnimationFinished())
+						{
+							anim->Play("attack");
+							this->GetFSM().Trigger("Idle");
+						}
+					}
+				},
 				[]() { std::cout << "kick 나감" << std::endl; }
 			};
 
@@ -56,13 +84,24 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 		}
 		{
 			State jumpUpState{
-				[]() {std::cout << "jumpUp 들어옴" << std::endl; },
+				[this]() 
+				{
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
+					{
+						anim->Play("attack");
+						auto sr = this->GetComponent<SpriteRenderer>();
+						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+						sr->SetTextureKey("boss");
+					}
+					std::cout << "jumpUp 들어옴" << std::endl; 
+				},
 				[this](float dt) {
 					if (this->GetComponent<RigidbodyComponent>()->GetVelocity().y < -3)
 						this->GetFSM().Trigger("JumpDown");
 					else if (this->GetComponent<RigidbodyComponent>()->GetVelocity().y < 3)
 						this->GetFSM().Trigger("JumpPose");
-					else if (this->isGround)
+					else if (this->m_IsGround)
 						this->GetFSM().Trigger("Idle");
 				},
 				[]() { std::cout << "jumpUp 나감" << std::endl; }
@@ -72,12 +111,23 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 		}
 		{
 			State jumpPoseState{
-				[]() {std::cout << "jumpPose 들어옴" << std::endl; },
+				[this]() 
+				{
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
+					{
+						anim->Play("attack");
+						auto sr = this->GetComponent<SpriteRenderer>();
+						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+						sr->SetTextureKey("boss");
+					}
+					std::cout << "jumpPose 들어옴" << std::endl; 
+				},
 				[this](float dt)
 				{
 					if (this->GetComponent<RigidbodyComponent>()->GetVelocity().y < -3)
 						this->GetFSM().Trigger("JumpDown");
-					else if (this->isGround)
+					else if (this->m_IsGround)
 						this->GetFSM().Trigger("Idle");
 				},
 				[]() { std::cout << "jumpPose 나감" << std::endl; }
@@ -87,10 +137,21 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 		}
 		{
 			State jumpDownState{
-				[]() {std::cout << "jumpDown 들어옴" << std::endl; },
+				[this]() 
+				{
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
+					{
+						anim->Play("attack");
+						auto sr = this->GetComponent<SpriteRenderer>();
+						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+						sr->SetTextureKey("boss");
+					}
+					std::cout << "jumpDown 들어옴" << std::endl; 
+				},
 				[this](float dt)
 				{
-					if (this->isGround)
+					if (this->m_IsGround)
 						this->GetFSM().Trigger("Idle");
 				},
 				[]() { std::cout << "jumpDown 나감" << std::endl; }
@@ -102,6 +163,14 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 			State slideState{
 				[this]()
 				{
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
+					{
+						anim->Play("attack");
+						auto sr = this->GetComponent<SpriteRenderer>();
+						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+						sr->SetTextureKey("boss");
+					}
 					std::cout << "slide 들어옴" << std::endl;
 					this->SetSlide(true);
 				},
@@ -125,15 +194,28 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 		}
 		{
 			State sprayState{
-				[]() {std::cout << "spray 들어옴" << std::endl; },
+				[this]() 
+				{
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
+					{
+						anim->Play("attack", false);
+						auto sr = this->GetComponent<SpriteRenderer>();
+						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+						sr->SetTextureKey("boss");
+					}
+					std::cout << "spray 들어옴" << std::endl; 
+				},
 				[this](float dt)
 				{
-					static float time = 0; // 나중에 애니메이션을 쓰게 될때 애니메이션 끝 프레임이라면 탈출을 넣을것이다
-					time += dt;
-					if (time >= 3)
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
 					{
-						time = 0;
-						this->GetFSM().Trigger("Idle");
+						if (anim->IsAnimationFinished())
+						{
+							anim->Play("attack");
+							this->GetFSM().Trigger("Idle");
+						}
 					}
 				},
 				[]() { std::cout << "spray 나감" << std::endl; } // 착지하면서 공격 끝나면 isJump 꺼지게 할 예정
@@ -142,16 +224,29 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 		}
 		{
 			State hurtState{
-				[this]() {
+				[this]() 
+				{
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
+					{
+						anim->Play("attack", false);
+						auto sr = this->GetComponent<SpriteRenderer>();
+						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+						sr->SetTextureKey("boss");
+					}
 					std::cout << "hurt 들어옴" << std::endl; 
 					this->m_InvincibleTime = 3.0f;
 				},
 				[this](float dt)
 				{
-					if (m_InvincibleTime <= 0)
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
 					{
-						m_InvincibleTime = 0;
-						this->GetFSM().Trigger("Idle");
+						if (anim->IsAnimationFinished())
+						{
+							anim->Play("attack");
+							this->GetFSM().Trigger("Idle");
+						}
 					}
 				},
 				[]() { std::cout << "hurt 나감" << std::endl; }
@@ -160,7 +255,18 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 		}
 		{
 			State deathState{
-				[]() {std::cout << "death 들어옴" << std::endl; },
+				[this]() 
+				{
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
+					{
+						anim->Play("attack", false);
+						auto sr = this->GetComponent<SpriteRenderer>();
+						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+						sr->SetTextureKey("boss");
+					}
+					std::cout << "death 들어옴" << std::endl; 
+				},
 				[](float dt) {},
 				[]() { std::cout << "death 나감" << std::endl; }
 			};
@@ -202,6 +308,8 @@ void PlayerObject::Update(float deltaTime)
 
 	if (m_InvincibleTime > 0)
 		m_InvincibleTime -= deltaTime;
+	else
+		m_InvincibleTime = 0;
 
 	GameObject::Update(deltaTime);
 
@@ -211,17 +319,28 @@ void PlayerObject::Update(float deltaTime)
 void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 {
 	auto sprite = GetComponent<SpriteRenderer>();
-	auto image = GetComponent<UIImageComponent>();
 
 	if (sprite)
 	{
 		{
 			RenderInfo info;
 			info.bitmap = sprite->GetTexture();
-			info.worldMatrix = m_Transform->GetWorldMatrix(); // D2D1::Matrix3x2F::Translation(0, z * m_RailHeight) *  
+			D2D1::Matrix3x2F flip = D2D1::Matrix3x2F::Identity();
+			if(m_IsFlip)
+				flip.m11 = -1;
+			info.worldMatrix = flip * m_Transform->GetWorldMatrix(); // D2D1::Matrix3x2F::Translation(0, z * m_RailHeight) *  
 			info.size = { 1,1 };
+			D2D1_SIZE_F size;
+			size.width = sprite->GetSrcRect().right - sprite->GetSrcRect().left;
+			size.height = sprite->GetSrcRect().bottom - sprite->GetSrcRect().top;
+			sprite->SetPivotPreset(SpritePivotPreset::BottomCenter, size);
+
 			info.pivot = sprite->GetPivot(); // 바꾸어 놓음
 			// UI가 아닌 일반 오브젝트 위치로 설정
+			float opacity = abs(cos(m_InvincibleTime * 5));
+			info.opacity = opacity;
+			info.useSrcRect = sprite->GetUseSrcRect();
+			info.srcRect = sprite->GetSrcRect();
 			renderInfo.push_back(info);
 		}
 		{
@@ -236,25 +355,23 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 			size._22 = 0.5f;
 			info.worldMatrix = size * m_Transform->GetWorldMatrix();
 
-			info.pivot = Math::Vector2F(180, 180);// 잠시 바꾸어놓음
+			D2D1_SIZE_F rectSize;
+			rectSize.width = sprite->GetSrcRect().right - sprite->GetSrcRect().left;
+			rectSize.height = sprite->GetSrcRect().bottom - sprite->GetSrcRect().top;
+			sprite->SetPivotPreset(SpritePivotPreset::Center, rectSize);
+			info.pivot = sprite->GetPivot(); // 바꾸어 놓음
 			// UI가 아닌 일반 오브젝트 위치로 설정
 			//float opacity = sprite->GetTexture().Get()->GetSize().height / (y + 1);
 			float forSin = (y - m_Z*m_RailHeight) / (sprite->GetTexture().Get()->GetSize().height);
 			forSin = forSin > asin(1) ? asin(1) : forSin;
 			float opacity = sin(forSin);
 			info.opacity = 1.0f - opacity;
+			info.useSrcRect = sprite->GetUseSrcRect();
+			info.srcRect = sprite->GetSrcRect();
 			renderInfo.push_back(info);
 			pos.y = y;
 			m_Transform->SetPosition(pos);
 		}
 	}
-	else if (image)
-	{
-		RenderInfo info;
-		renderInfo.push_back(info);
-	}
-	else
-	{
-		return;
-	}
+
 }

@@ -120,6 +120,15 @@
     <ClInclude Include="UISliderComponent.h">
       <Filter>Component\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Telegraph.h">
+       <Filter>Component\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RunPlayerController.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemObject.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp">
@@ -204,7 +213,13 @@
       <Filter>Component\Source</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp">
-      <Filter>Object\Source</Filter>
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Telegraph.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemObject.cpp">
+      <Filter>Component\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

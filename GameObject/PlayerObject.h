@@ -30,8 +30,8 @@ public:
 
 	FSM& GetFSM() { return m_Fsm; }
 
-	bool GetIsGround() { return isGround; }
-	void SetIsGround(bool value) { isGround = value; }
+	bool GetIsGround() { return m_IsGround; }
+	void SetIsGround(bool value) { m_IsGround = value; }
 
 	float GetRailHeight() { return m_RailHeight; }
 
@@ -39,9 +39,9 @@ public:
 	void SetZ(float value) { m_Z = value; }
 	float GetZ() { return m_Z; }
 
-	bool GetSlide() { return isSlide; }
+	bool GetSlide() { return m_IsSlide; }
 
-	void SetSlide(bool value) { isSlide = value; }
+	void SetSlide(bool value) { m_IsSlide = value; }
 
 	float GetInvincibleTime() { return m_InvincibleTime; }
 
@@ -49,13 +49,19 @@ public:
 	
 	void SetHp(int value) { m_Hp = value; }
 
+	bool GetIsFlip() { return m_IsFlip; }
+
+	void SetIsFlip(bool value) { m_IsFlip = value; }
+
 protected:
 
 	FSM m_Fsm;
 
-	bool isGround = false;
+	bool m_IsGround = false;
 
-	bool isSlide = false;
+	bool m_IsSlide = false;
+
+	bool m_IsFlip = false;
 
 	float m_RailHeight = 200;
 

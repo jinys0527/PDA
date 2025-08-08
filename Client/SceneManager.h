@@ -9,12 +9,13 @@
 #include "SoundAssetManager.h"
 #include "CameraObject.h"
 #include "SoundManager.h"
+#include "GameManager.h"
 
 class SceneManager
 {
 	friend class Editor;
 public:
-	SceneManager(D2DRenderer& renderer, EventDispatcher& eventDispatcher, AssetManager& assetManager, SoundAssetManager& soundAssetManager, SoundManager& soundManager) : m_Renderer(renderer), m_EventDispatcher(eventDispatcher), m_AssetManager(assetManager), m_SoundAssetManager(soundAssetManager), m_SoundManager(soundManager) { }
+	SceneManager(D2DRenderer& renderer, EventDispatcher& eventDispatcher, AssetManager& assetManager, SoundAssetManager& soundAssetManager, SoundManager& soundManager, GameManager& gameManager) : m_Renderer(renderer), m_EventDispatcher(eventDispatcher), m_AssetManager(assetManager), m_SoundAssetManager(soundAssetManager), m_SoundManager(soundManager), m_GameManager(gameManager) { }
 	~SceneManager() = default;
 
 	void Initialize();
@@ -37,11 +38,12 @@ public:
 private:
 	std::unordered_map<std::string, std::shared_ptr<Scene>> m_Scenes;
 	std::shared_ptr<Scene> m_CurrentScene;
-	CameraObject* m_Camera;
+	CameraObject* m_Camera = nullptr;
 	D2DRenderer& m_Renderer;
 	AssetManager& m_AssetManager;
 	SoundAssetManager& m_SoundAssetManager;
 	EventDispatcher& m_EventDispatcher;
 	SoundManager& m_SoundManager;
+	GameManager& m_GameManager;
 };
 

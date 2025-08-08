@@ -40,6 +40,8 @@ std::shared_ptr<Scene> SceneManager::AddScene(const std::string& name, std::shar
 {
 	m_Scenes[name] = scene;
 
+	m_Scenes[name]->SetGameManager(&m_GameManager);
+
 	return m_Scenes[name];
 }
 
