@@ -21,23 +21,45 @@ public:
 	T* AddComponent(Args&&... args)
 	{
 		static_assert(std::is_constructible_v<T, Args...>, "Invalid constructor arguments for T.");
+
 		auto comp = std::make_unique<T>(std::forward<Args>(args)...);
-		comp->SetOwner(this);
+		comp->SetOwner(this);  // ÇÊ¿äÇÑ °æ¿ì
 		T* ptr = comp.get();
-		m_Components[std::string(T::StaticTypeName)] = std::move(comp);
+
+		m_Components[T::StaticTypeName].emplace_back(std::move(comp));
 		return ptr;
 	}
 
 	template<typename T>
-	T* GetComponent() const
+	T* GetComponent(int index = 0) const
 	{
 		auto it = m_Components.find(T::StaticTypeName);
-		if (it != m_Components.end())
+		if (it == m_Components.end())
+			return nullptr;
+
+		const auto& vec = it->second;
+		if (index < 0 || index >= static_cast<int>(vec.size()))
+			return nullptr;
+
+		return dynamic_cast<T*>(vec[index].get());
+	}
+
+	template<typename T>
+	std::vector<T*> GetComponents() const
+	{
+		std::vector<T*> result;
+
+		auto it = m_Components.find(T::StaticTypeName);
+		if (it == m_Components.end())
+			return result; // ºó º¤ÅÍ ¹ÝÈ¯
+
+		for (const auto& comp : it->second)
 		{
-			return static_cast<T*>(it->second.get());
+			if (auto ptr = dynamic_cast<T*>(comp.get()))
+				result.push_back(ptr);
 		}
 
-		return nullptr;
+		return result;
 	}
 
 	virtual void Update(float deltaTime);
@@ -52,7 +74,7 @@ public:
 
 protected:
 	std::string m_Name;
-	std::unordered_map<std::string, std::unique_ptr<Component>> m_Components;
+	std::unordered_map<std::string, std::vector<std::unique_ptr<Component>>> m_Components;
 	EventDispatcher& m_EventDispatcher;
 };
 

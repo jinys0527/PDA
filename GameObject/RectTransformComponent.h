@@ -8,7 +8,8 @@ enum class AnchorPrset
 	TopRight,
 	BottomLeft,
 	BottomRight,
-	Center
+	Center,
+	FullStretch
 };
 
 enum class RectTransformPivotPreset
@@ -51,11 +52,14 @@ public:
 	void Deserialize(const nlohmann::json& j) override;
 
 	void SetAnchorPreset(AnchorPrset preset);
+	Anchor GetAnchor() const { return m_Anchor; }
+
 	void SetPivotPreset(RectTransformPivotPreset preset);
 
 	void SetPosition(const Vec2F& position)
 	{
-		m_Position = position;
+		m_Position.x = position.x + 960.0f - (m_Size.x / 2.0f);
+		m_Position.y = position.y + 540.0f - (m_Size.y / 2.0f);
 	}
 
 	Vec2F GetPosition() const 
@@ -68,7 +72,7 @@ public:
 		m_Size = size;
 	}
 
-	Vec2F GetSize() const
+	const Vec2F& GetSize() const
 	{
 		return m_Size;
 	}
@@ -100,6 +104,11 @@ public:
 
 	const Mat3X2F& GetWorldMatrix();
 	const Mat3X2F& GetLocalMatrix();
+
+	RectTransformComponent* GetParent()
+	{
+		return m_Parent;
+	}
 
 private:
 	void SetDirty()

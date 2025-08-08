@@ -13,6 +13,7 @@ public:
 	virtual ~UIObject() = default;
 
 	void Render(std::vector<UIRenderInfo>& renderInfo);
+	void Render(std::vector<UITextInfo>& textInfo);
 
 protected:
 	RectTransformComponent* m_RectTransform;

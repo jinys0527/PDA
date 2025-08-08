@@ -30,4 +30,15 @@ struct UIRenderInfo
 
 	float opacity = 1.0f;
 	int layer = 0;
+	bool useSrcRect = false;
+	D2D1_RECT_F srcRect = {};
+	bool draw = true;
+};
+
+struct UITextInfo : public UIRenderInfo
+{
+	std::wstring text;
+	float fontSize = 16.0f;
+	D2D1_COLOR_F color = D2D1::ColorF(D2D1::ColorF::Black);
+	Microsoft::WRL::ComPtr<IDWriteTextLayout> textLayout;
 };

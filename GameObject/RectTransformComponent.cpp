@@ -21,20 +21,29 @@ void RectTransformComponent::SetAnchorPreset(AnchorPrset preset)
 	switch (preset)
 	{
 	case AnchorPrset::TopLeft:
-		m_Anchor = { 0.0f, 0.0f };
+		m_Anchor = { {0.0f, 0.0f}, {0.0f, 0.0f} };
 		break;
+
 	case AnchorPrset::TopRight:
-		m_Anchor = { 1.0f, 0.0f };
+		m_Anchor = { {1.0f, 0.0f}, {1.0f, 0.0f} };
 		break;
+
 	case AnchorPrset::BottomLeft:
-		m_Anchor = { 0.0f, 1.0f };
+		m_Anchor = { {0.0f, 1.0f}, {0.0f, 1.0f} };
 		break;
+
 	case AnchorPrset::BottomRight:
-		m_Anchor = { 1.0f, 1.0f };
+		m_Anchor = { {1.0f, 1.0f}, {1.0f, 1.0f} };
 		break;
+
 	case AnchorPrset::Center:
-		m_Anchor = { 0.5f, 0.5f };
+		m_Anchor = { {0.5f, 0.5f}, {0.5f, 0.5f} };
 		break;
+
+	case AnchorPrset::FullStretch:
+		m_Anchor = { {0.0f, 0.0f}, {1.0f, 1.0f} };
+		break;
+
 	default:
 		break;
 	}
