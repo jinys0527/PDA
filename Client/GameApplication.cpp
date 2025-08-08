@@ -103,6 +103,7 @@ void GameApplication::Update()
 {
 #ifndef _EDITOR
 	m_SceneManager.Update(m_Engine.GetTimer().DeltaTime());
+	m_SoundManager.Update();
 	// FixedUpdate
 	{
 

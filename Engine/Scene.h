@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 #include "RenderData.h"
+#include "D2DRenderer.h"
 #include "AssetManager.h"
 #include "SoundAssetManager.h"
 #include "SoundManager.h"
@@ -17,7 +18,7 @@ class Scene
 public:
 	friend class Editor;
 
-	Scene(EventDispatcher& eventDispatcher, AssetManager& assetManager, SoundAssetManager& soundAssetManager, SoundManager& soundManager) : m_EventDispatcher(eventDispatcher), m_AssetManager(assetManager), m_SoundAssetManager(soundAssetManager), m_SoundManager(soundManager) {}
+	Scene(EventDispatcher& eventDispatcher, AssetManager& assetManager, SoundAssetManager& soundAssetManager, SoundManager& soundManager, D2DRenderer& renderer) : m_EventDispatcher(eventDispatcher), m_AssetManager(assetManager), m_SoundAssetManager(soundAssetManager), m_SoundManager(soundManager), m_Renderer(renderer) {}
 	virtual ~Scene();
 	virtual void Initialize() = 0;
 	virtual void Finalize() = 0;
@@ -27,7 +28,7 @@ public:
 
 	virtual void FixedUpdate() = 0;
 	virtual void Update(float deltaTime) = 0;
-	virtual void Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo) = 0;
+	virtual void Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo, std::vector<UITextInfo>& uiTextInfo) = 0;
 
 	void AddGameObject(std::shared_ptr<GameObject> gameObject);
 	void RemoveGameObject(std::shared_ptr<GameObject> gameObject);
@@ -48,6 +49,7 @@ protected:
 	std::unordered_map<std::string, std::shared_ptr<GameObject>> m_GameObjects;
 	std::unordered_map<std::string, std::shared_ptr<UIObject>> m_UIObjects;
 	EventDispatcher& m_EventDispatcher;
+	D2DRenderer& m_Renderer;
 	AssetManager& m_AssetManager;
 	SoundAssetManager& m_SoundAssetManager;
 	SoundManager& m_SoundManager;

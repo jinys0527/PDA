@@ -234,7 +234,7 @@ void TitleScene::Update(float deltaTime)
 
 }
 
-void TitleScene::Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo)
+void TitleScene::Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo, std::vector<UITextInfo>& uiTextInfo)
 {
 	for (auto gameObject : m_GameObjects)
 	{
@@ -246,5 +246,6 @@ void TitleScene::Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRende
 	for (auto uiObject : m_UIObjects)
 	{
 		uiObject.second->Render(uiRenderInfo);
+		uiObject.second->Render(uiTextInfo);
 	}
 }

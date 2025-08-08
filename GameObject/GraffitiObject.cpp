@@ -13,27 +13,30 @@ void GraffitiObject::Render(std::vector<RenderInfo>& renderInfo)
 
 	if (it != m_Components.end())
 	{
-		SpriteRenderer* sprite = dynamic_cast<SpriteRenderer*>(it->second.get());
-		if (sprite)
+		for (auto& comp : it->second)
 		{
-			RenderInfo info;
-			info.bitmap = sprite->GetTexture();
-			info.worldMatrix = m_Transform->GetWorldMatrix();
-			info.pivot = sprite->GetPivot();
-			// Opacity 적용
-			info.opacity = sprite->GetOpacity();
-			// UI가 아닌 일반 오브젝트 위치로 설정
-
-			if (m_GraffitiComponent->GetIsClicked())
+			SpriteRenderer* sprite = dynamic_cast<SpriteRenderer*>(comp.get());
+			if (sprite)
 			{
-				info.draw = true;
-			}
-			else
-			{
-				info.draw = false;
-			}
+				RenderInfo info;
+				info.bitmap = sprite->GetTexture();
+				info.worldMatrix = m_Transform->GetWorldMatrix();
+				info.pivot = sprite->GetPivot();
+				// Opacity 적용
+				info.opacity = sprite->GetOpacity();
+				// UI가 아닌 일반 오브젝트 위치로 설정
 
-			renderInfo.push_back(info);
+				if (m_GraffitiComponent->GetIsClicked())
+				{
+					info.draw = true;
+				}
+				else
+				{
+					info.draw = false;
+				}
+
+				renderInfo.push_back(info);
+			}
 		}
 	}
 }
