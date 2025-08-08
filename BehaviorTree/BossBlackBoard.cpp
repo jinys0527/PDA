@@ -16,8 +16,6 @@ BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegrap
 	SetValue("Skill_2", std::vector<int>{4, 5, 6, 7});
 	SetValue("Skill_3", std::vector<int>{8, 9, 10, 11});
 
-
-
 	//쿨다운 경과 시간
 	SetValue("ElapsedIdleTime", 0.0f);
 	SetValue("WarningTime", 3.0f);

@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ArmSmash.h" />
     <ClInclude Include="BlackBoard.h" />
     <ClInclude Include="BossBehaviorTree.h" />
     <ClInclude Include="BossBlackBoard.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="TestNode.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ArmSmash.cpp" />
     <ClCompile Include="BlackBoard.cpp" />
     <ClCompile Include="BossBehaviorTree.cpp" />
     <ClCompile Include="BossBlackBoard.cpp" />

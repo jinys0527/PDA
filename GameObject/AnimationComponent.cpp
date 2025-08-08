@@ -3,6 +3,12 @@
 #include "SpriteRenderer.h"
 #include "AssetManager.h"
 
+void AnimationComponent::Play()
+{
+	m_AnimationController.SetClip(m_Clips[m_CurrentClipName]);
+	m_AnimationController.SetElapsed(0.f);
+}
+
 void AnimationComponent::Play(const std::string& name, bool loop /*= true*/)
 {
 	if (m_CurrentClipName == name) return;

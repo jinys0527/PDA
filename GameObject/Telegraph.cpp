@@ -1,16 +1,25 @@
 #include "Telegraph.h"
 #include "BoxColliderComponent.h"
 #include "SpriteRenderer.h"
+#include "TransformComponent.h"
+
 #include <cmath>
 
 Telegraph::Telegraph(EventDispatcher& eventDispatcher) : Obstacle(eventDispatcher)
 {
 	auto box = GetComponent<BoxColliderComponent>();
     box->SetIsActive(false);
+    
 }
 
 void Telegraph::Update(float deltaTime)
 {
+    if (!m_IsInitialized)
+    {
+        auto trans = GetComponent<TransformComponent>();
+        m_InitPos = trans->GetPosition();
+    }
+
     if (!m_IsWaving) return;
 
     m_Time += deltaTime;
