@@ -9,8 +9,14 @@
 #include "AnimationComponent.h"
 #include "AnimationController.h"
 #include "SoundUI.h"
+#include "SoundManager.h"
+#include "ButtonUI.h"
+#include "UIObject.h"
 #include "UIImageComponent.h"
 #include "UISliderComponent.h"
+
+#include "UITextComponent.h"
+
 #include "Telegraph.h"
 
 #include "InputManager.h"
@@ -39,10 +45,10 @@
 #include "BossBehaviorTree.h"
 #include "BossBlackBoard.h"
 //================================
-
-
 void TestScene::Initialize()
 {
+	/*auto gameObject = std::make_shared<GameObject>(m_EventDispatcher);
+
 
 	auto soundUI = std::make_shared<SoundUI>(m_SoundManager, m_EventDispatcher);
 	soundUI->m_Name = "sound";
@@ -64,7 +70,7 @@ void TestScene::Initialize()
 
 #pragma region telegraph
 	std::vector<std::shared_ptr<Telegraph>> m_Telegraphs;
-	m_Telegraphs.reserve(12); // ¸Þ¸ð¸® ?çÇÒ´ç ¹æÁö
+	m_Telegraphs.reserve(12); // Â¸ÃžÂ¸Ã°Â¸Â® ?Ã§Ã‡Ã’Â´Ã§ Â¹Ã¦ÃÃ¶
 
 	const int columns = 4;
 	const int rows = 3;
@@ -72,9 +78,9 @@ void TestScene::Initialize()
 	const float startX = 0.0f;
 	const float startY = 0.0f;
 
-	// ¿©¹é(margin) ¼³Á¤
-	const float marginX = 20.0f; // °¡·Î °£°Ý
-	const float marginY = 20.0f; // ¼¼·Î °£°Ý
+	// Â¿Â©Â¹Ã©(margin) Â¼Â³ÃÂ¤
+	const float marginX = 20.0f; // Â°Â¡Â·ÃŽ Â°Â£Â°Ã
+	const float marginY = 20.0f; // Â¼Â¼Â·ÃŽ Â°Â£Â°Ã
 
 	D2D1_SIZE_F tileSize = { 0 };
 
@@ -95,7 +101,7 @@ void TestScene::Initialize()
 		int col = i % columns;
 		int row = i / columns;
 
-		// °£°Ý Æ÷ÇÔ ÁÂÇ¥ °è»ê
+		// Â°Â£Â°Ã Ã†Ã·Ã‡Ã” ÃÃ‚Ã‡Â¥ Â°Ã¨Â»Ãª
 		float posX = startX + col * (tileSize.width + marginX);
 		float posY = startY + row * (tileSize.height + marginY);
 
@@ -144,7 +150,7 @@ void TestScene::Initialize()
 		animComp->Play("attack");
 		sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 		sr->SetTextureKey("boss");
-		//�׷���Ƽ
+		//±×·¡ÇÇÆ¼
 		auto graffiti = std::make_shared<GraffitiObject>(m_EventDispatcher);
 		graffiti->m_Name = "graffiti";
 		auto graffitiTrans = graffiti->GetComponent<TransformComponent>();
@@ -221,8 +227,113 @@ void TestScene::Initialize()
 
 		animComp->Play("attack");
 
-		sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
-		sr->SetTextureKey("boss");
+	sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+	sr->SetTextureKey("boss");*/
+
+
+	auto soundUI = std::make_shared<SoundUI>(m_SoundManager, m_EventDispatcher);
+	soundUI->m_Name = "sound";
+	soundUI->SetSlider();
+	auto uiText = soundUI->AddComponent<UITextComponent>();
+	uiText->SetDWriteFactory(m_Renderer.GetDWriteFactory());
+	uiText->SetText(L"UI ÅØ½ºÆ® ¿¹½Ã");
+	uiText->SetFontName(L"Segoe UI");
+	uiText->SetFontSize(24.0f);
+	uiText->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	uiText->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	uiText->SetLayoutSize(500.0f, 100.0f);
+	m_SoundManager.BGM_Shot(L"bgm");
+	m_SoundManager.SFX_Shot(L"sfx_b2b");
+	m_SoundManager.UI_Shot(L"play");
+	
+	auto rect = soundUI->GetComponent<RectTransformComponent>();
+	rect->SetAnchorPreset(AnchorPrset::FullStretch);
+	rect->SetPivotPreset(RectTransformPivotPreset::Center);
+	rect->SetPosition({ 0.0f, 0.0f });
+	rect->SetSize({ 600.f, 600.f });
+
+	auto uiObj1 = std::make_shared<UIObject>(m_EventDispatcher);
+	auto uiImage1 = uiObj1->AddComponent<UIImageComponent>();
+	uiImage1->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
+	uiImage1->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
+	uiImage1->SetPivotPreset(ImagePivotPreset::Center, uiImage1->GetTexture()->GetSize());
+	auto rect1 = uiObj1->GetComponent<RectTransformComponent>();
+	rect1->SetAnchorPreset(AnchorPrset::FullStretch);
+	rect1->SetPivotPreset(RectTransformPivotPreset::Center);
+	rect1->SetSize({ 300.0f, 200.0f });
+	rect1->SetPosition({ 0.0f, -410.0f });
+	soundUI->GetMaster()->SetFrame(uiObj1);
+	soundUI->GetMaster()->SetFill(uiObj1);
+
+	auto uiObj2 = std::make_shared<UIObject>(m_EventDispatcher);
+	auto uiImage2 = uiObj2->AddComponent<UIImageComponent>();
+	uiImage2->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
+	uiImage2->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
+	uiImage2->SetPivotPreset(ImagePivotPreset::Center, uiImage2->GetTexture()->GetSize());
+	auto rect2 = uiObj2->GetComponent<RectTransformComponent>();
+	rect2->SetAnchorPreset(AnchorPrset::FullStretch);
+	rect2->SetPivotPreset(RectTransformPivotPreset::Center);
+	rect2->SetSize({ 300.0f, 200.0f });
+	rect2->SetPosition({ 0.0f, -160.0f }); 
+	soundUI->GetBGM()->SetFrame(uiObj2);
+	soundUI->GetBGM()->SetFill(uiObj2);
+
+	auto uiObj3 = std::make_shared<UIObject>(m_EventDispatcher);
+	auto uiImage3 = uiObj3->AddComponent<UIImageComponent>();
+	uiImage3->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
+	uiImage3->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
+	uiImage3->SetPivotPreset(ImagePivotPreset::Center, uiImage3->GetTexture()->GetSize());
+	auto rect3 = uiObj3->GetComponent<RectTransformComponent>();
+	rect3->SetAnchorPreset(AnchorPrset::FullStretch);
+	rect3->SetPivotPreset(RectTransformPivotPreset::Center);
+	rect3->SetSize({ 300.0f, 200.0f });
+	rect3->SetPosition({ 0.0f, 00.0f });
+	soundUI->GetSFX()->SetFrame(uiObj3);
+	soundUI->GetSFX()->SetFill(uiObj3);
+
+	auto uiObj4 = std::make_shared<UIObject>(m_EventDispatcher);
+	auto uiImage4 = uiObj4->AddComponent<UIImageComponent>();
+	uiImage4->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
+	uiImage4->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
+	uiImage4->SetPivotPreset(ImagePivotPreset::Center, uiImage4->GetTexture()->GetSize());
+	auto rect4 = uiObj4->GetComponent<RectTransformComponent>();
+	rect4->SetAnchorPreset(AnchorPrset::FullStretch);
+	rect4->SetPivotPreset(RectTransformPivotPreset::Center);
+	rect4->SetSize({ 300.0f, 200.0f });
+	rect4->SetPosition({ 0.0f, 340.0f });
+	soundUI->GetUI()->SetFrame(uiObj4);
+	soundUI->GetUI()->SetFill(uiObj4);
+
+
+	/*auto buttonUI = std::make_shared<ButtonUI>(m_EventDispatcher);
+	auto uiButton = buttonUI->GetComponent<UIButtonComponent>();
+	uiButton->Start();
+	uiButton->GetFSM().SetOnEnter("Click", []() {std::cout << "Click" << std::endl; });
+	auto uiImage5 = buttonUI->AddComponent<UIImageComponent>();
+	uiImage5->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
+	uiImage5->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
+	uiImage5->SetPivotPreset(ImagePivotPreset::Center, uiImage5->GetTexture()->GetSize());
+	auto rect5 = buttonUI->GetComponent<RectTransformComponent>();
+	rect5->SetAnchorPreset(AnchorPrset::FullStretch);
+	rect5->SetPivotPreset(RectTransformPivotPreset::Center);
+	rect5->SetSize({ 300.0f, 200.0f });
+	rect5->SetPosition({ 0.0f, 0.0f });*/
+	/*sr->SetPath("../Resource/cat.png");
+	sr->SetTextureKey("cat_texture");*/
+	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
+	cameraObject->m_Name = "Camera";
+	auto trans3 = cameraObject->GetComponent<TransformComponent>();
+	trans3->SetPosition({ 960.0f, 540.0f });
+	SetMainCamera(cameraObject);
+  
+	//AddGameObject(gameObject);
+  /*sr->SetTexture(bitmap);
+	sr2->SetTexture(bitmap);*/
+	//AddGameObject(gameObject);
+	//AddGameObject(gameObject2);
+	AddUIObject(soundUI);
+	//AddUIObject(buttonUI);
+	AddGameObject(cameraObject);
 
 
 		AddGameObject(gameObject);
@@ -337,7 +448,7 @@ void TestScene::FixedUpdate()
 		return;
 	if (m_GameObjects.find("Camera") == m_GameObjects.end())
 		return;
-	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("player")->second.get()); // ??ì¨·????? ???ë¼±æ¿?è«?�ë¶�???
+	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("player")->second.get()); // ??혧챙짢쨌?????혻???혖챘쩌짹챈쩔?챔짬?봤ヂ뗏???
 	GameObject* cameraObject = m_GameObjects.find("Camera")->second.get();
 	if (player == nullptr)
 		return;
@@ -415,7 +526,7 @@ void TestScene::FixedUpdate()
 				opponentZ = ally->GetZ();
 			else
 				continue;
-			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // ì§?ë¬¸ Z ì¶?ê²??¬ë? ë¨¼ì???ëŠ?�ê�?ë¹?��?��??ì¢?��?�„ê¹Œ�?��?X ì¶?ê²??¬ë? ë¨¼ì???ëŠ?�ê�?ë¹?��?��??ì¢?��?�„ê¹Œ�?��?
+			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // Ã¬Â§?Ã«Â¬Â¸ Z Ã¬Â¶?ÃªÂ²??Â¬Ã«? Ã«Â¨Â¼Ã¬???Ã«Å ?ÃªÂ?Ã«Â¹?žÃ?¡Â??Ã¬Â¢?¹Ã?â€žÃªÂ¹Å’Ã?¡â€?X Ã¬Â¶?ÃªÂ²??Â¬Ã«? Ã«Â¨Â¼Ã¬???Ã«Å ?ÃªÂ?Ã«Â¹?žÃ?¡Â??Ã¬Â¢?¹Ã?â€žÃªÂ¹Å’Ã?¡â€?
 			{
 				ObjectCollisionLeave(m_EventDispatcher, opponentBox, playerBox);
 				continue;
@@ -505,10 +616,10 @@ void TestScene::Update(float deltaTime)
 		m_OneSecondTimer = 0.0f;
 
 		float curHP = m_BlackBoard->GetValue<float>("BossCurrHP").value();
-		//std::cout << "Çö?ç HP: " << curHP << std::endl;
+		//std::cout << "Ã‡Ã¶?Ã§ HP: " << curHP << std::endl;
 		m_BlackBoard->SetValue("BossCurrHP", curHP - 5);
 
-		// °¡ÁßÄ¡ ·Î±× Ãâ·Â
+		// Â°Â¡ÃÃŸÃ„Â¡ Â·ÃŽÂ±Ã— ÃƒÃ¢Â·Ã‚
 		//float w1 = m_BlackBoard->GetValue<float>("SkillWeight_1").value();
 		//float w2 = m_BlackBoard->GetValue<float>("SkillWeight_2").value();
 		//float w3 = m_BlackBoard->GetValue<float>("SkillWeight_3").value();
@@ -525,7 +636,7 @@ void TestScene::Update(float deltaTime)
 	}
 }
 
-void TestScene::Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo)
+void TestScene::Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo, std::vector<UITextInfo>& uiTextInfo)
 {
 	for (auto gameObject : m_GameObjects)
 	{
@@ -534,5 +645,6 @@ void TestScene::Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRender
 	for (auto uiObject : m_UIObjects)
 	{
 		uiObject.second->Render(uiRenderInfo);
+		uiObject.second->Render(uiTextInfo);
 	}
 }

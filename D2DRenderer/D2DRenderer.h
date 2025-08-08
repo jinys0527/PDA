@@ -38,9 +38,10 @@ public:
 	void DrawMessage(const wchar_t* text, float left, float top, float width, float height, const D2D1::ColorF& color);
 
 
-	void Draw(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo);
+	void Draw(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo, std::vector<UITextInfo>& uiTextInfo);
 	void DrawGameObject(std::vector<RenderInfo>& renderInfo, D2D1::Matrix3x2F cameraMatrix);
-	void DrawUIObject(std::vector<UIRenderInfo>& uiRenderInfo, D2D1::Matrix3x2F cameraMatrix);
+	void DrawUIObject(std::vector<UIRenderInfo>& uiRenderInfo);
+	void DrawUIText(std::vector<UITextInfo>& uiTextInfo);
 
 	Math::Vector2F CalcAnchorOffset(const Math::Vector2F& parentSize,
 		const Anchor& anchor,
@@ -71,6 +72,8 @@ public:
 	ID2D1DeviceContext7* GetD2DContext() const { return m_d2dContext.Get(); }
 
 	ID3D11RenderTargetView* GetD3DRenderTargetView() const { return m_d3dRenderTargetView.Get(); }
+
+	ComPtr<IDWriteFactory> GetDWriteFactory() const { return m_dwriteFactory; }
 
 	void SetCamera(CameraObject* camera) { m_Camera = camera; }
 
@@ -103,4 +106,5 @@ private:
 	ComPtr<ID2D1DeviceContext7>		m_d2dContext;
 
 	ComPtr<IWICImagingFactory>		m_wicFactory;
+	ComPtr<IDWriteFactory> m_dwriteFactory;
 };

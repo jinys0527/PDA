@@ -42,14 +42,14 @@ UIButtonComponent::UIButtonComponent()
 void UIButtonComponent::Start()
 {
 	m_Owner->GetEventDispatcher().AddListener(EventType::Hovered, this);
-	m_Owner->GetEventDispatcher().AddListener(EventType::MouseLeftClick, this);
+	m_Owner->GetEventDispatcher().AddListener(EventType::Pressed, this);
 
 }
 
 UIButtonComponent::~UIButtonComponent()
 {
 	m_Owner->GetEventDispatcher().RemoveListener(EventType::Hovered, this);
-	m_Owner->GetEventDispatcher().RemoveListener(EventType::MouseLeftClick, this);
+	m_Owner->GetEventDispatcher().RemoveListener(EventType::Pressed, this);
 }
 
 void UIButtonComponent::SetOnClick(std::function<void()> callback)
@@ -57,10 +57,6 @@ void UIButtonComponent::SetOnClick(std::function<void()> callback)
 
 }
 
-void UIButtonComponent::Render(D2DRenderer* renderer)
-{
-
-}
 
 void UIButtonComponent::Update(float deltaTime)
 {
@@ -96,12 +92,12 @@ void UIButtonComponent::OnEvent(EventType type, const void* data)
 	}
 
 	//아래는 버튼UI가 될 듯
-	if (type == EventType::MouseLeftClick)
+	if (type == EventType::Pressed)
 	{
 		if (m_IsHovered)
 		{
 			auto mouseData = static_cast<const Events::MouseState*>(data);
-			//std::cout << mouseData->pos.x << " " << mouseData->pos.y << "에서 클릭됨 \n";
+			std::cout << mouseData->pos.x << " " << mouseData->pos.y << "에서 클릭됨 \n";
 			m_IsClicked = true;
 			m_FSM.Trigger("HoverToClick");
 
@@ -122,21 +118,23 @@ void UIButtonComponent::Deserialize(const nlohmann::json& j)
 
 void UIButtonComponent::IsHovered(POINT mousePos)
 {
-	mousePos.y = 1080 - mousePos.y;
+	auto rectTransform = m_Owner->GetComponent<RectTransformComponent>();
+	auto image = m_Owner->GetComponent<UIImageComponent>();
 
-	std::cout << mousePos.x << " " << mousePos.y << "에 위치함 \n";
+	Math::Vector2F size = rectTransform->GetSize(); // 실제 렌더링 크기
+	Math::Vector2F pivot = image->GetPivot();       // 0~1 범위 가정
+	Math::Vector2F position = rectTransform->GetPosition(); // 앵커 기준 위치
 
-
-	auto objPos = m_Owner->GetComponent<TransformComponent>()->GetPosition();
-	auto objSize = m_Owner->GetComponent<UIImageComponent>()->GetTexture()->GetSize();
-	auto objPivot = m_Owner->GetComponent<UIImageComponent>()->GetPivot();
-
+	// 좌상단 계산 (pivot 적용)
 	Math::Vector2F topLeft;
-	topLeft.x = objPos.x - objPivot.x;
-	topLeft.y = objPos.y - objPivot.y;
+	topLeft.x = position.x;
+	topLeft.y = position.y;
 
-	if (mousePos.x >= topLeft.x && mousePos.x <= (topLeft.x + objSize.width) &&
-		mousePos.y >= topLeft.y && mousePos.y <= (topLeft.y + objSize.height))
+
+
+	// 마우스 충돌 검사
+	if (mousePos.x >= topLeft.x && mousePos.x <= (topLeft.x + size.x) &&
+		mousePos.y >= topLeft.y && mousePos.y <= (topLeft.y + size.y))
 	{
 		m_IsHovered = true;
 	}

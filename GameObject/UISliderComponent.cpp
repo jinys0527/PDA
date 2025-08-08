@@ -1,12 +1,22 @@
 #include "UISliderComponent.h"
-
+#include "Object.h"
+#include "EventDispatcher.h"
+#include <iostream>
 
 UISliderComponent::UISliderComponent()
 {
 }
 
+UISliderComponent::~UISliderComponent()
+{
+	m_Owner->GetEventDispatcher().RemoveListener(EventType::Pressed, this);
+	m_Owner->GetEventDispatcher().RemoveListener(EventType::Dragged, this);
+	m_Owner->GetEventDispatcher().RemoveListener(EventType::Released, this);
+}
+
 void UISliderComponent::Update(float deltaTime)
 {
+
 	if (m_IsDirty)
 	{
 		UpdateFillImage(); //fill 이미지 갱신
@@ -17,22 +27,31 @@ void UISliderComponent::Update(float deltaTime)
 void UISliderComponent::OnEvent(EventType type, const void* data)
 {
 	auto mouseData = static_cast<const Events::MouseState*>(data);
-	auto rect = m_Fill->GetUV();
+
+	auto rect = m_Fill->GetComponent<UIImageComponent>()->GetUV();
 	float percentage;
 	switch (type)
 	{
 	case EventType::Pressed:
+		if (!IsMouseOverSlider(mouseData->pos))
+			return;
+
 		m_IsDragging = true;
 		m_CurrentMousePos = mouseData->pos;
 		break;
 	case EventType::Dragged:
-		if(m_IsDragging)
-		{
-			m_CurrentMousePos = mouseData->pos;
-		}
+		if (!m_IsDragging)
+			return;
+		if (!IsMouseOverSlider(mouseData->pos))
+			return;
+		m_CurrentMousePos = mouseData->pos;
 		break;
 	case EventType::Released:
-		percentage = std::clamp((m_CurrentMousePos.x - m_MinX) / m_Width, 0.0f, 1.0f);
+		if (!IsMouseOverSlider(mouseData->pos))
+			return;
+		float width = std::abs(m_MaxX - m_MinX);
+		float offset = m_CurrentMousePos.x - min(m_MinX, m_MaxX);
+		percentage = std::clamp(offset / width, 0.0f, 1.0f);
 		SetValue(percentage);			// 여기서 자동으로 OnValueChanged 호출
 		m_IsDragging = false;
 		break;
@@ -49,8 +68,8 @@ void UISliderComponent::Deserialize(const nlohmann::json& j)
 
 void UISliderComponent::UpdateFillImage()
 {
-	auto rect = m_Fill->GetUV();
-	float width = rect.right - rect.left;	
+	auto rect = m_OriginalUV;
+	float width = rect.right - rect.left;
 	float height = rect.bottom - rect.top;
 
 	switch (m_Direction)
@@ -68,5 +87,27 @@ void UISliderComponent::UpdateFillImage()
 		rect.bottom = rect.top + height * m_Value;
 		break;
 	}
-	m_Fill->SetUV(rect);
+	m_Fill->GetComponent<UIImageComponent>()->SetUV(rect);
+}
+
+void UISliderComponent::Start()
+{
+	m_Owner->GetEventDispatcher().AddListener(EventType::Pressed, this);
+	m_Owner->GetEventDispatcher().AddListener(EventType::Dragged, this);
+	m_Owner->GetEventDispatcher().AddListener(EventType::Released, this);
+}
+
+bool UISliderComponent::IsMouseOverSlider(const POINT& mousePos)
+{
+	auto rectTransform = m_Frame->GetComponent<RectTransformComponent>();
+	auto size = rectTransform->GetSize();
+	auto pos = rectTransform->GetPosition();
+	auto pivot = rectTransform->GetPivot();
+
+	float left = pos.x;
+	float top = pos.y;
+	float right = left + size.x;
+	float bottom = top + size.y;
+
+	return (mousePos.x >= left && mousePos.x <= right && mousePos.y >= top && mousePos.y <= bottom);
 }

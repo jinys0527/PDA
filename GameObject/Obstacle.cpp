@@ -82,10 +82,13 @@ void Obstacle::Serialize(nlohmann::json& j) const
 	j["lane"] = m_Z;
 	for (const auto& component : m_Components)
 	{
-		nlohmann::json compJson;
-		compJson["type"] = component.second->GetTypeName();
-		component.second->Serialize(compJson["data"]);
-		j["components"].push_back(compJson);
+		for (const auto& comp : component.second)
+		{
+			nlohmann::json compJson;
+			compJson["type"] = comp->GetTypeName();
+			comp->Serialize(compJson["data"]);
+			j["components"].push_back(compJson);
+		}
 	}
 }
 
@@ -99,15 +102,14 @@ void Obstacle::Deserialize(const nlohmann::json& j)
 		std::string typeName = compJson.at("type");
 
 		// 기존 컴포넌트가 있으면 찾아서 갱신
-		auto it = std::find_if(m_Components.begin(), m_Components.end(),
-			[&](const auto& pair)
-			{
-				return pair.second->GetTypeName() == typeName;
-			});
-
-		if (it != m_Components.end())
+		auto it = m_Components.find(typeName);
+		if (it != m_Components.end() && !it->second.empty())
 		{
-			it->second->Deserialize(compJson.at("data"));
+			// 해당 타입의 모든 컴포넌트에 대해 Deserialize 시도
+			for (auto& comp : it->second)
+			{
+				comp->Deserialize(compJson.at("data"));
+			}
 		}
 		else
 		{

@@ -3,6 +3,8 @@
 #include "json.hpp"
 #include "GameObject.h"
 #include "UIObject.h"
+//#include "ItemObject.h"
+#include "Obstacle.h"
 #include "CameraObject.h"
 #include "GameManager.h"
 #include <unordered_set>
@@ -94,8 +96,21 @@ void Scene::Deserialize(const nlohmann::json& j)
 		}
 		else
 		{
+			std::shared_ptr<GameObject> gameObject;
 			// 없으면 새로 생성 후 추가
-			auto gameObject = std::make_shared<GameObject>(m_EventDispatcher);
+			if (name.find("Obstacle"))
+			{
+				gameObject = std::make_shared<Obstacle>(m_EventDispatcher);
+			}
+			else if (name.find("Item"))
+			{
+				//gameObject = std::make_shared<ItemObject>(m_EventDispatcher);
+			}
+			else
+			{
+				gameObject = std::make_shared<GameObject>(m_EventDispatcher);
+			}
+			
 			gameObject->Deserialize(gameObjectJson);
 			m_GameObjects[name] = std::move(gameObject);
 		}
