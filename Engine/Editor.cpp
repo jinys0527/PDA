@@ -159,10 +159,10 @@ void Editor::DrawGameObjectInspector(std::shared_ptr<Scene> currentScene)
 
 		if (auto* obstacle = dynamic_cast<Obstacle*>(gameObject.get()))
 		{
-			int lane = obstacle->GetZ();
+			int lane = static_cast<int>(obstacle->GetZ());
 			if (ImGui::SliderInt("Lane", &lane, 0, 2))
 			{
-				obstacle->SetZ(lane);
+				obstacle->SetZ(static_cast<float>(lane));
 			}
 		}
 

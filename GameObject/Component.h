@@ -43,6 +43,8 @@ public:
 	}
 
 	void SetOwner(Object* owner) { m_Owner = owner; }
+	Object* GetOwner() { return m_Owner; }
+
 	void SetIsActive(bool active) { m_IsActive = active; }
 	bool GetIsActive() { return m_IsActive; }
 protected:

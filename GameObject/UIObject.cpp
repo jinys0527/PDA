@@ -3,6 +3,7 @@
 #include "UIImageComponent.h"
 #include "UISliderComponent.h"
 #include "UIButtonComponent.h"
+#include "UIGridComponent.h"
 #include "UITextComponent.h"
 
 UIObject::UIObject(EventDispatcher& eventDispatcher) : Object(eventDispatcher)
@@ -84,6 +85,36 @@ void UIObject::Render(std::vector<UIRenderInfo>& renderInfo)
 		fillInfo.srcRect = D2D1_RECT_F{ fillImage->GetUV().left, fillImage->GetUV().top, fillImage->GetUV().right, fillImage->GetUV().bottom };
 		fillInfo.useSrcRect = true;
 		renderInfo.emplace_back(fillInfo);
+	}
+	for (auto& grid : GetComponents<UIGridComponent>())
+	{
+		for (auto item : grid->GetItems())
+		{
+			for (auto image : item->GetComponents<UIImageComponent>())
+			{
+				UIRenderInfo info;
+				info.bitmap = image->GetTexture();
+				auto rect = item->GetComponent<RectTransformComponent>();
+				info.anchoredPosition = rect->GetPosition();
+				info.anchor = rect->GetAnchor();
+				info.sizeDelta = { 0, 0 };
+				if (rect->GetParent())
+				{
+					auto parentSize = rect->GetParent()->GetSize();
+					info.parentSize = parentSize;
+				}
+				else
+				{
+					auto size = rect->GetSize();
+					info.parentSize = { size.x, size.y };
+				}
+				info.pivot = rect->GetPivot();
+				// Opacity Àû¿ë
+				info.opacity = image->GetOpacity();
+				info.srcRect = D2D1_RECT_F{ image->GetUV().left, image->GetUV().top, image->GetUV().right, image->GetUV().bottom };
+				renderInfo.emplace_back(info);
+			}
+		}
 	}
 }
 

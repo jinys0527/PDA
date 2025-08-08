@@ -121,13 +121,25 @@
       <Filter>Component\Header</Filter>
     </ClInclude>
     <ClInclude Include="Telegraph.h">
-       <Filter>Component\Header</Filter>
+      <Filter>Component\Header</Filter>
     </ClInclude>
     <ClInclude Include="RunPlayerController.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
     <ClInclude Include="ItemObject.h">
       <Filter>Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DropObstacle.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DroneComponent.h">
+      <Filter>Component\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="FlyingObstacleComponent.h">
+      <Filter>Component\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="UIGridComponent.h">
+      <Filter>Component\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -219,6 +231,18 @@
       <Filter>Component\Source</Filter>
     </ClCompile>
     <ClCompile Include="ItemObject.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DropObstacle.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DroneComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UIGridComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="FlyingObstacleComponent.cpp">
       <Filter>Component\Source</Filter>
     </ClCompile>
   </ItemGroup>
