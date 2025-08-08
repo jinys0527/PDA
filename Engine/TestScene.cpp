@@ -124,21 +124,25 @@ void TestScene::Initialize()
 		animComp->Play("attack");
 		sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 		sr->SetTextureKey("boss");
+
+		//AddGameObject(gameObject);
+
 		//±×·¡ÇÇÆ¼
 		auto graffiti = std::make_shared<GraffitiObject>(m_EventDispatcher);
 		graffiti->m_Name = "graffiti";
 		auto graffitiTrans = graffiti->GetComponent<TransformComponent>();
-		graffitiTrans->SetPosition({ 1600,900 });
+		graffitiTrans->SetPosition({ 200,300 });
 		sr = graffiti->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
-		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
-		sr->SetPath("../Resource/cat.png");
+		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat_texture.png");
+		sr->SetPath("../Resource/cat_texture.png");
 		sr->SetTextureKey("cat_texture");
 		sr->SetTexture(bitmap);
 		sr->SetPivotPreset(SpritePivotPreset::Center, bitmap->GetSize());
 		graffiti->GetComponent<GraffitiComponent>()->Start();
 
-		AddGameObject(gameObject);
+		graffiti->SetGravitti(&m_AssetManager);
+
 		AddGameObject(graffiti);
 
 
@@ -158,7 +162,7 @@ void TestScene::Initialize()
 			obstacle->SetZ(1);
 			obstacle->SetSlide(true);
 
-			AddGameObject(obstacle);
+			//AddGameObject(obstacle);
 		}
 
 		{
@@ -176,7 +180,7 @@ void TestScene::Initialize()
 
 			obstacle.get()->SetZ(2);
 
-			AddGameObject(obstacle);
+			//AddGameObject(obstacle);
 		}
 
 
@@ -206,7 +210,7 @@ void TestScene::Initialize()
 		sr->SetTextureKey("boss");
 
 
-		AddGameObject(gameObject);
+		//AddGameObject(gameObject);
 	}
 
 
@@ -303,7 +307,7 @@ void TestScene::Initialize()
 	cameraObject->m_Name = "Camera";
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
 	trans3->SetPosition({ 960.0f, 540.0f });
-	cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5f);
+	//cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5f);
 	BoxColliderComponent* cameraCol = cameraObject->AddComponent<BoxColliderComponent>();
 	cameraCol->Start();
 	cameraCol->SetSize({ 1920, 1080 });
@@ -354,7 +358,7 @@ void TestScene::Initialize()
 
 
 
-		AddGameObject(obstacle);
+		//AddGameObject(obstacle);
 	}
 	{
 		auto obstacle = std::make_shared<GameObject>(m_EventDispatcher);
@@ -389,7 +393,7 @@ void TestScene::Initialize()
 		);
 
 
-		AddGameObject(obstacle);
+		//AddGameObject(obstacle);
 	}
 
 }
@@ -485,11 +489,6 @@ void TestScene::FixedUpdate()
 				info.contactPoint;
 				info.penetrationDepth;
 
-				if (gameObject->first == "obstacle3")
-					gameObject = gameObject;
-				if (gameObject->first == "obstacle4")
-					gameObject = gameObject;
-
 				m_EventDispatcher.Dispatch(EventType::CollisionTrigger, &info);
 
 			}
@@ -578,8 +577,8 @@ void TestScene::Update(float deltaTime)
 
 	Vec2F move = { 0, 0 };
 	move.x += 300 * deltaTime;
-	m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->Translate(move);
-	m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->Translate(move);
+	//m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->Translate(move);
+	//m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->Translate(move);
 
 	if (m_BTElapsedTime >= 0.016f)
 	{

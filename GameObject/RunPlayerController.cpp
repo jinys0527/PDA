@@ -16,6 +16,7 @@ void RunPlayerController::Start()
 	GetEventDispatcher().AddListener(EventType::KeyUp, this);
 	GetEventDispatcher().AddListener(EventType::OnPlayerCollisonOccur, this);
 
+
 	m_PlayerOwner = (PlayerObject*)(m_Owner);
 
 
@@ -32,7 +33,7 @@ RunPlayerController::~RunPlayerController()
 void RunPlayerController::Update(float deltaTime)
 {
 	// Transform 컴포넌트에 있던 움직이는 함수 잠시 가져온 것 
-
+	m_IsMoving = false;
 	if (m_RigidBodyComponent == nullptr)
 	{
 		m_RigidBodyComponent = m_Owner->GetComponent<RigidbodyComponent>();
@@ -126,6 +127,9 @@ void RunPlayerController::Update(float deltaTime)
 
 		m_Owner->GetComponent<TransformComponent>()->Translate(delta);// 실제론 이거 써야해요
 	}
+
+	if (delta.x != 0 || m_Z != prevZ)
+		m_IsMoving = true;
 
 	m_PlayerOwner->SetZ(m_Z);
 

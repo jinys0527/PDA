@@ -39,19 +39,29 @@ void InputManager::Update()
 	}
 	else if (m_MousePrev.leftPressed && m_Mouse.leftPressed)
 	{
+		m_EventDispatcher.Dispatch(EventType::MouseLeftClickHold, &m_Mouse);
 		m_EventDispatcher.Dispatch(EventType::Dragged, &m_Mouse);
 	}
 	else if(m_MousePrev.leftPressed && !m_Mouse.leftPressed)
 	{
+		m_EventDispatcher.Dispatch(EventType::MouseLeftClickUp, &m_Mouse);
 		m_EventDispatcher.Dispatch(EventType::Released, &m_Mouse);
 	}
 	
 
 	if (m_MousePrev.rightPressed == false)
 	{
-		if (m_Mouse.rightPressed == true)
+		if (m_Mouse.rightPressed == true && m_Mouse.rightPressed)
 		{
 			m_EventDispatcher.Dispatch(EventType::MouseRightClick, &m_Mouse);
+		}
+		else if (m_Mouse.rightPressed == true && m_Mouse.rightPressed)
+		{
+			m_EventDispatcher.Dispatch(EventType::MouseRightClickHold, &m_Mouse);
+		}
+		else
+		{
+			m_EventDispatcher.Dispatch(EventType::MouseRightClickUp, &m_Mouse);
 		}
 	}
 

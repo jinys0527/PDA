@@ -26,8 +26,8 @@ void GraffitiComponent::Start()
 
 void GraffitiComponent::Update(float deltatime)
 {
-	//std::cout << "m_IsHovered: " << m_IsHovered << std::endl;
-	//std::cout << "m_IsClicked: " << m_IsClicked << std::endl;
+	std::cout << "m_IsHovered: " << m_IsHovered << std::endl;
+	std::cout << "m_IsClicked: " << m_IsClicked << std::endl;
 
 }
 

@@ -6,7 +6,11 @@ enum class EventType
 	KeyDown,
 	KeyUp,
 	MouseLeftClick,
+	MouseLeftClickHold,
+	MouseLeftClickUp,
 	MouseRightClick,
+	MouseRightClickHold,
+	MouseRightClickUp,
 
 	//UI
 	Hovered,
