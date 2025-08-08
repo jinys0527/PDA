@@ -266,6 +266,7 @@
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="UIButtonComponent.h" />
     <ClInclude Include="UIComponent.h" />
+    <ClInclude Include="UIGridComponent.h" />
     <ClInclude Include="UIImageComponent.h" />
     <ClInclude Include="UIObject.h" />
     <ClInclude Include="UISliderComponent.h" />
@@ -301,6 +302,7 @@
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="UIButtonComponent.cpp" />
     <ClCompile Include="UIComponent.cpp" />
+    <ClCompile Include="UIGridComponent.cpp" />
     <ClCompile Include="UIImageComponent.cpp" />
     <ClCompile Include="UIObject.cpp" />
     <ClCompile Include="UISliderComponent.cpp" />
