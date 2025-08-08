@@ -255,7 +255,7 @@ void TestScene::Initialize()
 				if (info.self != lambdaObstacle->GetComponent<BoxColliderComponent>())
 					return;
 				lambdaObstacle->GetComponent<TransformComponent>()->SetParent(lambdaCamera->GetComponent<TransformComponent>());
-				auto component = lambdaObstacle->AddComponent<DroneComponent>();
+				auto component = lambdaObstacle->AddComponent<FlyingObstacleComponent>();
 				component->Start();
 				lambdaObstacle->GetComponent<BoxColliderComponent>()->OnTrigger();
 			}
@@ -267,7 +267,7 @@ void TestScene::Initialize()
 	}
 	{
 		auto obstacle = std::make_shared<GameObject>(m_EventDispatcher);
-		obstacle->m_Name = "obstacle4";
+		obstacle->m_Name = "drone3";
 		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
 		obstacleTrans->SetPosition({ 3000.0f, 350.0f });
 		auto sr = obstacle->AddComponent<SpriteRenderer>();
@@ -379,7 +379,7 @@ void TestScene::FixedUpdate()
 
 			opponentPos = opponentBox->GetCenter();
 
-			if (opponentPos.x > cameraPos.x + 1500)
+			if (opponentPos.x > cameraPos.x + 1500 || cameraPos.x > opponentPos.x)
 			{
 				continue;
 			}
@@ -486,8 +486,8 @@ void TestScene::Update(float deltaTime)
 
 	Vec2F move = { 0, 0 };
 	move.x += 300 * deltaTime;
-	//m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->Translate(move);
-	//m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->Translate(move);
+	m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->Translate(move);
+	m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->Translate(move);
 
 	if (m_BTElapsedTime >= 0.016f)
 	{
