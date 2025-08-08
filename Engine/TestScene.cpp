@@ -47,30 +47,9 @@
 //================================
 void TestScene::Initialize()
 {
-	/*auto gameObject = std::make_shared<GameObject>(m_EventDispatcher);
-
-
-	auto soundUI = std::make_shared<SoundUI>(m_SoundManager, m_EventDispatcher);
-	soundUI->m_Name = "sound";
-	auto rect = soundUI->GetComponent<RectTransformComponent>();
-	rect->SetPosition({ 0.0f, 0.0f });
-	auto uiImage = std::make_shared<UIImageComponent>();
-	uiImage->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
-	soundUI->GetBGM()->SetFrame(uiImage.get());
-
-	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
-	cameraObject->m_Name = "Camera";
-	auto trans3 = cameraObject->GetComponent<TransformComponent>();
-	trans3->SetPosition({ 960.0f, 540.0f });
-	cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5f);
-	BoxColliderComponent* cameraCol = cameraObject->AddComponent<BoxColliderComponent>();
-	cameraCol->Start();
-	cameraCol->SetSize({1920, 1080});
-	SetMainCamera(cameraObject);
-
 #pragma region telegraph
 	std::vector<std::shared_ptr<Telegraph>> m_Telegraphs;
-	m_Telegraphs.reserve(12); // Â¸ÃžÂ¸Ã°Â¸Â® ?Ã§Ã‡Ã’Â´Ã§ Â¹Ã¦ÃÃ¶
+	m_Telegraphs.reserve(12); // Â¸ÃžÂ¸Ã°Â¸Â® ?Ã§Ã?�Ã’Â´Ã�?Â¹Ã¦ÃÃ¶
 
 	const int columns = 4;
 	const int rows = 3;
@@ -101,7 +80,7 @@ void TestScene::Initialize()
 		int col = i % columns;
 		int row = i / columns;
 
-		// Â°Â£Â°Ã Ã†Ã·Ã‡Ã” ÃÃ‚Ã‡Â¥ Â°Ã¨Â»Ãª
+		// Â°Â£Â°Ã Ã?�Ã·Ã‡Ã�?ÃÃ?�Ã‡Â�?Â°Ã¨Â»Ãª
 		float posX = startX + col * (tileSize.width + marginX);
 		float posY = startY + row * (tileSize.height + marginY);
 
@@ -121,11 +100,6 @@ void TestScene::Initialize()
 
 	m_BlackBoard = std::make_unique<BossBlackBoard>(m_Telegraphs);
 	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
-
-
-
-	AddUIObject(soundUI);
-	AddGameObject(cameraObject);
 
 	{
 		auto gameObject = std::make_shared<PlayerObject>(m_EventDispatcher);
@@ -208,6 +182,7 @@ void TestScene::Initialize()
 
 	}
 
+
 	{
 		auto gameObject = std::make_shared<GameObject>(m_EventDispatcher);
 		gameObject->m_Name = "test";
@@ -227,8 +202,12 @@ void TestScene::Initialize()
 
 		animComp->Play("attack");
 
-	sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
-	sr->SetTextureKey("boss");*/
+		sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+		sr->SetTextureKey("boss");
+
+
+		AddGameObject(gameObject);
+	}
 
 
 	auto soundUI = std::make_shared<SoundUI>(m_SoundManager, m_EventDispatcher);
@@ -324,6 +303,10 @@ void TestScene::Initialize()
 	cameraObject->m_Name = "Camera";
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
 	trans3->SetPosition({ 960.0f, 540.0f });
+	cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5f);
+	BoxColliderComponent* cameraCol = cameraObject->AddComponent<BoxColliderComponent>();
+	cameraCol->Start();
+	cameraCol->SetSize({ 1920, 1080 });
 	SetMainCamera(cameraObject);
   
 	//AddGameObject(gameObject);
@@ -335,9 +318,6 @@ void TestScene::Initialize()
 	//AddUIObject(buttonUI);
 	AddGameObject(cameraObject);
 
-
-		AddGameObject(gameObject);
-	}
 	{
 		auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
 		obstacle->m_Name = "obstacle3";
@@ -448,8 +428,9 @@ void TestScene::FixedUpdate()
 		return;
 	if (m_GameObjects.find("Camera") == m_GameObjects.end())
 		return;
-	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("player")->second.get()); // ??혧챙짢쨌?????혻???혖챘쩌짹챈쩔?챔짬?봤ヂ뗏???
+	PlayerObject* player = (PlayerObject*)(m_GameObjects.find("player")->second.get()); // ??ì¨·????? ???ë¼±æ¿?è«?�ë¶�???
 	GameObject* cameraObject = m_GameObjects.find("Camera")->second.get();
+
 	if (player == nullptr)
 		return;
 	BoxColliderComponent* playerBox = player->GetComponent<BoxColliderComponent>();
@@ -526,7 +507,7 @@ void TestScene::FixedUpdate()
 				opponentZ = ally->GetZ();
 			else
 				continue;
-			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // Ã¬Â§?Ã«Â¬Â¸ Z Ã¬Â¶?ÃªÂ²??Â¬Ã«? Ã«Â¨Â¼Ã¬???Ã«Å ?ÃªÂ?Ã«Â¹?žÃ?¡Â??Ã¬Â¢?¹Ã?â€žÃªÂ¹Å’Ã?¡â€?X Ã¬Â¶?ÃªÂ²??Â¬Ã«? Ã«Â¨Â¼Ã¬???Ã«Å ?ÃªÂ?Ã«Â¹?žÃ?¡Â??Ã¬Â¢?¹Ã?â€žÃªÂ¹Å’Ã?¡â€?
+			if (opponentZ - 0.5f > playerZ || opponentZ + 0.5f < playerZ) // Ã¬Â§?Ã«Â¬Â¸ Z Ã¬Â¶?ÃªÂ²??Â¬Ã«? Ã«Â¨Â¼Ã¬???Ã«Å ?ÃªÂ?Ã«Â¹?žÃ?¡Â??Ã¬Â¢?¹Ã?â??�ÃªÂ¹Å’�?¡â??X Ã¬Â¶?ÃªÂ²??Â¬Ã«? Ã«Â¨Â¼Ã¬???Ã«Å ?ÃªÂ?Ã«Â¹?žÃ?¡Â??Ã¬Â¢?¹Ã?â??�ÃªÂ¹Å’�?¡â??
 			{
 				ObjectCollisionLeave(m_EventDispatcher, opponentBox, playerBox);
 				continue;
@@ -616,10 +597,10 @@ void TestScene::Update(float deltaTime)
 		m_OneSecondTimer = 0.0f;
 
 		float curHP = m_BlackBoard->GetValue<float>("BossCurrHP").value();
-		//std::cout << "Ã‡Ã¶?Ã§ HP: " << curHP << std::endl;
+		//std::cout << "Ã?�Ã�?Ã§ HP: " << curHP << std::endl;
 		m_BlackBoard->SetValue("BossCurrHP", curHP - 5);
 
-		// Â°Â¡ÃÃŸÃ„Â¡ Â·ÃŽÂ±Ã— ÃƒÃ¢Â·Ã‚
+		// Â°Â¡ÃÃŸÃ?�Â�?Â·ÃŽÂ±Ã??Ã?Ã¢Â·Ã??
 		//float w1 = m_BlackBoard->GetValue<float>("SkillWeight_1").value();
 		//float w2 = m_BlackBoard->GetValue<float>("SkillWeight_2").value();
 		//float w3 = m_BlackBoard->GetValue<float>("SkillWeight_3").value();
