@@ -31,9 +31,13 @@ NodeState SkillNode::Tick(BlackBoard& bb, float deltaTime)
     // 애니메이션 비활성화 타이머 (이게 먼저 와야 Success 전에 실행됨)
     if (m_AnimPlaying)
     {
+        if (m_Anims[0]->GetComponent<AnimationComponent>()->IsAnimationFinished())
+            std::cout << "adfasdfasdf" << std::endl;
+
         m_AnimTimer += deltaTime;
         if (m_AnimTimer >= 1.0f)
         {
+
             m_Anims[0]->GetComponent<AnimationComponent>()->SetIsActive(false);
             auto sprite = m_Anims[0]->GetComponent<SpriteRenderer>();
             sprite->SetIsActive(0);

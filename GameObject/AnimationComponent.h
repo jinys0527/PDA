@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include "AnimationController.h"
+#include <iostream>
 
 class AnimationClip;
 class AssetManager;

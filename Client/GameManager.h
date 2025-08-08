@@ -20,6 +20,8 @@ public:
 
 	void OnEvent(EventType type, const void* data);
 
+	void Reset();
+	
 private:
 	int m_playerHp = 3;
 	int m_playerStrongAttack = 3;
