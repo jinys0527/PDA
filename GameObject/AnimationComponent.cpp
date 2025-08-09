@@ -11,7 +11,7 @@ void AnimationComponent::Play()
 
 void AnimationComponent::Play(const std::string& name, bool loop /*= true*/)
 {
-	if (m_CurrentClipName == name) return;
+	//if (m_CurrentClipName == name) return; 현재 애니메이션 중복 플레이 하면 안바뀌어서 플레이어 state 고장나서 잠시 꺼놓음
 
 	m_AnimationController.SetClip(m_Clips[name]);
 	m_AnimationController.SetLooping(loop);

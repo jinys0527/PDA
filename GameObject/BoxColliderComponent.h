@@ -17,6 +17,11 @@ public:
 		m_Size = size;
 	}
 
+	void OnTrigger()
+	{
+		m_OnTrigger = nullptr;
+	}
+
 	const Vec2F& GetSize() const {
 		return m_Size;
 	}

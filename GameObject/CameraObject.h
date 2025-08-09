@@ -4,7 +4,7 @@
 class CameraObject : public GameObject
 {
 public:
-	CameraObject(EventDispatcher eventDispatcher, float width, float height);
+	CameraObject(EventDispatcher& eventDispatcher, float width, float height);
 	virtual ~CameraObject() = default;
 };
 

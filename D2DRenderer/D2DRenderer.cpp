@@ -21,6 +21,15 @@ void D2DRenderer::Initialize(HWND hwnd)
 	DX::ThrowIfFailed(hr);
 
 	m_wicFactory = wicFactory;
+
+	// DWriteFactory 생성
+	hr = DWriteCreateFactory(
+		DWRITE_FACTORY_TYPE_SHARED,
+		__uuidof(IDWriteFactory),
+		reinterpret_cast<IUnknown**>(m_dwriteFactory.GetAddressOf())
+	);
+
+	DX::ThrowIfFailed(hr);
 }
 
 void D2DRenderer::UnInitialize()
@@ -28,6 +37,8 @@ void D2DRenderer::UnInitialize()
 	ReleaseRenderTargets();
 
 	m_wicFactory = nullptr;
+
+	m_dwriteFactory = nullptr;
 
 	m_targetBitmap = nullptr;
 	m_brush = nullptr;
@@ -117,7 +128,7 @@ void D2DRenderer::DrawMessage(const wchar_t* text, float left, float top, float 
 	);
 }
 
-void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo)
+void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo, std::vector<UITextInfo>& uiTextInfo)
 {
 	//renderInfo에서 UI용이랑 게임 오브젝트용 따로 만들어서 받으면 될듯?
 
@@ -126,9 +137,9 @@ void D2DRenderer::Draw(std::vector<RenderInfo>& renderInfo, std::vector<UIRender
 	DrawGameObject(renderInfo, cameraMatrix);
 
 	//UI 그리기
-	cameraMatrix = m_Camera->GetComponent<CameraComponent>()->GetViewMatrixForUI();
-	DrawUIObject(uiRenderInfo, cameraMatrix);
+	DrawUIObject(uiRenderInfo);
 
+	DrawUIText(uiTextInfo);
 }
 
 void D2DRenderer::DrawGameObject(std::vector<RenderInfo>& renderInfo, D2D1::Matrix3x2F cameraMatrix)
@@ -139,7 +150,7 @@ void D2DRenderer::DrawGameObject(std::vector<RenderInfo>& renderInfo, D2D1::Matr
 
 	for (const auto& info : sortedInfo)
 	{
-		if (!info.bitmap)
+		if (!info.bitmap || !info.draw)
 		{
 			continue;
 		}
@@ -160,12 +171,7 @@ void D2DRenderer::DrawGameObject(std::vector<RenderInfo>& renderInfo, D2D1::Matr
 
 		m_d2dContext->SetTransform(mat); // 여기서 행렬 적용
 
-		D2D1_RECT_F destRect = {
-					-pivot.x,                 // left
-					-pivot.y,                 // top
-					bmpSize.width - pivot.x, // right
-					bmpSize.height - pivot.y  // bottom
-		};
+		D2D1_RECT_F destRect;
 
 		//m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());
 
@@ -192,6 +198,12 @@ void D2DRenderer::DrawGameObject(std::vector<RenderInfo>& renderInfo, D2D1::Matr
 		}
 		else
 		{
+			destRect= {
+				   -pivot.x,                 // left
+				   -pivot.y,                 // top
+				   bmpSize.width - pivot.x, // right
+				   bmpSize.height - pivot.y  // bottom
+			};
 			m_d2dContext->DrawBitmap(
 				info.bitmap.Get(),
 				&destRect,
@@ -210,7 +222,7 @@ void D2DRenderer::DrawGameObject(std::vector<RenderInfo>& renderInfo, D2D1::Matr
 
 }
 
-void D2DRenderer::DrawUIObject(std::vector<UIRenderInfo>& uiRenderInfo, D2D1::Matrix3x2F cameraMatrix)
+void D2DRenderer::DrawUIObject(std::vector<UIRenderInfo>& uiRenderInfo)
 {
 	std::vector<UIRenderInfo> sortedUIInfo = uiRenderInfo;
 	std::sort(sortedUIInfo.begin(), sortedUIInfo.end(), [](const UIRenderInfo& a, const UIRenderInfo& b) {return a.layer < b.layer; });
@@ -241,28 +253,110 @@ void D2DRenderer::DrawUIObject(std::vector<UIRenderInfo>& uiRenderInfo, D2D1::Ma
 		};
 
 		// 월드 변환 없이, 그냥 위치만 적용
+
 		D2D1_MATRIX_3X2_F mat = D2D1::Matrix3x2F::Translation(finalPos.x, finalPos.y);
-		mat = D2D1::Matrix3x2F::Scale(1, -1) * mat * cameraMatrix;
 
 		m_d2dContext->SetTransform(mat);
 
-		D2D1_RECT_F destRect = {
-					-info.pivot.x,                 // left
-					-info.pivot.y,                 // top
-					size.x - info.pivot.x, // right
-					size.y - info.pivot.y  // bottom
-		};
+		D2D1_RECT_F destRect;
+		if (info.useSrcRect)
+		{
+			float srcWidth = info.srcRect.right - info.srcRect.left;
+			float srcHeight = info.srcRect.bottom - info.srcRect.top;
 
-		m_d2dContext->DrawBitmap(
-			info.bitmap.Get(),
-			&destRect,
-			info.opacity,
-			D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
-			nullptr
-		);
+			destRect = {
+				-info.pivot.x,
+				-info.pivot.y,
+				srcWidth - info.pivot.x,
+				srcHeight - info.pivot.y
+			};
+
+			m_d2dContext->DrawBitmap(
+				info.bitmap.Get(),
+				&destRect,
+				info.opacity,
+				D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+				&info.srcRect
+			);
+		}
+		else
+		{
+			destRect = {
+				-info.pivot.x,
+				-info.pivot.y,
+				size.x - info.pivot.x,
+				size.y - info.pivot.y
+			};
+
+			m_d2dContext->DrawBitmap(
+				info.bitmap.Get(),
+				&destRect,
+				info.opacity,
+				D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+				nullptr
+			);
+		}
+
 	}
 
 	m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());
+}
+
+void D2DRenderer::DrawUIText(std::vector<UITextInfo>& uiTextInfo)
+{
+	std::vector<UITextInfo> sortedTextInfo = uiTextInfo;
+	std::sort(sortedTextInfo.begin(), sortedTextInfo.end(), [](const UITextInfo& a, const UITextInfo& b) {
+		return a.layer < b.layer;
+	});
+
+	for (const auto& info : sortedTextInfo)
+	{
+		if (!info.textLayout) continue;
+
+		// 브러시 없으면 생성
+		if (!m_textBrush)
+		{
+			m_d2dContext->CreateSolidColorBrush(info.color, &m_textBrush);
+		}
+		else
+		{
+			m_textBrush->SetColor(info.color); // 텍스트마다 색상 적용
+		}
+
+		// 앵커 기준 위치 계산
+		Math::Vector2F finalPos = CalcAnchorOffset(
+			info.parentSize,
+			info.anchor,
+			info.anchoredPosition,
+			info.sizeDelta,
+			info.pivot
+		);
+
+		// 변환 없이 바로 위치 지정
+		m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());
+
+		// 레이아웃 사이즈 필요
+		DWRITE_TEXT_METRICS metrics{};
+		info.textLayout->GetMetrics(&metrics);
+
+		float layoutWidth = metrics.width;
+		float layoutHeight = metrics.height;
+
+
+		Math::Vector2F drawPos = {
+			finalPos.x + layoutWidth * 0.5f,
+			finalPos.y + layoutHeight * 0.5f
+		};
+
+
+		// 텍스트 렌더링
+		m_d2dContext->DrawTextLayout(
+			D2D1::Point2F(drawPos.x, drawPos.y),
+			info.textLayout.Get(),
+			m_textBrush.Get(),
+			D2D1_DRAW_TEXT_OPTIONS_NO_SNAP
+		);
+	}
 }
 
 
@@ -294,10 +388,16 @@ Math::Vector2F D2DRenderer::CalcAnchorOffset(const Math::Vector2F& parentSize,
 		anchorAreaSize.y + sizeDelta.y
 	};
 
+	// AnchoredPosition을 Anchor 중심 기준으로 보정
+	Math::Vector2F anchorCenter = {
+		anchorAreaMin.x + anchorAreaSize.x * 0.5f,
+		anchorAreaMin.y + anchorAreaSize.y * 0.5f
+	};
+
 	// 최종 위치 계산
 	Math::Vector2F finalPos = {
-		anchorAreaMin.x + anchoredPosition.x - size.x * pivot.x,
-		anchorAreaMin.y + anchoredPosition.y - size.y * pivot.y
+		anchorCenter.x + anchoredPosition.x - size.x * pivot.x,
+		anchorCenter.y + anchoredPosition.y - size.y * pivot.y
 	};
 
 	return finalPos;

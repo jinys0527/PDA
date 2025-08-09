@@ -35,6 +35,7 @@ public:
 
 	float GetRailHeight() { return m_RailHeight; }
 
+	void SetShadowBitmap(Microsoft::WRL::ComPtr<ID2D1Bitmap1> shadow);
 
 	void SetZ(float value) { m_Z = value; }
 	float GetZ() { return m_Z; }
@@ -47,11 +48,15 @@ public:
 
 	int GetHp() { return m_Hp; }
 	
-	void SetHp(int value) { m_Hp = value; }
+	void SetHp(int value);
 
 	bool GetIsFlip() { return m_IsFlip; }
 
 	void SetIsFlip(bool value) { m_IsFlip = value; }
+
+	void SetBullet(int value);
+
+	int GetBullet() { return m_ReinforcedBullet; }
 
 protected:
 
@@ -76,5 +81,11 @@ protected:
 	float m_Z = 0;
 
 	int m_Hp = 3;
+
+	float m_HoldingAttack = 0;
+
+	int m_ReinforcedBullet = 0;
+
+	Microsoft::WRL::ComPtr<ID2D1Bitmap1> m_ShadowBitmap;
 };
 

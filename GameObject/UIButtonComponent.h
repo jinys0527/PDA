@@ -5,7 +5,7 @@
 #include "Event.h"
 #include "FSM.h"
 
-class D2DRenderer;
+class UIImageComponent;
 
 class UIButtonComponent : public UIComponent
 {
@@ -16,12 +16,14 @@ public:
 
 	virtual ~UIButtonComponent();
 	void SetOnClick(std::function<void()> callback);
-	void Render(D2DRenderer* renderer);
+
 	void Update(float deltaTime) override;
 	void OnEvent(EventType type, const void* data) override;
 
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;
+
+	FSM& GetFSM() { return m_FSM; }
 
 	void Start();
 private:

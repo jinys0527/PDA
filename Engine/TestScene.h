@@ -10,7 +10,7 @@ class BlackBoard;
 class TestScene : public Scene
 {
 public:
-	TestScene(EventDispatcher& eventDispatcher, AssetManager& assetManager, SoundAssetManager& soundAssetManager,SoundManager& soundManager) : Scene(eventDispatcher, assetManager, soundAssetManager, soundManager) {}
+	TestScene(EventDispatcher& eventDispatcher, AssetManager& assetManager, SoundAssetManager& soundAssetManager,SoundManager& soundManager, D2DRenderer& renderer) : Scene(eventDispatcher, assetManager, soundAssetManager, soundManager, renderer) {}
 	virtual ~TestScene() = default;
 
 	void Initialize() override;
@@ -21,7 +21,11 @@ public:
 
 	void FixedUpdate() override;
 	void Update(float deltaTime) override;
-	void Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo) override;
+
+	void Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo, std::vector<UITextInfo>& uiTextInfo) override;
+
+	void SavePlayerInfo();
+	void LoadPlayerInfo();
 
 private:
 	//Çàµ¿Æ®¸® Å×½ºÆ®¿ëµµ
@@ -30,6 +34,5 @@ private:
 	std::unique_ptr<BossBehaviorTree> m_BehaviorTree;
 	std::unique_ptr<BlackBoard> m_BlackBoard;
 	int cnt = 0;
-
 };
 

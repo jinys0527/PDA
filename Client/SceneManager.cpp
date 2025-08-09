@@ -6,8 +6,9 @@
 
 void SceneManager::Initialize()
 {
-	auto testScene = AddScene("TestScene", std::make_shared<TestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager));
-	auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager));
+	m_SoundManager.Init();
+	auto testScene = AddScene("TestScene", std::make_shared<TestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer));
+	auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer));
 	
 	testScene->Initialize();
 	titleScene->Initialize();
@@ -21,7 +22,7 @@ void SceneManager::Update(float deltaTime)
 {
 	static float totalTime = 0;
 	totalTime += deltaTime;
-	if (totalTime >= 0.2f)
+	if (totalTime >= 0.016f)
 		m_CurrentScene->FixedUpdate();
 	m_CurrentScene->Update(deltaTime);
 }
@@ -30,8 +31,9 @@ void SceneManager::Render()
 {
 	std::vector<RenderInfo> renderInfo;
 	std::vector<UIRenderInfo> uiRenderInfo;
-	m_CurrentScene->Render(renderInfo, uiRenderInfo);
-	m_Renderer.Draw(renderInfo, uiRenderInfo);
+	std::vector<UITextInfo> uiTextInfo;
+	m_CurrentScene->Render(renderInfo, uiRenderInfo, uiTextInfo);
+	m_Renderer.Draw(renderInfo, uiRenderInfo, uiTextInfo);
 }
 
 std::shared_ptr<Scene> SceneManager::AddScene(const std::string& name, std::shared_ptr<Scene> scene)
@@ -49,6 +51,7 @@ void SceneManager::SetCurrentScene(const std::string& name)
 	if (it != m_Scenes.end())
 	{
 		m_CurrentScene = it->second;
+		m_CurrentScene->Enter();
 		m_Camera = m_CurrentScene->GetMainCamera();
 		m_Renderer.SetCamera(m_Camera);
 	}
@@ -57,4 +60,18 @@ void SceneManager::SetCurrentScene(const std::string& name)
 std::shared_ptr<Scene> SceneManager::GetCurrentScene() const
 {
 	return m_CurrentScene;
+}
+
+void SceneManager::ChangeScene(const std::string& name)
+{
+	if(m_CurrentScene)
+		m_CurrentScene->Leave();
+	auto it = m_Scenes.find(name);
+	if (it != m_Scenes.end())
+	{
+		m_CurrentScene = it->second;
+		m_CurrentScene->Enter();
+		m_Camera = m_CurrentScene->GetMainCamera();
+		m_Renderer.SetCamera(m_Camera);
+	}
 }

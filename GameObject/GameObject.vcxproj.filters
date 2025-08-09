@@ -159,6 +159,7 @@
     <ClInclude Include="DropObstacle.h">
       <Filter>Objects\Header Files</Filter>
     </ClInclude>
+
     <ClInclude Include="GameObject.h">
       <Filter>Objects\Header Files</Filter>
     </ClInclude>
@@ -174,8 +175,27 @@
     <ClInclude Include="Obstacle.h">
       <Filter>Objects\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SoundUI.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GraffitiComponent.h">
+      <Filter>Component\Header</Filter>
+    </ClInclude>
     <ClInclude Include="PlayerObject.h">
       <Filter>Objects\Header Files</Filter>
+    </ClInclude>
+
+    <ClInclude Include="Object.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RunPlayerController.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="UISliderComponent.h">
+      <Filter>Component\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Telegraph.h">
+      <Filter>Component\Header</Filter>
     </ClInclude>
     <ClInclude Include="RunPlayerController.h">
       <Filter>Objects\Header Files</Filter>
@@ -189,6 +209,7 @@
     <ClInclude Include="Telegraph.h">
       <Filter>Objects\Header Files</Filter>
     </ClInclude>
+
     <ClInclude Include="UIComponent.h">
       <Filter>Objects\Header Files</Filter>
     </ClInclude>
@@ -216,5 +237,134 @@
     <Filter Include="Objects\Source Files">
       <UniqueIdentifier>{5b944315-1acd-4d83-8799-110f9d0f50de}</UniqueIdentifier>
     </Filter>
+
+    <ClInclude Include="DropObstacle.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="DroneComponent.h">
+      <Filter>Component\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="FlyingObstacleComponent.h">
+      <Filter>Component\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="UIGridComponent.h">
+      <Filter>Component\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="HeartUIComponent.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletUIComponent.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AnimationComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxColliderComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleColliderComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraObject.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidbodyComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RectTransformComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UIComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UIImageComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UIButtonComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UITextComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationController.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UIObject.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonUI.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Obstacle.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerObject.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RunPlayerController.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundUI.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UISliderComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GraffitiObject.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GraffitiComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Telegraph.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemObject.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DropObstacle.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DroneComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UIGridComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="FlyingObstacleComponent.cpp">
+      <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="HeartUIComponent.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletUIComponent.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

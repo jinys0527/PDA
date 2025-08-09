@@ -12,9 +12,7 @@ GameObject::GameObject(EventDispatcher& eventDispatcher) : Object(eventDispatche
 
 void GameObject::Render(std::vector<RenderInfo>& renderInfo)
 {
-	auto spriteRenderer = GetComponent<SpriteRenderer>();
-
-	if (spriteRenderer)
+	for(auto& spriteRenderer : GetComponents<SpriteRenderer>())
 	{
 		RenderInfo info;
 		info.bitmap = spriteRenderer->GetTexture();
@@ -27,10 +25,6 @@ void GameObject::Render(std::vector<RenderInfo>& renderInfo)
 		info.srcRect = spriteRenderer->GetSrcRect();
 		renderInfo.emplace_back(info);
 	}
-	else
-	{
-		return;
-	}
 }
 
 void GameObject::Serialize(nlohmann::json& j) const
@@ -39,14 +33,16 @@ void GameObject::Serialize(nlohmann::json& j) const
 	j["components"] = nlohmann::json::array();
 	for (const auto& component : m_Components)
 	{
-		const char* typeName = component.second->GetTypeName();
-
-		if(strcmp(typeName, "TransformComponent") == 0 || strcmp(typeName, "SpriteRenderer") == 0)
+		for (const auto& comp : component.second)
 		{
-			nlohmann::json compJson;		
-			compJson["type"] = typeName;
-			component.second->Serialize(compJson["data"]);
-			j["components"].push_back(compJson);
+			const char* typeName = comp->GetTypeName();
+			if (strcmp(typeName, "TransformComponent") == 0 || strcmp(typeName, "SpriteRenderer") == 0)
+			{
+				nlohmann::json compJson;
+				compJson["type"] = typeName;
+				comp->Serialize(compJson["data"]);
+				j["components"].push_back(compJson);
+			}
 		}
 	}
 }
@@ -60,15 +56,14 @@ void GameObject::Deserialize(const nlohmann::json& j)
 		std::string typeName = compJson.at("type");
 
 		// 기존 컴포넌트가 있으면 찾아서 갱신
-		auto it = std::find_if(m_Components.begin(), m_Components.end(),
-			[&](const auto& pair)
-			{
-				return pair.second->GetTypeName() == typeName;
-			});
-
-		if (it != m_Components.end())
+		auto it = m_Components.find(typeName);
+		if (it != m_Components.end() && !it->second.empty())
 		{
-			it->second->Deserialize(compJson.at("data"));
+			// 해당 타입의 모든 컴포넌트에 대해 Deserialize 시도
+			for (auto& comp : it->second)
+			{
+				comp->Deserialize(compJson.at("data"));
+			}
 		}
 		else
 		{

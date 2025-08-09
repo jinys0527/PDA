@@ -15,6 +15,9 @@ void RunPlayerController::Start()
 	GetEventDispatcher().AddListener(EventType::KeyDown, this);// 이벤트 추가
 	GetEventDispatcher().AddListener(EventType::KeyUp, this);
 	GetEventDispatcher().AddListener(EventType::OnPlayerCollisonOccur, this);
+	GetEventDispatcher().AddListener(EventType::OnPlayerReinforcedCollisionOccur, this);
+	GetEventDispatcher().AddListener(EventType::MouseRightClick, this);
+	GetEventDispatcher().AddListener(EventType::MouseRightClickUp, this);
 
 	m_PlayerOwner = (PlayerObject*)(m_Owner);
 
@@ -23,16 +26,19 @@ void RunPlayerController::Start()
 
 RunPlayerController::~RunPlayerController()
 {
-	m_PlayerOwner->GetEventDispatcher().RemoveListener(EventType::KeyDown, this);// 이벤트 추가
-	m_PlayerOwner->GetEventDispatcher().RemoveListener(EventType::KeyUp, this);
-	m_PlayerOwner->GetEventDispatcher().RemoveListener(EventType::OnPlayerCollisonOccur, this);
+	GetEventDispatcher().RemoveListener(EventType::KeyDown, this);// 이벤트 추가
+	GetEventDispatcher().RemoveListener(EventType::KeyUp, this);
+	GetEventDispatcher().RemoveListener(EventType::OnPlayerCollisonOccur, this);
+	GetEventDispatcher().RemoveListener(EventType::OnPlayerReinforcedCollisionOccur, this);	
+	GetEventDispatcher().RemoveListener(EventType::MouseRightClick, this);
+	GetEventDispatcher().RemoveListener(EventType::MouseRightClickUp, this);
 }
 
 
 void RunPlayerController::Update(float deltaTime)
 {
 	// Transform 컴포넌트에 있던 움직이는 함수 잠시 가져온 것 
-
+	m_IsMoving = false;
 	if (m_RigidBodyComponent == nullptr)
 	{
 		m_RigidBodyComponent = m_Owner->GetComponent<RigidbodyComponent>();
@@ -100,11 +106,17 @@ void RunPlayerController::Update(float deltaTime)
 
 	if (delta.x != 0 || delta.y != 0)
 	{
-		m_Owner->GetComponent<TransformComponent>()->Translate(delta);// 실제론 이거 써야해요
 		if (m_IsBoss)
 		{
+			Math::Vector2F normal = { delta.x, (m_Z - prevZ)*100 };
+			normal.Normalize();
+			//m_Z -= normal.y;
+
+			delta.x *= abs(normal.x);
+			m_Z -= normal.y * 0.01f;
+
 			std::string state = m_PlayerOwner->GetFSM().GetCurrentState();
-			if (state == "Idle" || state == "Kick" || state == "Hurt")
+			if (state == "Idle" || state == "Kick" || state == "Hurt" || state == "Run")
 			{
 				if (delta.x > 0)
 				{
@@ -117,8 +129,12 @@ void RunPlayerController::Update(float deltaTime)
 			}
 			
 		}
-		//m_Owner->GetComponent<TransformComponent>()->SetPosition(delta);// 보기 전용(z가 잘 되는지 y로 보는거)
+
+		m_Owner->GetComponent<TransformComponent>()->Translate(delta);// 실제론 이거 써야해요
 	}
+
+	if (delta.x != 0 || m_Z != prevZ)
+		m_IsMoving = true;
 
 	m_PlayerOwner->SetZ(m_Z);
 
@@ -144,11 +160,20 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 		case 'A': m_IsAPressed = isDown; break;
 		case 'S': m_IsSPressedDown = isDown; m_IsSPressed = isDown; break;
 		case 'D': m_IsDPressed = isDown; break;
-		case 'P':
+		case 'G':
 			m_PlayerOwner->GetEventDispatcher().Dispatch(EventType::OnPlayerCollisonOccur, (const void*)1);
 			break;
 		case 'Q':
 			m_IsBoss = !m_IsBoss;
+			break;
+		case 'B':
+			m_PlayerOwner->GetEventDispatcher().Dispatch(EventType::OnPlayerReinforcedCollisionOccur, (const void*)1);
+			break;
+		case 'V':
+			m_PlayerOwner->GetEventDispatcher().Dispatch(EventType::OnPlayerReinforcedCollisionOccur, (const void*)-1);
+			break;
+		case 'H':
+			m_PlayerOwner->GetEventDispatcher().Dispatch(EventType::OnPlayerCollisonOccur, (const void*)-1);
 			break;
 		case VK_SPACE : m_IsSpacePressed = isDown; break;
 		case VK_SHIFT : m_IsShiftPressed = isDown; break;
@@ -173,15 +198,15 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 		default: break;
 		}
 	}
-
-	if (type == EventType::OnPlayerCollisonOccur)
+	else if (type == EventType::OnPlayerCollisonOccur)
 	{
 		if (m_PlayerOwner->GetInvincibleTime() == 0 || (int)data <= 0)
 		{
 			int hp = m_PlayerOwner->GetHp();
 			hp -= (int)data;
+			if (hp > 3)
+				hp = 3;
 			m_PlayerOwner->SetHp(hp);
-			m_PlayerOwner->GetEventDispatcher().Dispatch(EventType::OnPlayerHit, (const void*)hp);// 현재 hp를 보냄
 			if ((int)data > 0)
 			{
 				if (hp > 0)
@@ -195,6 +220,24 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 				}
 			}
 		}
+	}
+	else if (type == EventType::OnPlayerReinforcedCollisionOccur)
+	{
+		int reinforcedBullet = m_PlayerOwner->GetBullet();
+		reinforcedBullet += (int)data;
+		if (reinforcedBullet < 0)
+			reinforcedBullet = 0;
+		m_PlayerOwner->SetBullet(reinforcedBullet);
+	}
+	else if (type == EventType::MouseRightClick)
+	{
+		m_IsHoldingAttack = true;
+		m_PlayerOwner->GetFSM().Trigger("WaitSpray");
+	}
+	else if (type == EventType::MouseRightClickUp)
+	{
+		m_IsHoldingAttack = false;
+		m_PlayerOwner->GetFSM().Trigger("Shoot");
 	}
 }
 
@@ -225,7 +268,8 @@ void RunPlayerController::JumpCheck()
 {
 	if (m_IsSpacePressed && m_IsShiftPressed == false)
 	{
-		if (m_IsJump == false)
+		auto state = m_PlayerOwner->GetFSM().GetCurrentState();
+		if (m_IsJump == false && (state == "Idle" || state == "Run" || state == "Kick" || state == "Slide"))
 		{
 			m_IsJumpStart = true;
 			m_IsJump = true;
@@ -257,7 +301,8 @@ void RunPlayerController::SlideCheck()
 	}
 	else
 	{
-		if (m_IsShiftPressed)
+		auto state = m_PlayerOwner->GetFSM().GetCurrentState();
+		if (m_IsShiftPressed && (state == "Idle" || state == "Run" || state == "Kick"))
 		{
 			//m_IsSlide = true; // 바닥에서 shift 하면 웅크림
 			m_PlayerOwner->GetFSM().Trigger("Slide");

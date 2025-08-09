@@ -239,6 +239,7 @@
     <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="AnimationController.h" />
     <ClInclude Include="Background.h" />
+    <ClInclude Include="BulletUIComponent.h" />
     <ClInclude Include="ButtonUI.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="CameraObject.h" />
@@ -247,9 +248,11 @@
     <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="CoreTypes.h" />
+    <ClInclude Include="DroneComponent.h" />
     <ClInclude Include="DropObstacle.h" />
     <ClInclude Include="FlyingObstacleComponent.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="HeartUIComponent.h" />
     <ClInclude Include="ItemObject.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="GraffitiComponent.h" />
@@ -265,6 +268,7 @@
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="UIButtonComponent.h" />
     <ClInclude Include="UIComponent.h" />
+    <ClInclude Include="UIGridComponent.h" />
     <ClInclude Include="UIImageComponent.h" />
     <ClInclude Include="UIObject.h" />
     <ClInclude Include="UISliderComponent.h" />
@@ -273,6 +277,7 @@
   <ItemGroup>
     <ClCompile Include="AnimationController.cpp" />
     <ClCompile Include="Background.cpp" />
+    <ClCompile Include="BulletUIComponent.cpp" />
     <ClCompile Include="ButtonUI.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="CameraObject.cpp" />
@@ -280,10 +285,12 @@
     <ClCompile Include="CircleColliderComponent.cpp" />
     <ClCompile Include="ColliderComponent.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="DroneComponent.cpp" />
     <ClCompile Include="DropObstacle.cpp" />
     <ClCompile Include="FlyingObstacleComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="AnimationComponent.cpp" />
+    <ClCompile Include="HeartUIComponent.cpp" />
     <ClCompile Include="ItemObject.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="GraffitiComponent.cpp" />
@@ -299,6 +306,7 @@
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="UIButtonComponent.cpp" />
     <ClCompile Include="UIComponent.cpp" />
+    <ClCompile Include="UIGridComponent.cpp" />
     <ClCompile Include="UIImageComponent.cpp" />
     <ClCompile Include="UIObject.cpp" />
     <ClCompile Include="UISliderComponent.cpp" />

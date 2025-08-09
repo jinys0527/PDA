@@ -21,7 +21,6 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 
 	{ // 좀 많이 길어서 이걸로 닫아주시길
 		{
-
 			State idleState{
 				[this]()
 				{
@@ -35,6 +34,35 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					}
 					std::cout << "idle 들어옴" << std::endl;
 					this->m_KickCool = 0;
+					if (!m_Controller->GetIsBoss())
+					{
+						m_Fsm.Trigger("Run");
+					}
+				},
+				[this](float dt)
+				{
+					if (m_Controller->GetIsMoving())
+						m_Fsm.Trigger("Run");
+				},
+				[]() { std::cout << "idle 나감" << std::endl; }
+			};
+
+			m_Fsm.AddState("Idle", idleState);
+		}
+		{
+			State runState{
+				[this]()
+				{
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
+					{
+						anim->Play("attack");
+						auto sr = this->GetComponent<SpriteRenderer>();
+						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+						sr->SetTextureKey("boss");
+					}
+					std::cout << "run 들어옴" << std::endl;
+					this->m_KickCool = 0;
 				},
 				[this](float dt)
 				{
@@ -44,11 +72,14 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 						this->m_KickCool = 0;
 						this->GetFSM().Trigger("Kick");
 					}
+
+					if (m_Controller->GetIsBoss()&&!m_Controller->GetIsMoving())
+						m_Fsm.Trigger("Idle");
 				},
-				[]() { std::cout << "idle 나감" << std::endl; }
+				[]() { std::cout << "run 나감" << std::endl; }
 			};
 
-			m_Fsm.AddState("Idle", idleState);
+			m_Fsm.AddState("Run", runState);
 		}
 		{
 			State kickState{
@@ -193,6 +224,41 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 			m_Fsm.AddState("Slide", slideState);
 		}
 		{
+			State waitingSprayState{
+					[this]()
+					{
+						auto anim = this->GetComponent<AnimationComponent>();
+						if (anim)
+						{
+							anim->Play("attack", true);
+							auto sr = this->GetComponent<SpriteRenderer>();
+							sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+							sr->SetTextureKey("boss");
+						}
+						this->m_HoldingAttack = 0;
+						std::cout << "waitSpray 들어옴" << std::endl;
+					},
+					[this](float dt)
+					{
+						/*auto anim = this->GetComponent<AnimationComponent>();
+						if (anim)
+						{
+							if (anim->IsAnimationFinished())
+							{
+								anim->Play("attack");
+								this->GetFSM().Trigger("Idle");
+							}
+						}*/
+					if(this->m_Controller->GetIsHoldingAttack())
+						this->m_HoldingAttack += dt;
+						if(m_HoldingAttack >= 1)
+							this->GetFSM().Trigger("ReadySpray");
+					},
+					[]() { std::cout << "waitSpray 나감" << std::endl; } // 착지하면서 공격 끝나면 isJump 꺼지게 할 예정
+			};
+			m_Fsm.AddState("WaitSpray", waitingSprayState);
+		}
+		{
 			State sprayState{
 				[this]() 
 				{
@@ -221,6 +287,70 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 				[]() { std::cout << "spray 나감" << std::endl; } // 착지하면서 공격 끝나면 isJump 꺼지게 할 예정
 			};
 			m_Fsm.AddState("Spray", sprayState);
+		}
+		{
+			State readySprayState{
+					[this]()
+					{
+						auto anim = this->GetComponent<AnimationComponent>();
+						if (anim)
+						{
+							anim->Play("attack", true);
+							auto sr = this->GetComponent<SpriteRenderer>();
+							sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+							sr->SetTextureKey("boss");
+						}
+						std::cout << "sprayReady 들어옴" << std::endl;
+					},
+					[this](float dt)
+					{
+						//auto anim = this->GetComponent<AnimationComponent>();
+						//if (anim)
+						//{
+						//	if (anim->IsAnimationFinished())
+						//	{
+						//		anim->Play("attack");
+						//		this->GetFSM().Trigger("Idle");
+						//	}
+						//}
+						if (this->m_Controller->GetIsHoldingAttack())
+						this->m_HoldingAttack += dt;
+						if (m_HoldingAttack >= 10)
+							this->GetFSM().Trigger("Shoot");
+					},
+					[]() { std::cout << "sprayReady 나감" << std::endl; } // 착지하면서 공격 끝나면 isJump 꺼지게 할 예정
+			};
+			m_Fsm.AddState("ReadySpray", readySprayState);
+		}
+		{
+			State StrongSprayState{
+				[this]()
+				{
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
+					{
+						anim->Play("attack", false);
+						auto sr = this->GetComponent<SpriteRenderer>();
+						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+						sr->SetTextureKey("boss");
+					}
+					std::cout << "strongSpray 들어옴" << std::endl;
+				},
+				[this](float dt)
+				{
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
+					{
+						if (anim->IsAnimationFinished())
+						{
+							anim->Play("attack");
+							this->GetFSM().Trigger("Idle");
+						}
+					}
+				},
+				[]() { std::cout << "strongSpray 나감" << std::endl; } // 착지하면서 공격 끝나면 isJump 꺼지게 할 예정
+			};
+			m_Fsm.AddState("StrongSpray", StrongSprayState);
 		}
 		{
 			State hurtState{
@@ -275,17 +405,26 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 		{
 			m_Fsm.AddTransition("Idle", "Kick", "Kick");// Idle Kick
 			m_Fsm.AddTransition("Kick", "Idle", "Idle");// Kick Idle
+			m_Fsm.AddTransition("Idle", "Run", "Run");// Idle Kick
+			m_Fsm.AddTransition("Run", "Idle", "Idle");// Idle Kick
+			m_Fsm.AddTransition("Run", "Kick", "Kick");// Idle Kick
+			m_Fsm.AddTransition("Kick", "Run", "Run");// Idle Kick
 			m_Fsm.AddTransition("Idle", "Slide", "Slide");// Idle Slide
 			m_Fsm.AddTransition("Slide", "Idle", "Idle");// Slide Idle
+			m_Fsm.AddTransition("Run", "Slide", "Slide");// Idle Slide
 			m_Fsm.AddTransition("Kick", "Slide", "Slide");// Kick Slide
-			m_Fsm.AddTransition("Idle", "Spray", "Spray");// Idle Spray
+			m_Fsm.AddTransition("Idle", "WaitSpray", "WaitSpray");// Idle Spray
+			m_Fsm.AddTransition("Run", "WaitSpray", "WaitSpray");// Idle Spray
+			m_Fsm.AddTransition("Kick", "WaitSpray", "WaitSpray");// Kick Spray
+			m_Fsm.AddTransition("WaitSpray", "Spray", "Shoot");// Kick Spray
+			m_Fsm.AddTransition("WaitSpray", "ReadySpray", "ReadySpray");// Kick Spray
+			m_Fsm.AddTransition("ReadySpray", "StrongSpray", "Shoot");// Kick Spray
 			m_Fsm.AddTransition("Spray", "Idle", "Idle");// Spray Idle
-			m_Fsm.AddTransition("Kick", "Spray", "Spray");// Kick Spray
-			m_Fsm.AddTransition("Spray", "Slide", "Slide");// Spray Slide
+			m_Fsm.AddTransition("StrongSpray", "Idle", "Idle");// Spray Idle
 			m_Fsm.AddTransition("Idle", "JumpUp", "JumpUp");// Idle JumpUp
+			m_Fsm.AddTransition("Run", "JumpUp", "JumpUp");// Idle JumpUp
 			m_Fsm.AddTransition("Kick", "JumpUp", "JumpUp");// Kick JumpUp
 			m_Fsm.AddTransition("Slide", "JumpUp", "JumpUp");// Slide JumpUp
-			m_Fsm.AddTransition("Spray", "JumpUp", "JumpUp");// Spray JumpUp
 			m_Fsm.AddTransition("JumpUp", "JumpPose", "JumpPose");// JumpUp JumpPose
 			m_Fsm.AddTransition("JumpUp", "JumpDown", "JumpDown");// JumpUp JumpDown
 			m_Fsm.AddTransition("JumpPose", "JumpDown", "JumpDown");// JumpPose JumpDown
@@ -345,7 +484,7 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 		}
 		{
 			RenderInfo info;
-			info.bitmap = sprite->GetTexture();
+			info.bitmap = m_ShadowBitmap;
 			Math::Vector2F pos = m_Transform->GetPosition();
 			float y = pos.y;
 			pos.y = m_Z * m_RailHeight;
@@ -355,23 +494,34 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 			size._22 = 0.5f;
 			info.worldMatrix = size * m_Transform->GetWorldMatrix();
 
-			D2D1_SIZE_F rectSize;
-			rectSize.width = sprite->GetSrcRect().right - sprite->GetSrcRect().left;
-			rectSize.height = sprite->GetSrcRect().bottom - sprite->GetSrcRect().top;
-			sprite->SetPivotPreset(SpritePivotPreset::Center, rectSize);
-			info.pivot = sprite->GetPivot(); // 바꾸어 놓음
+			info.pivot = { m_ShadowBitmap.Get()->GetSize().width*0.5f, m_ShadowBitmap.Get()->GetSize().height*0.5f }; // 바꾸어 놓음
 			// UI가 아닌 일반 오브젝트 위치로 설정
 			//float opacity = sprite->GetTexture().Get()->GetSize().height / (y + 1);
 			float forSin = (y - m_Z*m_RailHeight) / (sprite->GetTexture().Get()->GetSize().height);
 			forSin = forSin > asin(1) ? asin(1) : forSin;
 			float opacity = sin(forSin);
 			info.opacity = 1.0f - opacity;
-			info.useSrcRect = sprite->GetUseSrcRect();
-			info.srcRect = sprite->GetSrcRect();
 			renderInfo.push_back(info);
 			pos.y = y;
 			m_Transform->SetPosition(pos);
 		}
 	}
 
+}
+
+void PlayerObject::SetShadowBitmap(Microsoft::WRL::ComPtr<ID2D1Bitmap1> shadow)
+{
+	m_ShadowBitmap = shadow;
+}
+
+void PlayerObject::SetHp(int value)
+{
+	m_Hp = value; 
+	GetEventDispatcher().Dispatch(EventType::OnPlayerHpChanged, (const void*)value);// 현재 hp를 보냄}
+}
+
+void PlayerObject::SetBullet(int value)
+{
+	m_ReinforcedBullet = value; 
+	GetEventDispatcher().Dispatch(EventType::OnPlayerReinforcedBulletChanged, (const void*)value);
 }

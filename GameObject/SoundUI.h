@@ -10,19 +10,19 @@ public:
 	SoundUI(SoundManager& soundManager, EventDispatcher& eventDispatcher);
 	~SoundUI() = default;
 
-	UISliderComponent* GetMaster() { return m_Master.get(); }
-	UISliderComponent* GetBGM() { return m_BGM.get(); }
-	UISliderComponent* GetSFX() { return m_SFX.get(); }
-	UISliderComponent* GetUI() { return m_UI.get(); }
+	UISliderComponent* GetMaster() { return m_Master; }
+	UISliderComponent* GetBGM() { return m_BGM; }
+	UISliderComponent* GetSFX() { return m_SFX; }
+	UISliderComponent* GetUI() { return m_UI; }
 
 	void SetSlider();
 
 private:
 	SoundManager& m_SoundManager;
 
-	std::unique_ptr<UISliderComponent> m_Master;
-	std::unique_ptr<UISliderComponent> m_BGM;
-	std::unique_ptr<UISliderComponent> m_SFX;
-	std::unique_ptr<UISliderComponent> m_UI;
+	UISliderComponent* m_Master;
+	UISliderComponent* m_BGM;
+	UISliderComponent* m_SFX;
+	UISliderComponent* m_UI;
 };
 

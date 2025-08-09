@@ -38,7 +38,7 @@ public:
 
 	const float& GetOpacity() const { return m_Opacity; }
 
-	void SetPivotPreset(ImagePivotPreset spp, const D2D1_SIZE_F& size);
+	void SetPivotPreset(ImagePivotPreset ipp, const D2D1_SIZE_F& size);
 
 	Microsoft::WRL::ComPtr<ID2D1Bitmap1> GetTexture() const;
 	const Math::Vector2F& GetPivot() const

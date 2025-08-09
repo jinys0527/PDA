@@ -6,7 +6,11 @@ enum class EventType
 	KeyDown,
 	KeyUp,
 	MouseLeftClick,
+	MouseLeftClickHold,
+	MouseLeftClickUp,
 	MouseRightClick,
+	MouseRightClickHold,
+	MouseRightClickUp,
 
 	//UI
 	Hovered,
@@ -19,10 +23,13 @@ enum class EventType
 	CollisionEnter,
 	CollisionStay,
 	CollisionExit,
+	CollisionTrigger,
 
 	//Game
 	OnPlayerCollisonOccur, // 플레이어 충돌 플레이어 피격 전 무적 판정 등 체크
-	OnPlayerHit, // 플레이어 진짜 피격
+	OnPlayerReinforcedCollisionOccur, // 플레이어 충돌 플레이어 피격 전 무적 판정 등 체크
+	OnPlayerHpChanged, // 플레이어 진짜 피격
+	OnPlayerReinforcedBulletChanged,
 	OnPlayerDeath, // 플레이어 죽음
 	OnScoreChange,
 	OnBossScene

@@ -4,17 +4,17 @@
 
 class TransformComponent;
 
-class FlyingObstacleComponent : public Component
+class DroneComponent : public Component
 {
 public:
-	static constexpr const char* StaticTypeName = "FlyingObstacleComponent";
+	static constexpr const char* StaticTypeName = "DroneComponent";
 	virtual const char* GetTypeName() const override { return StaticTypeName; }
 
-	FlyingObstacleComponent();
+	DroneComponent();
 
 	void Start();
 
-	virtual ~FlyingObstacleComponent() = default;
+	virtual ~DroneComponent() = default;
 
 	virtual void Update(float deltaTime) override;// 추후 더 추가할 업데이트
 
@@ -23,15 +23,10 @@ public:
 	virtual void Serialize(nlohmann::json& j) const override;
 	virtual void Deserialize(const nlohmann::json& j) override;
 
-private:	
+private:
 	TransformComponent* m_TransformComponent;
 
-	float m_Z = 0;
+	float m_Delay;
 
-	float m_MaxFallingSpeed = 1500;
-	float m_FallingSpeed = 0;
-	float m_Delay = 0;
-
-	bool isDone = false;
 };
 
