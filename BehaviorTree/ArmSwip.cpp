@@ -32,6 +32,15 @@ NodeState ArmSwip::Tick(BlackBoard& bb, float deltaTime)
         m_TargetIndex.push_back(7);
         m_TargetIndex.push_back(12);
 
+        for (int i = 0; i < m_MoveStartIndex.size(); i++)
+        {
+            m_MoveStartPos.push_back(m_Telegraphs[m_MoveStartIndex[i]]->GetInitPos());
+            m_MoveTargetPos.push_back(m_Telegraphs[m_TargetIndex[i]]->GetInitPos());
+        }
+
+
+
+
         m_Initialized = true;
 
     }
@@ -153,9 +162,6 @@ void ArmSwip::EndWarning(BlackBoard& bb)
     for (int i = 0; i < m_MoveStartIndex.size(); i++)
     {
         m_Telegraphs[m_MoveStartIndex[i]]->SetColliderActive(true);
-
-        m_MoveStartPos.push_back(m_Telegraphs[m_MoveStartIndex[i]]->GetInitPos());
-        m_MoveTargetPos.push_back(m_Telegraphs[m_TargetIndex[i]]->GetInitPos());
     }
     
     m_IsMoving = true;
@@ -191,5 +197,6 @@ void ArmSwip::Reset()
     m_MoveStartPos.clear();    // 좌표 버퍼 초기화
     m_MoveTargetPos.clear();
 
+    m_Initialized = false;
 }
 

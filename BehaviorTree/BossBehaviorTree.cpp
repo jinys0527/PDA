@@ -139,7 +139,7 @@ void BossBehaviorTree::Initialize()
 
 #pragma region 1-4
 	// 1-4
-	auto P1_Skill_4_5_Wait = std::make_shared<WaitNode>("P1_Skill_4_5_Wait", 0.25f);
+	auto P1_Skill_4_5_Wait = std::make_shared<WaitNode>("P1_Skill_4_5_Wait", 1.25f);
 	auto P1_Skill_4_5_ArmSmash_3 = std::make_shared<ArmSmash>("Row_3");
 
 	auto P1_Skill_4_4_ArmSmash_2 = std::make_shared<ArmSmash>("Row_2");
@@ -147,7 +147,7 @@ void BossBehaviorTree::Initialize()
 	P1_Skill_4_4_Sequence->AddChild(P1_Skill_4_5_Wait);
 	P1_Skill_4_4_Sequence->AddChild(P1_Skill_4_5_ArmSmash_3);
 
-	auto P1_Skill_4_3_Wait = std::make_shared<WaitNode>("P1_Skill_4_3_Wait", 0.25f);
+	auto P1_Skill_4_3_Wait = std::make_shared<WaitNode>("P1_Skill_4_3_Wait", 1.25f);
 	auto P1_Skill_4_3_Parallel = std::make_shared<ParallelNode>("P1_Skill_4_3_Parallel");
 	P1_Skill_4_3_Parallel->AddChild(P1_Skill_4_4_ArmSmash_2);
 	P1_Skill_4_3_Parallel->AddChild(P1_Skill_4_4_Sequence);
@@ -285,7 +285,7 @@ void BossBehaviorTree::Initialize()
 	P3_Skill_3_3_Parallel->AddChild(P3_Skill_3_4_ArmSmash_3);
 	P3_Skill_3_3_Parallel->AddChild(P3_Skill_3_4_Sequence);
 
-	auto P3_Skill_3_2_ArmSwip_L = std::make_shared<ArmSwip>("ArmSwip_L");
+	auto P3_Skill_3_2_ArmSwip_L = std::make_shared<ArmSwip>("Swip_L");
 	auto P3_Skill_3_2_Sequence = std::make_shared<Sequence>("P3_Skill_3_2_Sequence");
 	P3_Skill_3_2_Sequence->AddChild(P3_Skill_3_3_Wait);
 	P3_Skill_3_2_Sequence->AddChild(P3_Skill_3_3_Parallel);

@@ -2,7 +2,7 @@
 
 BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegraphs, std::vector<std::shared_ptr<GameObject>>& anim)
 {
-	SetValue("BossMaxHP", 49.0f);
+	SetValue("BossMaxHP", 100.0f);
 	SetValue("BossCurrHP", GetValue<float>("BossMaxHP").value());
 	SetValue("IdleCoolDown", 1.0f);
 

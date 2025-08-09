@@ -20,6 +20,20 @@ NodeState ArmSmash::Tick(BlackBoard& bb, float deltaTime)
 
         m_AttackRange = bb.GetValue<std::vector<int>>(m_Name).value();
 
+        for (int idx : m_AttackRange)
+        {
+            if (m_minIndex > idx)
+            {
+                m_minIndex = idx;
+            }
+            if (m_maxIndex < idx)
+            {
+                m_maxIndex = idx;
+            }
+        }
+        m_MoveStartPos = m_Telegraphs[m_maxIndex]->GetInitPos();
+        m_MoveTargetPos = m_Telegraphs[m_minIndex]->GetInitPos();
+
         m_Initialized = true;
     }
 #pragma endregion
@@ -108,14 +122,6 @@ void ArmSmash::EndWarning(BlackBoard& bb)
 
     for (int idx : m_AttackRange)
     {
-        if (m_minIndex > idx)
-        {
-            m_minIndex = idx;
-        }
-        if (m_maxIndex < idx)
-        {
-            m_maxIndex = idx;
-        }
         auto& telegraph = m_Telegraphs[idx];
         if (telegraph)
         {
@@ -126,8 +132,6 @@ void ArmSmash::EndWarning(BlackBoard& bb)
 
     m_Telegraphs[m_maxIndex]->SetColliderActive(true);
 
-    m_MoveStartPos = m_Telegraphs[m_maxIndex]->GetInitPos();
-    m_MoveTargetPos = m_Telegraphs[m_minIndex]->GetInitPos();
     m_IsMoving = true;
 
 
