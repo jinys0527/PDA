@@ -239,6 +239,7 @@
     <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="AnimationController.h" />
     <ClInclude Include="Background.h" />
+    <ClInclude Include="BulletUIComponent.h" />
     <ClInclude Include="ButtonUI.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="CameraObject.h" />
@@ -251,6 +252,7 @@
     <ClInclude Include="DropObstacle.h" />
     <ClInclude Include="FlyingObstacleComponent.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="HeartUIComponent.h" />
     <ClInclude Include="ItemObject.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="GraffitiComponent.h" />
@@ -275,6 +277,7 @@
   <ItemGroup>
     <ClCompile Include="AnimationController.cpp" />
     <ClCompile Include="Background.cpp" />
+    <ClCompile Include="BulletUIComponent.cpp" />
     <ClCompile Include="ButtonUI.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="CameraObject.cpp" />
@@ -287,6 +290,7 @@
     <ClCompile Include="FlyingObstacleComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="AnimationComponent.cpp" />
+    <ClCompile Include="HeartUIComponent.cpp" />
     <ClCompile Include="ItemObject.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="GraffitiComponent.cpp" />

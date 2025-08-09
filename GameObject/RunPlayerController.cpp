@@ -225,6 +225,8 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 	{
 		int reinforcedBullet = m_PlayerOwner->GetBullet();
 		reinforcedBullet += (int)data;
+		if (reinforcedBullet < 0)
+			reinforcedBullet = 0;
 		m_PlayerOwner->SetBullet(reinforcedBullet);
 	}
 	else if (type == EventType::MouseRightClick)
