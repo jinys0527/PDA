@@ -4,7 +4,6 @@
 NodeState SkillCondition::Tick(BlackBoard& bb, float deltaTime)
 {
     float skillchance = 0.f;
-
     std::string skillName;
     int skillIndex = 0;
 
@@ -26,19 +25,42 @@ NodeState SkillCondition::Tick(BlackBoard& bb, float deltaTime)
         skillName = "SkillWeight_3";
         skillIndex = 3;
     }
+    else if (m_Name == "Skill_4_Con")
+    {
+        skillchance = bb.GetValue<float>("SkillChance_4").value();
+        skillName = "SkillWeight_4";
+        skillIndex = 4;
+    }
+    else if (m_Name == "Skill_5_Con")
+    {
+        skillchance = bb.GetValue<float>("SkillChance_5").value();
+        skillName = "SkillWeight_5";
+        skillIndex = 5;
+    }
 
     float randomValue = bb.GetValue<float>("RandomValue").value();
 
     if (randomValue < skillchance)
     {
-        //std::cout << m_Name << " 실행 \n";
-
         // 실행된 스킬: 가중치 감소
         float weight = bb.GetValue<float>(skillName).value();
-        bb.SetValue(skillName, 1.0f); // 음수 방지
+        bb.SetValue(skillName, 1.0f); // 1로 초기화
 
+        int n = 0;
         // 실행되지 않은 스킬들: 가중치 증가
-        for (int i = 1; i <= 3; ++i)
+        if (bb.GetValue<int>("CurrPhase").value() == 2)
+        {
+            n = 3;
+            bb.SetValue("SkillChance_4", 0.f);
+            bb.SetValue("SkillChance_5", 0.f);
+
+        }
+        else
+        {
+            n = 5;
+        }
+
+        for (int i = 1; i <= n; ++i)
         {
             if (i == skillIndex) continue; // 실행된 스킬은 건너뜀
 
@@ -52,3 +74,4 @@ NodeState SkillCondition::Tick(BlackBoard& bb, float deltaTime)
 
     return NodeState::Failure;
 }
+

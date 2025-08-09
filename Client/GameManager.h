@@ -22,6 +22,11 @@ public:
 
 	void OnEvent(EventType type, const void* data);
 
+
+	void Reset();
+	
+private:
+
 	int m_playerHp = 3;
 	int m_playerReinforcedAttack = 3;
 	float m_playerXLoc = -1000;
@@ -40,12 +45,12 @@ private:
 
 
 
-	int m_mapTotalLength = 0;// ³ªÁß¿¡ °ÔÀÓ Á¤»ê ÇÏ°Å³ª ¸Ê ÁøÇàµµ º¸¿©ÁÖ±â À§ÇÑ ¸Ê ±æÀÌ ÀúÀå
+	int m_mapTotalLength = 0;// ë‚˜ì¤‘ì— ê²Œì„ ì •ì‚° í•˜ê±°ë‚˜ ë§µ ì§„í–‰ë„ ë³´ì—¬ì£¼ê¸° ìœ„í•œ ë§µ ê¸¸ì´ ì €ì¥
 	int m_mapPlayedLength = 0;
 
-	// ÇÃ·¹ÀÌ¾î À§Ä¡¸¦ ÀúÀåÇÒ Æ÷ÀÎÅÍ Ãß°¡´Â ¾ÈÇØµµ µÇ°ÚÁÒ?
+	// í”Œë ˆì´ì–´ ìœ„ì¹˜ë¥¼ ì €ì¥í•  í¬ì¸í„° ì¶”ê°€ëŠ” ì•ˆí•´ë„ ë˜ê² ì£ ?
 
-	FSM m_Fsm; // Fsm °ÔÀÓ »óÅÂÀÎµ¥ ³ªÁß¿¡ »ç¿ëÇÒµí
+	FSM m_Fsm; // Fsm ê²Œì„ ìƒíƒœì¸ë° ë‚˜ì¤‘ì— ì‚¬ìš©í• ë“¯
 
 	EventDispatcher& m_EventDispatcher;
 };

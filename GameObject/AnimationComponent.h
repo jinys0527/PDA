@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include "AnimationController.h"
+#include <iostream>
 
 class AnimationClip;
 class AssetManager;
@@ -20,9 +21,26 @@ public:
 
 	bool IsAnimationFinished()
 	{
-		return m_AnimationController.IsEnd();
+		if (!m_AnimationController.IsValid())
+			return true;
+
+		if (m_AnimationController.IsLooping())
+			return false;
+
+		return m_AnimationController.IsLastFrameFinished();
 	}
 
+	void SetLoop(bool loop)
+	{
+		m_AnimationController.SetLooping(loop);
+	}
+
+	float GetTotalDuration(const std::string& name)
+	{
+		return m_Clips[name]->GetTotalDuration();
+	}
+
+	void Play();
 	void Play(const std::string& name, bool loop = true);
 
 	void Update(float deltaTime) override;

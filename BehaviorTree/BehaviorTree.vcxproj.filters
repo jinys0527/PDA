@@ -45,7 +45,7 @@
     <ClInclude Include="Inverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PhaseChecker.h">
+    <ClInclude Include="PhaseChecker_1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Repeater.h">
@@ -64,6 +64,33 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TestNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ArmSmash.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ParallelNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WaitNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pick.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Lazer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ArmSwip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhaseChecker_3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ArmStretch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhaseChecker_2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -95,7 +122,7 @@
     <ClCompile Include="Inverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PhaseChecker.cpp">
+    <ClCompile Include="PhaseChecker_1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Repeater.cpp">
@@ -114,6 +141,30 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TestNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArmSmash.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ParallelNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pick.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Lazer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArmSwip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhaseChecker_3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArmStretch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhaseChecker_2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

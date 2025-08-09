@@ -474,6 +474,8 @@ void D2DRenderer::CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1*& outBi
 	);
 
 	hr = m_d2dContext->CreateBitmapFromWicBitmap(converter.Get(), &bmpProps, &outBitmap);
+
+	DX::ThrowIfFailed(hr);
 }
 
 void D2DRenderer::CreateDeviceAndSwapChain(HWND hwnd)

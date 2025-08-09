@@ -13,9 +13,8 @@ GameManager::GameManager(EventDispatcher& eventDispatcher) : m_EventDispatcher(e
 GameManager::~GameManager()
 {
 
-}
 
-void GameManager::Reset()
+oid GameManager::Reset()
 {
 	m_EventDispatcher.RemoveListener(EventType::OnPlayerHpChanged, this);
 	m_EventDispatcher.RemoveListener(EventType::OnPlayerDeath, this);
@@ -43,4 +42,12 @@ void GameManager::OnEvent(EventType type, const void* data)
 		
 		break;
 	}
+}
+
+void GameManager::Reset()
+{
+	m_EventDispatcher.RemoveListener(EventType::OnPlayerHit, this);
+	m_EventDispatcher.RemoveListener(EventType::OnPlayerDeath, this);
+	m_EventDispatcher.RemoveListener(EventType::OnScoreChange, this);
+	m_EventDispatcher.RemoveListener(EventType::OnBossScene, this);
 }
