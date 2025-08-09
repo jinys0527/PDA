@@ -344,8 +344,8 @@ void D2DRenderer::DrawUIText(std::vector<UITextInfo>& uiTextInfo)
 
 
 		Math::Vector2F drawPos = {
-			finalPos.x - layoutWidth * 1.5f,
-			finalPos.y - layoutHeight * 1.5f
+			finalPos.x + layoutWidth * 0.5f,
+			finalPos.y + layoutHeight * 0.5f
 		};
 
 

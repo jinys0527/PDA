@@ -29,6 +29,8 @@
 #include "FSM.h"
 #include "FlyingObstacleComponent.h"
 #include "DroneComponent.h"
+#include "HeartUIComponent.h"
+#include "BulletUIComponent.h"
 //---
 
 
@@ -108,7 +110,7 @@ void TestScene::Initialize()
 	cameraObject->m_Name = "Camera";
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
 	trans3->SetPosition({ 960.0f, 540.0f });
-	//cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5f);
+	cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5f);
 	BoxColliderComponent* cameraCol = cameraObject->AddComponent<BoxColliderComponent>();
 	cameraCol->Start();
 	//cameraCol->SetSize({ 1920, 1080 });
@@ -263,6 +265,8 @@ void TestScene::Initialize()
 		m_SoundManager.BGM_Shot(L"bgm");
 		m_SoundManager.SFX_Shot(L"sfx_b2b");
 		m_SoundManager.UI_Shot(L"play");
+		soundUI->AddComponent<BulletUIComponent>()->Start();
+
 
 		auto rect = soundUI->GetComponent<RectTransformComponent>();
 		rect->SetAnchorPreset(AnchorPrset::FullStretch);
@@ -321,6 +325,8 @@ void TestScene::Initialize()
 		rect4->SetPosition({ 0.0f, 340.0f });
 		soundUI->GetUI()->SetFrame(uiObj4);
 		soundUI->GetUI()->SetFill(uiObj4);
+
+		AddUIObject(soundUI);
 	}
 
 
@@ -361,6 +367,10 @@ void TestScene::Initialize()
 	auto rect = heartUI->GetComponent<RectTransformComponent>();
 	rect->SetAnchorPreset(AnchorPrset::FullStretch);
 	rect->SetPivotPreset(RectTransformPivotPreset::Center);
+	auto heartUIComp = heartUI->AddComponent<HeartUIComponent>();
+	heartUIComp->Start();
+	heartUIComp->SetHpLoc(0);
+
 
 	grid->AddItem(heartUI);
 	auto heartUI2 = std::make_shared<UIObject>(m_EventDispatcher);
@@ -372,6 +382,9 @@ void TestScene::Initialize()
 	rect->SetAnchorPreset(AnchorPrset::FullStretch);
 	rect->SetPivotPreset(RectTransformPivotPreset::Center);
 	grid->AddItem(heartUI2);
+	heartUIComp = heartUI2->AddComponent<HeartUIComponent>();
+	heartUIComp->Start();
+	heartUIComp->SetHpLoc(1);
 	auto heartUI3 = std::make_shared<UIObject>(m_EventDispatcher);
 	heart = heartUI3->AddComponent<UIImageComponent>();
 	heart->SetBitmap(m_AssetManager.LoadTexture(L"heart", "../Resource/HEART.png"));
@@ -381,6 +394,9 @@ void TestScene::Initialize()
 	rect->SetAnchorPreset(AnchorPrset::FullStretch);
 	rect->SetPivotPreset(RectTransformPivotPreset::Center);
 	grid->AddItem(heartUI3);
+	heartUIComp = heartUI3->AddComponent<HeartUIComponent>();
+	heartUIComp->Start();
+	heartUIComp->SetHpLoc(2);
 
 
 	grid->UpdateLayout();
@@ -394,7 +410,6 @@ void TestScene::Initialize()
 	sr2->SetTexture(bitmap);*/
 	//AddGameObject(gameObject);
 	//AddGameObject(gameObject2);
-	//AddUIObject(soundUI);
 	//AddUIObject(buttonUI);
 	AddUIObject(uiObject);
 
@@ -757,4 +772,5 @@ void TestScene::LoadPlayerInfo()
 	player->SetBullet(m_GameManager->m_playerReinforcedAttack);
 	player->GetComponent<TransformComponent>()->SetPosition({ m_GameManager->m_playerXLoc, 0 });
 	GetMainCamera()->GetComponent<TransformComponent>()->SetPosition({ m_GameManager->m_playerXLoc+500, 540.0f });
+	m_GameManager->m_scrollSpeed = 0;
 }

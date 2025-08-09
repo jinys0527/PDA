@@ -141,6 +141,12 @@
     <ClInclude Include="UIGridComponent.h">
       <Filter>Component\Header</Filter>
     </ClInclude>
+    <ClInclude Include="HeartUIComponent.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletUIComponent.h">
+      <Filter>Object\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp">
@@ -244,6 +250,12 @@
     </ClCompile>
     <ClCompile Include="FlyingObstacleComponent.cpp">
       <Filter>Component\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="HeartUIComponent.cpp">
+      <Filter>Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletUIComponent.cpp">
+      <Filter>Object\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
