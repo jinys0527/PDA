@@ -209,19 +209,16 @@ void TestScene::Initialize()
 	//	}
 
 #pragma region camera
-	auto soundUI = std::make_shared<SoundUI>(m_SoundManager, m_EventDispatcher);
-	soundUI->m_Name = "sound";
-	auto rect = soundUI->GetComponent<RectTransformComponent>();
-	rect->SetPosition({ 0.0f, 0.0f });
-	auto uiImage = std::make_shared<UIImageComponent>();
-	uiImage->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
-	soundUI->GetBGM()->SetFrame(uiImage.get());
 
 	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
 	cameraObject->m_Name = "Camera";
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
 	trans3->SetPosition({ 60.0f, 540.f });
 	cameraObject->GetComponent<CameraComponent>()->SetZoom(1.0f);
+	BoxColliderComponent* cameraCol = cameraObject->AddComponent<BoxColliderComponent>();
+	cameraCol->Start();
+	//cameraCol->SetSize({ 1920, 1080 });
+	cameraCol->SetSize({ 2120, 1080 });
 	SetMainCamera(cameraObject);
 
 #pragma endregion
@@ -362,22 +359,6 @@ void TestScene::Initialize()
 #pragma endregion
 
 
-	m_BlackBoard = std::make_unique<BossBlackBoard>(m_Telegraphs);
-	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
-
-	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
-	cameraObject->m_Name = "Camera";
-	auto trans3 = cameraObject->GetComponent<TransformComponent>();
-	trans3->SetPosition({ 960.0f, 540.0f });
-	cameraObject->GetComponent<CameraComponent>()->SetZoom(0.5f);
-	BoxColliderComponent* cameraCol = cameraObject->AddComponent<BoxColliderComponent>();
-	cameraCol->Start();
-	//cameraCol->SetSize({ 1920, 1080 });
-	cameraCol->SetSize({ 2120, 1080 });
-	SetMainCamera(cameraObject);
-
-	AddGameObject(cameraObject);
-
 	{
 		auto gameObject = std::make_shared<PlayerObject>(m_EventDispatcher);
 		gameObject->m_Name = "player";
@@ -507,86 +488,88 @@ void TestScene::Initialize()
 		//AddGameObject(gameObject);
 	}
 
-	{
-
-		auto soundUI = std::make_shared<SoundUI>(m_SoundManager, m_EventDispatcher);
-		soundUI->m_Name = "sound";
-		soundUI->SetSlider();
-		auto uiText = soundUI->AddComponent<UITextComponent>();
-		uiText->SetDWriteFactory(m_Renderer.GetDWriteFactory());
-		uiText->SetText(L"UI Ã…Ã˜Â½ÂºÃ†Â® Â¿Â¹Â½Ãƒ");
-		uiText->SetFontName(L"Segoe UI");
-		uiText->SetFontSize(24.0f);
-		uiText->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-		uiText->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-		uiText->SetLayoutSize(500.0f, 100.0f);
-		m_SoundManager.BGM_Shot(L"bgm");
-		m_SoundManager.SFX_Shot(L"sfx_b2b");
-		m_SoundManager.UI_Shot(L"play");
-		soundUI->AddComponent<BulletUIComponent>()->Start();
-
-
-		auto rect = soundUI->GetComponent<RectTransformComponent>();
-		rect->SetAnchorPreset(AnchorPrset::FullStretch);
-		rect->SetPivotPreset(RectTransformPivotPreset::Center);
-		rect->SetPosition({ 0.0f, 0.0f });
-		rect->SetSize({ 600.f, 600.f });
-
-// 		auto uiObj1 = std::make_shared<UIObject>(m_EventDispatcher);
-// 		auto uiImage1 = uiObj1->AddComponent<UIImageComponent>();
-// 		uiImage1->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
-// 		uiImage1->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
-// 		uiImage1->SetPivotPreset(ImagePivotPreset::Center, uiImage1->GetTexture()->GetSize());
-// 		auto rect1 = uiObj1->GetComponent<RectTransformComponent>();
-// 		rect1->SetAnchorPreset(AnchorPrset::FullStretch);
-// 		rect1->SetPivotPreset(RectTransformPivotPreset::Center);
-// 		rect1->SetSize({ 300.0f, 200.0f });
-// 		rect1->SetPosition({ 0.0f, -410.0f });
-// 		soundUI->GetMaster()->SetFrame(uiObj1);
-// 		soundUI->GetMaster()->SetFill(uiObj1);
-
-		auto uiObj2 = std::make_shared<UIObject>(m_EventDispatcher);
-		auto uiImage2 = uiObj2->AddComponent<UIImageComponent>();
-		uiImage2->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
-		uiImage2->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
-		uiImage2->SetPivotPreset(ImagePivotPreset::Center, uiImage2->GetTexture()->GetSize());
-		auto rect2 = uiObj2->GetComponent<RectTransformComponent>();
-		rect2->SetAnchorPreset(AnchorPrset::FullStretch);
-		rect2->SetPivotPreset(RectTransformPivotPreset::Center);
-		rect2->SetSize({ 300.0f, 200.0f });
-		rect2->SetPosition({ 0.0f, -160.0f });
-		soundUI->GetBGM()->SetFrame(uiObj2);
-		soundUI->GetBGM()->SetFill(uiObj2);
-
-		auto uiObj3 = std::make_shared<UIObject>(m_EventDispatcher);
-		auto uiImage3 = uiObj3->AddComponent<UIImageComponent>();
-		uiImage3->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
-		uiImage3->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
-		uiImage3->SetPivotPreset(ImagePivotPreset::Center, uiImage3->GetTexture()->GetSize());
-		auto rect3 = uiObj3->GetComponent<RectTransformComponent>();
-		rect3->SetAnchorPreset(AnchorPrset::FullStretch);
-		rect3->SetPivotPreset(RectTransformPivotPreset::Center);
-		rect3->SetSize({ 300.0f, 200.0f });
-		rect3->SetPosition({ 0.0f, 40.0f });
-		soundUI->GetSFX()->SetFrame(uiObj3);
-		soundUI->GetSFX()->SetFill(uiObj3);
+	
+#pragma region soundUI
+	auto soundUI = std::make_shared<SoundUI>(m_SoundManager, m_EventDispatcher);
+	soundUI->m_Name = "sound";
+	soundUI->SetSlider();
+	auto uiText = soundUI->AddComponent<UITextComponent>();
+	uiText->SetDWriteFactory(m_Renderer.GetDWriteFactory());
+	uiText->SetText(L"UI Ã…Ã˜Â½ÂºÃ†Â® Â¿Â¹Â½Ãƒ");
+	uiText->SetFontName(L"Segoe UI");
+	uiText->SetFontSize(24.0f);
+	uiText->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	uiText->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	uiText->SetLayoutSize(500.0f, 100.0f);
+	m_SoundManager.BGM_Shot(L"bgm");
+	m_SoundManager.SFX_Shot(L"sfx_b2b");
+	m_SoundManager.UI_Shot(L"play");
+	soundUI->AddComponent<BulletUIComponent>()->Start();
 
 
-		/*auto uiObj4 = std::make_shared<UIObject>(m_EventDispatcher);
-		auto uiImage4 = uiObj4->AddComponent<UIImageComponent>();
-		uiImage4->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
-		uiImage4->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
-		uiImage4->SetPivotPreset(ImagePivotPreset::Center, uiImage4->GetTexture()->GetSize());
-		auto rect4 = uiObj4->GetComponent<RectTransformComponent>();
-		rect4->SetAnchorPreset(AnchorPrset::FullStretch);
-		rect4->SetPivotPreset(RectTransformPivotPreset::Center);
-		rect4->SetSize({ 300.0f, 200.0f });
-		rect4->SetPosition({ 0.0f, 340.0f });
-		soundUI->GetUI()->SetFrame(uiObj4);
-		soundUI->GetUI()->SetFill(uiObj4);*/
+	auto rect = soundUI->GetComponent<RectTransformComponent>();
+	rect->SetAnchorPreset(AnchorPrset::FullStretch);
+	rect->SetPivotPreset(RectTransformPivotPreset::Center);
+	rect->SetPosition({ 0.0f, 0.0f });
+	rect->SetSize({ 600.f, 600.f });
 
-		AddUIObject(soundUI);
-	}
+	// 		auto uiObj1 = std::make_shared<UIObject>(m_EventDispatcher);
+	// 		auto uiImage1 = uiObj1->AddComponent<UIImageComponent>();
+	// 		uiImage1->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
+	// 		uiImage1->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
+	// 		uiImage1->SetPivotPreset(ImagePivotPreset::Center, uiImage1->GetTexture()->GetSize());
+	// 		auto rect1 = uiObj1->GetComponent<RectTransformComponent>();
+	// 		rect1->SetAnchorPreset(AnchorPrset::FullStretch);
+	// 		rect1->SetPivotPreset(RectTransformPivotPreset::Center);
+	// 		rect1->SetSize({ 300.0f, 200.0f });
+	// 		rect1->SetPosition({ 0.0f, -410.0f });
+	// 		soundUI->GetMaster()->SetFrame(uiObj1);
+	// 		soundUI->GetMaster()->SetFill(uiObj1);
+
+	auto uiObj2 = std::make_shared<UIObject>(m_EventDispatcher);
+	auto uiImage2 = uiObj2->AddComponent<UIImageComponent>();
+	uiImage2->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
+	uiImage2->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
+	uiImage2->SetPivotPreset(ImagePivotPreset::Center, uiImage2->GetTexture()->GetSize());
+	auto rect2 = uiObj2->GetComponent<RectTransformComponent>();
+	rect2->SetAnchorPreset(AnchorPrset::FullStretch);
+	rect2->SetPivotPreset(RectTransformPivotPreset::Center);
+	rect2->SetSize({ 300.0f, 200.0f });
+	rect2->SetPosition({ 0.0f, -160.0f });
+	soundUI->GetBGM()->SetFrame(uiObj2);
+	soundUI->GetBGM()->SetFill(uiObj2);
+
+	auto uiObj3 = std::make_shared<UIObject>(m_EventDispatcher);
+	auto uiImage3 = uiObj3->AddComponent<UIImageComponent>();
+	uiImage3->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
+	uiImage3->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
+	uiImage3->SetPivotPreset(ImagePivotPreset::Center, uiImage3->GetTexture()->GetSize());
+	auto rect3 = uiObj3->GetComponent<RectTransformComponent>();
+	rect3->SetAnchorPreset(AnchorPrset::FullStretch);
+	rect3->SetPivotPreset(RectTransformPivotPreset::Center);
+	rect3->SetSize({ 300.0f, 200.0f });
+	rect3->SetPosition({ 0.0f, 40.0f });
+	soundUI->GetSFX()->SetFrame(uiObj3);
+	soundUI->GetSFX()->SetFill(uiObj3);
+
+
+	/*auto uiObj4 = std::make_shared<UIObject>(m_EventDispatcher);
+	auto uiImage4 = uiObj4->AddComponent<UIImageComponent>();
+	uiImage4->SetBitmap(m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png"));
+	uiImage4->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
+	uiImage4->SetPivotPreset(ImagePivotPreset::Center, uiImage4->GetTexture()->GetSize());
+	auto rect4 = uiObj4->GetComponent<RectTransformComponent>();
+	rect4->SetAnchorPreset(AnchorPrset::FullStretch);
+	rect4->SetPivotPreset(RectTransformPivotPreset::Center);
+	rect4->SetSize({ 300.0f, 200.0f });
+	rect4->SetPosition({ 0.0f, 340.0f });
+	soundUI->GetUI()->SetFrame(uiObj4);
+	soundUI->GetUI()->SetFill(uiObj4);*/
+#pragma endregion
+
+		
+
+	
 
 
 
@@ -626,35 +609,35 @@ void TestScene::Initialize()
 	heart->SetBitmap(m_AssetManager.LoadTexture(L"heart", "../Resource/HEART.png"));
 	heart->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
 	heart->SetPivotPreset(ImagePivotPreset::Center, heart->GetTexture()->GetSize());
-	auto rect = heartUI->GetComponent<RectTransformComponent>();
-	rect->SetAnchorPreset(AnchorPrset::FullStretch);
-	rect->SetPivotPreset(RectTransformPivotPreset::Center);
+	auto rect6 = heartUI->GetComponent<RectTransformComponent>();
+	rect6->SetAnchorPreset(AnchorPrset::FullStretch);
+	rect6->SetPivotPreset(RectTransformPivotPreset::Center);
+	grid->AddItem(heartUI);
 	auto heartUIComp = heartUI->AddComponent<HeartUIComponent>();
 	heartUIComp->Start();
 	heartUIComp->SetHpLoc(0);
 
-
-	grid->AddItem(heartUI);
 	auto heartUI2 = std::make_shared<UIObject>(m_EventDispatcher);
 	heart = heartUI2->AddComponent<UIImageComponent>();
 	heart->SetBitmap(m_AssetManager.LoadTexture(L"heart", "../Resource/HEART.png"));
 	heart->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
 	heart->SetPivotPreset(ImagePivotPreset::Center, heart->GetTexture()->GetSize());
-	rect = heartUI2->GetComponent<RectTransformComponent>();
-	rect->SetAnchorPreset(AnchorPrset::FullStretch);
-	rect->SetPivotPreset(RectTransformPivotPreset::Center);
+	rect6 = heartUI2->GetComponent<RectTransformComponent>();
+	rect6->SetAnchorPreset(AnchorPrset::FullStretch);
+	rect6->SetPivotPreset(RectTransformPivotPreset::Center);
 	grid->AddItem(heartUI2);
 	heartUIComp = heartUI2->AddComponent<HeartUIComponent>();
 	heartUIComp->Start();
 	heartUIComp->SetHpLoc(1);
+
 	auto heartUI3 = std::make_shared<UIObject>(m_EventDispatcher);
 	heart = heartUI3->AddComponent<UIImageComponent>();
 	heart->SetBitmap(m_AssetManager.LoadTexture(L"heart", "../Resource/HEART.png"));
 	heart->SetUV({ 0.0f, 0.0f, 300.0f, 200.0f });
 	heart->SetPivotPreset(ImagePivotPreset::Center, heart->GetTexture()->GetSize());
-	rect = heartUI3->GetComponent<RectTransformComponent>();
-	rect->SetAnchorPreset(AnchorPrset::FullStretch);
-	rect->SetPivotPreset(RectTransformPivotPreset::Center);
+	rect6 = heartUI3->GetComponent<RectTransformComponent>();
+	rect6->SetAnchorPreset(AnchorPrset::FullStretch);
+	rect6->SetPivotPreset(RectTransformPivotPreset::Center);
 	grid->AddItem(heartUI3);
 	heartUIComp = heartUI3->AddComponent<HeartUIComponent>();
 	heartUIComp->Start();
@@ -676,7 +659,7 @@ void TestScene::Initialize()
 
 	m_UIManager.AddUI(soundUI);
 	//m_UIManager.AddUI(buttonUI);
-  m_UIManager.AddUI(uiObject);
+	m_UIManager.AddUI(uiObject);
 	AddGameObject(cameraObject);
 
 

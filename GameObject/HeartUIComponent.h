@@ -1,8 +1,8 @@
 #pragma once
-#include "Component.h"
+#include "UIComponent.h"
 
 
-class HeartUIComponent : public Component, public IEventListener
+class HeartUIComponent : public UIComponent
 {
 public:
 	HeartUIComponent() = default;

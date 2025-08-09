@@ -1,16 +1,16 @@
 #include "BulletUIComponent.h"
-#include "GameObject.h"
+#include "Object.h"
 #include "SpriteRenderer.h"
 #include "UITextComponent.h"
 
 BulletUIComponent::~BulletUIComponent()
 {
-	GetEventDispatcher().RemoveListener(EventType::OnPlayerReinforcedBulletChanged, this);
+	m_Owner->GetEventDispatcher().RemoveListener(EventType::OnPlayerReinforcedBulletChanged, this);
 }
 
 void BulletUIComponent::Start()
 {
-	GetEventDispatcher().AddListener(EventType::OnPlayerReinforcedBulletChanged, this);
+	m_Owner->GetEventDispatcher().AddListener(EventType::OnPlayerReinforcedBulletChanged, this);
 }
 
 void BulletUIComponent::Update(float deltaTime)

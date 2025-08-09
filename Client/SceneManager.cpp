@@ -9,12 +9,12 @@ void SceneManager::Initialize()
 	m_SoundManager.Init();
 	auto testScene = AddScene("TestScene", std::make_shared<TestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
 	testScene->SetSceneManager(this);
-// 	auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
+//  auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
 // 	titleScene->SetSceneManager(this);
 
 	testScene->Initialize();
-	//titleScene->Initialize();
-	//titleScene->SetName("TitleScene");
+// 	titleScene->Initialize();
+// 	titleScene->SetName("TitleScene");
 	testScene->SetName("TestScene");
 
 	SetCurrentScene("TestScene");
