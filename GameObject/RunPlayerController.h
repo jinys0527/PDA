@@ -35,6 +35,21 @@ public:
 		return m_Z;
 	}
 
+	bool GetIsBoss()
+	{
+		return m_IsBoss;
+	}
+
+	bool GetIsMoving()
+	{
+		return m_IsMoving;
+	}
+	
+	bool GetIsHoldingAttack()
+	{
+		return m_IsHoldingAttack;
+	}
+
 private:
 
 	Math::Vector2F MoveCheck(float deltaTime); // 코드 길이 줄이기 위해
@@ -62,9 +77,12 @@ private:
 	bool m_RailMoveDown = false;
 	
 	bool m_IsBoss = false;
+	bool m_IsMoving = false;
 
 	float m_RailMoveCool = 0;
 	float m_RailTargetZ = 0;
+
+	bool m_IsHoldingAttack = false;
 
 	RigidbodyComponent* m_RigidBodyComponent = nullptr;
 	TransformComponent* m_TransformComponent = nullptr;

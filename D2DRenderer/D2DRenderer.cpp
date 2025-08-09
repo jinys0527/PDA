@@ -150,7 +150,7 @@ void D2DRenderer::DrawGameObject(std::vector<RenderInfo>& renderInfo, D2D1::Matr
 
 	for (const auto& info : sortedInfo)
 	{
-		if (!info.bitmap)
+		if (!info.bitmap || !info.draw)
 		{
 			continue;
 		}
@@ -344,8 +344,8 @@ void D2DRenderer::DrawUIText(std::vector<UITextInfo>& uiTextInfo)
 
 
 		Math::Vector2F drawPos = {
-			finalPos.x - layoutWidth * 1.5f,
-			finalPos.y - layoutHeight * 1.5f
+			finalPos.x + layoutWidth * 0.5f,
+			finalPos.y + layoutHeight * 0.5f
 		};
 
 
@@ -474,6 +474,8 @@ void D2DRenderer::CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1*& outBi
 	);
 
 	hr = m_d2dContext->CreateBitmapFromWicBitmap(converter.Get(), &bmpProps, &outBitmap);
+
+	DX::ThrowIfFailed(hr);
 }
 
 void D2DRenderer::CreateDeviceAndSwapChain(HWND hwnd)

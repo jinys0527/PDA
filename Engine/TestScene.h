@@ -29,6 +29,9 @@ public:
 
 	void Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo, std::vector<UITextInfo>& uiTextInfo) override;
 
+	void SavePlayerInfo();
+	void LoadPlayerInfo();
+
 private:
 	//Çàµ¿Æ®¸® Å×½ºÆ®¿ëµµ
 	float m_BTElapsedTime = 0.0f;

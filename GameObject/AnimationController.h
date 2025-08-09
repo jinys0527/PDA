@@ -13,10 +13,13 @@ public:
 	bool IsValid() const { return m_Clip != nullptr; }
 	bool IsEnd() { if (m_Clip->GetTotalDuration() <= m_Elapsed) return true; return false; }
 
+	bool IsLastFrameFinished() const;
+
 	void SetClip(const AnimationClip* clip);
 	const AnimationClip* GetClip() const { return m_Clip; }
 
 	void SetLooping(bool loop);
+	bool IsLooping() const { return m_Loop; }
 
 	float GetElapsed() const { return m_Elapsed; }
 	void SetElapsed(float elapsedTime);
