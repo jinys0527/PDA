@@ -11,19 +11,7 @@ NodeState Lazer::Tick(BlackBoard& bb, float deltaTime)
         m_Telegraphs = bb.GetValue<std::vector<std::shared_ptr<Telegraph>>>("BossTelegraph").value();
         m_Anims = bb.GetValue<std::vector<std::shared_ptr<GameObject>>>("BossAnims").value();
 
-        //юс╫ц
-        if (m_Name == "Lazer_1")
-        {
-            m_AttackRange = bb.GetValue<std::vector<int>>("Row_1").value();
-        }
-        else if (m_Name == "Lazer_2")
-        {
-            m_AttackRange = bb.GetValue<std::vector<int>>("Row_2").value();
-        }
-        else if (m_Name == "Lazer_3")
-        {
-            m_AttackRange = bb.GetValue<std::vector<int>>("Row_3").value();
-        }
+        m_AttackRange = bb.GetValue<std::vector<int>>(m_Name).value();
         m_minIndex = m_AttackRange.front();
         m_maxIndex = m_AttackRange.back();
 

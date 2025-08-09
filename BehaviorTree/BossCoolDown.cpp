@@ -4,43 +4,48 @@
 
 NodeState BossCoolDown::Tick(BlackBoard& bb, float deltaTime)
 {
-	float coolDown = bb.GetValue<float>("IdleCoolDown").value();
-	float elapsedTime = bb.GetValue<float>("ElapsedIdleTime").value();
+    float coolDown = bb.GetValue<float>("IdleCoolDown").value();
+    float elapsedTime = bb.GetValue<float>("ElapsedIdleTime").value();
 
-	elapsedTime += deltaTime;
-	
+    elapsedTime += deltaTime;
 
-	if (elapsedTime < coolDown)
-	{
-		//std::cout << "쿨타임: " << elapsedTime << std::endl;
+    if (elapsedTime < coolDown)
+    {
+        //std::cout << "쿨타임: " << elapsedTime << std::endl;
 
-		bb.SetValue("ElapsedIdleTime", elapsedTime);
-		return NodeState::Running;
-	}
+        bb.SetValue("ElapsedIdleTime", elapsedTime);
+        return NodeState::Running;
+    }
 
+    // 스킬 가중치 1~5 가져오기
+    float skillWeight_1 = bb.GetValue<float>("SkillWeight_1").value();
+    float skillWeight_2 = bb.GetValue<float>("SkillWeight_2").value();
+    float skillWeight_3 = bb.GetValue<float>("SkillWeight_3").value();
+    float skillWeight_4 = bb.GetValue<float>("SkillWeight_4").value();
+    float skillWeight_5 = bb.GetValue<float>("SkillWeight_5").value();
 
-	float skillWeight_1 = bb.GetValue<float>("SkillWeight_1").value();
-	float skillWeight_2 = bb.GetValue<float>("SkillWeight_2").value();
-	float skillWeight_3 = bb.GetValue<float>("SkillWeight_3").value();
+    float sum = skillWeight_1 + skillWeight_2 + skillWeight_3 + skillWeight_4 + skillWeight_5;
 
-	float sum = skillWeight_1 + skillWeight_2 + skillWeight_3;
+    float chance1 = skillWeight_1 / sum;
+    float chance2 = (skillWeight_1 + skillWeight_2) / sum;
+    float chance3 = (skillWeight_1 + skillWeight_2 + skillWeight_3) / sum;
+    float chance4 = (skillWeight_1 + skillWeight_2 + skillWeight_3 + skillWeight_4) / sum;
+    float chance5 = (skillWeight_1 + skillWeight_2 + skillWeight_3 + skillWeight_4 + skillWeight_5) / sum;
 
-	float chance1 = skillWeight_1 / sum;
-	float chance2 = (skillWeight_1 + skillWeight_2) / sum;
-	float chance3 = (skillWeight_1 + skillWeight_2 + skillWeight_3) / sum;
+    bb.SetValue("SkillChance_1", chance1);
+    bb.SetValue("SkillChance_2", chance2);
+    bb.SetValue("SkillChance_3", chance3);
+    bb.SetValue("SkillChance_4", chance4);
+    bb.SetValue("SkillChance_5", chance5);
 
-	bb.SetValue("SkillChance_1", chance1);
-	bb.SetValue("SkillChance_2", chance2);
-	bb.SetValue("SkillChance_3", chance3);
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    static std::uniform_real_distribution<float> dist(0.0f, 1.0f);
 
-	static std::random_device rd;
-	static std::mt19937 gen(rd());
-	static std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+    float randVal = dist(gen);
+    bb.SetValue("RandomValue", randVal);
 
-	float randVal = dist(gen);
-	bb.SetValue("RandomValue", randVal);
+    bb.SetValue("ElapsedIdleTime", 0.f);
 
-	bb.SetValue("ElapsedIdleTime", 0.f);
-
-	return NodeState::Failure;
+    return NodeState::Failure;
 }

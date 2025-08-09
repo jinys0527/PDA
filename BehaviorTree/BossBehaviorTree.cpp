@@ -65,6 +65,117 @@ void BossBehaviorTree::Initialize()
 	P1_Skill_1->AddChild(P1_Skill_1_1_Parallel);
 	// 1-1 场
 
+	// 1-2 
+	auto P1_Skill_2_5_Wait = std::make_shared<WaitNode>("P1_Skill_2_5_Wait", 0.33f);
+	auto P1_Skill_2_5_ArmSwip_L = std::make_shared<ArmSwip>("Swip_L");
+
+	auto P1_Skill_2_4_Pick_5 = std::make_shared<Pick>("Pick_5");
+	auto P1_Skill_2_4_Sequence = std::make_shared<Sequence>("P1_Skill_2_4_Sequence");
+	P1_Skill_2_4_Sequence->AddChild(P1_Skill_2_5_Wait);
+	P1_Skill_2_4_Sequence->AddChild(P1_Skill_2_5_ArmSwip_L);
+
+	auto P1_Skill_2_3_Wait = std::make_shared<WaitNode>("P1_Skill_2_3_Wait", 0.33f);
+	auto P1_Skill_2_3_Parallel = std::make_shared<ParallelNode>("P1_Skill_2_3_Parallel");
+	P1_Skill_2_3_Parallel->AddChild(P1_Skill_2_4_Pick_5);
+	P1_Skill_2_3_Parallel->AddChild(P1_Skill_2_4_Sequence);
+
+	auto P1_Skill_2_2_ArmSmash_1 = std::make_shared<ArmSmash>("Row_1");
+	auto P1_Skill_2_2_Sequence = std::make_shared<Sequence>("P1_Skill_2_2_Sequence");
+	P1_Skill_2_2_Sequence->AddChild(P1_Skill_2_3_Wait);
+	P1_Skill_2_2_Sequence->AddChild(P1_Skill_2_3_Parallel);
+
+	auto P1_Skill_2_1_Parallel = std::make_shared<ParallelNode>("P1_Skill_2_1_Parallel");
+	P1_Skill_2_1_Parallel->AddChild(P1_Skill_2_2_ArmSmash_1);
+	P1_Skill_2_1_Parallel->AddChild(P1_Skill_2_2_Sequence);
+
+	auto P1_Skill_2 = std::make_shared<Sequence>("P1_Skill_2");
+	P1_Skill_2->AddChild(P1_Skill_2_Con);
+	P1_Skill_2->AddChild(P1_Skill_2_1_Parallel);
+	// 1-2 场
+
+	// 1-3
+	auto P1_Skill_3_5_Wait = std::make_shared<WaitNode>("P1_Skill_3_5_Wait", 0.5f);
+	auto P1_Skill_3_5_Lazer_3 = std::make_shared<Lazer>("Row_3");
+
+	auto P1_Skill_3_4_ArmSmash_1 = std::make_shared<ArmSmash>("Row_1");
+	auto P1_Skill_3_4_Sequence = std::make_shared<Sequence>("P1_Skill_3_4_Sequence");
+	P1_Skill_3_4_Sequence->AddChild(P1_Skill_3_5_Wait);
+	P1_Skill_3_4_Sequence->AddChild(P1_Skill_3_5_Lazer_3);
+
+	auto P1_Skill_3_3_Wait = std::make_shared<WaitNode>("P1_Skill_3_3_Wait", 0.5f);
+	auto P1_Skill_3_3_Parallel = std::make_shared<ParallelNode>("P1_Skill_3_3_Parallel");
+	P1_Skill_3_3_Parallel->AddChild(P1_Skill_3_4_ArmSmash_1);
+	P1_Skill_3_3_Parallel->AddChild(P1_Skill_3_4_Sequence);
+
+	auto P1_Skill_3_2_Pick_5 = std::make_shared<Pick>("Pick_5");
+	auto P1_Skill_3_2_Sequence = std::make_shared<Sequence>("P1_Skill_3_2_Sequence");
+	P1_Skill_3_2_Sequence->AddChild(P1_Skill_3_3_Wait);
+	P1_Skill_3_2_Sequence->AddChild(P1_Skill_3_3_Parallel);
+
+	auto P1_Skill_3_1_Parallel = std::make_shared<ParallelNode>("P1_Skill_3_1_Parallel");
+	P1_Skill_3_1_Parallel->AddChild(P1_Skill_3_2_Pick_5);
+	P1_Skill_3_1_Parallel->AddChild(P1_Skill_3_2_Sequence);
+
+	auto P1_Skill_3 = std::make_shared<Sequence>("P1_Skill_3");
+	P1_Skill_3->AddChild(P1_Skill_3_Con);
+	P1_Skill_3->AddChild(P1_Skill_3_1_Parallel);
+	// 1-3场
+
+	// 1-4
+	auto P1_Skill_4_5_Wait = std::make_shared<WaitNode>("P1_Skill_4_5_Wait", 0.5f);
+	auto P1_Skill_4_5_Pick_7 = std::make_shared<Pick>("Pick_7");
+
+	auto P1_Skill_4_4_ArmSmash_3 = std::make_shared<ArmSmash>("Row_3");
+	auto P1_Skill_4_4_Sequence = std::make_shared<Sequence>("P1_Skill_4_4_Sequence");
+	P1_Skill_4_4_Sequence->AddChild(P1_Skill_4_5_Wait);
+	P1_Skill_4_4_Sequence->AddChild(P1_Skill_4_5_Pick_7);
+
+	auto P1_Skill_4_3_Wait = std::make_shared<WaitNode>("P1_Skill_4_3_Wait", 0.5f);
+	auto P1_Skill_4_3_Parallel = std::make_shared<ParallelNode>("P1_Skill_4_3_Parallel");
+	P1_Skill_4_3_Parallel->AddChild(P1_Skill_4_4_ArmSmash_3);
+	P1_Skill_4_3_Parallel->AddChild(P1_Skill_4_4_Sequence);
+
+	auto P1_Skill_4_2_Lazer_1 = std::make_shared<Lazer>("Row_1");
+	auto P1_Skill_4_2_Sequence = std::make_shared<Sequence>("P1_Skill_4_2_Sequence");
+	P1_Skill_4_2_Sequence->AddChild(P1_Skill_4_3_Wait);
+	P1_Skill_4_2_Sequence->AddChild(P1_Skill_4_3_Parallel);
+
+	auto P1_Skill_4_1_Parallel = std::make_shared<ParallelNode>("P1_Skill_4_1_Parallel");
+	P1_Skill_4_1_Parallel->AddChild(P1_Skill_4_2_Lazer_1);
+	P1_Skill_4_1_Parallel->AddChild(P1_Skill_4_2_Sequence);
+
+	auto P1_Skill_4 = std::make_shared<Sequence>("P1_Skill_4");
+	P1_Skill_4->AddChild(P1_Skill_4_Con);
+	P1_Skill_4->AddChild(P1_Skill_4_1_Parallel);
+	// 1-4场
+
+	// 1-5
+	auto P1_Skill_5_5_Wait = std::make_shared<WaitNode>("P1_Skill_5_5_Wait", 0.33f);
+	auto P1_Skill_5_5_Pick_4 = std::make_shared<Pick>("Pick_4");
+
+	auto P1_Skill_5_4_Lazer_2 = std::make_shared<Lazer>("Row_2");
+	auto P1_Skill_5_4_Sequence = std::make_shared<Sequence>("P1_Skill_5_4_Sequence");
+	P1_Skill_5_4_Sequence->AddChild(P1_Skill_5_5_Wait);
+	P1_Skill_5_4_Sequence->AddChild(P1_Skill_5_5_Pick_4);
+
+	auto P1_Skill_5_3_Wait = std::make_shared<WaitNode>("P1_Skill_5_3_Wait", 0.33f);
+	auto P1_Skill_5_3_Parallel = std::make_shared<ParallelNode>("P1_Skill_5_3_Parallel");
+	P1_Skill_5_3_Parallel->AddChild(P1_Skill_5_4_Lazer_2);
+	P1_Skill_5_3_Parallel->AddChild(P1_Skill_5_4_Sequence);
+
+	auto P1_Skill_5_2_ArmSwip_L = std::make_shared<ArmSwip>("Swip_L");
+	auto P1_Skill_5_2_Sequence = std::make_shared<Sequence>("P1_Skill_5_2_Sequence");
+	P1_Skill_5_2_Sequence->AddChild(P1_Skill_5_3_Wait);
+	P1_Skill_5_2_Sequence->AddChild(P1_Skill_5_3_Parallel);
+
+	auto P1_Skill_5_1_Parallel = std::make_shared<ParallelNode>("P1_Skill_5_1_Parallel");
+	P1_Skill_5_1_Parallel->AddChild(P1_Skill_5_2_ArmSwip_L);
+	P1_Skill_5_1_Parallel->AddChild(P1_Skill_5_2_Sequence);
+
+	auto P1_Skill_5 = std::make_shared<Sequence>("P1_Skill_5");
+	P1_Skill_5->AddChild(P1_Skill_5_Con);
+	P1_Skill_5->AddChild(P1_Skill_5_1_Parallel);
+	// 1-5场
 
 
 
@@ -144,16 +255,6 @@ void BossBehaviorTree::Initialize()
 
 
 
-	auto P1_Skill_ArmSwip_Test = std::make_shared<ArmSwip>("Swip_L");
-	auto P1_Skill_2 = std::make_shared<Sequence>("P1_Skill_2");
-	P1_Skill_2->AddChild(P1_Skill_2_Con);
-	P1_Skill_2->AddChild(P1_Skill_ArmSwip_Test);
-
-
-	auto P1_Skill_3 = std::make_shared<Sequence>("P1_Skill_3");
-	P1_Skill_3->AddChild(P1_Skill_3_Con);
-
-
 
 	auto Phase_1 = std::make_shared<Selector>("Phase_1");
 
@@ -164,6 +265,8 @@ void BossBehaviorTree::Initialize()
 	Phase_1->AddChild(P1_Skill_1);
 	Phase_1->AddChild(P1_Skill_2);
 	Phase_1->AddChild(P1_Skill_3);
+	Phase_1->AddChild(P1_Skill_4);
+	Phase_1->AddChild(P1_Skill_5);
 
 
 

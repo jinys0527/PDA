@@ -37,12 +37,16 @@ BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegrap
 	SetValue("RandomValue", 0.0f);
 
 	SetValue("SkillWeight_1", 1.0f);
-	SetValue("SkillWeight_2", 5000.0f);
+	SetValue("SkillWeight_2", 1.0f);
 	SetValue("SkillWeight_3", 1.0f);
+	SetValue("SkillWeight_4", 1.0f);
+	SetValue("SkillWeight_5", 5001.0f);
 
 	SetValue("SkillChance_1", 0.f);
 	SetValue("SkillChance_2", 0.f);
 	SetValue("SkillChance_3", 0.f);
+	SetValue("SkillChance_4", 0.f);
+	SetValue("SkillChance_5", 0.f);
 
 	SetValue("CurrPhase", 0);
 }
