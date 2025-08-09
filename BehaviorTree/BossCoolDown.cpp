@@ -47,5 +47,5 @@ NodeState BossCoolDown::Tick(BlackBoard& bb, float deltaTime)
 
     bb.SetValue("ElapsedIdleTime", 0.f);
 
-    return NodeState::Failure;
+    return NodeState::Success;
 }

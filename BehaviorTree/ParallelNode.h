@@ -10,6 +10,8 @@ public:
     NodeState Tick(BlackBoard& bb, float deltaTime) override
     {
         bool hasRunningChild = false;
+        bool hasFailureChild = false;
+
         for (auto& child : m_Children)
         {
             NodeState state = child->Tick(bb, deltaTime);
@@ -17,14 +19,17 @@ public:
             {
                 hasRunningChild = true;
             }
+            else if (state == NodeState::Failure)
+            {
+                hasFailureChild = true;
+            }
         }
 
-        // 모든 자식 노드가 완료되면(Success 또는 Failure) Success 반환
-        // 하나라도 Running 상태이면 Running 반환
+        if (hasFailureChild)
+            return NodeState::Failure;
+
         if (hasRunningChild)
-        {
             return NodeState::Running;
-        }
 
         return NodeState::Success;
     }

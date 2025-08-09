@@ -348,7 +348,7 @@ void TestScene::Update(float deltaTime)
 		m_OneSecondTimer = 0.0f;
 
 		float curHP = m_BlackBoard->GetValue<float>("BossCurrHP").value();
-		m_BlackBoard->SetValue("BossCurrHP", curHP - 5);
+		m_BlackBoard->SetValue("BossCurrHP", curHP - 1);
 
 	}
 

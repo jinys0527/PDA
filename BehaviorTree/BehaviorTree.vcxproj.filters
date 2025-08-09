@@ -45,7 +45,7 @@
     <ClInclude Include="Inverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PhaseChecker.h">
+    <ClInclude Include="PhaseChecker_1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Repeater.h">
@@ -84,6 +84,9 @@
     <ClInclude Include="ArmSwip.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PhaseChecker_3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -113,7 +116,7 @@
     <ClCompile Include="Inverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PhaseChecker.cpp">
+    <ClCompile Include="PhaseChecker_1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Repeater.cpp">
@@ -147,6 +150,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ArmSwip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhaseChecker_3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

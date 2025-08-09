@@ -1,10 +1,10 @@
 #pragma once
 #include "BTNode.h"
 
-class PhaseChecker : public BTNode
+class PhaseChecker_1 : public BTNode
 {
 public:
-	PhaseChecker(std::string name) : BTNode(name) {}
+	PhaseChecker_1(std::string name) : BTNode(name) {}
 
 	NodeState Tick(BlackBoard& bb, float deltaTime) override;
 };
