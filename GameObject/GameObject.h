@@ -3,6 +3,7 @@
 #include "json.hpp"
 
 class TransformComponent;
+class CameraObject;
 
 class GameObject : public Object 
 {
@@ -21,6 +22,8 @@ public:
 		comp->SetOwner(this);
 		m_Components[comp->GetTypeName()].emplace_back(std::move(comp));
 	}
+
+	bool IsInView(CameraObject* camera) const;
 
 	virtual void Render(std::vector<RenderInfo>& renderInfo);
 

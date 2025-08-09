@@ -250,6 +250,10 @@
     <ClInclude Include="UIGridComponent.h">
       <Filter>Component\Header</Filter>
     </ClInclude>
+
+    <ClInclude Include="UIUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="HeartUIComponent.h">
       <Filter>Object\Header</Filter>
     </ClInclude>

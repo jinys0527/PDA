@@ -273,6 +273,7 @@
     <ClInclude Include="UIObject.h" />
     <ClInclude Include="UISliderComponent.h" />
     <ClInclude Include="UITextComponent.h" />
+    <ClInclude Include="UIUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationController.cpp" />

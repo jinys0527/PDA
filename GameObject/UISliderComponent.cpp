@@ -1,7 +1,7 @@
 #include "UISliderComponent.h"
 #include "Object.h"
 #include "EventDispatcher.h"
-#include <iostream>
+#include "UIUtils.h"
 
 UISliderComponent::UISliderComponent()
 {
@@ -9,9 +9,9 @@ UISliderComponent::UISliderComponent()
 
 UISliderComponent::~UISliderComponent()
 {
-	m_Owner->GetEventDispatcher().RemoveListener(EventType::Pressed, this);
-	m_Owner->GetEventDispatcher().RemoveListener(EventType::Dragged, this);
-	m_Owner->GetEventDispatcher().RemoveListener(EventType::Released, this);
+	//m_Owner->GetEventDispatcher().RemoveListener(EventType::Pressed, this);
+	//m_Owner->GetEventDispatcher().RemoveListener(EventType::Dragged, this);
+	//m_Owner->GetEventDispatcher().RemoveListener(EventType::Released, this);
 }
 
 void UISliderComponent::Update(float deltaTime)
@@ -104,10 +104,5 @@ bool UISliderComponent::IsMouseOverSlider(const POINT& mousePos)
 	auto pos = rectTransform->GetPosition();
 	auto pivot = rectTransform->GetPivot();
 
-	float left = pos.x;
-	float top = pos.y;
-	float right = left + size.x;
-	float bottom = top + size.y;
-
-	return (mousePos.x >= left && mousePos.x <= right && mousePos.y >= top && mousePos.y <= bottom);
+	return IsPointInUIRect(pos, size, pivot, mousePos);
 }

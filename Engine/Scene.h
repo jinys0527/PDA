@@ -7,19 +7,33 @@
 #include "AssetManager.h"
 #include "SoundAssetManager.h"
 #include "SoundManager.h"
+#include "UIManager.h"
 
 class NzWndBase;
 class GameObject;
 class UIObject;
 class CameraObject;
 class GameManager;
+class SceneManager;
 
 class Scene
 {
 public:
 	friend class Editor;
 
-	Scene(EventDispatcher& eventDispatcher, AssetManager& assetManager, SoundAssetManager& soundAssetManager, SoundManager& soundManager, D2DRenderer& renderer) : m_EventDispatcher(eventDispatcher), m_AssetManager(assetManager), m_SoundAssetManager(soundAssetManager), m_SoundManager(soundManager), m_Renderer(renderer) {}
+	Scene(EventDispatcher& eventDispatcher, 
+		AssetManager& assetManager, 
+		SoundAssetManager& soundAssetManager, 
+		SoundManager& soundManager, 
+		D2DRenderer& renderer, 
+		UIManager& uiManager) 
+		: m_EventDispatcher(eventDispatcher), 
+		m_AssetManager(assetManager), 
+		m_SoundAssetManager(soundAssetManager), 
+		m_SoundManager(soundManager), 
+		m_Renderer(renderer), 
+		m_UIManager(uiManager) {}
+
 	virtual ~Scene();
 	virtual void Initialize() = 0;
 	virtual void Finalize() = 0;
@@ -34,9 +48,6 @@ public:
 	void AddGameObject(std::shared_ptr<GameObject> gameObject);
 	void RemoveGameObject(std::shared_ptr<GameObject> gameObject);
 
-	void AddUIObject(std::shared_ptr<UIObject> uiObject);
-	void RemoveUIObject(std::shared_ptr<UIObject> uiObject);
-
 	void SetMainCamera(std::shared_ptr<GameObject> gameObject);
 	CameraObject* GetMainCamera() { return m_Camera; }
 
@@ -47,15 +58,17 @@ public:
 	std::string GetName() const { return m_Name; }
 
 	void SetGameManager(GameManager* gameManager);
+	void SetSceneManager(SceneManager* sceneManager);
 
 protected:
 	std::unordered_map<std::string, std::shared_ptr<GameObject>> m_GameObjects;
-	std::unordered_map<std::string, std::shared_ptr<UIObject>> m_UIObjects;
 	EventDispatcher& m_EventDispatcher;
 	D2DRenderer& m_Renderer;
 	AssetManager& m_AssetManager;
 	SoundAssetManager& m_SoundAssetManager;
 	SoundManager& m_SoundManager;
+	UIManager& m_UIManager;
+	SceneManager* m_SceneManager = nullptr;
 	GameManager* m_GameManager = nullptr;
 	CameraObject* m_Camera;
 	std::string m_Name;

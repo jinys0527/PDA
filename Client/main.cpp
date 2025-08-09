@@ -3,6 +3,7 @@
 #include "GameApplication.h"
 #include "SceneManager.h"
 #include "SoundManager.h"
+#include "UIManager.h"
 #include "GameManager.h"
 
 namespace
@@ -23,7 +24,8 @@ int main()
     Engine engine;
     SoundManager soundManager(engine.GetSoundAssetManager());
     GameManager gameManager(engine.GetEventDispatcher());
-	SceneManager sceneManager(engine.GetRenderer(), engine.GetEventDispatcher(), engine.GetAssetManager(), engine.GetSoundAssetManager(), soundManager, gameManager);
+    UIManager uiManager;
+	SceneManager sceneManager(engine.GetRenderer(), engine.GetEventDispatcher(), engine.GetAssetManager(), engine.GetSoundAssetManager(), soundManager, gameManager, uiManager);
    
 #ifdef _EDITOR
     Editor editor(sceneManager);

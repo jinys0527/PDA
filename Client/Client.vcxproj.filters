@@ -16,6 +16,7 @@
     <ClCompile Include="GameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameApplication.h">
@@ -30,6 +31,7 @@
     <ClInclude Include="GameManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UIManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

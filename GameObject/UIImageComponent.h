@@ -41,7 +41,7 @@ public:
 	void SetPivotPreset(ImagePivotPreset ipp, const D2D1_SIZE_F& size);
 
 	Microsoft::WRL::ComPtr<ID2D1Bitmap1> GetTexture() const;
-	const Math::Vector2F& GetPivot() const
+	const D2D1_POINT_2F& GetPivot() const
 	{
 		return m_Pivot;
 	}
@@ -57,7 +57,7 @@ private:
 	Microsoft::WRL::ComPtr<ID2D1Bitmap1> m_Bitmap;
 	D2D1_RECT_F m_SourceRect = {};
 
-	Math::Vector2F m_Pivot;
+	D2D1_POINT_2F m_Pivot;
 
 	float m_Opacity = 1.0f;
 };

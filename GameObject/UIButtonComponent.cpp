@@ -4,6 +4,7 @@
 #include "TransformComponent.h"
 #include "SpriteRenderer.h"
 #include "UIImageComponent.h"
+#include "UIUtils.h"
 
 UIButtonComponent::UIButtonComponent()
 {
@@ -35,8 +36,6 @@ UIButtonComponent::UIButtonComponent()
 	m_FSM.AddTransition("Hover", "None", "HoverToNone");
 
 	m_FSM.SetInitialState("None");
-
-
 }
 
 void UIButtonComponent::Start()
@@ -48,26 +47,13 @@ void UIButtonComponent::Start()
 
 UIButtonComponent::~UIButtonComponent()
 {
-	m_Owner->GetEventDispatcher().RemoveListener(EventType::Hovered, this);
-	m_Owner->GetEventDispatcher().RemoveListener(EventType::Pressed, this);
-}
-
-void UIButtonComponent::SetOnClick(std::function<void()> callback)
-{
-
+	//m_Owner->GetEventDispatcher().RemoveListener(EventType::Hovered, this);
+	//m_Owner->GetEventDispatcher().RemoveListener(EventType::Pressed, this);
 }
 
 
 void UIButtonComponent::Update(float deltaTime)
 {
-	if (m_IsHovered)
-	{
-		//std::cout << "호버호버" << std::endl;
-	}
-	//std::cout << m_FSM.GetCurrentState() << std::endl;
-
-
-
 }
 
 void UIButtonComponent::OnEvent(EventType type, const void* data)
@@ -103,7 +89,6 @@ void UIButtonComponent::OnEvent(EventType type, const void* data)
 
 			m_FSM.Trigger("ClickToHover");
 			m_IsClicked = false;
-
 		}
 	}
 }
@@ -122,25 +107,8 @@ void UIButtonComponent::IsHovered(POINT mousePos)
 	auto image = m_Owner->GetComponent<UIImageComponent>();
 
 	Math::Vector2F size = rectTransform->GetSize(); // 실제 렌더링 크기
-	Math::Vector2F pivot = image->GetPivot();       // 0~1 범위 가정
+	D2D1_POINT_2F pivot = image->GetPivot();       // 0~1 범위 가정
 	Math::Vector2F position = rectTransform->GetPosition(); // 앵커 기준 위치
 
-	// 좌상단 계산 (pivot 적용)
-	Math::Vector2F topLeft;
-	topLeft.x = position.x;
-	topLeft.y = position.y;
-
-
-
-	// 마우스 충돌 검사
-	if (mousePos.x >= topLeft.x && mousePos.x <= (topLeft.x + size.x) &&
-		mousePos.y >= topLeft.y && mousePos.y <= (topLeft.y + size.y))
-	{
-		m_IsHovered = true;
-	}
-	else
-	{
-		m_IsHovered = false;
-	}
+	m_IsHovered = IsPointInUIRect(position, size, pivot, mousePos);
 }
-

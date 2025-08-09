@@ -364,7 +364,7 @@ Math::Vector2F D2DRenderer::CalcAnchorOffset(const Math::Vector2F& parentSize,
 	const Anchor& anchor,
 	const Math::Vector2F& anchoredPosition,
 	const Math::Vector2F& sizeDelta,
-	const Math::Vector2F& pivot)
+	const D2D1_POINT_2F& pivot)
 {
 	// Anchor 영역 계산
 	Math::Vector2F anchorAreaMin = {

@@ -5,6 +5,7 @@
 #include "UIButtonComponent.h"
 #include "UIGridComponent.h"
 #include "UITextComponent.h"
+#include "UIUtils.h"
 
 UIObject::UIObject(EventDispatcher& eventDispatcher) : Object(eventDispatcher)
 {
@@ -145,4 +146,26 @@ void UIObject::Render(std::vector<UITextInfo>& renderInfo)
 		info.textLayout = text->GetTextLayout();
 		renderInfo.emplace_back(info);
 	}
+}
+
+bool UIObject::HitCheck(const POINT& pos)
+{
+	auto rectTransform = GetComponent<RectTransformComponent>();
+	if (!rectTransform) return false;
+
+	auto size = rectTransform->GetSize();
+	auto position = rectTransform->GetPosition();
+	auto pivot = rectTransform->GetPivot();
+
+	return IsPointInUIRect(position, size, pivot, pos);
+}
+
+bool UIObject::IsFullScreen()
+{
+	return false;
+}
+
+bool UIObject::IsVisible()
+{
+	return false;
 }

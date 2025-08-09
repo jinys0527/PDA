@@ -3,8 +3,7 @@
 
 CameraObject::CameraObject(EventDispatcher& eventDispatcher, float width, float height) : GameObject(eventDispatcher)
 {
-	AddComponent<CameraComponent>(width, height);
-	auto* camera = GetComponent<CameraComponent>();
-	camera->m_Width = width;
-	camera->m_Height = height;
+	m_CameraComp = AddComponent<CameraComponent>(width, height);
+	m_CameraComp->m_Width = width;
+	m_CameraComp->m_Height = height;
 }
