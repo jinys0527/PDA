@@ -1,16 +1,16 @@
 #include "HeartUIComponent.h"
-#include "GameObject.h"
+#include "Object.h"
 #include "SpriteRenderer.h"
 #include "UIImageComponent.h"
 
 HeartUIComponent::~HeartUIComponent()
 {
-	GetEventDispatcher().RemoveListener(EventType::OnPlayerHpChanged, this);
+	m_Owner->GetEventDispatcher().RemoveListener(EventType::OnPlayerHpChanged, this);
 }
 
 void HeartUIComponent::Start()
 {
-	GetEventDispatcher().AddListener(EventType::OnPlayerHpChanged, this);
+	m_Owner->GetEventDispatcher().AddListener(EventType::OnPlayerHpChanged, this);
 }
 
 void HeartUIComponent::Update(float deltaTime)

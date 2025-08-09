@@ -31,6 +31,8 @@ public:
 
 	void Render(std::vector<UIRenderInfo>& renderInfo, std::vector<UITextInfo>& textInfo);
 
+	void Reset() { m_UIObjects.clear(); }
+
 private:
 	void DispatchToTopUI(EventType type, const POINT& pos);
 	std::unordered_map<std::string, std::shared_ptr<UIObject>> m_UIObjects;

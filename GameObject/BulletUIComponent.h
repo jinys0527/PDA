@@ -1,7 +1,7 @@
 #pragma once
-#include "Component.h"
+#include "UIComponent.h"
 
-class BulletUIComponent : public Component, public IEventListener
+class BulletUIComponent : public UIComponent
 {
 public:
 	BulletUIComponent() = default;
