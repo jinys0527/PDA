@@ -5,21 +5,45 @@
 #include "UIButtonComponent.h"
 #include "UISliderComponent.h"
 
+UIManager::~UIManager()
+{
+
+}
+
+void UIManager::Start()
+{
+	m_EventDispatcher.AddListener(EventType::Pressed, this);
+	m_EventDispatcher.AddListener(EventType::Hovered, this);
+	m_EventDispatcher.AddListener(EventType::Dragged, this);
+	m_EventDispatcher.AddListener(EventType::Released, this);
+}
+
 void UIManager::OnEvent(EventType type, const void* data)
 {
 	auto mouseData = static_cast<const Events::MouseState*>(data);
 
-	if (type == EventType::Pressed || type == EventType::Hovered || type == EventType::Dragged || type == EventType::Released)
+	if (type == EventType::Pressed || type == EventType::Hovered ||
+		type == EventType::Dragged || type == EventType::Released)
 	{
-		DispatchToTopUI(type, mouseData->pos);
+		auto it = m_UIObjects.find(m_CurrentSceneName);
+		if (it != m_UIObjects.end())
+		{
+			DispatchToTopUI(type, mouseData->pos, it->second);
+		}
 	}
 }
 
 bool UIManager::IsFullScreenUIActive() const
 {
-	for (const auto& pair : m_UIObjects)
+	auto it = m_UIObjects.find(m_CurrentSceneName);
+	if (it == m_UIObjects.end())
+		return false;
+
+	const auto& uiMap = it->second;
+	for (const auto& pair : uiMap)
 	{
-		if (pair.second->IsVisible() && pair.second->IsFullScreen())
+		const auto& uiObject = pair.second;
+		if (uiObject->IsVisible() && uiObject->IsFullScreen())
 			return true;
 	}
 	return false;
@@ -27,17 +51,21 @@ bool UIManager::IsFullScreenUIActive() const
 
 void UIManager::Update(float deltaTime)
 {
-	for (auto uiObject : m_UIObjects)
+	auto it = m_UIObjects.find(m_CurrentSceneName);
+	if (it == m_UIObjects.end())
+		return;
+
+	for (auto& pair : it->second)
 	{
-		uiObject.second->Update(deltaTime);
+		pair.second->Update(deltaTime);
 	}
 }
 
-void UIManager::DispatchToTopUI(EventType type, const POINT& pos)
+void UIManager::DispatchToTopUI(EventType type, const POINT& pos, std::unordered_map<std::string, std::shared_ptr<UIObject>>& uiMap)
 {
 	std::vector<UIObject*> sortedUI;
-	sortedUI.reserve(m_UIObjects.size());
-	for (auto& pair : m_UIObjects)
+	sortedUI.reserve(uiMap.size());
+	for (auto& pair : uiMap)
 		sortedUI.push_back(pair.second.get());
 
 	std::sort(sortedUI.begin(), sortedUI.end(), [](UIObject* a, UIObject* b) {
@@ -47,7 +75,6 @@ void UIManager::DispatchToTopUI(EventType type, const POINT& pos)
 	bool fullScreenUIActive = false;
 	int fullScreenZ = -1;
 
-	// 전체화면 UI 있는지, zOrder 확인
 	for (auto ui : sortedUI)
 	{
 		if (ui->IsVisible() && ui->IsFullScreen())
@@ -64,36 +91,27 @@ void UIManager::DispatchToTopUI(EventType type, const POINT& pos)
 			continue;
 
 		if (fullScreenUIActive && ui->GetZOrder() < fullScreenZ)
-			continue; // 전체화면 UI 아래 UI는 무시
+			continue;
 
-		if (!ui->HitCheck(pos))
+		if (type != EventType::Hovered && !ui->HitCheck(pos))
 			continue;
 
 		switch (type)
 		{
 		case EventType::Hovered:
 			for (auto btn : ui->GetComponents<UIButtonComponent>())
-			{
 				btn->OnEvent(type, &pos);
-			}
+			break;
 		case EventType::Pressed:
 		case EventType::Released:
 			for (auto btn : ui->GetComponents<UIButtonComponent>())
-			{
 				btn->OnEvent(type, &pos);
-			}
 			for (auto slider : ui->GetComponents<UISliderComponent>())
-			{
 				slider->OnEvent(type, &pos);
-			}
-			break;
-		case EventType::Moved:
 			break;
 		case EventType::Dragged:
 			for (auto slider : ui->GetComponents<UISliderComponent>())
-			{
 				slider->OnEvent(type, &pos);
-			}
 			break;
 		default:
 			break;
@@ -103,9 +121,22 @@ void UIManager::DispatchToTopUI(EventType type, const POINT& pos)
 
 void UIManager::Render(std::vector<UIRenderInfo>& uiRenderInfo, std::vector<UITextInfo>& uiTextInfo)
 {
-	for (auto uiObject : m_UIObjects)
+	auto it = m_UIObjects.find(m_CurrentSceneName);
+	if (it == m_UIObjects.end())
+		return;
+
+	for (auto& pair : it->second)
 	{
-		uiObject.second->Render(uiRenderInfo);
-		uiObject.second->Render(uiTextInfo);
+		pair.second->Render(uiRenderInfo);
+		pair.second->Render(uiTextInfo);
 	}
+}
+
+void UIManager::Reset()
+{
+	m_EventDispatcher.RemoveListener(EventType::Pressed, this);
+	m_EventDispatcher.RemoveListener(EventType::Hovered, this);
+	m_EventDispatcher.RemoveListener(EventType::Dragged, this);
+	m_EventDispatcher.RemoveListener(EventType::Released, this);
+	m_UIObjects.clear();
 }

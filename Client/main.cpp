@@ -24,7 +24,7 @@ int main()
     Engine engine;
     SoundManager soundManager(engine.GetSoundAssetManager());
     GameManager gameManager(engine.GetEventDispatcher());
-    UIManager uiManager;
+    UIManager uiManager(engine.GetEventDispatcher());
 	SceneManager sceneManager(engine.GetRenderer(), engine.GetEventDispatcher(), engine.GetAssetManager(), engine.GetSoundAssetManager(), soundManager, gameManager, uiManager);
    
 #ifdef _EDITOR

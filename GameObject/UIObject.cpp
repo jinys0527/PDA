@@ -6,6 +6,7 @@
 #include "UIGridComponent.h"
 #include "UITextComponent.h"
 #include "UIUtils.h"
+#include "Object.h"
 
 UIObject::UIObject(EventDispatcher& eventDispatcher) : Object(eventDispatcher)
 {
@@ -162,10 +163,10 @@ bool UIObject::HitCheck(const POINT& pos)
 
 bool UIObject::IsFullScreen()
 {
-	return false;
+	return m_IsFullScreen;
 }
 
 bool UIObject::IsVisible()
 {
-	return false;
+	return m_IsVisible;
 }

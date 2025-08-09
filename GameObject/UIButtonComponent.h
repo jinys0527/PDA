@@ -26,7 +26,7 @@ public:
 
 	void Start();
 private:
-	void IsHovered(POINT mousePos);
+	bool IsHovered(POINT mousePos);
 
 	bool m_IsClicked = false;
 	bool m_IsHovered = false;

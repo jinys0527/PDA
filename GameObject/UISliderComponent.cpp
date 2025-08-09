@@ -92,9 +92,9 @@ void UISliderComponent::UpdateFillImage()
 
 void UISliderComponent::Start()
 {
-	m_Owner->GetEventDispatcher().AddListener(EventType::Pressed, this);
-	m_Owner->GetEventDispatcher().AddListener(EventType::Dragged, this);
-	m_Owner->GetEventDispatcher().AddListener(EventType::Released, this);
+// 	m_Owner->GetEventDispatcher().AddListener(EventType::Pressed, this);
+// 	m_Owner->GetEventDispatcher().AddListener(EventType::Dragged, this);
+// 	m_Owner->GetEventDispatcher().AddListener(EventType::Released, this);
 }
 
 bool UISliderComponent::IsMouseOverSlider(const POINT& mousePos)
