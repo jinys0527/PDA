@@ -14,11 +14,11 @@ void AssetManager::Init(const std::filesystem::path& rootPath)	// 폴더 자동 로드
 		const auto& ext = path.extension().wstring();
 		const auto key = path.stem().wstring();
 		
-		/*if (ext == L".json")
+		if (ext == L".json")
 		{
 			LoadAnimation(key, path);
 		}
-		else */if (ext == L".png" || ext == L".jpg" || ext == L".bmp")
+		else if (ext == L".png" || ext == L".jpg" || ext == L".bmp")
 		{
 			LoadTexture(key, path);
 		}

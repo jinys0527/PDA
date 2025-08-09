@@ -4,10 +4,56 @@
 #include "SpriteRenderer.h"
 #include "UIImageComponent.h"
 #include "GraffitiComponent.h"
+#include "CameraObject.h"
+#include "CameraComponent.h"
 
 GameObject::GameObject(EventDispatcher& eventDispatcher) : Object(eventDispatcher)
 {
 	m_Transform = AddComponent<TransformComponent>();
+}
+
+bool GameObject::IsInView(CameraObject* camera) const
+{
+	// 카메라 뷰 영역 크기, 위치 가져오기
+	// 카메라 위치 (World)
+	auto cameraComp = camera->GetComponent<CameraComponent>();
+	auto cameraPos = camera->GetComponent<TransformComponent>()->GetPosition();
+
+	float cameraWidth = cameraComp->GetWidth() / cameraComp->GetZoom();
+	float cameraHeight = cameraComp->GetHeight() / cameraComp->GetZoom();
+
+	// 카메라 뷰의 Rect
+	float cameraLeft = cameraPos.x - cameraWidth * 0.5f;
+	float cameraTop = cameraPos.y - cameraHeight * 0.5f;
+	float cameraRight = cameraLeft + cameraWidth;
+	float cameraBottom = cameraTop + cameraHeight;
+
+	// 오브젝트 위치 및 크기 가져오기
+	auto trans = GetComponent<TransformComponent>();
+
+	if (!trans)
+		return true;
+
+	auto spriteRenderer = GetComponent<SpriteRenderer>();
+
+	if (!spriteRenderer)
+		return false;
+
+	auto objPos = trans->GetPosition();
+	auto objSize = spriteRenderer->GetTexture()->GetSize();
+	auto objPivot = spriteRenderer->GetPivot();
+
+	// 오브젝트 좌상단 좌표 계산 (pivot 적용)
+	float objLeft = objPos.x - objSize.width * objPivot.x;
+	float objTop = objPos.y - objSize.height * objPivot.y;
+	float objRight = objLeft + objSize.width;
+	float objBottom = objTop + objSize.height;
+
+	// AABB 충돌 검사
+	bool isVisible = !(objRight < cameraLeft || objLeft > cameraRight ||
+		objBottom < cameraTop || objTop > cameraBottom);
+
+	return isVisible;
 }
 
 void GameObject::Render(std::vector<RenderInfo>& renderInfo)

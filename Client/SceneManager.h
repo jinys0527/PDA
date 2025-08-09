@@ -10,12 +10,13 @@
 #include "CameraObject.h"
 #include "SoundManager.h"
 #include "GameManager.h"
+#include "UIManager.h"
 
 class SceneManager
 {
 	friend class Editor;
 public:
-	SceneManager(D2DRenderer& renderer, EventDispatcher& eventDispatcher, AssetManager& assetManager, SoundAssetManager& soundAssetManager, SoundManager& soundManager, GameManager& gameManager) : m_Renderer(renderer), m_EventDispatcher(eventDispatcher), m_AssetManager(assetManager), m_SoundAssetManager(soundAssetManager), m_SoundManager(soundManager), m_GameManager(gameManager) { }
+	SceneManager(D2DRenderer& renderer, EventDispatcher& eventDispatcher, AssetManager& assetManager, SoundAssetManager& soundAssetManager, SoundManager& soundManager, GameManager& gameManager, UIManager& uiManager) : m_Renderer(renderer), m_EventDispatcher(eventDispatcher), m_AssetManager(assetManager), m_SoundAssetManager(soundAssetManager), m_SoundManager(soundManager), m_GameManager(gameManager), m_UIManager(uiManager) { }
 	~SceneManager() = default;
 
 	void Initialize();
@@ -45,5 +46,6 @@ private:
 	EventDispatcher& m_EventDispatcher;
 	SoundManager& m_SoundManager;
 	GameManager& m_GameManager;
+	UIManager& m_UIManager;
 };
 

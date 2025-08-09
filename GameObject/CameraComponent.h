@@ -12,10 +12,6 @@ public:
 	static constexpr const char* StaticTypeName = "CameraComponent";
 	const char* GetTypeName() const override { return StaticTypeName; }
 
-/* // 확인 부탁
-	static constexpr const char* StaticTypeName = "CameraObject";
-	const char* GetTypeName() const override { return StaticTypeName; }
-*/
 	void Update(float deltaTime) override;
 	void OnEvent(EventType type, const void* data) override;
 
@@ -25,6 +21,21 @@ public:
 	void SetZoom(float zoom)
 	{
 		m_Zoom = zoom;
+	}
+
+	float GetWidth() const 
+	{
+		return m_Width;
+	}
+
+	float GetHeight() const 
+	{
+		return m_Height;
+	}
+
+	float GetZoom() const 
+	{
+		return m_Zoom;
 	}
 
 	D2D1::Matrix3x2F GetViewMatrix();

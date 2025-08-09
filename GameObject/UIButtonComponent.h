@@ -15,7 +15,6 @@ public:
 	const char* GetTypeName() const override { return StaticTypeName; }
 
 	virtual ~UIButtonComponent();
-	void SetOnClick(std::function<void()> callback);
 
 	void Update(float deltaTime) override;
 	void OnEvent(EventType type, const void* data) override;
@@ -29,7 +28,6 @@ public:
 private:
 	void IsHovered(POINT mousePos);
 
-	std::function<void()> m_OnClick;
 	bool m_IsClicked = false;
 	bool m_IsHovered = false;
 	FSM m_FSM;

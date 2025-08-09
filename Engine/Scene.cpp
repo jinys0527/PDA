@@ -33,20 +33,6 @@ void Scene::RemoveGameObject(std::shared_ptr<GameObject> gameObject)
 	}
 }
 
-void Scene::AddUIObject(std::shared_ptr<UIObject> uiObject)
-{
-	m_UIObjects[uiObject->m_Name] = uiObject;
-}
-
-void Scene::RemoveUIObject(std::shared_ptr<UIObject> uiObject)
-{
-	auto it = m_UIObjects.find(uiObject->m_Name);
-	if (it != m_UIObjects.end())
-	{
-		m_UIObjects.erase(uiObject->m_Name);
-	}
-}
-
 void Scene::SetMainCamera(std::shared_ptr<GameObject> gameObject)
 {
 	m_Camera = dynamic_cast<CameraObject*>(gameObject.get());
@@ -120,4 +106,9 @@ void Scene::Deserialize(const nlohmann::json& j)
 void Scene::SetGameManager(GameManager* gameManager)
 {
 	m_GameManager = gameManager;
+}
+
+void Scene::SetSceneManager(SceneManager* sceneManager)
+{
+	m_SceneManager = sceneManager;
 }

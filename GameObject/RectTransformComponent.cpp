@@ -1,4 +1,5 @@
 #include "RectTransformComponent.h"
+#include "TMHelper.h"
 
 void RectTransformComponent::Update(float deltaTime)
 {
@@ -14,6 +15,62 @@ void RectTransformComponent::Serialize(nlohmann::json& j) const
 
 void RectTransformComponent::Deserialize(const nlohmann::json& j)
 {
+}
+
+void RectTransformComponent::SetParent(RectTransformComponent* newParent)
+{
+	assert(newParent != this);
+	assert(m_Parent == nullptr);
+
+	m_Parent = newParent;
+	m_Parent->AddChild(this);
+
+	SetDirty();
+}
+
+
+void RectTransformComponent::DetachFromParent()
+{
+	if (m_Parent == nullptr) return;
+
+	m_Parent->RemoveChild(this);
+
+	m_Parent = nullptr;
+
+	SetDirty();
+
+}
+
+void RectTransformComponent::AddChild(RectTransformComponent* child)
+{
+	Mat3X2F childLocalTM = child->GetLocalMatrix();
+	childLocalTM = childLocalTM * GetInverseWorldMatrix();
+
+	auto m_noPivot = TM::RemovePivot(childLocalTM, child->GetPivot());
+	TM::DecomposeMatrix3X2(m_noPivot, child->m_Position, child->m_Rotation, child->m_Scale);
+
+	m_Children.push_back(child);
+}
+
+void RectTransformComponent::RemoveChild(RectTransformComponent* child)
+{
+	Mat3X2F childLocalTM = child->GetLocalMatrix();
+	childLocalTM = childLocalTM * GetWorldMatrix();
+
+	auto m_noPivot = TM::RemovePivot(childLocalTM, child->GetPivot());
+	TM::DecomposeMatrix3X2(m_noPivot, child->m_Position, child->m_Rotation, child->m_Scale);
+
+	m_Children.erase(
+		std::remove(m_Children.begin(), m_Children.end(), child),
+		m_Children.end()
+	);
+}
+
+RectTransformComponent::Mat3X2F RectTransformComponent::GetInverseWorldMatrix()
+{
+	Mat3X2F inv = GetWorldMatrix();
+	inv.Invert();
+	return inv;
 }
 
 void RectTransformComponent::SetAnchorPreset(AnchorPrset preset)

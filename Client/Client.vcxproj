@@ -301,12 +301,14 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='ReleaseEditor|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameApplication.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="UIManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

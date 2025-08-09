@@ -51,6 +51,14 @@ public:
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;
 
+	void SetParent(RectTransformComponent* newParent);
+	void DetachFromParent();
+
+	void AddChild(RectTransformComponent* child);
+	void RemoveChild(RectTransformComponent* child);
+
+	Mat3X2F GetInverseWorldMatrix();
+
 	void SetAnchorPreset(AnchorPrset preset);
 	Anchor GetAnchor() const { return m_Anchor; }
 
@@ -97,7 +105,7 @@ public:
 		return m_Scale;
 	}
 
-	Vec2F GetPivot() const
+	D2D1_POINT_2F GetPivot() const
 	{
 		return m_Pivot;
 	}
@@ -108,6 +116,11 @@ public:
 	RectTransformComponent* GetParent()
 	{
 		return m_Parent;
+	}
+
+	std::vector<RectTransformComponent*> GetChild()
+	{
+		return m_Children;
 	}
 
 private:
@@ -125,7 +138,7 @@ private:
 private:
 	Vec2F m_Position;
 	Anchor m_Anchor;
-	Vec2F m_Pivot = { 0.5f, 0.5f };			// 0.0 ~ 1.0
+	D2D1_POINT_2F m_Pivot = { 0.5f, 0.5f };			// 0.0 ~ 1.0
 	Vec2F m_Size;
 	float m_Rotation;
 	Vec2F m_Scale;

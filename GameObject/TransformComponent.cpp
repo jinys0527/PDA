@@ -1,6 +1,7 @@
 #include "TransformComponent.h"
 #include "Event.h"
 #include <cassert>
+#include "RectTransformComponent.h"
 
 void TransformComponent::SetParent(TransformComponent* newParent)
 {

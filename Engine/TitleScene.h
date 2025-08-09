@@ -7,7 +7,13 @@
 class TitleScene : public Scene
 {
 public:
-	TitleScene(EventDispatcher& eventDispatcher, AssetManager& assetManager, SoundAssetManager& soundAssetManager, SoundManager& soundManager, D2DRenderer& renderer) : Scene(eventDispatcher, assetManager, soundAssetManager, soundManager, renderer) {}
+	TitleScene(EventDispatcher& eventDispatcher, 
+		AssetManager& assetManager, 
+		SoundAssetManager& soundAssetManager, 
+		SoundManager& soundManager, 
+		D2DRenderer& renderer, 
+		UIManager& uiManager) 
+		: Scene(eventDispatcher, assetManager, soundAssetManager, soundManager, renderer, uiManager) {}
 	virtual ~TitleScene() = default;
 
 	void Initialize() override;

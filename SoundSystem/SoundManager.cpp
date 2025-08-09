@@ -17,26 +17,26 @@ bool SoundManager::Init()
 	m_CoreSystem->getMasterChannelGroup(&m_MasterGroup);
 	m_CoreSystem->createChannelGroup("BGM", &m_BGMGroup);
 	m_CoreSystem->createChannelGroup("SFX", &m_SFXGroup);
-	m_CoreSystem->createChannelGroup("UI", &m_UIGroup);
+	//m_CoreSystem->createChannelGroup("UI", &m_UIGroup);
 
 	m_MasterGroup->addGroup(m_BGMGroup);
 	m_MasterGroup->addGroup(m_SFXGroup);
-	m_MasterGroup->addGroup(m_UIGroup);
+	//m_MasterGroup->addGroup(m_UIGroup);
 
 	CreateBGMSource(m_SoundAssetManager.GetBGMPaths());
 	CreateSFXSource(m_SoundAssetManager.GetSFXPaths());
-	CreateUISource(m_SoundAssetManager.GetUISoundPaths());
+	//CreateUISource(m_SoundAssetManager.GetUISoundPaths());
 
 	return true;
 }
 
 SoundManager::~SoundManager()
 {
-	m_CoreSystem->release();
 	m_BGMGroup->release();
 	m_SFXGroup->release();
-	m_UIGroup->release();
+	//m_UIGroup->release();
 	m_MasterGroup->release();
+	m_CoreSystem->release();
 }
 
 void SoundManager::SetDirty()
@@ -44,7 +44,7 @@ void SoundManager::SetDirty()
 	m_SoundDirty = true;
 	m_Dirty_BGM = true;
 	m_Dirty_SFX = true;
-	m_Dirty_UI = true;
+	//m_Dirty_UI = true;
 }
 
 //3D 설정시 변경 //FMOD_3D
@@ -92,7 +92,7 @@ void SoundManager::Shutdown()
 {
 	for (auto& bgm : m_BGMs) { bgm.second->release(); }
 	for (auto& sfx : m_SFXs) { sfx.second->release(); }
-	for (auto& ui : m_UIs) { ui.second->release(); }
+	//for (auto& ui : m_UIs) { ui.second->release(); }
 	m_CoreSystem->release();
 }
 

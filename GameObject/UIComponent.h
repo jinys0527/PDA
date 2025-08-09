@@ -18,8 +18,7 @@ public:
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;
 protected:
-	
-	
+
 	bool m_Visible = true;
 	int m_ZOrder = 0;
 	float m_Opacity = 1.0f;

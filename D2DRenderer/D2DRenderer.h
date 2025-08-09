@@ -47,7 +47,7 @@ public:
 		const Anchor& anchor,
 		const Math::Vector2F& anchoredPosition,
 		const Math::Vector2F& sizeDelta,
-		const Math::Vector2F& pivot);
+		const D2D1_POINT_2F& pivot);
 
 	void SetTransform(const D2D1_MATRIX_3X2_F tm);
 

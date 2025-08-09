@@ -26,7 +26,7 @@ struct UIRenderInfo
 	Anchor anchor;
 	Math::Vector2F anchoredPosition;
 	Math::Vector2F sizeDelta;
-	Math::Vector2F pivot;
+	D2D1_POINT_2F pivot;
 
 	float opacity = 1.0f;
 	int layer = 0;

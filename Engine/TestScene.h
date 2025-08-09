@@ -10,7 +10,12 @@ class BlackBoard;
 class TestScene : public Scene
 {
 public:
-	TestScene(EventDispatcher& eventDispatcher, AssetManager& assetManager, SoundAssetManager& soundAssetManager,SoundManager& soundManager, D2DRenderer& renderer) : Scene(eventDispatcher, assetManager, soundAssetManager, soundManager, renderer) {}
+	TestScene(EventDispatcher& eventDispatcher, 
+		AssetManager& assetManager, 
+		SoundAssetManager& soundAssetManager,
+		SoundManager& soundManager, 
+		D2DRenderer& renderer, 
+		UIManager& uiManager) : Scene(eventDispatcher, assetManager, soundAssetManager, soundManager, renderer, uiManager) {}
 	virtual ~TestScene() = default;
 
 	void Initialize() override;
