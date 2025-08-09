@@ -2,6 +2,7 @@
 #include "Selector.h"
 #include "SkillCondition.h"
 #include "PhaseChecker_1.h"
+#include "PhaseChecker_2.h"
 #include "PhaseChecker_3.h"
 #include "BossCoolDown.h"
 #include "Sequence.h"
@@ -11,16 +12,17 @@
 #include "Pick.h"
 #include "Lazer.h"
 #include "ArmSwip.h"
+#include "ArmStretch.h"
 
 void BossBehaviorTree::Initialize()
 {
 #pragma region PhaseCheckers_and_CoolDown
 	auto P1_PhaseChecker = std::make_shared<PhaseChecker_1>("PhaseChecker_1");
-	//auto P2_PhaseChecker = std::make_shared<PhaseChecker>("PhaseChecker_2");
+	auto P2_PhaseChecker = std::make_shared<PhaseChecker_2>("PhaseChecker_2");
 	auto P3_PhaseChecker = std::make_shared<PhaseChecker_3>("PhaseChecker_3");
 
 	auto P1_BossCoolDown = std::make_shared<BossCoolDown>("BossCoolDown_1");
-	//auto P2_BossCoolDown = std::make_shared<BossCoolDown>("BossCoolDown");
+	auto P2_BossCoolDown = std::make_shared<BossCoolDown>("BossCoolDown_2");
 	auto P3_BossCoolDown = std::make_shared<BossCoolDown>("BossCoolDown_3");
 
 #pragma endregion
@@ -32,6 +34,11 @@ void BossBehaviorTree::Initialize()
 	auto P1_Skill_3_Con = std::make_shared<SkillCondition>("Skill_3_Con");
 	auto P1_Skill_4_Con = std::make_shared<SkillCondition>("Skill_4_Con");
 	auto P1_Skill_5_Con = std::make_shared<SkillCondition>("Skill_5_Con");
+
+	// 2페이즈 스킬 사용 가능 판정 노드
+	auto P2_Skill_1_Con = std::make_shared<SkillCondition>("Skill_1_Con");
+	auto P2_Skill_2_Con = std::make_shared<SkillCondition>("Skill_2_Con");
+	auto P2_Skill_3_Con = std::make_shared<SkillCondition>("Skill_3_Con");
 
 	// 3페이즈 스킬 사용 가능 판정 노드
 	auto P3_Skill_1_Con = std::make_shared<SkillCondition>("Skill_1_Con");
@@ -203,6 +210,30 @@ void BossBehaviorTree::Initialize()
 	auto P1_Skill_5 = std::make_shared<Sequence>("P1_Skill_5");
 	P1_Skill_5->AddChild(P1_Skill_5_Con);
 	P1_Skill_5->AddChild(P1_Skill_5_1_Parallel);
+
+#pragma endregion
+
+#pragma region 2-1
+	auto P2_Skill_1_ArmStretch = std::make_shared<ArmStretch>("Row_1");
+	auto P2_Skill_1 = std::make_shared<Sequence>("P2_Skill_1");
+	P2_Skill_1->AddChild(P2_Skill_1_Con);
+	P2_Skill_1->AddChild(P2_Skill_1_ArmStretch);
+
+#pragma endregion
+
+#pragma region 2-2
+	auto P2_Skill_2_ArmStretch = std::make_shared<ArmStretch>("Row_2");
+	auto P2_Skill_2 = std::make_shared<Sequence>("P2_Skill_2");
+	P2_Skill_2->AddChild(P2_Skill_2_Con);
+	P2_Skill_2->AddChild(P2_Skill_2_ArmStretch);
+
+#pragma endregion
+
+#pragma region 2-3
+	auto P2_Skill_3_ArmStretch = std::make_shared<ArmStretch>("Row_3");
+	auto P2_Skill_3 = std::make_shared<Sequence>("P2_Skill_3");
+	P2_Skill_3->AddChild(P2_Skill_3_Con);
+	P2_Skill_3->AddChild(P2_Skill_3_ArmStretch);
 
 #pragma endregion
 
@@ -380,6 +411,13 @@ void BossBehaviorTree::Initialize()
 	Phase_1_Skills->AddChild(P1_Skill_5);
 #pragma endregion
 
+#pragma region Phase_2
+	auto Phase_2_Skills = std::make_shared<Selector>("Phase_2_Skills");
+	Phase_2_Skills->AddChild(P2_Skill_1);
+	Phase_2_Skills->AddChild(P2_Skill_2);
+	Phase_2_Skills->AddChild(P2_Skill_3);
+
+#pragma endregion
 
 
 #pragma region Phase_3
@@ -394,13 +432,19 @@ void BossBehaviorTree::Initialize()
 
 
 #pragma region PhaseSelectors_and_Root
-	//원본임
 	auto Phase_1 = std::make_shared<Sequence>("Phase_1");
+	auto Phase_2 = std::make_shared<Sequence>("Phase_2");
 	auto Phase_3 = std::make_shared<Sequence>("Phase_3");
 
 	Phase_1->AddChild(P1_PhaseChecker);
 	Phase_1->AddChild(P1_BossCoolDown);
 	Phase_1->AddChild(Phase_1_Skills);
+
+	Phase_2->AddChild(P2_PhaseChecker);
+	Phase_2->AddChild(P2_BossCoolDown);
+	Phase_2->AddChild(Phase_2_Skills);
+
+
 
 	Phase_3->AddChild(P3_PhaseChecker);
 	Phase_3->AddChild(P3_BossCoolDown);
@@ -409,6 +453,7 @@ void BossBehaviorTree::Initialize()
 
 	auto Root = std::make_shared<Selector>("Root");
 	Root->AddChild(Phase_1);
+	Root->AddChild(Phase_2);
 	Root->AddChild(Phase_3);
 
 	m_BehaviorTree = Root;

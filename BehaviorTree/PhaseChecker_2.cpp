@@ -1,18 +1,18 @@
-#include "PhaseChecker_3.h"
+#include "PhaseChecker_2.h"
 #include "BlackBoard.h"
 
-NodeState PhaseChecker_3::Tick(BlackBoard& bb, float deltaTime)
+NodeState PhaseChecker_2::Tick(BlackBoard& bb, float deltaTime)
 {
     int currPhase = bb.GetValue<int>("CurrPhase").value();
     float hp = bb.GetValue<float>("BossCurrHP").value();
     bool isPhase3 = bb.GetValue<bool>("3Phase").value();
 
-    if (currPhase == 3)
+    if (currPhase == 2)
         return NodeState::Success;
 
-    if (hp < 50.f && isPhase3)
+    if (hp < 50.f && !isPhase3)
     {
-        bb.SetValue("CurrPhase", 3);
+        bb.SetValue("CurrPhase", 2);
         return NodeState::Success;
     }
 

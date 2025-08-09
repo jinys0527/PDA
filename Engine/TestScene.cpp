@@ -50,7 +50,7 @@ void TestScene::Initialize()
 	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
 	cameraObject->m_Name = "Camera";
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
-	trans3->SetPosition({ 960.0f, 540.f });
+	trans3->SetPosition({ 60.0f, 540.f });
 	cameraObject->GetComponent<CameraComponent>()->SetZoom(1.0f);
 	SetMainCamera(cameraObject);
 

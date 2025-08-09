@@ -44,10 +44,23 @@ NodeState SkillCondition::Tick(BlackBoard& bb, float deltaTime)
     {
         // 실행된 스킬: 가중치 감소
         float weight = bb.GetValue<float>(skillName).value();
-        bb.SetValue(skillName, 1.0f); // 음수 방지
+        bb.SetValue(skillName, 1.0f); // 1로 초기화
 
+        int n = 0;
         // 실행되지 않은 스킬들: 가중치 증가
-        for (int i = 1; i <= 5; ++i)
+        if (bb.GetValue<int>("CurrPhase").value() == 2)
+        {
+            n = 3;
+            bb.SetValue("SkillChance_4", 0.f);
+            bb.SetValue("SkillChance_5", 0.f);
+
+        }
+        else
+        {
+            n = 5;
+        }
+
+        for (int i = 1; i <= n; ++i)
         {
             if (i == skillIndex) continue; // 실행된 스킬은 건너뜀
 

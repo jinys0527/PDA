@@ -87,6 +87,12 @@
     <ClInclude Include="PhaseChecker_3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ArmStretch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhaseChecker_2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -153,6 +159,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PhaseChecker_3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArmStretch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhaseChecker_2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

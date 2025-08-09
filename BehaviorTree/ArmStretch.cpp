@@ -1,15 +1,13 @@
-#include "ArmSmash.h"
+#include "ArmStretch.h"
 #include "BlackBoard.h"
 #include "AnimationComponent.h"
 #include "SpriteRenderer.h"
 #include "TransformComponent.h"
 
-
-NodeState ArmSmash::Tick(BlackBoard& bb, float deltaTime)
+NodeState ArmStretch::Tick(BlackBoard& bb, float deltaTime)
 {
-
 #pragma region Initialize
-    if (!m_Initialized)
+	if (!m_Initialized)
     {
         m_Telegraphs = bb.GetValue<std::vector<std::shared_ptr<Telegraph>>>("BossTelegraph").value();
         m_Anims = bb.GetValue<std::vector<std::shared_ptr<GameObject>>>("BossAnims").value();
@@ -28,15 +26,13 @@ NodeState ArmSmash::Tick(BlackBoard& bb, float deltaTime)
                 m_maxIndex = idx;
             }
         }
-        m_MoveStartPos = m_Telegraphs[m_maxIndex]->GetInitPos();
-        m_MoveTargetPos = m_Telegraphs[m_minIndex]->GetInitPos();
+        m_MoveStartPos = m_Telegraphs[m_minIndex]->GetInitPos();
+        m_MoveTargetPos = m_Telegraphs[m_maxIndex]->GetInitPos();
 
         m_Initialized = true;
 
     }
-
 #pragma endregion
-
 
     if (!m_HasStarted)
     {
@@ -82,7 +78,7 @@ NodeState ArmSmash::Tick(BlackBoard& bb, float deltaTime)
         float t = m_MoveTimer / m_MoveDuration;
         if (t > 1.0f) t = 1.0f;
 
-        auto trans = m_Telegraphs[m_maxIndex]->GetComponent<TransformComponent>();
+        auto trans = m_Telegraphs[m_minIndex]->GetComponent<TransformComponent>();
         Math::Vector2F currPos;
         currPos.x = m_MoveStartPos.x + (m_MoveTargetPos.x - m_MoveStartPos.x) * t;
         currPos.y = m_MoveStartPos.y + (m_MoveTargetPos.y - m_MoveStartPos.y) * t;
@@ -92,15 +88,15 @@ NodeState ArmSmash::Tick(BlackBoard& bb, float deltaTime)
         if (t >= 1.0f)
         {
             m_IsMoving = false; // 이동 완료
-            m_Telegraphs[m_maxIndex]->SetColliderActive(false);
+            m_Telegraphs[m_minIndex]->SetColliderActive(false);
         }
     }
 
     return NodeState::Running;
+
 }
 
-
-void ArmSmash::StartWarning(BlackBoard& bb)
+void ArmStretch::StartWarning(BlackBoard& bb)
 {
     std::cout << m_Name << " 경고" << std::endl;
 
@@ -113,9 +109,10 @@ void ArmSmash::StartWarning(BlackBoard& bb)
             telegraph->SetActive();
         }
     }
+
 }
 
-void ArmSmash::EndWarning(BlackBoard& bb)
+void ArmStretch::EndWarning(BlackBoard& bb)
 {
     std::cout << m_Name << " 공격" << std::endl;
 
@@ -129,7 +126,7 @@ void ArmSmash::EndWarning(BlackBoard& bb)
         }
     }
 
-    m_Telegraphs[m_maxIndex]->SetColliderActive(true);
+    m_Telegraphs[m_minIndex]->SetColliderActive(true);
 
     m_IsMoving = true;
 
@@ -145,14 +142,14 @@ void ArmSmash::EndWarning(BlackBoard& bb)
 
     m_AnimPlaying = true;
     m_AnimTimer = 0.0f;
+
 }
 
-void ArmSmash::Reset()
+void ArmStretch::Reset()
 {
     __super::Reset();
     m_MoveTimer = 0.0f;
 
-    m_Telegraphs[m_maxIndex]->GetComponent<TransformComponent>()->SetPosition(m_MoveStartPos);
+    m_Telegraphs[m_minIndex]->GetComponent<TransformComponent>()->SetPosition(m_MoveStartPos);
+
 }
-
-
