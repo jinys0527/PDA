@@ -18,7 +18,7 @@ NodeState ArmSmash::Tick(BlackBoard& bb, float deltaTime)
         }
         //m_MoveDuration = m_Anims[0]->GetComponent<AnimationComponent>()->GetTotalDuration("attack");
 
-            m_AttackRange = bb.GetValue<std::vector<int>>(m_Name).value();
+        m_AttackRange = bb.GetValue<std::vector<int>>(m_Name).value();
 
         m_Initialized = true;
     }

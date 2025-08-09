@@ -2,7 +2,7 @@
 
 BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegraphs, std::vector<std::shared_ptr<GameObject>>& anim)
 {
-	SetValue("BossMaxHP", 100.0f);
+	SetValue("BossMaxHP", 49.0f);
 	SetValue("BossCurrHP", GetValue<float>("BossMaxHP").value());
 	SetValue("IdleCoolDown", 1.0f);
 
@@ -17,9 +17,13 @@ BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegrap
 	SetValue("Row_3", std::vector<int>{10, 11, 12, 13, 14});
 
 	SetValue("Pick_0", std::vector<int>{0});
+	SetValue("Pick_1", std::vector<int>{1});
+	SetValue("Pick_3", std::vector<int>{3});
 	SetValue("Pick_4", std::vector<int>{4});
 	SetValue("Pick_5", std::vector<int>{5});
+	SetValue("Pick_6", std::vector<int>{6});
 	SetValue("Pick_7", std::vector<int>{7});
+	SetValue("Pick_8", std::vector<int>{8});
 	SetValue("Pick_9", std::vector<int>{9});
 	SetValue("Pick_10", std::vector<int>{10});
 	SetValue("Pick_14", std::vector<int>{14});
@@ -39,8 +43,8 @@ BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegrap
 	SetValue("SkillWeight_1", 1.0f);
 	SetValue("SkillWeight_2", 1.0f);
 	SetValue("SkillWeight_3", 1.0f);
-	SetValue("SkillWeight_4", 1.0f);
-	SetValue("SkillWeight_5", 5001.0f);
+	SetValue("SkillWeight_4", 5001.0f);
+	SetValue("SkillWeight_5", 1.0f);
 
 	SetValue("SkillChance_1", 0.f);
 	SetValue("SkillChance_2", 0.f);
