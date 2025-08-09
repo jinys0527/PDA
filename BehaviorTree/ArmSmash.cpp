@@ -151,12 +151,8 @@ void ArmSmash::EndWarning(BlackBoard& bb)
 
 void ArmSmash::Reset()
 {
-    m_ElapsedTime = 0.0f;
-    m_HasStarted = false;
-    m_AttackStarted = false;
+    __super::Reset();
     m_MoveTimer = 0.0f;
-    m_AnimPlaying = false;
-    m_AnimTimer = 0.0f;
 
     m_Telegraphs[m_maxIndex]->GetComponent<TransformComponent>()->SetPosition(m_MoveStartPos);
 }

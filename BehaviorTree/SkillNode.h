@@ -16,9 +16,12 @@ protected:
 	virtual void EndWarning(BlackBoard& bb) {}
 	virtual void Reset() 
 	{
-		bool m_HasStarted = false;
-		bool m_AnimPlaying = false;
-		bool m_AttackStarted = false;
+		m_HasStarted = false;
+		m_AnimPlaying = false;
+		m_AttackStarted = false;
+		m_ElapsedTime = 0.f;
+		m_AnimTimer = 0.0f;
+
 	}
 
 	//공격 범위

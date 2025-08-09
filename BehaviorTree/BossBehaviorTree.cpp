@@ -9,6 +9,7 @@
 #include "ParallelNode.h"
 #include "Pick.h"
 #include "Lazer.h"
+#include "ArmSwip.h"
 
 void BossBehaviorTree::Initialize()
 {
@@ -143,6 +144,11 @@ void BossBehaviorTree::Initialize()
 
 
 
+	auto P1_Skill_ArmSwip_Test = std::make_shared<ArmSwip>("Swip_L");
+	auto P1_Skill_2 = std::make_shared<Sequence>("P1_Skill_2");
+	P1_Skill_2->AddChild(P1_Skill_2_Con);
+	P1_Skill_2->AddChild(P1_Skill_ArmSwip_Test);
+
 
 	auto P1_Skill_3 = std::make_shared<Sequence>("P1_Skill_3");
 	P1_Skill_3->AddChild(P1_Skill_3_Con);
@@ -156,7 +162,7 @@ void BossBehaviorTree::Initialize()
 	Phase_1->AddChild(P1_PhaseChecker);
 	Phase_1->AddChild(P1_BossCoolDown);
 	Phase_1->AddChild(P1_Skill_1);
-	//Phase_1->AddChild(P1_Skill_2);
+	Phase_1->AddChild(P1_Skill_2);
 	Phase_1->AddChild(P1_Skill_3);
 
 
