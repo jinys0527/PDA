@@ -18,8 +18,8 @@ void TitleScene::Initialize()
 #pragma region Setting
 	auto settingBackGround = std::make_shared<UIObject>(m_EventDispatcher);
 	settingBackGround->SetIsFullScreen(true);
-	auto settingBackGroungImg = settingBackGround->GetComponent<UIImageComponent>();
-	settingBackGroungImg->SetBitmap(m_AssetManager.LoadTexture(L"setting_bg_popup", "../Resource/UI/Setting/setting_bg_popup.png"));
+	auto settingBackGroundImg = settingBackGround->AddComponent<UIImageComponent>();
+	settingBackGroundImg->SetBitmap(m_AssetManager.LoadTexture(L"setting_bg_popup", "../Resource/UI/Setting/setting_bg_popup.png"));
 	auto settingBackGroundRect = settingBackGround->GetComponent<RectTransformComponent>();
 
 	auto settingOkButton = std::make_shared<ButtonUI>(m_EventDispatcher);
@@ -90,13 +90,20 @@ void TitleScene::Initialize()
 
 
 #pragma region Credit
-	auto creditMainButton = std::make_shared<ButtonUI>(m_EventDispatcher);
-
-	auto creditMainButtonRect = creditMainButton->GetComponent<RectTransformComponent>();
-
 	auto creditBackGround = std::make_shared<UIObject>(m_EventDispatcher);
 	creditBackGround->SetIsFullScreen(true);
+	auto creditBackGroundImg = creditBackGround->AddComponent<UIImageComponent>();
+	creditBackGroundImg->SetBitmap(m_AssetManager.LoadTexture(L"credits_popup", "../Resource/UI/Credit/credits_popup.png"));
 	auto creditBackGroundRect = creditBackGround->GetComponent<RectTransformComponent>();
+
+	auto creditMainButton = std::make_shared<ButtonUI>(m_EventDispatcher);
+	auto creditMainButtonImg = creditMainButton->GetComponent<UIImageComponent>();
+	creditMainButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"credits_button_off", "../Resource/UI/Credit/credits_button_off.png"));
+	auto creditMainButtonComp = creditMainButton->GetComponent<UIButtonComponent>();
+	creditMainButtonComp->GetFSM().SetOnEnter("Hover", [creditMainButtonImg, this]() { creditMainButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"credits_button_on", "../Resource/UI/Credit/credits_button_on.png")); });
+	creditMainButtonComp->GetFSM().SetOnExit("Hover", [creditMainButtonImg, this]() { creditMainButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"credits_button_off", "../Resource/UI/Credit/credits_button_off.png")); });
+	creditMainButtonComp->GetFSM().SetOnEnter("Click", [creditBackGround]() { creditBackGround->SetIsVisible(false); });
+	auto creditMainButtonRect = creditMainButton->GetComponent<RectTransformComponent>();
 	
 	creditBackGroundRect->AddChild(creditMainButtonRect);
 
@@ -107,9 +114,37 @@ void TitleScene::Initialize()
 #pragma region Exit
 	auto exitBackGround = std::make_shared<UIObject>(m_EventDispatcher);
 	exitBackGround->SetIsFullScreen(true);
-	exitBackGround->SetIsVisible(false);
+	auto exitBackGroundImg = exitBackGround->AddComponent<UIImageComponent>();
+	exitBackGroundImg->SetBitmap(m_AssetManager.LoadTexture(L"exitconfirm_popup", "../Resource/UI/Exit/exitconfirm_popup.png"));
+	auto exitBackGroundRect = exitBackGround->GetComponent<RectTransformComponent>();
+
 	auto exitYesButton = std::make_shared<ButtonUI>(m_EventDispatcher);
+	auto exitYesButtonImg = exitYesButton->GetComponent<UIImageComponent>();
+	exitYesButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"exitconfirm_yes_button_off", "../Resource/UI/Exit/exitconfirm_yes_button_off.png"));
+	auto exitYesButtonComp = exitYesButton->GetComponent<UIButtonComponent>();
+	exitYesButtonComp->GetFSM().SetOnEnter("Hover", [exitYesButtonImg, this]() { exitYesButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"exitconfirm_yes_button_on", "../Resource/UI/Exit/exitconfirm_yes_button_on.png")); });
+	exitYesButtonComp->GetFSM().SetOnExit("Hover", [exitYesButtonImg, this]() { exitYesButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"exitconfirm_yes_button_off", "../Resource/UI/Exit/exitconfirm_yes_button_off.png")); });
+	exitYesButtonComp->GetFSM().SetOnEnter("Click", [this]() {
+			if (m_SceneManager)
+			{
+				m_SceneManager->RequestQuit();
+			}
+		});
+	auto exitYesButtonRect = exitYesButton->GetComponent<RectTransformComponent>();
+
 	auto exitNoButton = std::make_shared<ButtonUI>(m_EventDispatcher);
+	auto exitNoButtonImg = exitNoButton->GetComponent<UIImageComponent>();
+	exitNoButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"exitconfirm_yes_button_off", "../Resource/UI/Exit/exitconfirm_yes_button_off.png"));
+	auto exitNoButtonComp = exitNoButton->GetComponent<UIButtonComponent>();
+	exitNoButtonComp->GetFSM().SetOnEnter("Hover", [exitNoButtonImg, this]() { exitNoButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"exitconfirm_no_button_on", "../Resource/UI/Exit/exitconfirm_no_button_on.png")); });
+	exitNoButtonComp->GetFSM().SetOnExit("Hover", [exitNoButtonImg, this]() { exitNoButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"exitconfirm_no_button_off", "../Resource/UI/Exit/exitconfirm_no_button_off.png")); });
+	exitNoButtonComp->GetFSM().SetOnEnter("Click", [exitBackGround]() { exitBackGround->SetIsVisible(false); });
+	auto exitNoButtonRect = exitNoButton->GetComponent<RectTransformComponent>();
+
+	exitBackGroundRect->AddChild(exitYesButtonRect);
+	exitBackGroundRect->AddChild(exitNoButtonRect);
+
+	exitBackGround->SetIsVisible(false);
 #pragma endregion
 
 #pragma region Main
@@ -131,7 +166,7 @@ void TitleScene::Initialize()
 	auto menuBoxRect = menuBox->GetComponent<RectTransformComponent>();
 
 	auto startButton = std::make_shared<ButtonUI>(m_EventDispatcher);
-	auto startButtonImg = startButton->AddComponent<UIImageComponent>();
+	auto startButtonImg = startButton->GetComponent<UIImageComponent>();
 	startButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"mainmenu_startbutton_off", "../Resource/UI/Title/mainmenu_startbutton_off.png"));
 	auto startButtonComp = startButton->GetComponent<UIButtonComponent>();
 	startButtonComp->GetFSM().SetOnEnter("Hover", [startButtonImg, this]() { startButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"mainmenu_startbutton_on", "../Resource/UI/Title/mainmenu_startbutton_on.png")); });
@@ -141,7 +176,7 @@ void TitleScene::Initialize()
 	auto startButtonRect = startButton->GetComponent<RectTransformComponent>();
 
 	auto settingButton = std::make_shared<ButtonUI>(m_EventDispatcher);
-	auto settingButtonImg = settingButton->AddComponent<UIImageComponent>();
+	auto settingButtonImg = settingButton->GetComponent<UIImageComponent>();
 	settingButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"mainmenu_settingbutton_off", "../Resource/UI/Title/mainmenu_settingbutton_off.png"));
 	auto settingButtonComp = settingButton->GetComponent<UIButtonComponent>();
 	settingButtonComp->GetFSM().SetOnEnter("Hover", [settingButtonImg, this]() {settingButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"mainmenu_setting_on", "../Resource/UI/Title/mainmenu_settingbutton_on.png")); });
@@ -151,12 +186,12 @@ void TitleScene::Initialize()
 	auto settingButtonRect = settingButton->GetComponent<RectTransformComponent>();
 
 	auto creditButton = std::make_shared<ButtonUI>(m_EventDispatcher);
-	auto creditButtonImg = creditButton->AddComponent<UIImageComponent>();
+	auto creditButtonImg = creditButton->GetComponent<UIImageComponent>();
 	creditButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"mainmenu_creditbutton_off", "../Resource/UI/Title/mainmenu_creditbutton_off.png"));
 	auto creditButtonComp = creditButton->GetComponent<UIButtonComponent>();
 	creditButtonComp->GetFSM().SetOnEnter("Hover", [creditButtonImg, this]() {creditButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"mainmenu_creditbutton_on", "../Resource/UI/Title/mainmenu_creditbutton_on.png")); });
 	creditButtonComp->GetFSM().SetOnExit("Hover", [creditButtonImg, this]() {creditButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"mainmenu_creditbutton_off", "../Resource/UI/Title/mainmenu_creditbutton_off.png")); });
-	creditButtonComp->GetFSM().SetOnEnter("Click", []() {});
+	creditButtonComp->GetFSM().SetOnEnter("Click", [creditBackGround]() { creditBackGround->SetIsVisible(true);  });
 
 	auto creditButtonRect = creditButton->GetComponent<RectTransformComponent>();
 

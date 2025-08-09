@@ -51,7 +51,7 @@ void GameApplication::Run()
 {
 	MSG msg = { 0 };
 
-	while (WM_QUIT != msg.message)
+	while (WM_QUIT != msg.message && !m_SceneManager.ShouldQuit())
 	{
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
