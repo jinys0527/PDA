@@ -21,6 +21,7 @@ void Telegraph::Update(float deltaTime)
         m_InitPos = trans->GetPosition();
 
         m_WarningTexture = GetComponent<SpriteRenderer>()->GetTexture();
+        m_IsInitialized = true;
     }
 
     if (m_IsWaving)
