@@ -1,8 +1,9 @@
 #include "BossBlackBoard.h"
 
-BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegraphs, std::vector<std::shared_ptr<GameObject>>& anim)
+BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegraphs, std::vector<std::shared_ptr<GameObject>>& anim, SoundManager& soundmanager)
+	: BlackBoard(soundmanager)
 {
-	SetValue("BossMaxHP", 49.0f);
+	SetValue("BossMaxHP", 100.0f);
 	SetValue("BossCurrHP", GetValue<float>("BossMaxHP").value());
 	SetValue("IdleCoolDown", 1.0f);
 
@@ -40,7 +41,7 @@ BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegrap
 	SetValue("3Phase", false);
 	SetValue("RandomValue", 0.0f);
 
-	SetValue("SkillWeight_1", 5001.0f);
+	SetValue("SkillWeight_1", 1.0f);
 	SetValue("SkillWeight_2", 1.0f);
 	SetValue("SkillWeight_3", 1.0f);
 	SetValue("SkillWeight_4", 1.0f);

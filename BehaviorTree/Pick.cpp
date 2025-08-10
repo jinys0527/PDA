@@ -20,6 +20,8 @@ NodeState Pick::Tick(BlackBoard& bb, float deltaTime)
 
     if (!m_HasStarted)
     {
+        bb.GetSoundManager().SFX_Shot(L"boss_warning_beep");
+
         StartWarning(bb);
         m_HasStarted = true;
     }
@@ -43,6 +45,8 @@ NodeState Pick::Tick(BlackBoard& bb, float deltaTime)
     {
         if (!m_AttackStarted)
         {
+            bb.GetSoundManager().SFX_Shot(L"boss_arm_slam_stab");
+
             EndWarning(bb);
             m_AttackStarted = true;
         }
@@ -50,6 +54,7 @@ NodeState Pick::Tick(BlackBoard& bb, float deltaTime)
         // 애니메이션 끝났는지 체크
         if (!m_AnimPlaying)
         {
+
             Reset();
             return NodeState::Success;
         }

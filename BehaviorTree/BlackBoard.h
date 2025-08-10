@@ -4,6 +4,7 @@
 #include <optional>
 #include <memory>
 #include <variant>
+#include "SoundManager.h"
 
 
 class Telegraph;
@@ -27,6 +28,8 @@ public:
 
 public:
 
+    BlackBoard(SoundManager& soundmanager) : m_SoundManager(soundmanager) {}
+
 	void SetValue(const std::string& key, const BBValue& value);
 
     // 데이터 확인
@@ -44,9 +47,11 @@ public:
 
     // 데이터 존재 여부
     bool HasKey(const std::string& key) const;
+    SoundManager& GetSoundManager() { return m_SoundManager; }
 
-private:
+protected:
 	std::unordered_map<std::string, BBValue> m_Data;
+    SoundManager& m_SoundManager;
 
 };
 

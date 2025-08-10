@@ -45,169 +45,6 @@
 
 void TestScene::Initialize()
 {
-
-	//#pragma region telegraph
-	//	std::vector<std::shared_ptr<Telegraph>> m_Telegraphs;
-	//	m_Telegraphs.reserve(12); // Â¸ÃžÂ¸Ã°Â¸Â® ?Ã§Ã?�Ã’Â´Ã�?Â¹Ã¦ÃÃ¶
-	//
-	//	const int columns = 4;
-	//	const int rows = 3;
-	//
-	//	const float startX = 0.0f;
-	//	const float startY = 0.0f;
-	//
-	//	// Â¿Â©Â¹Ã©(margin) Â¼Â³ÃÂ¤
-	//	const float marginX = 20.0f; // Â°Â¡Â·ÃŽ Â°Â£Â°Ã
-	//	const float marginY = 20.0f; // Â¼Â¼Â·ÃŽ Â°Â£Â°Ã
-	//
-	//	D2D1_SIZE_F tileSize = { 0 };
-	//
-	//	for (int i = 0; i < 12; ++i)
-	//	{
-	//		auto teleobj = std::make_shared<Telegraph>(m_EventDispatcher);
-	//		teleobj->m_Name = "tele" + std::to_string(i);
-	//		auto sr = teleobj->AddComponent<SpriteRenderer>();
-	//		auto texture = m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png");
-	//		sr->SetTexture(texture);
-	//		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
-	//
-	//		if (i == 0)
-	//		{
-	//			tileSize = texture->GetSize();
-	//		}
-	//
-	//		int col = i % columns;
-	//		int row = i / columns;
-	//
-	//		// Â°Â£Â°Ã Ã?�Ã·Ã‡Ã�?ÃÃ?�Ã‡Â�?Â°Ã¨Â»Ãª
-	//		float posX = startX + col * (tileSize.width + marginX);
-	//		float posY = startY + row * (tileSize.height + marginY);
-	//
-	//		std::cout << "posx: " << posX << " posy: " << posY << std::endl;
-	//		teleobj->GetComponent<TransformComponent>()->SetPosition({ posX, posY });
-	//		sr->SetOpacity(0.0f);
-	//		teleobj->SetZ(row);
-	//
-	//		AddGameObject(teleobj);
-	//		m_Telegraphs.push_back(teleobj);
-	//	}
-	//
-	//
-	//
-	//
-	//#pragma endregion
-	//
-	//	m_BlackBoard = std::make_unique<BossBlackBoard>(m_Telegraphs);
-	//	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
-	//
-	//	{
-	//		auto gameObject = std::make_shared<PlayerObject>(m_EventDispatcher);
-	//		gameObject->m_Name = "player";
-	//		//m_EventDispatcher.AddListener()
-	//		auto trans = gameObject->GetComponent<TransformComponent>();
-	//		trans->SetPosition({ 960.0f, 540.0f });
-	//		auto sr = gameObject->AddComponent<SpriteRenderer>();
-	//		sr->SetAssetManager(&m_AssetManager);
-	//		auto& clips = m_AssetManager.LoadAnimation(L"boss", L"../Resource/Character/Boss/Boss_Arm_Right_Hit/boss.json");
-	//		auto animComp = gameObject->AddComponent<AnimationComponent>();
-	//		animComp->SetAssetManager(&m_AssetManager);
-	//
-	//		gameObject->SetShadowBitmap(m_AssetManager.LoadTexture(L"cat", L"../Resource/cat.png"));
-	//
-	//		for (const auto& [clipName, clip] : clips)
-	//		{
-	//			animComp->AddClip(clipName, &clip);
-	//		}
-	//
-	//		//sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
-	//		animComp->Play("attack");
-	//		sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
-	//		sr->SetTextureKey("boss");
-	//		//±×·¡ÇÇÆ¼
-	//		auto graffiti = std::make_shared<GraffitiObject>(m_EventDispatcher);
-	//		graffiti->m_Name = "graffiti";
-	//		auto graffitiTrans = graffiti->GetComponent<TransformComponent>();
-	//		graffitiTrans->SetPosition({ 1600,900 });
-	//		sr = graffiti->AddComponent<SpriteRenderer>();
-	//		sr->SetAssetManager(&m_AssetManager);
-	//		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
-	//		sr->SetPath("../Resource/cat.png");
-	//		sr->SetTextureKey("cat_texture");
-	//		sr->SetTexture(bitmap);
-	//		sr->SetPivotPreset(SpritePivotPreset::Center, bitmap->GetSize());
-	//		graffiti->GetComponent<GraffitiComponent>()->Start();
-	//
-	//		AddGameObject(gameObject);
-	//		AddGameObject(graffiti);
-	//
-	//
-	//		{
-	//			auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
-	//			obstacle->m_Name = "obstacle";
-	//			auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
-	//			obstacleTrans->SetPosition({ 1460.0f, 350.0f });
-	//			sr = obstacle->AddComponent<SpriteRenderer>();
-	//			sr->SetAssetManager(&m_AssetManager);
-	//			bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
-	//			sr->SetPath("../Resource/cat.png");
-	//			sr->SetTextureKey("cat_texture");
-	//			sr->SetTexture(bitmap);
-	//			sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
-	//
-	//			obstacle->SetZ(1);
-	//			obstacle->SetSlide(true);
-	//
-	//			AddGameObject(obstacle);
-	//		}
-	//
-	//		{
-	//			auto obstacle = std::make_shared<ItemObject>(m_EventDispatcher);
-	//			obstacle->m_Name = "obstacle2";
-	//			auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
-	//			obstacleTrans->SetPosition({ 1000.0f, 700.0f });
-	//			sr = obstacle->AddComponent<SpriteRenderer>();
-	//			sr->SetAssetManager(&m_AssetManager);
-	//			bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
-	//			sr->SetPath("../Resource/cat.png");
-	//			sr->SetTextureKey("cat_texture");
-	//			sr->SetTexture(bitmap);
-	//			sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
-	//
-	//			obstacle.get()->SetZ(2);
-	//
-	//			AddGameObject(obstacle);
-	//		}
-	//
-	//
-	//	}
-	//
-	//
-	//	{
-	//		auto gameObject = std::make_shared<GameObject>(m_EventDispatcher);
-	//		gameObject->m_Name = "test";
-	//		auto trans = gameObject->GetComponent<TransformComponent>();
-	//		trans->SetPosition({ 300.0f, 300.0f });
-	//		auto sr = gameObject->AddComponent<SpriteRenderer>();
-	//		sr->SetAssetManager(&m_AssetManager);
-	//		auto& clips = m_AssetManager.LoadAnimation(L"boss", L"../Resource/Character/Boss/Boss_Arm_Right_Hit/boss.json");
-	//
-	//		auto animComp = gameObject->AddComponent<AnimationComponent>();
-	//		animComp->SetAssetManager(&m_AssetManager);
-	//
-	//		for (const auto& [clipName, clip] : clips)
-	//		{
-	//			animComp->AddClip(clipName, &clip);
-	//		}
-	//
-	//		animComp->Play("attack");
-	//
-	//		sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
-	//		sr->SetTextureKey("boss");
-	//
-	//
-	//		AddGameObject(gameObject);
-	//	}
-
 #pragma region camera
 
 	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
@@ -259,7 +96,7 @@ void TestScene::Initialize()
 
 #pragma region telegraph
 	std::vector<std::shared_ptr<Telegraph>> m_Telegraphs;
-	m_Telegraphs.reserve(12);
+	m_Telegraphs.reserve(15);
 
 	const int columns = 5;
 	const int rows = 3;
@@ -301,7 +138,7 @@ void TestScene::Initialize()
 		m_Telegraphs.push_back(teleobj);
 	}
  
-	m_BlackBoard = std::make_unique<BossBlackBoard>(m_Telegraphs, m_Anims);
+	m_BlackBoard = std::make_unique<BossBlackBoard>(m_Telegraphs, m_Anims, m_SoundManager);
 	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
 #pragma endregion
 

@@ -49,6 +49,8 @@ NodeState ArmSwip::Tick(BlackBoard& bb, float deltaTime)
 
     if (!m_HasStarted)
     {
+        bb.GetSoundManager().SFX_Shot(L"boss_warning_beep");
+
         StartWarning(bb);
         m_HasStarted = true;
     }
@@ -72,6 +74,8 @@ NodeState ArmSwip::Tick(BlackBoard& bb, float deltaTime)
     {
         if (!m_AttackStarted)
         {
+            bb.GetSoundManager().SFX_Shot(L"boss_arm_sweep");
+
             EndWarning(bb);
             m_AttackStarted = true;
         }

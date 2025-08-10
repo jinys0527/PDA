@@ -24,6 +24,9 @@ NodeState Lazer::Tick(BlackBoard& bb, float deltaTime)
 
     if (!m_HasStarted)
     {
+        bb.GetSoundManager().SFX_Shot(L"boss_laser_charge");
+        bb.GetSoundManager().SFX_Shot(L"boss_warning_beep");
+
         StartWarning(bb);
         m_HasStarted = true;
     }
@@ -54,11 +57,14 @@ NodeState Lazer::Tick(BlackBoard& bb, float deltaTime)
             {
                 m_Telegraphs[curLeft]->SetColliderActive(true);
                 m_Telegraphs[curLeft]->SetActive();
+                //m_Telegraphs[curLeft]->SetActiveAnimation();
             }
             if (curRight <= m_maxIndex)
             {
                 m_Telegraphs[curRight]->SetColliderActive(true);
                 m_Telegraphs[curRight]->SetActive();
+                //m_Telegraphs[curRight]->SetActiveAnimation();
+
             }
 
             // 이전 거 끄기
@@ -106,6 +112,8 @@ NodeState Lazer::Tick(BlackBoard& bb, float deltaTime)
     {
         if (!m_AttackStarted)
         {
+            bb.GetSoundManager().SFX_Shot(L"boss_laser_fire");
+
             EndWarning(bb);
             m_AttackStarted = true;
         }
