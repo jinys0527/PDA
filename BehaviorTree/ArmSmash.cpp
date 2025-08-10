@@ -53,7 +53,7 @@ NodeState ArmSmash::Tick(BlackBoard& bb, float deltaTime)
         {
             m_Anims[0]->GetComponent<AnimationComponent>()->SetIsActive(false);
             auto sprite = m_Anims[0]->GetComponent<SpriteRenderer>();
-            sprite->SetIsActive(0);
+            sprite->SetIsActive(false);
             sprite->SetOpacity(0);
             m_AnimPlaying = false;
         }
