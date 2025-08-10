@@ -10,7 +10,10 @@ void Object::Update(float deltaTime)
 	{
 		for (auto& comp : it->second)
 		{
-			comp->Update(deltaTime);
+			if (comp->GetIsActive())
+			{
+				comp->Update(deltaTime);
+			}
 		}
 	}
 }
