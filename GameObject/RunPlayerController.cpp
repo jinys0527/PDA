@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "RunPlayerController.h"
 #include "PlayerObject.h"
+#include "CameraComponent.h"
 #include "Event.h"
 
 RunPlayerController::RunPlayerController() : Component(), IEventListener()
@@ -237,6 +238,17 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 	else if (type == EventType::MouseRightClickUp)
 	{
 		m_IsHoldingAttack = false;
+		auto mouseData = static_cast<const Events::MouseState*>(data);
+
+		D2D1_POINT_2F tempMousePos = { mouseData->pos.x, mouseData->pos.y };
+
+		D2D1::Matrix3x2F viewMatrix = m_PlayerOwner->GetCameraObject()->GetComponent<CameraComponent>()->GetViewMatrix();
+		viewMatrix.Invert();
+		tempMousePos = viewMatrix.TransformPoint(tempMousePos);
+
+		mousePos.x = tempMousePos.x;
+		mousePos.y = tempMousePos.y;
+
 		m_PlayerOwner->GetFSM().Trigger("Shoot");
 	}
 }
