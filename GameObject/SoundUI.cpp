@@ -5,9 +5,7 @@ SoundUI::SoundUI(SoundManager& soundManager, EventDispatcher& eventDispatcher) :
 // 	m_Master = AddComponent<UISliderComponent>();
 // 	m_Master->Start();
 	m_BGM = AddComponent<UISliderComponent>();
-	m_BGM->Start();
 	m_SFX = AddComponent<UISliderComponent>();
-	m_SFX->Start();
 // 	m_UI = AddComponent<UISliderComponent>();
 // 	m_UI->Start();
 }

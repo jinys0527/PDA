@@ -84,7 +84,6 @@ void UIButtonComponent::OnEvent(EventType type, const void* data)
 		if (m_IsHovered)
 		{
 			auto mouseData = static_cast<const Events::MouseState*>(data);
-			std::cout << mouseData->pos.x << " " << mouseData->pos.y << "¿¡¼­ Å¬¸¯µÊ \n";
 			m_IsClicked = true;
 			m_FSM.Trigger("HoverToClick");
 

@@ -44,6 +44,8 @@ public:
 
 	void Render(std::vector<UIRenderInfo>& renderInfo, std::vector<UITextInfo>& textInfo);
 
+	void SendEventToUI(UIObject* ui, EventType type, const void* data);
+
 	void Start();
 
 	void Reset();
@@ -62,11 +64,22 @@ public:
 	{
 		return m_UIObjects;
 	}
+	// UIManager: UI가 변경될 때 호출하는 함수
+	void UpdateSortedUI(const std::unordered_map<std::string, std::shared_ptr<UIObject>>& uiMap);
+
+	void RefreshUIListForCurrentScene();
 
 private:
+	// UIManager 멤버 변수에 추가 (헤더에 선언)
+	std::vector<UIObject*> m_SortedUI;
+
+	UIObject* m_ActiveUI;
+	UIObject* m_LastHoveredUI = nullptr;
+	bool m_FullScreenUIActive = false;
+	int m_FullScreenZ = -1;
 	EventDispatcher& m_EventDispatcher; 
 	std::string m_CurrentSceneName;
-	void DispatchToTopUI(EventType type, const POINT& pos, std::unordered_map<std::string, std::shared_ptr<UIObject>>& uiMap);
+	void DispatchToTopUI(EventType type, const void* data);
 	std::unordered_map <std::string, std::unordered_map<std::string, std::shared_ptr<UIObject>>> m_UIObjects;
 };
 
