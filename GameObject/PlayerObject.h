@@ -7,6 +7,13 @@
 
 //class RunPlayerController;
 
+struct PlayerAttackInfo
+{
+	int damage;
+	PlayerObject* player;
+	Math::Vector2F mousePos;
+};
+
 //존재 이유 플레이어 생성마다 수많은 FSM 컴포넌트의 상태 설정과, 컴포넌트 생성을 씬에서 하기엔 힘들것 같아 생성시 동시에 컴포넌트를 내부에서 처리하게함
 class PlayerObject : public GameObject
 {
@@ -58,6 +65,12 @@ public:
 
 	int GetBullet() { return m_ReinforcedBullet; }
 
+	void SetIsAttackSuccessed(bool value) { if(value) m_IsAttackSuccessed = value; }
+
+	void SetCameraObject(GameObject* cameraObject);
+	
+	GameObject* GetCameraObject();
+
 protected:
 
 	FSM m_Fsm;
@@ -67,6 +80,8 @@ protected:
 	bool m_IsSlide = false;
 
 	bool m_IsFlip = false;
+
+	bool m_IsAttackSuccessed = false;
 
 	float m_RailHeight = 200;
 
@@ -85,6 +100,8 @@ protected:
 	float m_HoldingAttack = 0;
 
 	int m_ReinforcedBullet = 0;
+
+	GameObject* m_CameraObject;
 
 	Microsoft::WRL::ComPtr<ID2D1Bitmap1> m_ShadowBitmap;
 };
