@@ -29,18 +29,18 @@ public:
 	{
 		m_IsVisible = isVisible;
 
-		// 자식들한테도 재귀 호출해서 동일하게 적용
-		for (auto& child : m_RectTransform->GetChild())
-		{
-			if (child)
-			{
-				auto owner = dynamic_cast<UIObject*>(child->GetOwner());
-				if (owner)
-				{
-					owner->SetIsVisible(isVisible);
-				}
-			}
-		}
+		//// 자식들한테도 재귀 호출해서 동일하게 적용
+		//for (auto& child : m_RectTransform->GetChild())
+		//{
+		//	if (child)
+		//	{
+		//		auto owner = dynamic_cast<UIObject*>(child->GetOwner());
+		//		if (owner)
+		//		{
+		//			owner->SetIsVisible(isVisible);
+		//		}
+		//	}
+		//}
 	}
 	bool IsVisible();
 

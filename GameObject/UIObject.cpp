@@ -6,6 +6,7 @@
 #include "UIGridComponent.h"
 #include "UITextComponent.h"
 #include "UIUtils.h"
+#include "Object.h"
 
 UIObject::UIObject(EventDispatcher& eventDispatcher) : Object(eventDispatcher)
 {
@@ -21,6 +22,7 @@ void UIObject::Render(std::vector<UIRenderInfo>& renderInfo)
 		info.anchoredPosition = m_RectTransform->GetPosition();
 		info.anchor = m_RectTransform->GetAnchor();
 		info.sizeDelta = { 0, 0 }; 
+		info.layer = m_ZOrder;
 		if (m_RectTransform->GetParent())
 		{
 			auto parentSize = m_RectTransform->GetParent()->GetSize();
@@ -46,6 +48,7 @@ void UIObject::Render(std::vector<UIRenderInfo>& renderInfo)
 		frameInfo.anchor = frameRect->GetAnchor();
 		frameInfo.anchoredPosition = frameRect->GetPosition();
 		frameInfo.sizeDelta = { 0, 0 };
+		frameInfo.layer = m_ZOrder;
 		if (frameRect->GetParent())
 		{
 			auto parentSize = frameRect->GetParent()->GetSize();
@@ -70,6 +73,7 @@ void UIObject::Render(std::vector<UIRenderInfo>& renderInfo)
 		fillInfo.anchor = fillRect->GetAnchor();
 		fillInfo.anchoredPosition = fillRect->GetPosition();
 		fillInfo.sizeDelta = { 0, 0 };
+		fillInfo.layer = m_ZOrder;
 		if (fillRect->GetParent())
 		{
 			auto parentSize = fillRect->GetParent()->GetSize();
@@ -99,6 +103,7 @@ void UIObject::Render(std::vector<UIRenderInfo>& renderInfo)
 				info.anchoredPosition = rect->GetPosition();
 				info.anchor = rect->GetAnchor();
 				info.sizeDelta = { 0, 0 };
+				info.layer = m_ZOrder;
 				if (rect->GetParent())
 				{
 					auto parentSize = rect->GetParent()->GetSize();
@@ -127,6 +132,7 @@ void UIObject::Render(std::vector<UITextInfo>& renderInfo)
 		info.anchoredPosition = m_RectTransform->GetPosition();
 		info.anchor = m_RectTransform->GetAnchor();
 		info.sizeDelta = { 0, 0 };
+		info.layer = m_ZOrder;
 		if (m_RectTransform->GetParent())
 		{
 			auto parentSize = m_RectTransform->GetParent()->GetSize();
@@ -162,10 +168,10 @@ bool UIObject::HitCheck(const POINT& pos)
 
 bool UIObject::IsFullScreen()
 {
-	return false;
+	return m_IsFullScreen;
 }
 
 bool UIObject::IsVisible()
 {
-	return false;
+	return m_IsVisible;
 }
