@@ -43,6 +43,8 @@ public:
 	void Play();
 	void Play(const std::string& name, bool loop = true);
 
+	void Finish();
+
 	void Update(float deltaTime) override;
 
 	void OnEvent(EventType type, const void* data) override;

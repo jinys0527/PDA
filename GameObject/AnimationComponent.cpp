@@ -19,6 +19,11 @@ void AnimationComponent::Play(const std::string& name, bool loop /*= true*/)
 	m_CurrentClipName = name;
 }
 
+void AnimationComponent::Finish()
+{
+	m_AnimationController.FinishFrame();
+}
+
 void AnimationComponent::Update(float deltaTime)
 {
 	m_AnimationController.Update(deltaTime);

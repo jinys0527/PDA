@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Scene.h"
 #include <memory>
 #include "BlackBoard.h"
@@ -7,16 +7,17 @@
 class BossBehaviorTree;
 class BlackBoard;
 
-class TestScene : public Scene
+class InGameUITestScene : public Scene
 {
 public:
-	TestScene(EventDispatcher& eventDispatcher, 
-		AssetManager& assetManager, 
+	InGameUITestScene(EventDispatcher& eventDispatcher,
+		AssetManager& assetManager,
 		SoundAssetManager& soundAssetManager,
-		SoundManager& soundManager, 
-		D2DRenderer& renderer, 
-		UIManager& uiManager) : Scene(eventDispatcher, assetManager, soundAssetManager, soundManager, renderer, uiManager) {}
-	virtual ~TestScene() = default;
+		SoundManager& soundManager,
+		D2DRenderer& renderer,
+		UIManager& uiManager) : Scene(eventDispatcher, assetManager, soundAssetManager, soundManager, renderer, uiManager) {
+	}
+	virtual ~InGameUITestScene() = default;
 
 	void Initialize() override;
 	void Finalize()  override;
@@ -42,4 +43,3 @@ private:
 	std::unique_ptr<BlackBoard> m_BlackBoard;
 	int cnt = 0;
 };
-

@@ -244,6 +244,7 @@
   <ItemGroup>
     <ClInclude Include="Editor.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="InGameUITestScene.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Scene.h" />
@@ -253,6 +254,7 @@
   <ItemGroup>
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="InGameUITestScene.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -97,6 +97,11 @@
     <ClCompile Include="UIObject.cpp">
       <Filter>Objects\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BulletUIComponent.cpp" />
+    <ClCompile Include="DroneComponent.cpp" />
+    <ClCompile Include="HeartUIComponent.cpp" />
+    <ClCompile Include="UIGridComponent.cpp" />
+    <ClCompile Include="PlayerEffectComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h">
@@ -159,7 +164,6 @@
     <ClInclude Include="DropObstacle.h">
       <Filter>Objects\Header Files</Filter>
     </ClInclude>
-
     <ClInclude Include="GameObject.h">
       <Filter>Objects\Header Files</Filter>
     </ClInclude>
@@ -175,26 +179,16 @@
     <ClInclude Include="Obstacle.h">
       <Filter>Objects\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SoundUI.h">
-      <Filter>Object\Header</Filter>
-    </ClInclude>
     <ClInclude Include="GraffitiComponent.h">
       <Filter>Component\Header</Filter>
     </ClInclude>
     <ClInclude Include="PlayerObject.h">
       <Filter>Objects\Header Files</Filter>
     </ClInclude>
-
     <ClInclude Include="Object.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
-    <ClInclude Include="RunPlayerController.h">
-      <Filter>Object\Header</Filter>
-    </ClInclude>
     <ClInclude Include="UISliderComponent.h">
-      <Filter>Component\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Telegraph.h">
       <Filter>Component\Header</Filter>
     </ClInclude>
     <ClInclude Include="RunPlayerController.h">
@@ -209,7 +203,6 @@
     <ClInclude Include="Telegraph.h">
       <Filter>Objects\Header Files</Filter>
     </ClInclude>
-
     <ClInclude Include="UIComponent.h">
       <Filter>Objects\Header Files</Filter>
     </ClInclude>
@@ -217,6 +210,15 @@
       <Filter>Objects\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CoreTypes.h" />
+    <ClInclude Include="BulletUIComponent.h" />
+    <ClInclude Include="DroneComponent.h" />
+    <ClInclude Include="HeartUIComponent.h" />
+    <ClInclude Include="RunPlayerController.h" />
+    <ClInclude Include="SoundUI.h" />
+    <ClInclude Include="Telegraph.h" />
+    <ClInclude Include="UIGridComponent.h" />
+    <ClInclude Include="UIUtils.h" />
+    <ClInclude Include="PlayerEffectComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Components">
@@ -237,28 +239,11 @@
     <Filter Include="Objects\Source Files">
       <UniqueIdentifier>{5b944315-1acd-4d83-8799-110f9d0f50de}</UniqueIdentifier>
     </Filter>
-
     <ClInclude Include="DropObstacle.h">
       <Filter>Object\Header</Filter>
     </ClInclude>
-    <ClInclude Include="DroneComponent.h">
-      <Filter>Component\Header</Filter>
-    </ClInclude>
     <ClInclude Include="FlyingObstacleComponent.h">
       <Filter>Component\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="UIGridComponent.h">
-      <Filter>Component\Header</Filter>
-    </ClInclude>
-
-    <ClInclude Include="UIUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HeartUIComponent.h">
-      <Filter>Object\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="BulletUIComponent.h">
-      <Filter>Object\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -355,20 +340,8 @@
     <ClCompile Include="DropObstacle.cpp">
       <Filter>Object\Source</Filter>
     </ClCompile>
-    <ClCompile Include="DroneComponent.cpp">
-      <Filter>Component\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="UIGridComponent.cpp">
-      <Filter>Component\Source</Filter>
-    </ClCompile>
     <ClCompile Include="FlyingObstacleComponent.cpp">
       <Filter>Component\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="HeartUIComponent.cpp">
-      <Filter>Object\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="BulletUIComponent.cpp">
-      <Filter>Object\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -10,6 +10,7 @@ class UIObject : public Object
 	friend class Scene;
 	friend class TestScene;
 	friend class TitleScene;
+	friend class InGameUITestScene;
 public:
 	UIObject(EventDispatcher& eventDispatcher);
 	virtual ~UIObject() = default;

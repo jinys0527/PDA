@@ -28,6 +28,7 @@
 #include "ItemObject.h"
 #include "FSM.h"
 #include "FlyingObstacleComponent.h"
+#include "PlayerEffectComponent.h"
 #include "DroneComponent.h"
 #include "HeartUIComponent.h"
 #include "BulletUIComponent.h"
@@ -381,115 +382,117 @@ void TestScene::Initialize()
 		//	}
 		//}
 		{
-			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Run_Ani", L"../Resource/Character/Sour/Sour_Run_Ani.json");
-			for (const auto& [clipName, clip] : clips)
 			{
-				animComp->AddClip(clipName, &clip);
+				auto& clips = m_AssetManager.LoadAnimation(L"Sour_Run_Ani", L"../Resource/Character/Sour/Sour_Run_Ani.json");
+				for (const auto& [clipName, clip] : clips)
+				{
+					animComp->AddClip(clipName, &clip);
+				}
 			}
-		}
-		{
-			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Attack_Ani", L"../Resource/Character/Sour/Sour_Attack_Ani.json");
-			for (const auto& [clipName, clip] : clips)
 			{
-				animComp->AddClip(clipName, &clip);
+				auto& clips = m_AssetManager.LoadAnimation(L"Sour_Attack_Ani", L"../Resource/Character/Sour/Sour_Attack_Ani.json");
+				for (const auto& [clipName, clip] : clips)
+				{
+					animComp->AddClip(clipName, &clip);
+				}
 			}
-		}
-		{
-			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Charge_Ani", L"../Resource/Character/Sour/Sour_Charge_Ani.json");
-			for (const auto& [clipName, clip] : clips)
 			{
-				animComp->AddClip(clipName, &clip);
+				auto& clips = m_AssetManager.LoadAnimation(L"Sour_Charge_Ani", L"../Resource/Character/Sour/Sour_Charge_Ani.json");
+				for (const auto& [clipName, clip] : clips)
+				{
+					animComp->AddClip(clipName, &clip);
+				}
 			}
-		} 
-		{
-			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Charge_Shot_Ani", L"../Resource/Character/Sour/Sour_Charge_Shot_Ani.json");
-			for (const auto& [clipName, clip] : clips)
 			{
-				animComp->AddClip(clipName, &clip);
+				auto& clips = m_AssetManager.LoadAnimation(L"Sour_Charge_Shot_Ani", L"../Resource/Character/Sour/Sour_Charge_Shot_Ani.json");
+				for (const auto& [clipName, clip] : clips)
+				{
+					animComp->AddClip(clipName, &clip);
+				}
 			}
-		} 
-		{
-			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Dead_Ani", L"../Resource/Character/Sour/Sour_Dead_Ani.json");
-			for (const auto& [clipName, clip] : clips)
 			{
-				animComp->AddClip(clipName, &clip);
+				auto& clips = m_AssetManager.LoadAnimation(L"Sour_Dead_Ani", L"../Resource/Character/Sour/Sour_Dead_Ani.json");
+				for (const auto& [clipName, clip] : clips)
+				{
+					animComp->AddClip(clipName, &clip);
+				}
 			}
-		} 
-		{
-			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Heal_Ani", L"../Resource/Character/Sour/Sour_Heal_Ani.json");
-			for (const auto& [clipName, clip] : clips)
 			{
-				animComp->AddClip(clipName, &clip);
+				auto& clips = m_AssetManager.LoadAnimation(L"Sour_Heal_Ani", L"../Resource/Character/Sour/Sour_Heal_Ani.json");
+				for (const auto& [clipName, clip] : clips)
+				{
+					animComp->AddClip(clipName, &clip);
+				}
 			}
-		}
-		{
-			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Hitted_ani", L"../Resource/Character/Sour/Sour_Hitted_ani.json");
-			for (const auto& [clipName, clip] : clips)
 			{
-				animComp->AddClip(clipName, &clip);
+				auto& clips = m_AssetManager.LoadAnimation(L"Sour_Hitted_ani", L"../Resource/Character/Sour/Sour_Hitted_ani.json");
+				for (const auto& [clipName, clip] : clips)
+				{
+					animComp->AddClip(clipName, &clip);
+				}
 			}
-		}
-		{
-			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Jump_Ani", L"../Resource/Character/Sour/Sour_Jump_Ani.json");
-			for (const auto& [clipName, clip] : clips)
 			{
-				animComp->AddClip(clipName, &clip);
+				auto& clips = m_AssetManager.LoadAnimation(L"Sour_Jump_Ani", L"../Resource/Character/Sour/Sour_Jump_Ani.json");
+				for (const auto& [clipName, clip] : clips)
+				{
+					animComp->AddClip(clipName, &clip);
+				}
 			}
-		}
-		{
-			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Jump_Down_Ani", L"../Resource/Character/Sour/Sour_Jump_Down_Ani.json");
-			for (const auto& [clipName, clip] : clips)
 			{
-				animComp->AddClip(clipName, &clip);
+				auto& clips = m_AssetManager.LoadAnimation(L"Sour_Jump_Down_Ani", L"../Resource/Character/Sour/Sour_Jump_Down_Ani.json");
+				for (const auto& [clipName, clip] : clips)
+				{
+					animComp->AddClip(clipName, &clip);
+				}
 			}
-		}
-		{
-			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Jump_Top_Ani", L"../Resource/Character/Sour/Sour_Jump_Top_Ani.json");
-			for (const auto& [clipName, clip] : clips)
 			{
-				animComp->AddClip(clipName, &clip);
+				auto& clips = m_AssetManager.LoadAnimation(L"Sour_Jump_Top_Ani", L"../Resource/Character/Sour/Sour_Jump_Top_Ani.json");
+				for (const auto& [clipName, clip] : clips)
+				{
+					animComp->AddClip(clipName, &clip);
+				}
 			}
-		}
-		{
-			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Jump_Up_Ani", L"../Resource/Character/Sour/Sour_Jump_Up_Ani.json");
-			for (const auto& [clipName, clip] : clips)
 			{
-				animComp->AddClip(clipName, &clip);
+				auto& clips = m_AssetManager.LoadAnimation(L"Sour_Jump_Up_Ani", L"../Resource/Character/Sour/Sour_Jump_Up_Ani.json");
+				for (const auto& [clipName, clip] : clips)
+				{
+					animComp->AddClip(clipName, &clip);
+				}
 			}
-		}
-		{
-			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Kick_Ground_Ani", L"../Resource/Character/Sour/Sour_Kick_Ground_Ani.json");
-			for (const auto& [clipName, clip] : clips)
 			{
-				animComp->AddClip(clipName, &clip);
+				auto& clips = m_AssetManager.LoadAnimation(L"Sour_Kick_Ground_Ani", L"../Resource/Character/Sour/Sour_Kick_Ground_Ani.json");
+				for (const auto& [clipName, clip] : clips)
+				{
+					animComp->AddClip(clipName, &clip);
+				}
 			}
-		}
-		{
-			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Marking_Fail_Ani", L"../Resource/Character/Sour/Sour_Marking_Fail_Ani.json");
-			for (const auto& [clipName, clip] : clips)
 			{
-				animComp->AddClip(clipName, &clip);
+				auto& clips = m_AssetManager.LoadAnimation(L"Sour_Marking_Fail_Ani", L"../Resource/Character/Sour/Sour_Marking_Fail_Ani.json");
+				for (const auto& [clipName, clip] : clips)
+				{
+					animComp->AddClip(clipName, &clip);
+				}
 			}
-		}
-		{
-			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Marking_Success_Ani", L"../Resource/Character/Sour/Sour_Marking_Success_Ani.json");
-			for (const auto& [clipName, clip] : clips)
 			{
-				animComp->AddClip(clipName, &clip);
+				auto& clips = m_AssetManager.LoadAnimation(L"Sour_Marking_Success_Ani", L"../Resource/Character/Sour/Sour_Marking_Success_Ani.json");
+				for (const auto& [clipName, clip] : clips)
+				{
+					animComp->AddClip(clipName, &clip);
+				}
 			}
-		}
-		{
-			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Slide_Ani", L"../Resource/Character/Sour/Sour_Slide_Ani.json");
-			for (const auto& [clipName, clip] : clips)
 			{
-				animComp->AddClip(clipName, &clip);
+				auto& clips = m_AssetManager.LoadAnimation(L"Sour_Slide_Ani", L"../Resource/Character/Sour/Sour_Slide_Ani.json");
+				for (const auto& [clipName, clip] : clips)
+				{
+					animComp->AddClip(clipName, &clip);
+				}
 			}
-		}
-		{
-			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Run_Ani", L"../Resource/Character/Sour/Sour_Run_Ani.json");
-			for (const auto& [clipName, clip] : clips)
 			{
-				animComp->AddClip(clipName, &clip);
+				auto& clips = m_AssetManager.LoadAnimation(L"Sour_Run_Ani", L"../Resource/Character/Sour/Sour_Run_Ani.json");
+				for (const auto& [clipName, clip] : clips)
+				{
+					animComp->AddClip(clipName, &clip);
+				}
 			}
 		}
 		//{
@@ -520,6 +523,40 @@ void TestScene::Initialize()
 		gameObject->SetCameraObject(GetMainCamera());
 
 		AddGameObject(gameObject);
+
+		{
+			auto effect = std::make_shared<GameObject>(m_EventDispatcher);
+			effect->m_Name = "PlayerEffect";
+			auto effecttrans = effect->GetComponent<TransformComponent>();
+			effecttrans->SetParent(trans);
+			effecttrans->SetPosition({ 0, 0 });
+			auto effectsr = effect->AddComponent<SpriteRenderer>();
+			effectsr->SetAssetManager(&m_AssetManager);
+
+			auto& effectclips = m_AssetManager.LoadAnimation(L"Sour_Heal_Ani", L"../Resource/Character/Sour/Sour_Heal_Ani.json");
+			auto effectanim = effect->AddComponent<AnimationComponent>();
+			effectanim->SetAssetManager(&m_AssetManager);
+			for (const auto& [clipName, clip] : effectclips)
+			{
+				effectanim->AddClip(clipName, &clip);
+			}
+
+			effectanim->Play("heal");
+			effectanim->SetLoop(false);
+			effectanim->Finish();
+
+			effectsr->SetPath("../Resource/Character/Sour/Sour_Heal_Ani.json");
+			effectsr->SetTextureKey("Sour_Heal_Ani");
+			
+
+			effectsr->SetPivotPreset(SpritePivotPreset::HealPivot, {400, 400});
+
+			auto effectComp = effect->AddComponent<PlayerEffectComponent>();
+			effectComp->Start();
+
+			AddGameObject(effect);
+		}
+
 
 		auto graffiti = std::make_shared<GraffitiObject>(m_EventDispatcher);
 		graffiti->m_Name = "graffiti";
@@ -899,6 +936,7 @@ void TestScene::Initialize()
 				if (info.self != lambdaObstacle->GetComponent<BoxColliderComponent>())
 					return;
 				this->SavePlayerInfo();
+				lambdaObstacle->GetComponent<BoxColliderComponent>()->OnTrigger();
 			}
 		);
 
@@ -1090,8 +1128,8 @@ void TestScene::Update(float deltaTime)
 
 
 	m_GameManager->m_scrollSpeed += deltaTime;
-	if (m_GameManager->m_scrollSpeed >= 500)
-		m_GameManager->m_scrollSpeed = 500;
+	//if (m_GameManager->m_scrollSpeed >= 1000)
+		m_GameManager->m_scrollSpeed = 2000* deltaTime;
 
 	Vec2F move = { 0, 0 };
 	move.x += m_GameManager->m_scrollSpeed;
@@ -1149,4 +1187,169 @@ void TestScene::LoadPlayerInfo()
 	player->GetComponent<TransformComponent>()->SetPosition({ m_GameManager->m_playerXLoc, 0 });
 	GetMainCamera()->GetComponent<TransformComponent>()->SetPosition({ m_GameManager->m_playerXLoc+500, 540.0f });
 	m_GameManager->m_scrollSpeed = 0;
+}
+
+void TestScene::RandomSpawnObstacle()
+{
+	srand((unsigned)time(NULL));
+	rand();
+	m_GameObjects;
+	{
+		auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
+		obstacle->m_Name = "obstacle";
+		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+		obstacleTrans->SetPosition({ 1460.0f, 350.0f });
+		auto sr = obstacle->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+
+		obstacle->SetZ(1);
+		obstacle->SetSlide(true);
+	}
+	{
+		auto obstacle = std::make_shared<ItemObject>(m_EventDispatcher);
+		obstacle->m_Name = "item";
+		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+		obstacleTrans->SetPosition({ 1000.0f, 700.0f });
+		auto sr = obstacle->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+
+		obstacle.get()->SetZ(2);
+
+		AddGameObject(obstacle);
+	}
+
+	{
+		auto obstacle = std::make_shared<ItemObject>(m_EventDispatcher);
+		obstacle->m_Name = "item2";
+		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+		obstacleTrans->SetPosition({ 1000.0f, 700.0f });
+		auto sr = obstacle->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+
+		obstacle->m_isBullet = true;
+
+		obstacle.get()->SetZ(2);
+
+		AddGameObject(obstacle);
+	}
+	{
+		auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
+		obstacle->m_Name = "obstacle3";
+		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+		obstacleTrans->SetPosition({ 3000.0f, 350.0f });
+		auto sr = obstacle->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+
+		obstacle->SetZ(1);
+		obstacle->SetSlide(false);
+
+		auto lambdaObstacle = obstacle.get();
+		auto lambdaCamera = GetMainCamera();
+
+		auto rect = obstacle->GetComponent<BoxColliderComponent>();
+		rect->SetCenter(obstacleTrans->GetPosition());
+		m_EventDispatcher.AddListener(EventType::CollisionTrigger, rect);
+		rect->SetOnTrigger(
+			[lambdaObstacle, lambdaCamera](const CollisionInfo& info)
+			{
+				if (info.self != lambdaObstacle->GetComponent<BoxColliderComponent>())
+					return;
+				lambdaObstacle->GetComponent<TransformComponent>()->SetParent(lambdaCamera->GetComponent<TransformComponent>());
+				auto component = lambdaObstacle->AddComponent<FlyingObstacleComponent>();
+				component->Start();
+				lambdaObstacle->GetComponent<BoxColliderComponent>()->OnTrigger();
+			}
+		);
+
+
+
+		AddGameObject(obstacle);
+	}
+	{
+		auto obstacle = std::make_shared<GameObject>(m_EventDispatcher);
+		obstacle->m_Name = "drone3";
+		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+		obstacleTrans->SetPosition({ 3000.0f, 350.0f });
+		auto sr = obstacle->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+
+		auto lambdaObstacle = obstacle.get();
+		auto lambdaCamera = GetMainCamera();
+
+		auto rect = obstacle->AddComponent<BoxColliderComponent>();
+		//m_EventDispatcher.AddListener(EventType::CollisionTrigger, rect);
+		rect->SetSize({ 100, 100 });
+		rect->Start();
+		rect->SetOnTrigger(
+			[lambdaObstacle, lambdaCamera](const CollisionInfo& info)
+			{
+				if (info.self != lambdaObstacle->GetComponent<BoxColliderComponent>())
+					return;
+				lambdaObstacle->GetComponent<TransformComponent>()->SetParent(lambdaCamera->GetComponent<TransformComponent>());
+				auto component = lambdaObstacle->AddComponent<DroneComponent>();
+				component->Start();
+				lambdaObstacle->GetComponent<BoxColliderComponent>()->OnTrigger();
+			}
+		);
+
+
+		AddGameObject(obstacle);
+	}
+	{
+		auto obstacle = std::make_shared<GameObject>(m_EventDispatcher);
+		obstacle->m_Name = "savepoint";
+		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+		obstacleTrans->SetPosition({ 3000.0f, 350.0f });
+		auto sr = obstacle->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+
+		auto lambdaObstacle = obstacle.get();
+		auto lambdaCamera = GetMainCamera();
+
+		auto rect = obstacle->AddComponent<BoxColliderComponent>();
+		//m_EventDispatcher.AddListener(EventType::CollisionTrigger, rect);
+		rect->SetSize({ 100, 10000 });
+		rect->Start();
+		rect->SetOnTrigger(
+			[lambdaObstacle, this](const CollisionInfo& info)
+			{
+				if (info.self != lambdaObstacle->GetComponent<BoxColliderComponent>())
+					return;
+				this->SavePlayerInfo();
+			}
+		);
+
+
+		AddGameObject(obstacle);
+	}
 }

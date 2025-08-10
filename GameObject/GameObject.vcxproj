@@ -258,6 +258,7 @@
     <ClInclude Include="GraffitiComponent.h" />
     <ClInclude Include="GraffitiObject.h" />
     <ClInclude Include="Obstacle.h" />
+    <ClInclude Include="PlayerEffectComponent.h" />
     <ClInclude Include="PlayerObject.h" />
     <ClInclude Include="RectTransformComponent.h" />
     <ClInclude Include="RigidbodyComponent.h" />
@@ -297,6 +298,7 @@
     <ClCompile Include="GraffitiComponent.cpp" />
     <ClCompile Include="GraffitiObject.cpp" />
     <ClCompile Include="Obstacle.cpp" />
+    <ClCompile Include="PlayerEffectComponent.cpp" />
     <ClCompile Include="PlayerObject.cpp" />
     <ClCompile Include="RectTransformComponent.cpp" />
     <ClCompile Include="RigidbodyComponent.cpp" />

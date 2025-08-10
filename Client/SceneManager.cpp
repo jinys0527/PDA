@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "TitleScene.h"
 #include "TestScene.h"
+#include "InGameUITestScene.h"
 #include "RenderData.h"
 
 void SceneManager::Initialize()
@@ -11,13 +12,17 @@ void SceneManager::Initialize()
 	testScene->SetSceneManager(this);
 //  auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
 // 	titleScene->SetSceneManager(this);
+	auto inGameUITestScene = AddScene("InGameUITestScene", std::make_shared<InGameUITestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
+	inGameUITestScene->SetSceneManager(this);
 
 	testScene->Initialize();
-// 	titleScene->Initialize();
-// 	titleScene->SetName("TitleScene");
-	testScene->SetName("TestScene");
+	//testScene->SetName("TestScene");
+	//titleScene->Initialize();
+	//titleScene->SetName("TitleScene");
+	inGameUITestScene->Initialize();
+	inGameUITestScene->SetName("InGameUITestScene");
 
-	SetCurrentScene("TestScene");
+	SetCurrentScene("InGameUITestScene");
 }
 
 void SceneManager::Update(float deltaTime)

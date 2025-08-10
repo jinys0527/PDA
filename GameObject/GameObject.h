@@ -11,6 +11,8 @@ class GameObject : public Object
 	friend class Scene;
 	friend class TestScene;
 	friend class TitleScene;
+	friend class InGameUITestScene;
+
 public:
 	GameObject(EventDispatcher& eventDispatcher);
 	virtual ~GameObject() = default;
