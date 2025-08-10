@@ -93,6 +93,26 @@ void UIManager::DispatchToTopUI(EventType type, const POINT& pos, std::unordered
 		if (fullScreenUIActive && ui->GetZOrder() < fullScreenZ)
 			continue;
 
+		// 이벤트 받을 컴포넌트 있는지 체크
+		bool hasInteractableComponent = false;
+
+		switch (type)
+		{
+		case EventType::Hovered:
+		case EventType::Pressed:
+		case EventType::Released:
+			hasInteractableComponent = !ui->GetComponents<UIButtonComponent>().empty();
+			break;
+		case EventType::Dragged:
+			hasInteractableComponent = !ui->GetComponents<UISliderComponent>().empty();
+			break;
+		default:
+			break;
+		}
+
+		if (!hasInteractableComponent)
+			continue;
+
 		if (type != EventType::Hovered && !ui->HitCheck(pos))
 			continue;
 
@@ -127,6 +147,9 @@ void UIManager::Render(std::vector<UIRenderInfo>& uiRenderInfo, std::vector<UITe
 
 	for (auto& pair : it->second)
 	{
+		if (!pair.second->IsVisible())
+			continue;
+
 		pair.second->Render(uiRenderInfo);
 		pair.second->Render(uiTextInfo);
 	}

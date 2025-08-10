@@ -58,6 +58,11 @@ public:
 		return m_CurrentSceneName;
 	}
 
+	std::unordered_map <std::string, std::unordered_map<std::string, std::shared_ptr<UIObject>>>& GetUIObjects()
+	{
+		return m_UIObjects;
+	}
+
 private:
 	EventDispatcher& m_EventDispatcher; 
 	std::string m_CurrentSceneName;

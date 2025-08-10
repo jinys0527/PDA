@@ -1,8 +1,6 @@
 #pragma once
 #include "Scene.h"
 #include <memory>
-#include "BlackBoard.h"
-#include "BossBehaviorTree.h"
 
 class TitleScene : public Scene
 {
