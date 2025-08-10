@@ -14,8 +14,6 @@ public:
 
 	void SetGravitti(AssetManager* assetManager);
 
-	void SetCameraObject(GameObject* gameObject);
-
 private:
 	GraffitiComponent* m_GraffitiComponent;
 	int m_RandTexture;

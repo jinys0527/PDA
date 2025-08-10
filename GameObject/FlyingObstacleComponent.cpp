@@ -2,6 +2,7 @@
 #include "Obstacle.h"
 #include "ItemObject.h"
 #include "TransformComponent.h"
+#include "BoxColliderComponent.h"
 
 
 FlyingObstacleComponent::FlyingObstacleComponent()
@@ -44,6 +45,7 @@ void FlyingObstacleComponent::Update(float deltaTime)
 	else
 	{
 		m_TransformComponent->DetachFromParent();
+		m_Owner->GetComponent<BoxColliderComponent>()->SetCenter(m_TransformComponent->GetPosition());
 		isDone = true;
 	}
 

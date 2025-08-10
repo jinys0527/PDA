@@ -1,4 +1,6 @@
 #pragma once
+#include "SimpleMathHelper.h"
+
 #include "Windows.h"
 #include "Component.h"
 #include "IEventListener.h"
@@ -26,12 +28,8 @@ public :
 	void Serialize(nlohmann::json& j) const override{};
 	void Deserialize(const nlohmann::json& j) override{};
 
-	void SetCameraObject(GameObject* cameraObject);
-
 private:
-	void IsHovered(POINT mousePos);
-
-	GameObject* m_CameraObject;
+	void IsHovered(Math::Vector2F mousePos);
 
 	bool m_IsHovered = false;
 	bool m_IsClicked = false;

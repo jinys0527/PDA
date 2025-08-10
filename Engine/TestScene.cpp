@@ -219,6 +219,7 @@ void TestScene::Initialize()
 	cameraCol->Start();
 	//cameraCol->SetSize({ 1920, 1080 });
 	cameraCol->SetSize({ 2120, 1080 });
+	
 	SetMainCamera(cameraObject);
 
 #pragma endregion
@@ -367,20 +368,156 @@ void TestScene::Initialize()
 		trans->SetPosition({ 960.0f, 540.0f });
 		auto sr = gameObject->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
-		auto& clips = m_AssetManager.LoadAnimation(L"boss", L"../Resource/Character/Boss/Boss_Arm_Right_Hit/boss.json");
+		//auto& clips1 = m_AssetManager.LoadAnimation(L"Sour_Run_Ani", L"../Resource/Character/Sour/Sour_Run_Ani.json");
 		auto animComp = gameObject->AddComponent<AnimationComponent>();
 		animComp->SetAssetManager(&m_AssetManager);
 		gameObject->SetShadowBitmap(m_AssetManager.LoadTexture(L"cat", L"../Resource/cat.png"));
 
-		for (const auto& [clipName, clip] : clips)
+		//{
+		//	auto& clips = m_AssetManager.LoadAnimation(L"boss", L"../Resource/Character/Boss/Boss_Arm_Right_Hit/boss.json");
+		//	for (const auto& [clipName, clip] : clips)
+		//	{
+		//		animComp->AddClip(clipName, &clip);
+		//	}
+		//}
 		{
-			animComp->AddClip(clipName, &clip);
+			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Run_Ani", L"../Resource/Character/Sour/Sour_Run_Ani.json");
+			for (const auto& [clipName, clip] : clips)
+			{
+				animComp->AddClip(clipName, &clip);
+			}
 		}
-
+		{
+			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Attack_Ani", L"../Resource/Character/Sour/Sour_Attack_Ani.json");
+			for (const auto& [clipName, clip] : clips)
+			{
+				animComp->AddClip(clipName, &clip);
+			}
+		}
+		{
+			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Charge_Ani", L"../Resource/Character/Sour/Sour_Charge_Ani.json");
+			for (const auto& [clipName, clip] : clips)
+			{
+				animComp->AddClip(clipName, &clip);
+			}
+		} 
+		{
+			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Charge_Shot_Ani", L"../Resource/Character/Sour/Sour_Charge_Shot_Ani.json");
+			for (const auto& [clipName, clip] : clips)
+			{
+				animComp->AddClip(clipName, &clip);
+			}
+		} 
+		{
+			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Dead_Ani", L"../Resource/Character/Sour/Sour_Dead_Ani.json");
+			for (const auto& [clipName, clip] : clips)
+			{
+				animComp->AddClip(clipName, &clip);
+			}
+		} 
+		{
+			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Heal_Ani", L"../Resource/Character/Sour/Sour_Heal_Ani.json");
+			for (const auto& [clipName, clip] : clips)
+			{
+				animComp->AddClip(clipName, &clip);
+			}
+		}
+		{
+			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Hitted_ani", L"../Resource/Character/Sour/Sour_Hitted_ani.json");
+			for (const auto& [clipName, clip] : clips)
+			{
+				animComp->AddClip(clipName, &clip);
+			}
+		}
+		{
+			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Jump_Ani", L"../Resource/Character/Sour/Sour_Jump_Ani.json");
+			for (const auto& [clipName, clip] : clips)
+			{
+				animComp->AddClip(clipName, &clip);
+			}
+		}
+		{
+			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Jump_Down_Ani", L"../Resource/Character/Sour/Sour_Jump_Down_Ani.json");
+			for (const auto& [clipName, clip] : clips)
+			{
+				animComp->AddClip(clipName, &clip);
+			}
+		}
+		{
+			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Jump_Top_Ani", L"../Resource/Character/Sour/Sour_Jump_Top_Ani.json");
+			for (const auto& [clipName, clip] : clips)
+			{
+				animComp->AddClip(clipName, &clip);
+			}
+		}
+		{
+			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Jump_Up_Ani", L"../Resource/Character/Sour/Sour_Jump_Up_Ani.json");
+			for (const auto& [clipName, clip] : clips)
+			{
+				animComp->AddClip(clipName, &clip);
+			}
+		}
+		{
+			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Kick_Ground_Ani", L"../Resource/Character/Sour/Sour_Kick_Ground_Ani.json");
+			for (const auto& [clipName, clip] : clips)
+			{
+				animComp->AddClip(clipName, &clip);
+			}
+		}
+		{
+			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Marking_Fail_Ani", L"../Resource/Character/Sour/Sour_Marking_Fail_Ani.json");
+			for (const auto& [clipName, clip] : clips)
+			{
+				animComp->AddClip(clipName, &clip);
+			}
+		}
+		{
+			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Marking_Success_Ani", L"../Resource/Character/Sour/Sour_Marking_Success_Ani.json");
+			for (const auto& [clipName, clip] : clips)
+			{
+				animComp->AddClip(clipName, &clip);
+			}
+		}
+		{
+			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Slide_Ani", L"../Resource/Character/Sour/Sour_Slide_Ani.json");
+			for (const auto& [clipName, clip] : clips)
+			{
+				animComp->AddClip(clipName, &clip);
+			}
+		}
+		{
+			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Run_Ani", L"../Resource/Character/Sour/Sour_Run_Ani.json");
+			for (const auto& [clipName, clip] : clips)
+			{
+				animComp->AddClip(clipName, &clip);
+			}
+		}
+		//{
+		//	auto& clips = m_AssetManager.LoadAnimation(L"Sour_Marking_Fail_Ani", L"../Resource/Character/Sour/Sour_Marking_Fail_Ani.json");
+		//	for (const auto& [clipName, clip] : clips)
+		//	{
+		//		animComp->AddClip(clipName, &clip);
+		//	}
+		//}
+		//{
+		//	auto& clips = m_AssetManager.LoadAnimation(L"Sour_Marking_Fail_Ani", L"../Resource/Character/Sour/Sour_Marking_Fail_Ani.json");
+		//	for (const auto& [clipName, clip] : clips)
+		//	{
+		//		animComp->AddClip(clipName, &clip);
+		//	}
+		//}
+		//{
+		//	auto& clips = m_AssetManager.LoadAnimation(L"Sour_Marking_Fail_Ani", L"../Resource/Character/Sour/Sour_Marking_Fail_Ani.json");
+		//	for (const auto& [clipName, clip] : clips)
+		//	{
+		//		animComp->AddClip(clipName, &clip);
+		//	}
+		//}
 		//sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
-		animComp->Play("attack");
+		animComp->Play("run");
 		sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 		sr->SetTextureKey("boss");
+		gameObject->SetCameraObject(GetMainCamera());
 
 		AddGameObject(gameObject);
 
@@ -398,7 +535,6 @@ void TestScene::Initialize()
 		graffiti->GetComponent<GraffitiComponent>()->Start();
 
 		graffiti->SetGravitti(&m_AssetManager);
-		graffiti->SetCameraObject(GetMainCamera());
 
 		AddGameObject(graffiti);
 
@@ -847,11 +983,15 @@ void TestScene::FixedUpdate()
 
 			opponentPos = opponentBox->GetCenter();
 
-			if (opponentPos.x > cameraPos.x + 1500 || cameraPos.x-1500 > opponentPos.x)
+			if (opponentPos.x > cameraPos.x + 1500)
 			{
 				continue;
 			}
-
+			else if (cameraPos.x - 1500 > opponentPos.x)
+			{
+				if(!gameObject->second.get()->GetComponent<TransformComponent>()->GetParent())
+					removeList.push_back(gameObject->second);
+			}
 			if (opponentBox->BoxVsBox(*cameraBox))
 			{
 				CollisionInfo info;

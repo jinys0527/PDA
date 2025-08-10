@@ -32,7 +32,8 @@ enum class EventType
 	OnPlayerReinforcedBulletChanged,
 	OnPlayerDeath, // 플레이어 죽음
 	OnScoreChange,
-	OnBossScene
+	OnBossScene,
+	OnPlayerAttack
 
 };
 

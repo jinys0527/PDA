@@ -50,6 +50,11 @@ public:
 		return m_IsHoldingAttack;
 	}
 
+	Math::Vector2F GetMousePos()
+	{
+		return mousePos;
+	}
+
 private:
 
 	Math::Vector2F MoveCheck(float deltaTime); // 코드 길이 줄이기 위해
@@ -100,6 +105,8 @@ private:
 	int m_minZ = 0;
 
 	float m_MoveSpeed = 500.0f;
+
+	Math::Vector2F mousePos = {0, 0};
 
 	//Z축이 점프 Y 가 레인
 
