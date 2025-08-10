@@ -33,6 +33,8 @@ public:
 	void LoadPlayerInfo();
 
 private:
+	float time = 0.f;
+
 	float m_BTElapsedTime = 0.0f;
 	float m_OneSecondTimer = 0.0f;
 	std::unique_ptr<BossBehaviorTree> m_BehaviorTree;

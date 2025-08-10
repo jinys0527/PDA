@@ -39,7 +39,7 @@
 #include "Inverter.h"
 #include "BossBehaviorTree.h"
 #include "BossBlackBoard.h"
-
+#include "AnimationClip.h"
 #include "GameManager.h"
 
 
@@ -50,7 +50,7 @@ void TestScene::Initialize()
 	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
 	cameraObject->m_Name = "Camera";
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
-	trans3->SetPosition({ 60.0f, 540.f });
+	trans3->SetPosition({ 960.0f, 540.f });
 	cameraObject->GetComponent<CameraComponent>()->SetZoom(1.0f);
 	BoxColliderComponent* cameraCol = cameraObject->AddComponent<BoxColliderComponent>();
 	cameraCol->Start();
@@ -59,6 +59,175 @@ void TestScene::Initialize()
 	SetMainCamera(cameraObject);
 
 #pragma endregion
+
+#pragma region Boss_IDLE
+	//{
+	//	auto bossIdle = std::make_shared<GameObject>(m_EventDispatcher);
+	//	bossIdle->m_Name = "BossIdle";
+	//	auto trans = bossIdle->GetComponent<TransformComponent>();
+	//	trans->SetPosition({ 960, 800 });
+	//	auto sr = bossIdle->AddComponent<SpriteRenderer>();
+	//	sr->SetAssetManager(&m_AssetManager);
+	//	
+
+	//	auto& clips = m_AssetManager.LoadAnimation(L"boss_idle", L"../Resource/Character/Boss/Boss_IDLE.json");
+	//	auto anim = bossIdle->AddComponent<AnimationComponent>();
+	//	anim->SetAssetManager(&m_AssetManager);
+
+	//	for (const auto& [clipName, clip] : clips)
+	//	{
+	//		anim->AddClip(clipName, &clip);
+	//	}
+
+	//	anim->Play("idle");
+
+	//	sr->SetPath("../Resource/Boss/Boss_IDLE.json");
+	//	sr->SetTextureKey("boss");
+
+	//	float width = clips.begin()->second.GetFrames().begin()->Width();
+	//	float height = clips.begin()->second.GetFrames().begin()->Height();
+
+	//	sr->SetPivotPreset(SpritePivotPreset::Center, {width, height});
+	//	
+	//	AddGameObject(bossIdle);
+	//}
+#pragma endregion
+
+#pragma region Anim_Pick
+	//{
+	//	auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
+	//	animobj->m_Name = "Boss_pick";
+	//	auto trans = animobj->GetComponent<TransformComponent>();
+	//	trans->SetPosition({ 960, 800 });
+	//	auto sr = animobj->AddComponent<SpriteRenderer>();
+	//	sr->SetAssetManager(&m_AssetManager);
+
+
+	//	auto& clips = m_AssetManager.LoadAnimation(L"boss_pick", L"../Resource/Character/Boss/Phase_1/Boss_Arm_Pick.json");
+	//	auto anim = animobj->AddComponent<AnimationComponent>();
+	//	anim->SetAssetManager(&m_AssetManager);
+
+	//	for (const auto& [clipName, clip] : clips)
+	//	{
+	//		anim->AddClip(clipName, &clip);
+	//	}
+
+	//	anim->Play("pick");
+
+	//	sr->SetPath("../Resource/Boss/Phase_1/Boss_Arm_Pick.json");
+	//	sr->SetTextureKey("boss_pick");
+
+	//	float width = clips.begin()->second.GetFrames().begin()->Width();
+	//	float height = clips.begin()->second.GetFrames().begin()->Height();
+
+	//	sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+
+	//	AddGameObject(animobj);
+	//}
+
+#pragma endregion
+
+#pragma region Anim_Lazer_VFX
+	{
+		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
+		animobj->m_Name = "Boss_Lazer";
+		auto trans = animobj->GetComponent<TransformComponent>();
+		trans->SetPosition({ 960, 800 });
+		auto sr = animobj->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+
+
+		auto& clips = m_AssetManager.LoadAnimation(L"Boss_Lazer", L"../Resource/Character/Boss/Phase_1/Boss_1Phase_Laser_VFX_Ani.json");
+		auto anim = animobj->AddComponent<AnimationComponent>();
+		anim->SetAssetManager(&m_AssetManager);
+
+		for (const auto& [clipName, clip] : clips)
+		{
+			anim->AddClip(clipName, &clip);
+		}
+
+		anim->Play("fire");
+
+		sr->SetPath("../Resource/Boss/Phase_1/Boss_1Phase_Laser_VFX_Ani.json");
+		sr->SetTextureKey("Boss_Lazer");
+
+		float width = clips.begin()->second.GetFrames().begin()->Width();
+		float height = clips.begin()->second.GetFrames().begin()->Height();
+
+		sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+
+		AddGameObject(animobj);
+	}
+
+#pragma endregion
+
+#pragma region Anim_Arm_Idle
+	//{
+	//	auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
+	//	animobj->m_Name = "Boss_Arm_Idle";
+	//	auto trans = animobj->GetComponent<TransformComponent>();
+	//	trans->SetPosition({ 960, 800 });
+	//	auto sr = animobj->AddComponent<SpriteRenderer>();
+	//	sr->SetAssetManager(&m_AssetManager);
+
+	//	auto& clips = m_AssetManager.LoadAnimation(L"Boss_Arm_Idle", L"../Resource/Character/Boss/Phase_1/Boss_1Phase_Arm_Up_IDLE_Ani.json");
+	//	auto anim = animobj->AddComponent<AnimationComponent>();
+	//	anim->SetAssetManager(&m_AssetManager);
+
+	//	for (const auto& [clipName, clip] : clips)
+	//	{
+	//		anim->AddClip(clipName, &clip);
+	//	}
+
+	//	anim->Play("idle");
+
+	//	sr->SetPath("../Resource/Boss/Phase_1/Boss_1Phase_Arm_Up_IDLE_Ani.json");
+	//	sr->SetTextureKey("Boss_Arm_Idle");
+
+	//	float width = clips.begin()->second.GetFrames().begin()->Width();
+	//	float height = clips.begin()->second.GetFrames().begin()->Height();
+
+	//	sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+
+	//	AddGameObject(animobj);
+	//}
+
+#pragma endregion
+
+#pragma region Anim_Phase2_Arm
+	{
+		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
+		animobj->m_Name = "Boss_Anim_Phase2_Arm";
+		auto trans = animobj->GetComponent<TransformComponent>();
+		trans->SetPosition({ 960, 800 });
+		auto sr = animobj->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+
+		auto& clips = m_AssetManager.LoadAnimation(L"Boss_Anim_Phase2_Arm", L"../Resource/Character/Boss/Phase_2/Boss_2Phase_Arms_Ani.json");
+		auto anim = animobj->AddComponent<AnimationComponent>();
+		anim->SetAssetManager(&m_AssetManager);
+
+		for (const auto& [clipName, clip] : clips)
+		{
+			anim->AddClip(clipName, &clip);
+		}
+
+		anim->Play("stretch");
+
+		sr->SetPath("../Resource/Boss/Phase_2/Boss_2Phase_Arms_Ani.json");
+		sr->SetTextureKey("Boss_Anim_Phase2_Arm");
+
+		float width = clips.begin()->second.GetFrames().begin()->Width();
+		float height = clips.begin()->second.GetFrames().begin()->Height();
+
+		sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+
+		AddGameObject(animobj);
+	}
+
+
+#pragma endregion
+
 
 #pragma region anim
 	std::vector<std::shared_ptr<GameObject>> m_Anims;
@@ -101,21 +270,21 @@ void TestScene::Initialize()
 	const int columns = 5;
 	const int rows = 3;
 
-	const float startX = 0.0f;
-	const float startY = 300.0f;
+	const float startX = 500.0f;
+	const float startY = 500.0f;
 
 
 	const float marginX = 20.0f;
 	const float marginY = 20.0f;
 
 	D2D1_SIZE_F tileSize = { 0 };
+	auto texture = m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png");
 
 	for (int i = 0; i < columns * rows; ++i)
 	{
 		auto teleobj = std::make_shared<Telegraph>(m_EventDispatcher);
 		teleobj->m_Name = "tele" + std::to_string(i);
 		auto sr = teleobj->AddComponent<SpriteRenderer>();
-		auto texture = m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png");
 		sr->SetTexture(texture);
 		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
 
@@ -168,6 +337,12 @@ void TestScene::FixedUpdate()
 void TestScene::Update(float deltaTime)
 {
 #pragma region BT
+	if (time < 3.0f)
+	{
+		time += deltaTime;
+		return; // 3초 지나기 전에는 행동트리 실행 X
+	}
+
 	m_BTElapsedTime += deltaTime;
 	m_OneSecondTimer += deltaTime;
 
