@@ -11,7 +11,6 @@ NodeState BossCoolDown::Tick(BlackBoard& bb, float deltaTime)
 
     if (elapsedTime < coolDown)
     {
-        //std::cout << "ÄðÅ¸ÀÓ: " << elapsedTime << std::endl;
 
         bb.SetValue("ElapsedIdleTime", elapsedTime);
         return NodeState::Running;
@@ -43,6 +42,8 @@ NodeState BossCoolDown::Tick(BlackBoard& bb, float deltaTime)
     static std::uniform_real_distribution<float> dist(0.0f, 1.0f);
 
     float randVal = dist(gen);
+    std::cout << randVal << std::endl;
+
     bb.SetValue("RandomValue", randVal);
 
     bb.SetValue("ElapsedIdleTime", 0.f);

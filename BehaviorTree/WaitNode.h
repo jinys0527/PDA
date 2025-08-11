@@ -14,11 +14,9 @@ public:
         if (m_ElapsedTime >= m_WaitTime)
         {
 
-
             Reset();
             return NodeState::Success;
         }
-
         return NodeState::Running;
     }
 

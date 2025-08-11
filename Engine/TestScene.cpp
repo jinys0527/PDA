@@ -268,35 +268,43 @@ void TestScene::Initialize()
 #pragma endregion
 
 #pragma region Anim_Phase2_Arm
-	//{
-	//	auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
-	//	animobj->m_Name = "Boss_Anim_Phase2_Arm";
-	//	auto trans = animobj->GetComponent<TransformComponent>();
-	//	trans->SetPosition({ 0, 540 });
-	//	auto sr = animobj->AddComponent<SpriteRenderer>();
-	//	sr->SetAssetManager(&m_AssetManager);
+	{
+		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
+		animobj->m_Name = "Boss_Anim_Phase2_Arm";
+		auto trans = animobj->GetComponent<TransformComponent>();
+		trans->SetPosition({ 200.f, 720.f });
+		trans->SetScale({ 1.0f, 1.0f });
 
-	//	auto& clips = m_AssetManager.LoadAnimation(L"Boss_Anim_Phase2_Arm", L"../Resource/Character/Boss/Phase_2/Boss_2Phase_Arms_Ani.json");
-	//	auto anim = animobj->AddComponent<AnimationComponent>();
-	//	anim->SetAssetManager(&m_AssetManager);
+		auto sr = animobj->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
 
-	//	for (const auto& [clipName, clip] : clips)
-	//	{
-	//		anim->AddClip(clipName, &clip);
-	//	}
+		auto& clips = m_AssetManager.LoadAnimation(L"Boss_Anim_Phase2_Arm", L"../Resource/Character/Boss/Phase_2/Boss_2Phase_Arms_Ani.json");
+		auto anim = animobj->AddComponent<AnimationComponent>();
+		anim->SetAssetManager(&m_AssetManager);
 
-	//	anim->Play("stretch");
+		for (const auto& [clipName, clip] : clips)
+		{
+			anim->AddClip(clipName, &clip);
+		}
 
-	//	sr->SetPath("../Resource/Boss/Phase_2/Boss_2Phase_Arms_Ani.json");
-	//	sr->SetTextureKey("Boss_Anim_Phase2_Arm");
+		anim->Play("idle");
+		anim->SetIsActive(true);
+		anim->SetLoop(false);
 
-	//	float width = clips.begin()->second.GetFrames().begin()->Width();
-	//	float height = clips.begin()->second.GetFrames().begin()->Height();
+		sr->SetPath("../Resource/Boss/Phase_2/Boss_2Phase_Arms_Ani.json");
+		sr->SetTextureKey("Boss_Anim_Phase2_Arm");
 
-	//	sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+		float width = clips.begin()->second.GetFrames().begin()->Width();
+		float height = clips.begin()->second.GetFrames().begin()->Height();
 
-	//	AddGameObject(animobj);
-	//}
+		sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+
+		AddGameObject(animobj);
+		m_Anims.push_back(animobj);
+		int index = static_cast<int>(m_Anims.size() - 1);
+		m_AnimIndexMap["Boss_Anim_Phase2_Arm"].push_back(index);
+
+	}
 
 
 #pragma endregion
@@ -338,11 +346,12 @@ void TestScene::Initialize()
 		int row = i / columns;
 
 		// 7번이 startX, startY에 위치하도록 보정
-		float posX = startX + (col - baseCol) * (tileSize.width + marginX);
-		float posY = startY + (row - baseRow) * (tileSize.height + marginY);
+		float posX = startX + (col - baseCol) * (tileSize.width * 0.7f + marginX);
+		float posY = startY + (row - baseRow) * (tileSize.height * 0.7f + marginY);
 
 		std::cout << "posx: " << posX << " posy: " << posY << std::endl;
 		teleobj->GetComponent<TransformComponent>()->SetPosition({ posX, posY });
+		teleobj->GetComponent<TransformComponent>()->SetScale({ 0.7f, 0.7f });
 		sr->SetOpacity(0.0f);
 
 		AddGameObject(teleobj);
@@ -412,7 +421,7 @@ void TestScene::Update(float deltaTime)
 		m_OneSecondTimer = 0.0f;
 		float curHP = m_BlackBoard->GetValue<float>("BossCurrHP").value();
 		m_BlackBoard->SetValue("BossCurrHP", curHP - 1);
-
+		std::cout << curHP << std::endl;
 	}
 
 #pragma endregion

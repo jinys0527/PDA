@@ -22,9 +22,20 @@ private:
 	//이동 관련
 	float m_MoveTimer = 0.0f;
 	float m_MoveDuration = 0.7f;
+
+	bool m_IsMovingToStartPos = false;
+	//콜라이더
 	bool m_IsMoving = false;
+
+	//스프라이트 본체? 전체 이동
+	float m_MoveToStartPosTimer = 0.0f;
+	float m_MoveToStartPosDuration = 1.0f;
+	Math::Vector2F m_MoveFromPos = { 0, 0 };
 
 	Math::Vector2F m_MoveStartPos = { 0,0 };
 	Math::Vector2F m_MoveTargetPos = { 0,0 };
+
+	std::shared_ptr<GameObject> m_CurrentAnimObj;
+
 };
 

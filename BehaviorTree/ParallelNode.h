@@ -32,6 +32,7 @@ public:
     {
         SyncChildStates();
 
+
         bool allSuccess = true;
         bool hasFailure = false;
 
@@ -64,6 +65,7 @@ public:
         if (allSuccess)
         {
             // std::cout << "Success: " << m_Name << std::endl;
+            Reset();
             return NodeState::Success;
         }
 

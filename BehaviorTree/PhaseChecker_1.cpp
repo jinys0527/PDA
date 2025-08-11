@@ -7,7 +7,14 @@ NodeState PhaseChecker_1::Tick(BlackBoard& bb, float deltaTime)
     float hp = bb.GetValue<float>("BossCurrHP").value();
 
     if (currPhase == 1)
+    {
+        if (hp < 50.f)
+        {
+            // 1페이즈 유지 조건이 아님 → 실패 처리
+            return NodeState::Failure;
+        }
         return NodeState::Success;
+    }
 
     if (hp >= 50.f)
     {
@@ -16,4 +23,5 @@ NodeState PhaseChecker_1::Tick(BlackBoard& bb, float deltaTime)
     }
 
     return NodeState::Failure;
+
 }
