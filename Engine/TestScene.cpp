@@ -272,7 +272,7 @@ void TestScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Anim_Phase2_Arm";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 200.f, 720.f });
+		trans->SetPosition({ -900.f, 240.f });
 		trans->SetScale({ 1.0f, 1.0f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
@@ -297,7 +297,7 @@ void TestScene::Initialize()
 		float width = clips.begin()->second.GetFrames().begin()->Width();
 		float height = clips.begin()->second.GetFrames().begin()->Height();
 
-		sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+		sr->SetPivotPreset(SpritePivotPreset::Phase_2_Arm, { width, height });
 
 		AddGameObject(animobj);
 		m_Anims.push_back(animobj);

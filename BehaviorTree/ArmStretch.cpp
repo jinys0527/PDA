@@ -167,10 +167,16 @@ void ArmStretch::StartWarning(BlackBoard& bb)
         m_AnimPlaying = true;
     }
 
+    int i = 0;
     for (int idx : m_AttackRange)
     {
+        if (i > 2)
+        {
+            break;
+        }
         auto& telegraph = m_Telegraphs[idx];
         if (telegraph) telegraph->SetActive();
+        i++;
     }
 }
 
@@ -178,13 +184,20 @@ void ArmStretch::EndWarning(BlackBoard& bb)
 {
     std::cout << m_Name << " АјАн" << std::endl;
 
+
+    int i = 0;
     for (int idx : m_AttackRange)
     {
+        if (i > 2)
+        {
+            break;
+        }
         auto& telegraph = m_Telegraphs[idx];
         if (telegraph)
         {
             telegraph->SetInactive();
         }
+        i++;
     }
 
     m_Telegraphs[m_minIndex]->SetColliderActive(true);

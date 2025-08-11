@@ -32,6 +32,7 @@ private:
 	float m_MoveToStartPosDuration = 1.0f;
 	Math::Vector2F m_MoveFromPos = { 0, 0 };
 
+	//콜라이더 관련
 	Math::Vector2F m_MoveStartPos = { 0,0 };
 	Math::Vector2F m_MoveTargetPos = { 0,0 };
 
