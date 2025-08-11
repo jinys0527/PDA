@@ -8,7 +8,7 @@ inline bool IsPointInUIRect(
 	const D2D1_POINT_2F& pivot,      // 0~1 pivot
 	const POINT& mousePos)             // 검사할 좌표 (스크린 또는 UI 좌표계)
 {
-	Math::Vector2F topLeft = position - Math::Vector2F(size.x * pivot.x, size.y * pivot.y);
+	Math::Vector2F topLeft = position;
 
 	return (mousePos.x >= topLeft.x && mousePos.x <= (topLeft.x + size.x) &&
 		mousePos.y >= topLeft.y && mousePos.y <= (topLeft.y + size.y));

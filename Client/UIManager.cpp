@@ -18,20 +18,6 @@ void UIManager::Start()
 	m_EventDispatcher.AddListener(EventType::Released, this);
 }
 
-void UIManager::OnEvent(EventType type, const void* data)
-{
-	auto mouseData = static_cast<const Events::MouseState*>(data);
-
-	if (type == EventType::Pressed || type == EventType::Hovered ||
-		type == EventType::Dragged || type == EventType::Released)
-	{
-		auto it = m_UIObjects.find(m_CurrentSceneName);
-		if (it != m_UIObjects.end())
-		{
-			DispatchToTopUI(type, mouseData->pos, it->second);
-		}
-	}
-}
 
 bool UIManager::IsFullScreenUIActive() const
 {
@@ -61,83 +47,112 @@ void UIManager::Update(float deltaTime)
 	}
 }
 
-void UIManager::DispatchToTopUI(EventType type, const POINT& pos, std::unordered_map<std::string, std::shared_ptr<UIObject>>& uiMap)
+void UIManager::OnEvent(EventType type, const void* data)
 {
-	std::vector<UIObject*> sortedUI;
-	sortedUI.reserve(uiMap.size());
-	for (auto& pair : uiMap)
-		sortedUI.push_back(pair.second.get());
+	auto it = m_UIObjects.find(m_CurrentSceneName);
+	if (it == m_UIObjects.end())
+		return;
 
-	std::sort(sortedUI.begin(), sortedUI.end(), [](UIObject* a, UIObject* b) {
-		return a->GetZOrder() > b->GetZOrder();
-		});
+	auto& uiMap = it->second;
+	auto mouseData = static_cast<const Events::MouseState*>(data);
 
-	bool fullScreenUIActive = false;
-	int fullScreenZ = -1;
-
-	for (auto ui : sortedUI)
+	if (type == EventType::Pressed)
 	{
-		if (ui->IsVisible() && ui->IsFullScreen())
+		m_ActiveUI = nullptr;
+		for (auto& pair : uiMap)
 		{
-			fullScreenUIActive = true;
-			fullScreenZ = ui->GetZOrder();
+			auto& ui = pair.second;
+			if (!ui->IsVisible())
+				continue;
+			if (m_FullScreenUIActive && ui->GetZOrder() < m_FullScreenZ)
+				continue;
+			if (!(ui->hasButton || ui->hasSlider))
+				continue;
+			if (!ui->HitCheck(mouseData->pos))
+				continue;
+
+			m_ActiveUI = ui.get();
+			SendEventToUI(m_ActiveUI, type, data);
 			break;
 		}
 	}
-
-	for (auto ui : sortedUI)
+	else if (type == EventType::Dragged || type == EventType::Released)
 	{
-		if (!ui->IsVisible())
-			continue;
-
-		if (fullScreenUIActive && ui->GetZOrder() < fullScreenZ)
-			continue;
-
-		// 이벤트 받을 컴포넌트 있는지 체크
-		bool hasInteractableComponent = false;
-
-		switch (type)
+		if (m_ActiveUI)
 		{
-		case EventType::Hovered:
-		case EventType::Pressed:
-		case EventType::Released:
-			hasInteractableComponent = !ui->GetComponents<UIButtonComponent>().empty();
-			break;
-		case EventType::Dragged:
-			hasInteractableComponent = !ui->GetComponents<UISliderComponent>().empty();
-			break;
-		default:
-			break;
+			SendEventToUI(m_ActiveUI, type, data);
+			if (type == EventType::Released)
+				m_ActiveUI = nullptr;
 		}
-
-		if (!hasInteractableComponent)
-			continue;
-
-		if (type != EventType::Hovered && !ui->HitCheck(pos))
-			continue;
-
-		switch (type)
+	}
+	else if (type == EventType::Hovered)
+	{
+		// Hover는 모든 UI에 전달, 내부에서 입장/이탈 상태 관리
+		for (auto& pair : uiMap)
 		{
-		case EventType::Hovered:
-			for (auto btn : ui->GetComponents<UIButtonComponent>())
-				btn->OnEvent(type, &pos);
-			break;
-		case EventType::Pressed:
-		case EventType::Released:
-			for (auto btn : ui->GetComponents<UIButtonComponent>())
-				btn->OnEvent(type, &pos);
-			for (auto slider : ui->GetComponents<UISliderComponent>())
-				slider->OnEvent(type, &pos);
-			break;
-		case EventType::Dragged:
-			for (auto slider : ui->GetComponents<UISliderComponent>())
-				slider->OnEvent(type, &pos);
-			break;
-		default:
-			break;
+			auto& ui = pair.second;
+			if (!ui->IsVisible())
+				continue;
+			if (m_FullScreenUIActive && ui->GetZOrder() < m_FullScreenZ)
+				continue;
+			if (!ui->hasButton)
+				continue;
+
+			SendEventToUI(ui.get(), type, data);
 		}
 	}
 }
+
+void UIManager::UpdateSortedUI(const std::unordered_map<std::string, std::shared_ptr<UIObject>>& uiMap)
+{
+	m_SortedUI.clear();
+	m_SortedUI.reserve(uiMap.size());
+
+	m_FullScreenUIActive = false;
+	m_FullScreenZ = -1;
+
+	for (auto& pair : uiMap)
+	{
+		UIObject* ui = pair.second.get();
+		m_SortedUI.push_back(ui);
+
+		if (ui->IsVisible() && ui->IsFullScreen())
+		{
+			m_FullScreenUIActive = true;
+			if (ui->GetZOrder() > m_FullScreenZ)
+				m_FullScreenZ = ui->GetZOrder();
+		}
+	}
+
+	std::sort(m_SortedUI.begin(), m_SortedUI.end(), [](UIObject* a, UIObject* b) {
+		return a->GetZOrder() > b->GetZOrder();
+		});
+}
+
+void UIManager::SendEventToUI(UIObject* ui, EventType type, const void* data)
+{
+	if (ui->hasButton)
+	{
+		for (auto& btn : ui->GetComponents<UIButtonComponent>())
+			btn->OnEvent(type, data);
+	}
+	if (ui->hasSlider)
+	{
+		for (auto& slider : ui->GetComponents<UISliderComponent>())
+			slider->OnEvent(type, data);
+	}
+}
+
+void UIManager::RefreshUIListForCurrentScene()
+{
+	auto& uiObjects = GetUIObjects();
+	auto it = uiObjects.find(m_CurrentSceneName);
+	if (it != uiObjects.end())
+	{
+		UpdateSortedUI(it->second);
+	}
+}
+
 
 void UIManager::Render(std::vector<UIRenderInfo>& uiRenderInfo, std::vector<UITextInfo>& uiTextInfo)
 {
@@ -162,4 +177,5 @@ void UIManager::Reset()
 	m_EventDispatcher.RemoveListener(EventType::Dragged, this);
 	m_EventDispatcher.RemoveListener(EventType::Released, this);
 	m_UIObjects.clear();
+	m_ActiveUI = nullptr;
 }

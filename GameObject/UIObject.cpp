@@ -1,8 +1,8 @@
 #include "UIObject.h"
 #include "RectTransformComponent.h"
 #include "UIImageComponent.h"
-#include "UISliderComponent.h"
 #include "UIButtonComponent.h"
+#include "UISliderComponent.h"
 #include "UIGridComponent.h"
 #include "UITextComponent.h"
 #include "UIUtils.h"
@@ -174,4 +174,10 @@ bool UIObject::IsFullScreen()
 bool UIObject::IsVisible()
 {
 	return m_IsVisible;
+}
+
+void UIObject::UpdateInteractableFlags()
+{
+	hasButton = !GetComponents<UIButtonComponent>().empty();
+	hasSlider = !GetComponents<UISliderComponent>().empty();
 }
