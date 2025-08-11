@@ -2,42 +2,54 @@
 #include "BlackBoard.h"
 #include "AnimationComponent.h"
 #include "SpriteRenderer.h"
+#include "TransformComponent.h"
 
 NodeState Pick::Tick(BlackBoard& bb, float deltaTime)
 {
-#pragma region Initialize
     if (!m_Initialized)
     {
         m_Telegraphs = bb.GetValue<std::vector<std::shared_ptr<Telegraph>>>("BossTelegraph").value();
-        m_Anims = bb.GetValue<std::vector<std::shared_ptr<GameObject>>>("BossAnims").value();
-
-        //임시
         m_AttackRange = bb.GetValue<std::vector<int>>(m_Name).value();
 
         m_Initialized = true;
     }
-#pragma endregion
 
     if (!m_HasStarted)
     {
-        bb.GetSoundManager().SFX_Shot(L"boss_warning_beep");
 
+        bb.GetSoundManager().SFX_Shot(L"boss_warning_beep");
         StartWarning(bb);
         m_HasStarted = true;
     }
 
     m_ElapsedTime += deltaTime;
 
-
-    if (m_AnimPlaying)
+    if (m_AnimPlaying && m_CurrentAnimObj)
     {
-        if (m_Anims[0]->GetComponent<AnimationComponent>()->IsAnimationFinished())
+        auto animComp = m_CurrentAnimObj->GetComponent<AnimationComponent>();
+        if (animComp->IsAnimationFinished())
         {
-            m_Anims[0]->GetComponent<AnimationComponent>()->SetIsActive(false);
-            auto sprite = m_Anims[0]->GetComponent<SpriteRenderer>();
-            sprite->SetIsActive(0);
+            animComp->SetIsActive(false);
+            auto sprite = m_CurrentAnimObj->GetComponent<SpriteRenderer>();
+            sprite->SetIsActive(false);
             sprite->SetOpacity(0);
+
             m_AnimPlaying = false;
+
+            // 실행 종료한 애니메이션 이름 블랙보드에서 제거
+            auto runningAnimsOpt = bb.GetValue<std::vector<std::string>>("RunningAnims");
+            if (runningAnimsOpt.has_value())
+            {
+                auto runningAnims = runningAnimsOpt.value();
+                auto it = std::find(runningAnims.begin(), runningAnims.end(), m_Name);
+                if (it != runningAnims.end())
+                {
+                    runningAnims.erase(it);
+                    bb.SetValue("RunningAnims", runningAnims);
+                }
+            }
+
+            m_CurrentAnimObj = nullptr;
         }
     }
 
@@ -46,20 +58,21 @@ NodeState Pick::Tick(BlackBoard& bb, float deltaTime)
         if (!m_AttackStarted)
         {
             bb.GetSoundManager().SFX_Shot(L"boss_arm_slam_stab");
-
             EndWarning(bb);
             m_AttackStarted = true;
         }
 
-        // 애니메이션 끝났는지 체크
-        if (!m_AnimPlaying)
+        // 실행 중인 애니메이션이 하나라도 남아 있으면 계속 Running
+        auto runningAnimsOpt = bb.GetValue<std::vector<std::string>>("RunningAnims");
+        if (runningAnimsOpt.has_value() && !runningAnimsOpt.value().empty())
         {
-
-            Reset();
-            return NodeState::Success;
+            return NodeState::Running;
         }
-    }
 
+        // 없으면 성공 반환
+        Reset();
+        return NodeState::Success;
+    }
 
     return NodeState::Running;
 }
@@ -71,11 +84,8 @@ void Pick::StartWarning(BlackBoard& bb)
     for (int idx : m_AttackRange)
     {
         auto& telegraph = m_Telegraphs[idx];
-
         if (telegraph)
-        {
             telegraph->SetActive();
-        }
     }
 }
 
@@ -93,30 +103,58 @@ void Pick::EndWarning(BlackBoard& bb)
         }
     }
 
-    // 애니메이션 재생
-    auto anim = m_Anims[0]->GetComponent<AnimationComponent>();
-    anim->SetIsActive(true);
-    anim->Play();
-    auto sprite = m_Anims[0]->GetComponent<SpriteRenderer>();
-    sprite->SetIsActive(1);
-    sprite->SetOpacity(1);
+    auto animObj = GetAvailableAnim(bb, "Boss_Pick");
+    if (animObj)
+    {
+        m_CurrentAnimObj = animObj;
 
-    m_AnimPlaying = true;
-    m_AnimTimer = 0.0f;
+        if (!m_AttackRange.empty())
+        {
+            int idx = m_AttackRange[0];
+            auto pos = m_Telegraphs[idx]->GetInitPos();
+            pos.y -= 120.f;  // 위치 조정
 
+            auto trans = m_CurrentAnimObj->GetComponent<TransformComponent>();
+            trans->SetPosition(pos);
+        }
+
+        auto animComp = m_CurrentAnimObj->GetComponent<AnimationComponent>();
+        animComp->SetIsActive(true);
+        animComp->Play();
+
+        auto sprite = m_CurrentAnimObj->GetComponent<SpriteRenderer>();
+        sprite->SetIsActive(true);
+        sprite->SetOpacity(1);
+
+        // 실행 시작 시 블랙보드에 애니메이션 이름 추가
+        auto runningAnimsOpt = bb.GetValue<std::vector<std::string>>("RunningAnims");
+        if (!runningAnimsOpt.has_value())
+        {
+            bb.SetValue("RunningAnims", std::vector<std::string>{ m_Name });
+        }
+        else
+        {
+            auto runningAnims = runningAnimsOpt.value();
+            runningAnims.push_back(m_Name);
+            bb.SetValue("RunningAnims", runningAnims);
+        }
+
+        m_AnimPlaying = true;
+    }
 }
 
 void Pick::Reset()
 {
-	__super::Reset();
+    __super::Reset();
+
+    //m_ElapsedTime = 0.f;
+    //m_HasStarted = false;
+    //m_AttackStarted = false;
 
     for (int idx : m_AttackRange)
     {
         auto& telegraph = m_Telegraphs[idx];
         if (telegraph)
-        {
             telegraph->SetColliderActive(false);
-        }
     }
-
 }

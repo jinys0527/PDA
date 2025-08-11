@@ -51,7 +51,7 @@ void TestScene::Initialize()
 	cameraObject->m_Name = "Camera";
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
 	trans3->SetPosition({ 960.0f, 540.f });
-	cameraObject->GetComponent<CameraComponent>()->SetZoom(1.0f);
+	cameraObject->GetComponent<CameraComponent>()->SetZoom((9.0f/16.0f));
 	BoxColliderComponent* cameraCol = cameraObject->AddComponent<BoxColliderComponent>();
 	cameraCol->Start();
 	//cameraCol->SetSize({ 1920, 1080 });
@@ -59,6 +59,13 @@ void TestScene::Initialize()
 	SetMainCamera(cameraObject);
 
 #pragma endregion
+
+#pragma region anim_now
+	std::vector<std::shared_ptr<GameObject>> m_Anims;
+	std::unordered_map<std::string, std::vector<int>> m_AnimIndexMap;
+
+#pragma endregion
+
 
 #pragma region Boss_IDLE
 	//{
@@ -94,38 +101,94 @@ void TestScene::Initialize()
 #pragma endregion
 
 #pragma region Anim_Pick
-	//{
-	//	auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
-	//	animobj->m_Name = "Boss_pick";
-	//	auto trans = animobj->GetComponent<TransformComponent>();
-	//	trans->SetPosition({ 960, 800 });
-	//	auto sr = animobj->AddComponent<SpriteRenderer>();
-	//	sr->SetAssetManager(&m_AssetManager);
+	for (int i = 0; i < 5; i++)
+	{
+		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
+		animobj->m_Name = "Boss_Pick" + std::to_string(i);
 
+		auto trans = animobj->GetComponent<TransformComponent>();
+		trans->SetPosition({ 960, 800 });
 
-	//	auto& clips = m_AssetManager.LoadAnimation(L"boss_pick", L"../Resource/Character/Boss/Phase_1/Boss_Arm_Pick.json");
-	//	auto anim = animobj->AddComponent<AnimationComponent>();
-	//	anim->SetAssetManager(&m_AssetManager);
+		trans->SetScale({ 1.0f, 2.0f });
 
-	//	for (const auto& [clipName, clip] : clips)
-	//	{
-	//		anim->AddClip(clipName, &clip);
-	//	}
+		auto sr = animobj->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
 
-	//	anim->Play("pick");
+		auto& clips = m_AssetManager.LoadAnimation(L"Boss_Pick", L"../Resource/Character/Boss/Phase_1/Boss_Arm_Pick.json");
+		auto anim = animobj->AddComponent<AnimationComponent>();
+		anim->SetAssetManager(&m_AssetManager);
 
-	//	sr->SetPath("../Resource/Boss/Phase_1/Boss_Arm_Pick.json");
-	//	sr->SetTextureKey("boss_pick");
+		for (const auto& [clipName, clip] : clips)
+		{
+			anim->AddClip(clipName, &clip);
+		}
 
-	//	float width = clips.begin()->second.GetFrames().begin()->Width();
-	//	float height = clips.begin()->second.GetFrames().begin()->Height();
+		anim->Play("pick");
+		anim->SetIsActive(false);
+		anim->SetLoop(false);
 
-	//	sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+		sr->SetPath("../Resource/Boss/Phase_1/Boss_Arm_Pick.json");
+		sr->SetTextureKey("Boss_Pick");
 
-	//	AddGameObject(animobj);
-	//}
+		float width = clips.begin()->second.GetFrames().begin()->Width();
+		float height = clips.begin()->second.GetFrames().begin()->Height();
+
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, { width, height });
+
+		AddGameObject(animobj);
+
+		// m_Anims, m_AnimIndexMap는 클래스 멤버라고 가정
+		m_Anims.push_back(animobj);
+		int index = static_cast<int>(m_Anims.size() - 1);
+		m_AnimIndexMap["Boss_Pick"].push_back(index);
+	}
+#pragma endregion
+
+#pragma region Anim_Smash
+	for (int i = 0; i < 3; i++)
+	{
+		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
+		animobj->m_Name = "Boss_ArmSmash" + std::to_string(i);
+
+		auto trans = animobj->GetComponent<TransformComponent>();
+		trans->SetPosition({ 960, 800 });
+
+		trans->SetScale({ 1.8f, 1.0f });
+
+		auto sr = animobj->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+
+		auto& clips = m_AssetManager.LoadAnimation(L"Boss_ArmSmash", L"../Resource/Character/Boss/Phase_1/Boss_Arm_Smash.json");
+		auto anim = animobj->AddComponent<AnimationComponent>();
+		anim->SetAssetManager(&m_AssetManager);
+
+		for (const auto& [clipName, clip] : clips)
+		{
+			anim->AddClip(clipName, &clip);
+		}
+
+		anim->Play("smash");
+		anim->SetIsActive(false);
+		anim->SetLoop(false);
+
+		sr->SetPath("../Resource/Boss/Phase_1/Boss_Arm_Smash.json");
+		sr->SetTextureKey("Boss_ArmSmash");
+
+		float width = clips.begin()->second.GetFrames().begin()->Width();
+		float height = clips.begin()->second.GetFrames().begin()->Height();
+
+		sr->SetPivotPreset(SpritePivotPreset::BottomRight, { width, height });
+
+		AddGameObject(animobj);
+
+		// m_Anims, m_AnimIndexMap는 클래스 멤버라고 가정
+		m_Anims.push_back(animobj);
+		int index = static_cast<int>(m_Anims.size() - 1);
+		m_AnimIndexMap["Boss_ArmSmash"].push_back(index);
+	}
 
 #pragma endregion
+
 
 #pragma region Anim_Lazer_VFX
 	{
@@ -157,6 +220,11 @@ void TestScene::Initialize()
 		sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
 
 		AddGameObject(animobj);
+
+		m_Anims.push_back(animobj);
+		int index = static_cast<int>(m_Anims.size() - 1);
+		m_AnimIndexMap["Boss_Lazer"].push_back(index);
+
 	}
 
 #pragma endregion
@@ -195,73 +263,40 @@ void TestScene::Initialize()
 #pragma endregion
 
 #pragma region Anim_Phase2_Arm
-	{
-		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
-		animobj->m_Name = "Boss_Anim_Phase2_Arm";
-		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 960, 800 });
-		auto sr = animobj->AddComponent<SpriteRenderer>();
-		sr->SetAssetManager(&m_AssetManager);
+	//{
+	//	auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
+	//	animobj->m_Name = "Boss_Anim_Phase2_Arm";
+	//	auto trans = animobj->GetComponent<TransformComponent>();
+	//	trans->SetPosition({ 0, 540 });
+	//	auto sr = animobj->AddComponent<SpriteRenderer>();
+	//	sr->SetAssetManager(&m_AssetManager);
 
-		auto& clips = m_AssetManager.LoadAnimation(L"Boss_Anim_Phase2_Arm", L"../Resource/Character/Boss/Phase_2/Boss_2Phase_Arms_Ani.json");
-		auto anim = animobj->AddComponent<AnimationComponent>();
-		anim->SetAssetManager(&m_AssetManager);
+	//	auto& clips = m_AssetManager.LoadAnimation(L"Boss_Anim_Phase2_Arm", L"../Resource/Character/Boss/Phase_2/Boss_2Phase_Arms_Ani.json");
+	//	auto anim = animobj->AddComponent<AnimationComponent>();
+	//	anim->SetAssetManager(&m_AssetManager);
 
-		for (const auto& [clipName, clip] : clips)
-		{
-			anim->AddClip(clipName, &clip);
-		}
+	//	for (const auto& [clipName, clip] : clips)
+	//	{
+	//		anim->AddClip(clipName, &clip);
+	//	}
 
-		anim->Play("stretch");
+	//	anim->Play("stretch");
 
-		sr->SetPath("../Resource/Boss/Phase_2/Boss_2Phase_Arms_Ani.json");
-		sr->SetTextureKey("Boss_Anim_Phase2_Arm");
+	//	sr->SetPath("../Resource/Boss/Phase_2/Boss_2Phase_Arms_Ani.json");
+	//	sr->SetTextureKey("Boss_Anim_Phase2_Arm");
 
-		float width = clips.begin()->second.GetFrames().begin()->Width();
-		float height = clips.begin()->second.GetFrames().begin()->Height();
+	//	float width = clips.begin()->second.GetFrames().begin()->Width();
+	//	float height = clips.begin()->second.GetFrames().begin()->Height();
 
-		sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+	//	sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
 
-		AddGameObject(animobj);
-	}
+	//	AddGameObject(animobj);
+	//}
 
 
 #pragma endregion
 
 
-#pragma region anim
-	std::vector<std::shared_ptr<GameObject>> m_Anims;
-
-	//보스 스킬에 페이즈 별로 스프라이트 다르게 하도록 Init할 때 코드 추가해야함
-
-	auto bossarm = std::make_shared<GameObject>(m_EventDispatcher);
-	bossarm->m_Name = "BossArm";
-	auto trans2 = bossarm->GetComponent<TransformComponent>();
-	trans2->SetPosition({ 960, 540 });
-	auto sr2 = bossarm->AddComponent<SpriteRenderer>();
-	sr2->SetAssetManager(&m_AssetManager);
-
-	auto& clips = m_AssetManager.LoadAnimation(L"boss", L"../Resource/Character/Boss/Boss_Arm_Right_Hit/boss.json");
-	auto anim = bossarm->AddComponent<AnimationComponent>();
-	anim->SetAssetManager(&m_AssetManager);
-	for (const auto& [clipName, clip] : clips)
-	{
-		anim->AddClip(clipName, &clip);
-	}
-
-	anim->Play("attack");
-	anim->SetLoop(false);
-	anim->SetIsActive(false);
-
-	sr2->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
-	sr2->SetTextureKey("boss");
-	
-	sr2->SetPivotPreset(SpritePivotPreset::BottomRight, {960, 800});
-
-	m_Anims.push_back(bossarm);
- 	AddGameObject(bossarm);
-
-#pragma endregion
 
 #pragma region telegraph
 	std::vector<std::shared_ptr<Telegraph>> m_Telegraphs;
@@ -270,15 +305,21 @@ void TestScene::Initialize()
 	const int columns = 5;
 	const int rows = 3;
 
-	const float startX = 500.0f;
-	const float startY = 500.0f;
-
+	const float startX = 960.f; // 기준 좌표
+	const float startY = 173.f;
 
 	const float marginX = 20.0f;
 	const float marginY = 20.0f;
 
 	D2D1_SIZE_F tileSize = { 0 };
-	auto texture = m_AssetManager.LoadTexture(L"brick", L"../Resource/bricks.png");
+	auto texture = m_AssetManager.LoadTexture(L"WarningSign", L"../Resource/Character/WarningSign.png");
+	if (texture)
+		tileSize = texture->GetSize();
+
+	// 기준 인덱스
+	const int baseIndex = 7;
+	const int baseCol = baseIndex % columns;
+	const int baseRow = baseIndex / columns;
 
 	for (int i = 0; i < columns * rows; ++i)
 	{
@@ -288,16 +329,12 @@ void TestScene::Initialize()
 		sr->SetTexture(texture);
 		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
 
-		if (i == 0)
-		{
-			tileSize = texture->GetSize();
-		}
-
 		int col = i % columns;
 		int row = i / columns;
 
-		float posX = startX + col * (tileSize.width + marginX);
-		float posY = startY + row * (tileSize.height + marginY);
+		// 7번이 startX, startY에 위치하도록 보정
+		float posX = startX + (col - baseCol) * (tileSize.width + marginX);
+		float posY = startY + (row - baseRow) * (tileSize.height + marginY);
 
 		std::cout << "posx: " << posX << " posy: " << posY << std::endl;
 		teleobj->GetComponent<TransformComponent>()->SetPosition({ posX, posY });
@@ -306,8 +343,8 @@ void TestScene::Initialize()
 		AddGameObject(teleobj);
 		m_Telegraphs.push_back(teleobj);
 	}
- 
-	m_BlackBoard = std::make_unique<BossBlackBoard>(m_Telegraphs, m_Anims, m_SoundManager);
+
+	m_BlackBoard = std::make_unique<BossBlackBoard>(m_Telegraphs, m_Anims, m_AnimIndexMap, m_SoundManager);
 	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
 #pragma endregion
 

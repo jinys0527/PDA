@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationUtils.h" />
     <ClInclude Include="ArmSmash.h" />
     <ClInclude Include="ArmStretch.h" />
     <ClInclude Include="ArmSwip.h" />
@@ -169,6 +170,7 @@
     <ClInclude Include="WaitNode.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationUtils.cpp" />
     <ClCompile Include="ArmSmash.cpp" />
     <ClCompile Include="ArmStretch.cpp" />
     <ClCompile Include="ArmSwip.cpp" />

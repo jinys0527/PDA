@@ -9,11 +9,16 @@ public:
     NodeState Tick(BlackBoard& bb, float deltaTime) override
     {
         m_ElapsedTime += deltaTime;
+
+
         if (m_ElapsedTime >= m_WaitTime)
         {
+
+
             Reset();
             return NodeState::Success;
         }
+
         return NodeState::Running;
     }
 

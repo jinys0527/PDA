@@ -1,6 +1,10 @@
 #include "BossBlackBoard.h"
 
-BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegraphs, std::vector<std::shared_ptr<GameObject>>& anim, SoundManager& soundmanager)
+BossBlackBoard::BossBlackBoard(
+	std::vector<std::shared_ptr<Telegraph>>& telegraphs, 
+	std::vector<std::shared_ptr<GameObject>>& anims, 
+	std::unordered_map<std::string, std::vector<int>>& animIndexMap,
+	SoundManager& soundmanager)
 	: BlackBoard(soundmanager)
 {
 	SetValue("BossMaxHP", 100.0f);
@@ -9,7 +13,10 @@ BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegrap
 
 	//보스 공격 장판 전체
 	SetValue("BossTelegraph", telegraphs);
-	SetValue("BossAnims", anim);
+
+	//보스 애니메이션 저장
+	SetValue("BossAnims", anims);
+	SetValue("BossAnimIndexMap", animIndexMap);
 
 	//보스 패턴 활성화 지정?
 	// 나중에 패턴 이름있으면 여기에 Skill_1 대신 입력
@@ -44,7 +51,7 @@ BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegrap
 	SetValue("SkillWeight_1", 1.0f);
 	SetValue("SkillWeight_2", 1.0f);
 	SetValue("SkillWeight_3", 1.0f);
-	SetValue("SkillWeight_4", 1.0f);
+	SetValue("SkillWeight_4", 5001.0f);
 	SetValue("SkillWeight_5", 1.0f);
 
 	SetValue("SkillChance_1", 0.f);

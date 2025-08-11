@@ -16,6 +16,10 @@
 
 void BossBehaviorTree::Initialize()
 {
+	//마지막으로 실행될 스킬 노드 이름을 저장할 변수
+	std::vector<std::string> lastSkills;
+
+
 #pragma region PhaseCheckers_and_CoolDown
 	auto P1_PhaseChecker = std::make_shared<PhaseChecker_1>("PhaseChecker_1");
 	auto P2_PhaseChecker = std::make_shared<PhaseChecker_2>("PhaseChecker_2");
@@ -76,10 +80,13 @@ void BossBehaviorTree::Initialize()
 	auto P1_Skill_1_2_Sequence = std::make_shared<Sequence>("P1_Skill_1_2_Sequence");
 	P1_Skill_1_2_Sequence->AddChild(P1_Skill_1_3_Wait);
 	P1_Skill_1_2_Sequence->AddChild(P1_Skill_1_3_Parallel);
+	//마지막 스킬 이름 추가
+	//lastSkills.push_back("P1_Skill_1_2_Pick_5");
 
 	auto P1_Skill_1_1_Parallel = std::make_shared<ParallelNode>("P1_Skill_1_1_Parallel");
 	P1_Skill_1_1_Parallel->AddChild(P1_Skill_1_2_Pick_5);
 	P1_Skill_1_1_Parallel->AddChild(P1_Skill_1_2_Sequence);
+
 
 	auto P1_Skill_1 = std::make_shared<Sequence>("P1_Skill_1");
 	P1_Skill_1->AddChild(P1_Skill_1_Con);
@@ -458,6 +465,9 @@ void BossBehaviorTree::Initialize()
 
 	m_BehaviorTree = Root;
 #pragma endregion
+
+	//블랙보드에 저장
+	//m_BlackBoard.SetValue("lastSkills", lastSkills);
 }
 
 void BossBehaviorTree::Tick(float deltaTime)

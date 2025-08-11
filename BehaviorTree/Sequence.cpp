@@ -6,10 +6,12 @@ NodeState Sequence::Tick(BlackBoard& bb, float deltaTime)
     while (m_CurrIndex < m_Children.size()) {
         NodeState result = m_Children[m_CurrIndex]->Tick(bb, deltaTime);
 
-        if (result == NodeState::Running) {
+        if (result == NodeState::Running) 
+        {
             return NodeState::Running;
         }
-        else if (result == NodeState::Failure) {
+        else if (result == NodeState::Failure) 
+        {
             m_CurrIndex = 0;
             return NodeState::Failure;
         }
@@ -18,5 +20,6 @@ NodeState Sequence::Tick(BlackBoard& bb, float deltaTime)
     }
 
     m_CurrIndex = 0;
+
     return NodeState::Success;
 }
