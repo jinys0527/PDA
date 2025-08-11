@@ -1,28 +1,30 @@
 #pragma once
 #include "Scene.h"
+#include <memory>
 
-class CharacterScene : public Scene
+class GameScene : public Scene
 {
 public:
-	CharacterScene(EventDispatcher& eventDispatcher,
+	GameScene(EventDispatcher& eventDispatcher,
 		AssetManager& assetManager,
 		SoundAssetManager& soundAssetManager,
 		SoundManager& soundManager,
 		D2DRenderer& renderer,
-		UIManager& uiManager) : Scene(eventDispatcher, assetManager, soundAssetManager, soundManager, renderer, uiManager) {
+		UIManager& uiManager)
+		: Scene(eventDispatcher, assetManager, soundAssetManager, soundManager, renderer, uiManager) {
 	}
-	virtual ~CharacterScene() = default;
+	virtual ~GameScene() = default;
 
 	void Initialize() override;
-	void Finalize()  override;
+	void Finalize() override;
 
 	void Enter() override;
 	void Leave() override;
 
 	void FixedUpdate() override;
 	void Update(float deltaTime) override;
-
 	void Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo, std::vector<UITextInfo>& uiTextInfo) override;
 
+private:
 };
 

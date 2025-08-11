@@ -115,7 +115,9 @@
     <ClCompile Include="SpriteRenderer.cpp">
       <Filter>Components\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ControlComponent.cpp" />
+    <ClCompile Include="ControlComponent.cpp">
+      <Filter>Components\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h">
@@ -252,7 +254,9 @@
     </ClInclude>
     <ClInclude Include="CoreTypes.h" />
     <ClInclude Include="UIUtils.h" />
-    <ClInclude Include="ControlComponent.h" />
+    <ClInclude Include="ControlComponent.h">
+      <Filter>Components\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Components">

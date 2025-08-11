@@ -199,7 +199,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer;$(SolutionDir)ImGUIDX11;$(SolutionDir)Event;$(SolutionDir)ResourceManager;$(SolutionDir)GameObject;$(SolutionDir)Client;$(SolutionDir)AI</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer;$(SolutionDir)ImGUIDX11;$(SolutionDir)Event;$(SolutionDir)ResourceManager;$(SolutionDir)GameObject;$(SolutionDir)Client;$(SolutionDir)AI;$(SolutionDir)SoundSystem;$(SolutionDir)ThirdParty\FMOD\inc;$(SolutionDir)BehaviorTree</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -218,7 +218,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon; $(SolutionDir)D2DRenderer; $(SolutionDir)ImGUIDX11; $(SolutionDir)Event; $(SolutionDir)ResourceManager; $(SolutionDir)GameObject;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer;$(SolutionDir)ImGUIDX11;$(SolutionDir)Event;$(SolutionDir)ResourceManager;$(SolutionDir)GameObject;$(SolutionDir)Client;$(SolutionDir)AI;$(SolutionDir)SoundSystem;$(SolutionDir)ThirdParty\FMOD\inc;$(SolutionDir)BehaviorTree</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -234,7 +234,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon; $(SolutionDir)D2DRenderer; $(SolutionDir)ImGUIDX11; $(SolutionDir)Event; $(SolutionDir)ResourceManager; $(SolutionDir)GameObject;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer;$(SolutionDir)ImGUIDX11;$(SolutionDir)Event;$(SolutionDir)ResourceManager;$(SolutionDir)GameObject;$(SolutionDir)Client;$(SolutionDir)AI;$(SolutionDir)SoundSystem;$(SolutionDir)ThirdParty\FMOD\inc;$(SolutionDir)BehaviorTree</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -242,9 +242,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CharacterScene.h" />
     <ClInclude Include="Editor.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Scene.h" />
@@ -252,9 +252,9 @@
     <ClInclude Include="TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CharacterScene.cpp" />
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
