@@ -40,8 +40,8 @@ UIButtonComponent::UIButtonComponent()
 
 void UIButtonComponent::Start()
 {
-	m_Owner->GetEventDispatcher().AddListener(EventType::Hovered, this);
-	m_Owner->GetEventDispatcher().AddListener(EventType::Pressed, this);
+// 	m_Owner->GetEventDispatcher().AddListener(EventType::Hovered, this);
+// 	m_Owner->GetEventDispatcher().AddListener(EventType::Pressed, this);
 
 }
 
@@ -62,7 +62,8 @@ void UIButtonComponent::OnEvent(EventType type, const void* data)
 	if (type == EventType::Hovered)
 	{
 		auto mouseData = static_cast<const Events::MouseState*>(data);
-		IsHovered(mouseData->pos);
+		m_IsHovered = IsHovered(mouseData->pos);
+
 		if (m_IsHovered)
 		{
 			if (m_FSM.GetCurrentState() == "None")
@@ -83,7 +84,6 @@ void UIButtonComponent::OnEvent(EventType type, const void* data)
 		if (m_IsHovered)
 		{
 			auto mouseData = static_cast<const Events::MouseState*>(data);
-			std::cout << mouseData->pos.x << " " << mouseData->pos.y << "에서 클릭됨 \n";
 			m_IsClicked = true;
 			m_FSM.Trigger("HoverToClick");
 
@@ -101,7 +101,7 @@ void UIButtonComponent::Deserialize(const nlohmann::json& j)
 {
 }
 
-void UIButtonComponent::IsHovered(POINT mousePos)
+bool UIButtonComponent::IsHovered(POINT mousePos)
 {
 	auto rectTransform = m_Owner->GetComponent<RectTransformComponent>();
 	auto image = m_Owner->GetComponent<UIImageComponent>();
@@ -110,5 +110,5 @@ void UIButtonComponent::IsHovered(POINT mousePos)
 	D2D1_POINT_2F pivot = image->GetPivot();       // 0~1 범위 가정
 	Math::Vector2F position = rectTransform->GetPosition(); // 앵커 기준 위치
 
-	m_IsHovered = IsPointInUIRect(position, size, pivot, mousePos);
+	return IsPointInUIRect(position, size, pivot, mousePos);
 }

@@ -17,10 +17,13 @@ void AssetManager::Init(const std::filesystem::path& rootPath)	// 폴더 자동 로드
 		if (ext == L".json")
 		{
 			LoadAnimation(key, path);
+			//std::cout << path << std::endl;
+
 		}
 		else if (ext == L".png" || ext == L".jpg" || ext == L".bmp")
 		{
 			LoadTexture(key, path);
+			//std::cout << path << std::endl;
 		}
 	}
 }

@@ -197,7 +197,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer; $(SolutionDir)ResourceManager; $(SolutionDir)AI;$(SolutionDir)Event; $(SolutionDir)Engine; $(SolutionDir)Client;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer; $(SolutionDir)ResourceManager; $(SolutionDir)AI;$(SolutionDir)Event; $(SolutionDir)Engine; $(SolutionDir)Client; $(SolutionDir)SoundSystem;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -247,6 +247,7 @@
     <ClInclude Include="CircleColliderComponent.h" />
     <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ControlComponent.h" />
     <ClInclude Include="CoreTypes.h" />
     <ClInclude Include="DroneComponent.h" />
     <ClInclude Include="DropObstacle.h" />
@@ -287,6 +288,7 @@
     <ClCompile Include="CircleColliderComponent.cpp" />
     <ClCompile Include="ColliderComponent.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="ControlComponent.cpp" />
     <ClCompile Include="DroneComponent.cpp" />
     <ClCompile Include="DropObstacle.cpp" />
     <ClCompile Include="FlyingObstacleComponent.cpp" />

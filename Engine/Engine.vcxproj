@@ -242,6 +242,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CharacterScene.h" />
     <ClInclude Include="Editor.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="InGameUITestScene.h" />
@@ -252,6 +253,7 @@
     <ClInclude Include="TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CharacterScene.cpp" />
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="InGameUITestScene.cpp" />

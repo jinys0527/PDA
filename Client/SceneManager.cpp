@@ -3,6 +3,7 @@
 #include "TitleScene.h"
 #include "TestScene.h"
 #include "InGameUITestScene.h"
+#include "CharacterScene.h"
 #include "RenderData.h"
 
 void SceneManager::Initialize()
@@ -10,19 +11,24 @@ void SceneManager::Initialize()
 	m_SoundManager.Init();
 	auto testScene = AddScene("TestScene", std::make_shared<TestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
 	testScene->SetSceneManager(this);
-//  auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
-// 	titleScene->SetSceneManager(this);
+	auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
+ 	titleScene->SetSceneManager(this);
 	auto inGameUITestScene = AddScene("InGameUITestScene", std::make_shared<InGameUITestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
 	inGameUITestScene->SetSceneManager(this);
+// 	auto characterScene = AddScene("CharacterScene", std::make_shared<CharacterScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
+// 	characterScene->SetSceneManager(this);
 
 	testScene->Initialize();
-	//testScene->SetName("TestScene");
-	//titleScene->Initialize();
-	//titleScene->SetName("TitleScene");
+	testScene->SetName("TestScene");
+	titleScene->Initialize();
+	titleScene->SetName("TitleScene");
 	inGameUITestScene->Initialize();
 	inGameUITestScene->SetName("InGameUITestScene");
 
-	SetCurrentScene("InGameUITestScene");
+	ChangeScene("InGameUITestScene");
+	m_UIManager.Start();
+	//m_UIManager.SetCurrentScene("TitleScene");
+	m_UIManager.SetCurrentScene("InGameUITestScene");
 }
 
 void SceneManager::Update(float deltaTime)
@@ -57,13 +63,7 @@ void SceneManager::SetCurrentScene(const std::string& name)
 	auto it = m_Scenes.find(name);
 	if (it != m_Scenes.end())
 	{
-		if (m_CurrentScene)
-		{
-			m_CurrentScene->Leave();
-		}
-
 		m_CurrentScene = it->second;
-		m_CurrentScene->Enter();
 
 		m_Camera = m_CurrentScene->GetMainCamera();
 		m_Renderer.SetCamera(m_Camera);

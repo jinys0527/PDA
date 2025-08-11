@@ -36,7 +36,7 @@
     <ClInclude Include="Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InGameUITestScene.h">
+    <ClInclude Include="CharacterScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -62,7 +62,7 @@
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InGameUITestScene.cpp">
+    <ClCompile Include="CharacterScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -26,15 +26,15 @@ enum class EventType
 	CollisionTrigger,
 
 	//Game
-	OnPlayerCollisonOccur, // ÇÃ·¹ÀÌ¾î Ãæµ¹ ÇÃ·¹ÀÌ¾î ÇÇ°İ Àü ¹«Àû ÆÇÁ¤ µî Ã¼Å©
-	OnPlayerReinforcedCollisionOccur, // ÇÃ·¹ÀÌ¾î Ãæµ¹ ÇÃ·¹ÀÌ¾î ÇÇ°İ Àü ¹«Àû ÆÇÁ¤ µî Ã¼Å©
-	OnPlayerHpChanged, // ÇÃ·¹ÀÌ¾î ÁøÂ¥ ÇÇ°İ
+	OnPlayerCollisonOccur, // í”Œë ˆì´ì–´ ì¶©ëŒ í”Œë ˆì´ì–´ í”¼ê²© ì „ ë¬´ì  íŒì • ë“± ì²´í¬
+	OnPlayerReinforcedCollisionOccur, // í”Œë ˆì´ì–´ ì¶©ëŒ í”Œë ˆì´ì–´ í”¼ê²© ì „ ë¬´ì  íŒì • ë“± ì²´í¬
+	OnPlayerHpChanged, // í”Œë ˆì´ì–´ ì§„ì§œ í”¼ê²©
 	OnPlayerReinforcedBulletChanged,
-	OnPlayerDeath, // ÇÃ·¹ÀÌ¾î Á×À½
+	OnPlayerDeath, // í”Œë ˆì´ì–´ ì£½ìŒ
 	OnScoreChange,
 	OnBossScene,
-	OnPlayerAttack
-
+	OnPlayerAttack,
+	Quit
 };
 
 class IEventListener

@@ -30,7 +30,7 @@ public:
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;
 
-	void SetFrame(std::shared_ptr<UIObject> frameImage)
+	void SetFrame(std::shared_ptr<UIObject>& frameImage)
 	{
 		m_Frame = frameImage;
 	}
@@ -40,7 +40,7 @@ public:
 		return m_Frame;
 	}
 
-	void SetFill(std::shared_ptr<UIObject> fillImage)
+	void SetFill(std::shared_ptr<UIObject>& fillImage)
 	{
 		m_Fill = fillImage;
 		m_OriginalUV = fillImage->GetComponent<UIImageComponent>()->GetUV();

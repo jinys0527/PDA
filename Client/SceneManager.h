@@ -38,6 +38,9 @@ public:
 		m_CurrentScene.reset();
 	}
 
+	void RequestQuit() { m_ShouldQuit = true; }
+	bool ShouldQuit() const { return m_ShouldQuit; }
+
 private:
 	std::unordered_map<std::string, std::shared_ptr<Scene>> m_Scenes;
 	std::shared_ptr<Scene> m_CurrentScene;
@@ -49,5 +52,6 @@ private:
 	SoundManager& m_SoundManager;
 	GameManager& m_GameManager;
 	UIManager& m_UIManager;
+	bool m_ShouldQuit;
 };
 
