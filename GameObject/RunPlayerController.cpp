@@ -147,6 +147,8 @@ void RunPlayerController::Update(float deltaTime)
 void RunPlayerController::OnEvent(EventType type, const void* data)
 {
 	// 키 입력 처리
+	if (!m_PlayerOwner->GetScene())
+		return;
 
 	if (type == EventType::KeyDown)
 	{
@@ -205,8 +207,8 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 		{
 			int hp = m_PlayerOwner->GetHp();
 			hp -= (int)data;
-			if (hp > 3)
-				hp = 3;
+			if (hp > 5)
+				hp = 5;
 			m_PlayerOwner->SetHp(hp);
 			if ((int)data > 0)
 			{
@@ -313,6 +315,8 @@ void RunPlayerController::SlideCheck()
 	}
 	else
 	{
+		if (m_PlayerOwner->GetSlideCool() > 0)
+			return;
 		auto state = m_PlayerOwner->GetFSM().GetCurrentState();
 		if (m_IsShiftPressed && (state == "Idle" || state == "Run" || state == "Kick"))
 		{

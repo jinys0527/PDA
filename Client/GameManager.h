@@ -22,7 +22,7 @@ public:
 
 	void OnEvent(EventType type, const void* data);
 
-	int m_playerHp = 3;
+	int m_playerHp = 5;
 	int m_playerReinforcedAttack = 3;
 	float m_playerXLoc = -1000;
 
@@ -33,10 +33,10 @@ public:
 
 private:
 
-	int m_initialHp = 3;
+	int m_initialHp = 5;
 	int m_initialReinforcedAttack = 3;
 
-	int m_prevHp = 3;
+	int m_prevHp = 5;
 
 
 	int m_mapTotalLength = 0;// 나중에 게임 정산 하거나 맵 진행도 보여주기 위한 맵 길이 저장

@@ -129,7 +129,7 @@ void UIObject::Render(std::vector<UITextInfo>& renderInfo)
 	for (auto& text : GetComponents<UITextComponent>())
 	{
 		UITextInfo info;
-		info.anchoredPosition = m_RectTransform->GetPosition();
+		info.anchoredPosition = m_RectTransform->GetPosition() + text->GetPosition();
 		info.anchor = m_RectTransform->GetAnchor();
 		info.sizeDelta = { 0, 0 };
 		info.layer = m_ZOrder;

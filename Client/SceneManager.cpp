@@ -13,8 +13,8 @@ void SceneManager::Initialize()
 	testScene->SetSceneManager(this);
 	auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
  	titleScene->SetSceneManager(this);
-	//auto inGameUITestScene = AddScene("InGameUITestScene", std::make_shared<InGameUITestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
-	//inGameUITestScene->SetSceneManager(this);
+	auto inGameUITestScene = AddScene("InGameUITestScene", std::make_shared<InGameUITestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
+	inGameUITestScene->SetSceneManager(this);
 // 	auto characterScene = AddScene("CharacterScene", std::make_shared<CharacterScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
 // 	characterScene->SetSceneManager(this);
 
@@ -22,13 +22,13 @@ void SceneManager::Initialize()
 	testScene->SetName("TestScene");
 	titleScene->Initialize();
 	titleScene->SetName("TitleScene");
-	//inGameUITestScene->Initialize();
-	//inGameUITestScene->SetName("InGameUITestScene");
+	inGameUITestScene->Initialize();
+	inGameUITestScene->SetName("InGameUITestScene");
 
-	ChangeScene("TitleScene");
+	ChangeScene("InGameUITestScene");
 	m_UIManager.Start();
 	//m_UIManager.SetCurrentScene("TitleScene");
-	m_UIManager.SetCurrentScene("TitleScene");
+	m_UIManager.SetCurrentScene("InGameUITestScene");
 }
 
 void SceneManager::Update(float deltaTime)

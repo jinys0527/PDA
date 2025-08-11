@@ -78,11 +78,11 @@ void GraffitiObject::Render(std::vector<RenderInfo>& renderInfo)
 
 void GraffitiObject::SetGravitti(AssetManager* assetManager)
 {
-	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"brick", L"../Resource/bricks.png"));
+	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"brick", L"../Resource/Character/Sour/Graffiti/SOUR.png"));
 	//m_GraffitiTextures.push_back(assetManager->LoadTexture(L"cat_texture", L"../Resource/cat_texture.png"));
-	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"test", L"../Resource/test.png"));
-	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"test1", L"../Resource/test1.png"));
-	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"test2", L"../Resource/test2.png"));
+	//m_GraffitiTextures.push_back(assetManager->LoadTexture(L"test", L"../Resource/test.png"));
+	//m_GraffitiTextures.push_back(assetManager->LoadTexture(L"test1", L"../Resource/test1.png"));
+	//m_GraffitiTextures.push_back(assetManager->LoadTexture(L"test2", L"../Resource/test2.png"));
 
 	m_RandTexture = m_RandTexture % m_GraffitiTextures.size();
 }
