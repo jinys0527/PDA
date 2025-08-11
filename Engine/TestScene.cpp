@@ -194,11 +194,14 @@ void TestScene::Initialize()
 	{
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Lazer";
+
 		auto trans = animobj->GetComponent<TransformComponent>();
 		trans->SetPosition({ 960, 800 });
+
+		trans->SetScale({ 1.0f, 2.0f });
+
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
-
 
 		auto& clips = m_AssetManager.LoadAnimation(L"Boss_Lazer", L"../Resource/Character/Boss/Phase_1/Boss_1Phase_Laser_VFX_Ani.json");
 		auto anim = animobj->AddComponent<AnimationComponent>();
@@ -209,7 +212,9 @@ void TestScene::Initialize()
 			anim->AddClip(clipName, &clip);
 		}
 
-		anim->Play("fire");
+		anim->Play("charge");
+		anim->SetIsActive(false);
+		anim->SetLoop(false);
 
 		sr->SetPath("../Resource/Boss/Phase_1/Boss_1Phase_Laser_VFX_Ani.json");
 		sr->SetTextureKey("Boss_Lazer");
@@ -217,14 +222,14 @@ void TestScene::Initialize()
 		float width = clips.begin()->second.GetFrames().begin()->Width();
 		float height = clips.begin()->second.GetFrames().begin()->Height();
 
-		sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, { width, height });
 
 		AddGameObject(animobj);
 
+		// m_Anims, m_AnimIndexMap는 클래스 멤버라고 가정
 		m_Anims.push_back(animobj);
 		int index = static_cast<int>(m_Anims.size() - 1);
 		m_AnimIndexMap["Boss_Lazer"].push_back(index);
-
 	}
 
 #pragma endregion

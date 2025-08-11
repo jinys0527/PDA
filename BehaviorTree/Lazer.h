@@ -23,5 +23,8 @@ private:
 	float m_ActivateTimer = 0.0f;
 
 	bool m_IsActivating = false;
+
+	std::shared_ptr<GameObject> m_CurrentAnimObj;
+
 };
 

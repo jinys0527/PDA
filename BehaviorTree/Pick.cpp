@@ -84,8 +84,10 @@ void Pick::StartWarning(BlackBoard& bb)
     for (int idx : m_AttackRange)
     {
         auto& telegraph = m_Telegraphs[idx];
-        if (telegraph)
+        if (telegraph) 
+        {
             telegraph->SetActive();
+        }
     }
 }
 
