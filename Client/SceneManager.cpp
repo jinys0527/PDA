@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "SceneManager.h"
 #include "TitleScene.h"
-#include "TestScene.h"
 #include "CharacterScene.h"
 #include "RenderData.h"
 #include "BossScene.h"
@@ -9,18 +8,14 @@
 void SceneManager::Initialize()
 {
 	m_SoundManager.Init();
-	auto testScene = AddScene("TestScene", std::make_shared<TestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
-	testScene->SetSceneManager(this);
     auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
  	titleScene->SetSceneManager(this);
 // 	auto characterScene = AddScene("CharacterScene", std::make_shared<CharacterScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
 // 	characterScene->SetSceneManager(this);
 
-	testScene->Initialize();
  	titleScene->Initialize();
 	/*characterScene->Initialize();*/
  	titleScene->SetName("TitleScene");
-	testScene->SetName("TestScene");
 	/*characterScene->SetName("CharacterScene");*/
 
 	auto bossScene = AddScene("BossScene", std::make_shared<BossScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
