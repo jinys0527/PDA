@@ -32,6 +32,8 @@ public:
 
 	void ChangeScene(const std::string& name);
 
+	void ChangeScene();
+
 	void Reset()
 	{
 		m_Scenes.clear();
@@ -40,6 +42,8 @@ public:
 
 	void RequestQuit() { m_ShouldQuit = true; }
 	bool ShouldQuit() const { return m_ShouldQuit; }
+
+	void SetChangeScene(std::string name);
 
 private:
 	std::unordered_map<std::string, std::shared_ptr<Scene>> m_Scenes;
@@ -53,5 +57,7 @@ private:
 	GameManager& m_GameManager;
 	UIManager& m_UIManager;
 	bool m_ShouldQuit;
+
+	std::string m_ChangeSceneName;
 };
 

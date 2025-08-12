@@ -204,19 +204,21 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					}
 					std::cout << "slide 들어옴" << std::endl;
 					this->SetSlide(true);
+
+					this->m_SlideDuration = 0;
 				},
 				[this](float dt)
 				{
-					static float time = 0;
-					time += dt;
-					if (time >= 3)
+					this->m_SlideDuration += dt;
+					if (this->m_SlideDuration >= 1)
 					{
-						time = 0;
 						this->GetFSM().Trigger("Idle");
+						this->m_SlideCool = 2;
 					}
 				},
 				[this]()
 				{
+					this->m_SlideDuration = 0;
 					std::cout << "slide 나감" << std::endl;
 					this->SetSlide(false);
 				}
@@ -535,6 +537,11 @@ void PlayerObject::Update(float deltaTime)
 	else
 		m_InvincibleTime = 0;
 
+	if (m_SlideCool > 0)
+		m_SlideCool -= deltaTime;
+	else
+		m_SlideCool = 0;
+
 	GameObject::Update(deltaTime);
 
 	m_Fsm.Update(deltaTime);
@@ -546,6 +553,30 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 
 	if (sprite)
 	{
+		{
+			RenderInfo info;
+			info.bitmap = m_ShadowBitmap;
+			Math::Vector2F pos = m_Transform->GetPosition();
+			float y = pos.y;
+			pos.y = m_Z * m_RailHeight + 65.f;
+			m_Transform->SetPosition(pos);
+			info.size = { 1,1 };
+			D2D1::Matrix3x2F trans = D2D1::Matrix3x2F::Identity();
+			trans._22 = 0.7f;
+			trans._32 = 15.0f;
+			info.worldMatrix = trans * m_Transform->GetWorldMatrix();
+
+			info.pivot = { m_ShadowBitmap.Get()->GetSize().width * 0.5f, m_ShadowBitmap.Get()->GetSize().height * 0.5f }; // 바꾸어 놓음
+			// UI가 아닌 일반 오브젝트 위치로 설정
+			//float opacity = sprite->GetTexture().Get()->GetSize().height / (y + 1);
+			float forSin = (y - m_Z * m_RailHeight) / (sprite->GetTexture().Get()->GetSize().height);
+			forSin = forSin > asin(1) ? asin(1) : forSin;
+			float opacity = sin(forSin);
+			info.opacity = 1.0f - opacity;
+			renderInfo.push_back(info);
+			pos.y = y;
+			m_Transform->SetPosition(pos);
+		}
 		{
 			RenderInfo info;
 			info.bitmap = sprite->GetTexture();
@@ -566,29 +597,6 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 			info.useSrcRect = sprite->GetUseSrcRect();
 			info.srcRect = sprite->GetSrcRect();
 			renderInfo.push_back(info);
-		}
-		{
-			RenderInfo info;
-			info.bitmap = m_ShadowBitmap;
-			Math::Vector2F pos = m_Transform->GetPosition();
-			float y = pos.y;
-			pos.y = m_Z * m_RailHeight;
-			m_Transform->SetPosition(pos);
-			info.size = { 1,1 };
-			D2D1::Matrix3x2F size = D2D1::Matrix3x2F::Identity();
-			size._22 = 0.5f;
-			info.worldMatrix = size * m_Transform->GetWorldMatrix();
-
-			info.pivot = { m_ShadowBitmap.Get()->GetSize().width*0.5f, m_ShadowBitmap.Get()->GetSize().height*0.5f }; // 바꾸어 놓음
-			// UI가 아닌 일반 오브젝트 위치로 설정
-			//float opacity = sprite->GetTexture().Get()->GetSize().height / (y + 1);
-			float forSin = (y - m_Z*m_RailHeight) / (sprite->GetTexture().Get()->GetSize().height);
-			forSin = forSin > asin(1) ? asin(1) : forSin;
-			float opacity = sin(forSin);
-			info.opacity = 1.0f - opacity;
-			renderInfo.push_back(info);
-			pos.y = y;
-			m_Transform->SetPosition(pos);
 		}
 	}
 

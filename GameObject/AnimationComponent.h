@@ -14,6 +14,9 @@ public:
 	static constexpr const char* StaticTypeName = "AnimationComponent";
 	const char* GetTypeName() const override { return StaticTypeName; }
 
+	const AnimationClip* GetClip() const;
+
+
 	void AddClip(const std::string& name, const AnimationClip* clip)
 	{
 		m_Clips[name] = clip;
@@ -44,6 +47,8 @@ public:
 
 	void Play();
 	void Play(const std::string& name, bool loop = true);
+
+	void Finish();
 
 	void Update(float deltaTime) override;
 

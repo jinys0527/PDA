@@ -116,6 +116,19 @@
       <Filter>Components\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ControlComponent.cpp" />
+    <ClCompile Include="PlayerEffectComponent.cpp" />
+    <ClCompile Include="LoadingRollerComponent.cpp" />
+    <ClCompile Include="Drone.cpp">
+      <Filter>Components\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FixedObstacle_1.cpp">
+      <Filter>Components\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SlidingObstacle.cpp">
+      <Filter>Components\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RollerBackComponent.cpp" />
+    <ClCompile Include="SwitchingAreaComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h">
@@ -253,6 +266,19 @@
     <ClInclude Include="CoreTypes.h" />
     <ClInclude Include="UIUtils.h" />
     <ClInclude Include="ControlComponent.h" />
+    <ClInclude Include="PlayerEffectComponent.h" />
+    <ClInclude Include="LoadingRollerComponent.h" />
+    <ClInclude Include="Drone.h">
+      <Filter>Components\Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FixedObstacle_1.h">
+      <Filter>Components\Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SlidingObstacle.h">
+      <Filter>Components\Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RollerBackComponent.h" />
+    <ClInclude Include="SwitchingAreaComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Components">

@@ -68,6 +68,7 @@ void GameObject::Render(std::vector<RenderInfo>& renderInfo)
 		info.opacity = spriteRenderer->GetOpacity();
 		info.layer = m_Transform->GetZOrder();
 		// UI가 아닌 일반 오브젝트 위치로 설정
+		info.layer = m_Transform->GetZOrder();
 		info.useSrcRect = spriteRenderer->GetUseSrcRect();
 		info.srcRect = spriteRenderer->GetSrcRect();
 		renderInfo.emplace_back(info);

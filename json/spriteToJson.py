@@ -59,7 +59,7 @@ def spritesheet_to_json_with_tags_empty_tag(png_path, frame_width, frame_height,
     print(f"JSON saved to {output_json}")
 
 # 사용 예시
-filename_stem = "Boss_3Phase_Arms_IDLE_Ani"
+filename_stem = "Boss_3Phase_Arm_Right_Hit_Ani"
 filename = filename_stem + ".png"
 img = Image.open(filename)
 sheet_width, sheet_height = img.size

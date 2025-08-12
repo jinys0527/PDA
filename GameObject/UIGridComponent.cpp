@@ -20,6 +20,10 @@ void UIGridComponent::ClearItems()
 
 void UIGridComponent::UpdateLayout()
 {
+	Math::Vector2F pos = m_Owner->GetComponent<RectTransformComponent>()->GetPosition();
+	Math::Vector2F size = m_Owner->GetComponent<RectTransformComponent>()->GetSize();
+	pos.x = pos.x - 960.0f + (size.x / 2.0f);
+	pos.y = pos.y - 540.0f + (size.y / 2.0f);
 	for (int i = 0; i < m_Items.size(); ++i)
 	{
 		int row = i / m_Col;
@@ -30,7 +34,7 @@ void UIGridComponent::UpdateLayout()
 
 		auto rect = m_Items[i]->GetComponent<RectTransformComponent>();
 		rect->SetSize(m_CellSize);
-		rect->SetPosition({ x, y });
+		rect->SetPosition({ pos.x + x, pos.y + y});
 	}
 }
 

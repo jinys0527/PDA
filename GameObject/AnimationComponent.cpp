@@ -3,6 +3,11 @@
 #include "SpriteRenderer.h"
 #include "AssetManager.h"
 
+const AnimationClip* AnimationComponent::GetClip() const
+{
+	return m_AnimationController.GetClip();
+}
+
 void AnimationComponent::Play()
 {
 	m_AnimationController.SetClip(m_Clips[m_CurrentClipName]);
@@ -17,6 +22,11 @@ void AnimationComponent::Play(const std::string& name, bool loop /*= true*/)
 	m_AnimationController.SetLooping(loop);
 	m_AnimationController.SetElapsed(0.f);
 	m_CurrentClipName = name;
+}
+
+void AnimationComponent::Finish()
+{
+	m_AnimationController.FinishFrame();
 }
 
 void AnimationComponent::Update(float deltaTime)
