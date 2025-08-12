@@ -11,7 +11,7 @@
 
 void CharacterScene::Initialize()
 {
-	auto sourRun = std::make_shared<GameObject>(m_EventDispatcher);
+	/*auto sourRun = std::make_shared<GameObject>(m_EventDispatcher);
 	sourRun->m_Name = "sourRun";
 	auto trans = sourRun->GetComponent<TransformComponent>();
 	trans->SetPosition({ -960.0f, 1080.0f });
@@ -260,9 +260,31 @@ void CharacterScene::Initialize()
 	sr->SetTextureKey("Sour_Marking_Fail_Ani");
 
 
-	AddGameObject(sourMarkingFail);
+	AddGameObject(sourMarkingFail);*/
 
 
+	//auto boss = std::make_shared<GameObject>(m_EventDispatcher);
+	//boss->m_Name = "boss";
+	//auto bossTrans = boss->GetComponent<TransformComponent>();
+	//bossTrans->SetPosition({ -900.0f, 1920.0f });
+	//auto bossSR = boss->AddComponent<SpriteRenderer>();
+	//bossSR->SetAssetManager(&m_AssetManager);
+	//auto& bossclips = m_AssetManager.LoadAnimation(L"Boss_1Phase_Arm_UP_Hit1_Ani", "../Resource/Character/Boss/Boss_1Phase_Arm_UP_Hit1_Ani.json");
+
+	//auto bossAnimComp = boss->AddComponent<AnimationComponent>();
+	//bossAnimComp->SetAssetManager(&m_AssetManager);
+
+	//for (const auto& [clipName, clip] : bossclips)
+	//{
+	//	bossAnimComp->AddClip(clipName, &clip);
+	//}
+
+	//bossAnimComp->Play("hit1");
+
+	//bossSR->SetPath("../Resource/Character/Boss/Boss_1Phase_Arm_Up_Hit1_Ani.json");
+	//bossSR->SetTextureKey("Boss_1Phase_Arm_Up_Hit1_Ani");
+
+	//AddGameObject(boss);
 
 
 	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
@@ -311,10 +333,10 @@ void CharacterScene::Render(std::vector<RenderInfo>& renderInfo, std::vector<UIR
 		for (auto& pair : m_GameObjects)
 		{
 			auto& gameObject = pair.second;
-			if (gameObject->IsInView(m_Camera))
-			{
+			/*if (gameObject->IsInView(m_Camera))
+			{*/
 				gameObject->Render(renderInfo);
-			}
+			//}
 		}
 	}
 

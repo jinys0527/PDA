@@ -28,31 +28,36 @@ void UISliderComponent::OnEvent(EventType type, const void* data)
 {
 	auto mouseData = static_cast<const Events::MouseState*>(data);
 
-	auto rect = m_Fill->GetComponent<UIImageComponent>()->GetUV();
 	float percentage;
 	switch (type)
 	{
 	case EventType::Pressed:
 		if (!IsMouseOverSlider(mouseData->pos))
 			return;
-
 		m_IsDragging = true;
 		m_CurrentMousePos = mouseData->pos;
 		break;
+
 	case EventType::Dragged:
 		if (!m_IsDragging)
 			return;
-		if (!IsMouseOverSlider(mouseData->pos))
-			return;
+		// 슬라이더 위 여부 체크 제거하여 드래그 중 UI 밖으로 마우스 나가도 처리 가능하게 변경
+		// if (!IsMouseOverSlider(mouseData->pos))
+		//     return;
 		m_CurrentMousePos = mouseData->pos;
 		break;
+
 	case EventType::Released:
-		if (!IsMouseOverSlider(mouseData->pos))
+		if (!m_IsDragging)
 			return;
+		// 마찬가지로 UI 밖이어도 드래그 끝낼 수 있도록 체크 제거
+		// if (!IsMouseOverSlider(mouseData->pos))
+		//     return;
+
 		float width = std::abs(m_MaxX - m_MinX);
 		float offset = m_CurrentMousePos.x - min(m_MinX, m_MaxX);
 		percentage = std::clamp(offset / width, 0.0f, 1.0f);
-		SetValue(percentage);			// 여기서 자동으로 OnValueChanged 호출
+		SetValue(percentage);  // OnValueChanged 콜백 호출
 		m_IsDragging = false;
 		break;
 	}
@@ -92,9 +97,9 @@ void UISliderComponent::UpdateFillImage()
 
 void UISliderComponent::Start()
 {
-	m_Owner->GetEventDispatcher().AddListener(EventType::Pressed, this);
-	m_Owner->GetEventDispatcher().AddListener(EventType::Dragged, this);
-	m_Owner->GetEventDispatcher().AddListener(EventType::Released, this);
+// 	m_Owner->GetEventDispatcher().AddListener(EventType::Pressed, this);
+// 	m_Owner->GetEventDispatcher().AddListener(EventType::Dragged, this);
+// 	m_Owner->GetEventDispatcher().AddListener(EventType::Released, this);
 }
 
 bool UISliderComponent::IsMouseOverSlider(const POINT& mousePos)

@@ -27,7 +27,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
 					{
-						anim->Play("attack");
+						anim->Play("run");
 						auto sr = this->GetComponent<SpriteRenderer>();
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
@@ -56,7 +56,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
 					{
-						anim->Play("attack");
+						anim->Play("run");
 						auto sr = this->GetComponent<SpriteRenderer>();
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
@@ -88,7 +88,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
 					{
-						anim->Play("attack", false);
+						anim->Play("kickground", false);
 						auto sr = this->GetComponent<SpriteRenderer>();
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
@@ -103,7 +103,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					{
 						if (anim->IsAnimationFinished())
 						{
-							anim->Play("attack");
+							//anim->Play("attack");
 							this->GetFSM().Trigger("Idle");
 						}
 					}
@@ -120,7 +120,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
 					{
-						anim->Play("attack");
+						anim->Play("jumpup", false);
 						auto sr = this->GetComponent<SpriteRenderer>();
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
@@ -147,7 +147,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
 					{
-						anim->Play("attack");
+						anim->Play("jumptop", false);
 						auto sr = this->GetComponent<SpriteRenderer>();
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
@@ -173,7 +173,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
 					{
-						anim->Play("attack");
+						anim->Play("jumpdown", false);
 						auto sr = this->GetComponent<SpriteRenderer>();
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
@@ -197,7 +197,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
 					{
-						anim->Play("attack");
+						anim->Play("slide");
 						auto sr = this->GetComponent<SpriteRenderer>();
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
@@ -230,7 +230,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 						auto anim = this->GetComponent<AnimationComponent>();
 						if (anim)
 						{
-							anim->Play("attack", true);
+							anim->Play("run", true);
 							auto sr = this->GetComponent<SpriteRenderer>();
 							sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 							sr->SetTextureKey("boss");
@@ -240,21 +240,17 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					},
 					[this](float dt)
 					{
-						/*auto anim = this->GetComponent<AnimationComponent>();
-						if (anim)
-						{
-							if (anim->IsAnimationFinished())
-							{
-								anim->Play("attack");
-								this->GetFSM().Trigger("Idle");
-							}
-						}*/
 					if(this->m_Controller->GetIsHoldingAttack())
 						this->m_HoldingAttack += dt;
-						if(m_HoldingAttack >= 1)
+						if(m_HoldingAttack >= 1 && this->m_Controller->GetIsBoss())
 							this->GetFSM().Trigger("ReadySpray");
+						else if (m_HoldingAttack >= 10)
+							this->GetFSM().Trigger("Shoot");
 					},
-					[]() { std::cout << "waitSpray 나감" << std::endl; } // 착지하면서 공격 끝나면 isJump 꺼지게 할 예정
+					[this]() 
+					{ 
+						std::cout << "waitSpray 나감" << std::endl; 
+					} // 착지하면서 공격 끝나면 isJump 꺼지게 할 예정
 			};
 			m_Fsm.AddState("WaitSpray", waitingSprayState);
 		}
@@ -262,6 +258,18 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 			State sprayState{
 				[this]() 
 				{
+					std::cout << "spray 들어옴" << std::endl;
+					PlayerAttackInfo info;
+					info.damage = 1;
+					info.mousePos = m_Controller->GetMousePos();
+					info.player = this;
+					this->m_EventDispatcher.Dispatch(EventType::OnPlayerAttack, static_cast<const void*>(&info));
+					if (!m_IsAttackSuccessed)
+					{
+						m_Fsm.Trigger("FailSpray");
+						return;
+					}
+					m_IsAttackSuccessed = false;
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
 					{
@@ -270,7 +278,6 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
 					}
-					std::cout << "spray 들어옴" << std::endl; 
 				},
 				[this](float dt)
 				{
@@ -279,8 +286,8 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					{
 						if (anim->IsAnimationFinished())
 						{
-							anim->Play("attack");
-							this->GetFSM().Trigger("Idle");
+							//anim->Play("attack");
+							this->GetFSM().Trigger("SuccessSpray");
 						}
 					}
 				},
@@ -295,7 +302,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 						auto anim = this->GetComponent<AnimationComponent>();
 						if (anim)
 						{
-							anim->Play("attack", true);
+							anim->Play("charge", true);
 							auto sr = this->GetComponent<SpriteRenderer>();
 							sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 							sr->SetTextureKey("boss");
@@ -318,7 +325,10 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 						if (m_HoldingAttack >= 10)
 							this->GetFSM().Trigger("Shoot");
 					},
-					[]() { std::cout << "sprayReady 나감" << std::endl; } // 착지하면서 공격 끝나면 isJump 꺼지게 할 예정
+					[this]() 
+					{ 
+						std::cout << "sprayReady 나감" << std::endl;
+					} // 착지하면서 공격 끝나면 isJump 꺼지게 할 예정
 			};
 			m_Fsm.AddState("ReadySpray", readySprayState);
 		}
@@ -326,15 +336,26 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 			State StrongSprayState{
 				[this]()
 				{
+					std::cout << "strongSpray 들어옴" << std::endl;
+					PlayerAttackInfo info;
+					info.damage = 1;
+					info.mousePos = m_Controller->GetMousePos();
+					info.player = this;
+					this->m_EventDispatcher.Dispatch(EventType::OnPlayerAttack, static_cast<const void*>(&info));
+					if (!m_IsAttackSuccessed)
+					{
+						m_Fsm.Trigger("FailSpray");
+						return;
+					}
+					m_IsAttackSuccessed = false;
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
 					{
-						anim->Play("attack", false);
+						anim->Play("chargeshot", false);
 						auto sr = this->GetComponent<SpriteRenderer>();
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
 					}
-					std::cout << "strongSpray 들어옴" << std::endl;
 				},
 				[this](float dt)
 				{
@@ -343,8 +364,8 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					{
 						if (anim->IsAnimationFinished())
 						{
-							anim->Play("attack");
-							this->GetFSM().Trigger("Idle");
+							//anim->Play("attack");
+							this->GetFSM().Trigger("SuccessSpray");
 						}
 					}
 				},
@@ -353,13 +374,73 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 			m_Fsm.AddState("StrongSpray", StrongSprayState);
 		}
 		{
+			State FailSprayState{
+				[this]()
+				{
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
+					{
+						anim->Play("markingfail", false);
+						auto sr = this->GetComponent<SpriteRenderer>();
+						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+						sr->SetTextureKey("boss");
+					}
+					std::cout << "failSpray 들어옴" << std::endl;
+				},
+				[this](float dt)
+				{
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
+					{
+						if (anim->IsAnimationFinished())
+						{
+							//anim->Play("attack");
+							this->GetFSM().Trigger("Idle");
+						}
+					}
+				},
+				[]() { std::cout << "failSpray 나감" << std::endl; } // 착지하면서 공격 끝나면 isJump 꺼지게 할 예정
+			};
+			m_Fsm.AddState("FailSpray", FailSprayState);
+		}
+		{
+			State SuccessSprayState{
+				[this]()
+				{
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
+					{
+						anim->Play("markingsuccess", false);
+						auto sr = this->GetComponent<SpriteRenderer>();
+						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
+						sr->SetTextureKey("boss");
+					}
+					std::cout << "successSpray 들어옴" << std::endl;
+				},
+				[this](float dt)
+				{
+					auto anim = this->GetComponent<AnimationComponent>();
+					if (anim)
+					{
+						if (anim->IsAnimationFinished())
+						{
+							//anim->Play("attack");
+							this->GetFSM().Trigger("Idle");
+						}
+					}
+				},
+				[]() { std::cout << "successSpray 나감" << std::endl; } // 착지하면서 공격 끝나면 isJump 꺼지게 할 예정
+			};
+			m_Fsm.AddState("SuccessSpray", SuccessSprayState);
+		}
+		{
 			State hurtState{
 				[this]() 
 				{
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
 					{
-						anim->Play("attack", false);
+						anim->Play("hitted", false);
 						auto sr = this->GetComponent<SpriteRenderer>();
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
@@ -374,7 +455,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					{
 						if (anim->IsAnimationFinished())
 						{
-							anim->Play("attack");
+							//anim->Play("attack");
 							this->GetFSM().Trigger("Idle");
 						}
 					}
@@ -390,7 +471,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
 					{
-						anim->Play("attack", false);
+						anim->Play("dead", false);
 						auto sr = this->GetComponent<SpriteRenderer>();
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
@@ -419,8 +500,12 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 			m_Fsm.AddTransition("WaitSpray", "Spray", "Shoot");// Kick Spray
 			m_Fsm.AddTransition("WaitSpray", "ReadySpray", "ReadySpray");// Kick Spray
 			m_Fsm.AddTransition("ReadySpray", "StrongSpray", "Shoot");// Kick Spray
-			m_Fsm.AddTransition("Spray", "Idle", "Idle");// Spray Idle
-			m_Fsm.AddTransition("StrongSpray", "Idle", "Idle");// Spray Idle
+			m_Fsm.AddTransition("Spray", "SuccessSpray", "SuccessSpray");// Spray Idle
+			m_Fsm.AddTransition("StrongSpray", "SuccessSpray", "SuccessSpray");// Spray Idle
+			m_Fsm.AddTransition("Spray", "FailSpray", "FailSpray");// Spray Idle
+			m_Fsm.AddTransition("StrongSpray", "FailSpray", "FailSpray");// Spray Idle
+			m_Fsm.AddTransition("FailSpray", "Idle", "Idle");// Spray Idle
+			m_Fsm.AddTransition("SuccessSpray", "Idle", "Idle");// Spray Idle
 			m_Fsm.AddTransition("Idle", "JumpUp", "JumpUp");// Idle JumpUp
 			m_Fsm.AddTransition("Run", "JumpUp", "JumpUp");// Idle JumpUp
 			m_Fsm.AddTransition("Kick", "JumpUp", "JumpUp");// Kick JumpUp
@@ -524,4 +609,16 @@ void PlayerObject::SetBullet(int value)
 {
 	m_ReinforcedBullet = value; 
 	GetEventDispatcher().Dispatch(EventType::OnPlayerReinforcedBulletChanged, (const void*)value);
+}
+
+void PlayerObject::SetCameraObject(GameObject* cameraObject)
+{
+
+	m_CameraObject = cameraObject;
+
+}
+
+GameObject* PlayerObject::GetCameraObject()
+{
+	return m_CameraObject;
 }

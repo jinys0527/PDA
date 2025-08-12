@@ -2,29 +2,31 @@
 #include "SceneManager.h"
 #include "TitleScene.h"
 #include "TestScene.h"
+#include "CharacterScene.h"
 #include "RenderData.h"
 #include "BossScene.h"
 
 void SceneManager::Initialize()
 {
 	m_SoundManager.Init();
-	//auto testScene = AddScene("TestScene", std::make_shared<TestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
-	//testScene->SetSceneManager(this);
-//  auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
-// 	titleScene->SetSceneManager(this);
+	auto testScene = AddScene("TestScene", std::make_shared<TestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
+	testScene->SetSceneManager(this);
+    auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
+ 	titleScene->SetSceneManager(this);
+// 	auto characterScene = AddScene("CharacterScene", std::make_shared<CharacterScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
+// 	characterScene->SetSceneManager(this);
 
-	//testScene->Initialize();
-// 	titleScene->Initialize();
-// 	titleScene->SetName("TitleScene");
-	//testScene->SetName("TestScene");
+	testScene->Initialize();
+ 	titleScene->Initialize();
+	/*characterScene->Initialize();*/
+ 	titleScene->SetName("TitleScene");
+	testScene->SetName("TestScene");
+	/*characterScene->SetName("CharacterScene");*/
 
 	auto bossScene = AddScene("BossScene", std::make_shared<BossScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
 
 	bossScene->Initialize();
 	bossScene->SetName("BossScene");
-
-
-
 	SetCurrentScene("BossScene");
 }
 
@@ -60,13 +62,7 @@ void SceneManager::SetCurrentScene(const std::string& name)
 	auto it = m_Scenes.find(name);
 	if (it != m_Scenes.end())
 	{
-		if (m_CurrentScene)
-		{
-			m_CurrentScene->Leave();
-		}
-
 		m_CurrentScene = it->second;
-		m_CurrentScene->Enter();
 
 		m_Camera = m_CurrentScene->GetMainCamera();
 		m_Renderer.SetCamera(m_Camera);

@@ -8,6 +8,7 @@
 #include "CameraObject.h"
 #include "GameManager.h"
 #include <unordered_set>
+#include "TransformComponent.h"
 
 Scene::~Scene()
 {
@@ -29,6 +30,7 @@ void Scene::RemoveGameObject(std::shared_ptr<GameObject> gameObject)
 	auto it = m_GameObjects.find(gameObject->m_Name);
 	if (it != m_GameObjects.end())
 	{
+		gameObject->GetComponent<TransformComponent>()->DetachFromParent();
 		m_GameObjects.erase(gameObject->m_Name);
 	}
 }
