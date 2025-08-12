@@ -32,14 +32,8 @@
 #include "HeartUIComponent.h"
 #include "BulletUIComponent.h"
 #include "BlackBoard.h"
-#include "TestNode.h"
-#include "Sequence.h"
-#include "Selector.h"
-#include "Repeater.h"
-#include "Inverter.h"
 #include "BossBehaviorTree.h"
 #include "BossBlackBoard.h"
-#include "AnimationClip.h"
 #include "GameManager.h"
 
 

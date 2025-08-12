@@ -98,16 +98,16 @@ void BossBehaviorTree::Initialize()
 #pragma region 1-2
 	// 1-2
 	auto P1_Skill_2_5_Wait = std::make_shared<WaitNode>("P1_Skill_2_5_Wait", 0.5f);
-	auto P1_Skill_2_5_Lazer_3 = std::make_shared<Lazer>("Row_3");
+	auto P1_Skill_2_5_Lazer_1 = std::make_shared<Lazer>("Row_1");
 
-	auto P1_Skill_2_4_ArmSmash_1 = std::make_shared<ArmSmash>("Row_1");
+	auto P1_Skill_2_4_ArmSmash_3 = std::make_shared<ArmSmash>("Row_3");
 	auto P1_Skill_2_4_Sequence = std::make_shared<Sequence>("P1_Skill_2_4_Sequence");
 	P1_Skill_2_4_Sequence->AddChild(P1_Skill_2_5_Wait);
-	P1_Skill_2_4_Sequence->AddChild(P1_Skill_2_5_Lazer_3);
+	P1_Skill_2_4_Sequence->AddChild(P1_Skill_2_5_Lazer_1);
 
 	auto P1_Skill_2_3_Wait = std::make_shared<WaitNode>("P1_Skill_2_3_Wait", 0.5f);
 	auto P1_Skill_2_3_Parallel = std::make_shared<ParallelNode>("P1_Skill_2_3_Parallel");
-	P1_Skill_2_3_Parallel->AddChild(P1_Skill_2_4_ArmSmash_1);
+	P1_Skill_2_3_Parallel->AddChild(P1_Skill_2_4_ArmSmash_3);
 	P1_Skill_2_3_Parallel->AddChild(P1_Skill_2_4_Sequence);
 
 	auto P1_Skill_2_2_Pick_5 = std::make_shared<Pick>("Pick_5");
@@ -193,20 +193,20 @@ void BossBehaviorTree::Initialize()
 	P1_Skill_5_5_ParallelNode->AddChild(P1_Skill_5_6_Pick_0);
 	P1_Skill_5_5_ParallelNode->AddChild(P1_Skill_5_6_Pick_14);
 
-	auto P1_Skill_5_4_Lazer_2 = std::make_shared<Lazer>("Row_2");
+	auto P1_Skill_5_4_Lazer_1 = std::make_shared<Lazer>("Row_1");
 	auto P1_Skill_5_4_Sequence = std::make_shared<Sequence>("P1_Skill_5_4_Sequence");
 	P1_Skill_5_4_Sequence->AddChild(P1_Skill_5_5_Wait);
 	P1_Skill_5_4_Sequence->AddChild(P1_Skill_5_5_ParallelNode);
 
 	auto P1_Skill_5_3_Wait = std::make_shared<WaitNode>("P1_Skill_5_3_Wait", 1.3f);
 	auto P1_Skill_5_3_Parallel = std::make_shared<ParallelNode>("P1_Skill_5_3_Parallel");
-	P1_Skill_5_3_Parallel->AddChild(P1_Skill_5_4_Lazer_2);
+	P1_Skill_5_3_Parallel->AddChild(P1_Skill_5_4_Lazer_1);
 	P1_Skill_5_3_Parallel->AddChild(P1_Skill_5_4_Sequence);
-	auto P1_Skill_5_3_ArmSmash_1 = std::make_shared<ArmSmash>("Row_1");
+	auto P1_Skill_5_3_ArmSmash_2 = std::make_shared<ArmSmash>("Row_2");
 	auto P1_Skill_5_3_ArmSmash_3 = std::make_shared<ArmSmash>("Row_3");
 
 	auto P1_Skill_5_2_ParallelNode = std::make_shared<ParallelNode>("P1_Skill_5_2_ParallelNode");
-	P1_Skill_5_2_ParallelNode->AddChild(P1_Skill_5_3_ArmSmash_1);
+	P1_Skill_5_2_ParallelNode->AddChild(P1_Skill_5_3_ArmSmash_2);
 	P1_Skill_5_2_ParallelNode->AddChild(P1_Skill_5_3_ArmSmash_3);
 	auto P1_Skill_5_2_Sequence = std::make_shared<Sequence>("P1_Skill_5_2_Sequence");
 	P1_Skill_5_2_Sequence->AddChild(P1_Skill_5_3_Wait);
