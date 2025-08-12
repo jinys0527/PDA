@@ -13,6 +13,7 @@
 #include "Lazer.h"
 #include "ArmSwip.h"
 #include "ArmStretch.h"
+#include "HitNode.h"
 
 void BossBehaviorTree::Initialize()
 {
@@ -443,8 +444,13 @@ void BossBehaviorTree::Initialize()
 	auto Phase_2 = std::make_shared<Sequence>("Phase_2");
 	auto Phase_3 = std::make_shared<Sequence>("Phase_3");
 
+	auto Phase_1_HitNode = std::make_shared<HitNode>("Phase_1_HitNode");
+	auto Phase_1_Parellel_CoolDown = std::make_shared<ParallelNode>("Phase_1_Parellel_CoolDown");
+	Phase_1_Parellel_CoolDown->AddChild(Phase_1_HitNode);
+	Phase_1_Parellel_CoolDown->AddChild(P1_BossCoolDown);
+
 	Phase_1->AddChild(P1_PhaseChecker);
-	Phase_1->AddChild(P1_BossCoolDown);
+	Phase_1->AddChild(Phase_1_Parellel_CoolDown);
 	Phase_1->AddChild(Phase_1_Skills);
 
 	Phase_2->AddChild(P2_PhaseChecker);
@@ -452,9 +458,13 @@ void BossBehaviorTree::Initialize()
 	Phase_2->AddChild(Phase_2_Skills);
 
 
+	auto Phase_3_HitNode = std::make_shared<HitNode>("Phase_3_HitNode");
+	auto Phase_3_Parellel_CoolDown = std::make_shared<ParallelNode>("Phase_3_Parellel_CoolDown");
+	Phase_3_Parellel_CoolDown->AddChild(Phase_3_HitNode);
+	Phase_3_Parellel_CoolDown->AddChild(P3_BossCoolDown);
 
 	Phase_3->AddChild(P3_PhaseChecker);
-	Phase_3->AddChild(P3_BossCoolDown);
+	Phase_3->AddChild(Phase_3_Parellel_CoolDown);
 	Phase_3->AddChild(Phase_3_Skills);
 
 
@@ -466,8 +476,6 @@ void BossBehaviorTree::Initialize()
 	m_BehaviorTree = Root;
 #pragma endregion
 
-	//블랙보드에 저장
-	//m_BlackBoard.SetValue("lastSkills", lastSkills);
 }
 
 void BossBehaviorTree::Tick(float deltaTime)

@@ -191,7 +191,7 @@
         },
       "frameTags": [
         {
-          "name": "3phasedead",
+          "name": "dead",
           "from": 0,
           "to": 17,
           "direction": "forward",

@@ -153,6 +153,7 @@
     <ClInclude Include="CompositeNode.h" />
     <ClInclude Include="Decorator.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="HitNode.h" />
     <ClInclude Include="Inverter.h" />
     <ClInclude Include="Lazer.h" />
     <ClInclude Include="ParallelNode.h" />
@@ -181,6 +182,7 @@
     <ClCompile Include="BTNode.cpp" />
     <ClCompile Include="CompositeNode.cpp" />
     <ClCompile Include="Decorator.cpp" />
+    <ClCompile Include="HitNode.cpp" />
     <ClCompile Include="Inverter.cpp" />
     <ClCompile Include="Lazer.cpp" />
     <ClCompile Include="ParallelNode.cpp" />

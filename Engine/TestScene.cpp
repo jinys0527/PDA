@@ -61,25 +61,28 @@ void TestScene::Initialize()
 #pragma endregion
 
 #pragma region Background
-	//{
-	//	auto texture = m_AssetManager.LoadTexture(L"3Chap_2Phase_View", L"../Resource/Character/Boss/Phase_3/3Chap_2Phase_View.png");
+	{
+		auto texture = m_AssetManager.LoadTexture(L"3Chap_2Phase_View", L"../Resource/Character/Boss/Phase_3/3Chap_2Phase_View.png");
 
-	//	auto backobj = std::make_shared<GameObject>(m_EventDispatcher);
-	//	backobj->m_Name = "backgroundtest";
-	//	auto sr = backobj->AddComponent<SpriteRenderer>();
-	//	sr->SetTexture(texture);
-	//	sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
+		//auto texture = m_AssetManager.LoadTexture(L"3Chap_1Phase_01", L"../Resource/Character/Boss/Phase_1/3Chap_1Phase_01.png");
 
 
-	//	auto tr = backobj->GetComponent<TransformComponent>();
-	//	tr->SetPosition({ 960.f, 540.f });
-	//	tr->SetScale({ 0.9f, 0.9f });
-	//	sr->SetOpacity(1.0f);
+		auto backobj = std::make_shared<GameObject>(m_EventDispatcher);
+		backobj->m_Name = "backgroundtest";
+		auto sr = backobj->AddComponent<SpriteRenderer>();
+		sr->SetTexture(texture);
+		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
 
-	//	tr->SetZOrder(-1);
 
-	//	AddGameObject(backobj);
-	//}
+		auto tr = backobj->GetComponent<TransformComponent>();
+		tr->SetPosition({ 960.f, 540.f });
+		tr->SetScale({ 0.9f, 0.9f });
+		sr->SetOpacity(1.0f);
+
+		tr->SetZOrder(-1);
+
+		AddGameObject(backobj);
+	}
 #pragma endregion
 
 #pragma region anim_now
@@ -513,39 +516,6 @@ void TestScene::Initialize()
 
 #pragma endregion
 
-#pragma region Anim_Arm_Idle
-	//{
-	//	auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
-	//	animobj->m_Name = "Boss_Arm_Idle";
-	//	auto trans = animobj->GetComponent<TransformComponent>();
-	//	trans->SetPosition({ 960, 800 });
-	//	auto sr = animobj->AddComponent<SpriteRenderer>();
-	//	sr->SetAssetManager(&m_AssetManager);
-
-	//	auto& clips = m_AssetManager.LoadAnimation(L"Boss_Arm_Idle", L"../Resource/Character/Boss/Phase_1/Boss_1Phase_Arm_Up_IDLE_Ani.json");
-	//	auto anim = animobj->AddComponent<AnimationComponent>();
-	//	anim->SetAssetManager(&m_AssetManager);
-
-	//	for (const auto& [clipName, clip] : clips)
-	//	{
-	//		anim->AddClip(clipName, &clip);
-	//	}
-
-	//	anim->Play("idle");
-
-	//	sr->SetPath("../Resource/Boss/Phase_1/Boss_1Phase_Arm_Up_IDLE_Ani.json");
-	//	sr->SetTextureKey("Boss_Arm_Idle");
-
-	//	float width = clips.begin()->second.GetFrames().begin()->Width();
-	//	float height = clips.begin()->second.GetFrames().begin()->Height();
-
-	//	sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
-
-	//	AddGameObject(animobj);
-	//}
-
-#pragma endregion
-
 #pragma region Anim_Phase2_Arm
 	{
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
@@ -596,13 +566,13 @@ void TestScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Anim_Arm_L";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 700.f, 1200.f });
-		trans->SetScale({ -1.5f, 1.5f });
+		trans->SetPosition({ 500.f, 800.f });
+		trans->SetScale({ -1.75f, 1.75f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
 
-		auto& clips = m_AssetManager.LoadAnimation(L"Boss_3Phase_Arms_IDLE_Ani", L"../Resource/Character/Boss/Phase_3/Boss_3Phase_Arms_IDLE_Ani.json");
+		auto& clips = m_AssetManager.LoadAnimation(L"Boss_3Phase_Arms_IDLE", L"../Resource/Character/Boss/Phase_3/Boss_3Phase_Arms_IDLE.json");
 		auto anim = animobj->AddComponent<AnimationComponent>();
 		anim->SetAssetManager(&m_AssetManager);
 
@@ -612,10 +582,10 @@ void TestScene::Initialize()
 		}
 
 		anim->Play("idle");
-		anim->SetIsActive(false);
+		anim->SetIsActive(true);
 		anim->SetLoop(true);
 
-		sr->SetPath("../Resource/Boss/Phase_3/Boss_3Phase_Arms_IDLE_Ani.json");
+		sr->SetPath("../Resource/Boss/Phase_3/Boss_3Phase_Arms_IDLE.json");
 		sr->SetTextureKey("Boss_Anim_Arm_L");
 
 		float width = clips.begin()->second.GetFrames().begin()->Width();
@@ -635,13 +605,13 @@ void TestScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Anim_Arm_R";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 1220.f, 1200.f });
-		trans->SetScale({ 1.5f, 1.5f });
+		trans->SetPosition({ 1420.f, 800.f });
+		trans->SetScale({ 1.75f, 1.75f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
 
-		auto& clips = m_AssetManager.LoadAnimation(L"Boss_3Phase_Arms_IDLE_Ani", L"../Resource/Character/Boss/Phase_3/Boss_3Phase_Arms_IDLE_Ani.json");
+		auto& clips = m_AssetManager.LoadAnimation(L"Boss_3Phase_Arms_IDLE", L"../Resource/Character/Boss/Phase_3/Boss_3Phase_Arms_IDLE.json");
 		auto anim = animobj->AddComponent<AnimationComponent>();
 		anim->SetAssetManager(&m_AssetManager);
 
@@ -651,10 +621,10 @@ void TestScene::Initialize()
 		}
 
 		anim->Play("idle");
-		anim->SetIsActive(false);
+		anim->SetIsActive(true);
 		anim->SetLoop(true);
 
-		sr->SetPath("../Resource/Boss/Phase_3/Boss_3Phase_Arms_IDLE_Ani.json");
+		sr->SetPath("../Resource/Boss/Phase_3/Boss_3Phase_Arms_IDLE.json");
 		sr->SetTextureKey("Boss_Anim_Arm_R");
 
 		float width = clips.begin()->second.GetFrames().begin()->Width();
@@ -752,6 +722,168 @@ void TestScene::Initialize()
 
 #pragma endregion
 
+#pragma region Anim_Dead
+	// 본체 사망
+	{
+		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
+		animobj->m_Name = "Boss_3Phase_DEAD_Ani";
+		auto trans = animobj->GetComponent<TransformComponent>();
+		trans->SetPosition({ 960.f, 1740.f });
+		trans->SetScale({ 2.f, 2.f });
+		auto sr = animobj->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+
+
+		auto& clips = m_AssetManager.LoadAnimation(L"Boss_3Phase_DEAD_Ani", L"../Resource/Character/Boss/Phase_3/Boss_3Phase_DEAD_Ani.json");
+		auto anim = animobj->AddComponent<AnimationComponent>();
+		anim->SetAssetManager(&m_AssetManager);
+
+		for (const auto& [clipName, clip] : clips)
+		{
+			anim->AddClip(clipName, &clip);
+		}
+
+		anim->Play("dead");
+
+		sr->SetPath("../Resource/Boss/Phase_3/Boss_3Phase_DEAD_Ani.json");
+		sr->SetTextureKey("Boss_3Phase_DEAD_Ani");
+
+		float width = clips.begin()->second.GetFrames().begin()->Width();
+		float height = clips.begin()->second.GetFrames().begin()->Height();
+
+		sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+
+		AddGameObject(animobj);
+
+		m_Anims.push_back(animobj);
+		int index = static_cast<int>(m_Anims.size() - 1);
+		m_AnimIndexMap["Boss_3Phase_DEAD_Ani"].push_back(index);
+
+	}
+
+	//화면기준 왼팔
+	{
+		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
+		animobj->m_Name = "Boss_3Phase_Arms_Dead_L";
+		auto trans = animobj->GetComponent<TransformComponent>();
+		trans->SetPosition({ 920.f, 690.f });
+		trans->SetScale({ -1.75f, 1.75f });
+
+		auto sr = animobj->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+
+		auto& clips = m_AssetManager.LoadAnimation(L"Boss_3Phase_Arms_Dead_Ani", L"../Resource/Character/Boss/Phase_3/Boss_3Phase_Arms_Dead_Ani.json");
+		auto anim = animobj->AddComponent<AnimationComponent>();
+		anim->SetAssetManager(&m_AssetManager);
+
+		for (const auto& [clipName, clip] : clips)
+		{
+			anim->AddClip(clipName, &clip);
+		}
+
+		anim->Play("dead");
+		anim->SetIsActive(true);
+		anim->SetLoop(true);
+
+		sr->SetPath("../Resource/Boss/Phase_3/Boss_3Phase_Arms_Dead_Ani.json");
+		sr->SetTextureKey("Boss_3Phase_Arms_Dead_L");
+
+		float width = clips.begin()->second.GetFrames().begin()->Width();
+		float height = clips.begin()->second.GetFrames().begin()->Height();
+
+		sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+
+		AddGameObject(animobj);
+		m_Anims.push_back(animobj);
+		int index = static_cast<int>(m_Anims.size() - 1);
+		m_AnimIndexMap["Boss_3Phase_Arms_Dead_L"].push_back(index);
+
+	}
+
+	//화면기준 왼팔
+	{
+		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
+		animobj->m_Name = "Boss_3Phase_Arms_Dead_R";
+		auto trans = animobj->GetComponent<TransformComponent>();
+		trans->SetPosition({ 1000.f, 690.f });
+		trans->SetScale({ 1.75f, 1.75f });
+
+		auto sr = animobj->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+
+		auto& clips = m_AssetManager.LoadAnimation(L"Boss_3Phase_Arms_Dead_Ani", L"../Resource/Character/Boss/Phase_3/Boss_3Phase_Arms_Dead_Ani.json");
+		auto anim = animobj->AddComponent<AnimationComponent>();
+		anim->SetAssetManager(&m_AssetManager);
+
+		for (const auto& [clipName, clip] : clips)
+		{
+			anim->AddClip(clipName, &clip);
+		}
+
+		anim->Play("dead");
+		anim->SetIsActive(true);
+		anim->SetLoop(true);
+
+		sr->SetPath("../Resource/Boss/Phase_3/Boss_3Phase_Arms_Dead_Ani.json");
+		sr->SetTextureKey("Boss_3Phase_Arms_Dead_R");
+
+		float width = clips.begin()->second.GetFrames().begin()->Width();
+		float height = clips.begin()->second.GetFrames().begin()->Height();
+
+		sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+
+		AddGameObject(animobj);
+		m_Anims.push_back(animobj);
+		int index = static_cast<int>(m_Anims.size() - 1);
+		m_AnimIndexMap["Boss_3Phase_Arms_Dead_R"].push_back(index);
+
+	}
+
+
+#pragma endregion
+
+#pragma region Anim_Shot
+	//Phase_3
+	{
+		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
+		animobj->m_Name = "Boss_3Phase_Shot_Ani";
+		auto trans = animobj->GetComponent<TransformComponent>();
+		trans->SetPosition({ 960.f, 1740.f });
+		trans->SetScale({ 2.f, 2.f });
+		auto sr = animobj->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+
+
+		auto& clips = m_AssetManager.LoadAnimation(L"Boss_3Phase_Shot_Ani", L"../Resource/Character/Boss/Phase_3/Boss_3Phase_Shot_Ani.json");
+		auto anim = animobj->AddComponent<AnimationComponent>();
+		anim->SetAssetManager(&m_AssetManager);
+
+		for (const auto& [clipName, clip] : clips)
+		{
+			anim->AddClip(clipName, &clip);
+		}
+
+		anim->Play("shot");
+
+		sr->SetPath("../Resource/Boss/Phase_3/Boss_3Phase_Shot_Ani.json");
+		sr->SetTextureKey("Boss_3Phase_Shot_Ani");
+
+		float width = clips.begin()->second.GetFrames().begin()->Width();
+		float height = clips.begin()->second.GetFrames().begin()->Height();
+
+		sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+
+		AddGameObject(animobj);
+
+		m_Anims.push_back(animobj);
+		int index = static_cast<int>(m_Anims.size() - 1);
+		m_AnimIndexMap["Boss_3Phase_Shot_Ani"].push_back(index);
+
+	}
+
+#pragma endregion
+
+
 #pragma region telegraph
 	m_Telegraphs.reserve(15);
 
@@ -846,6 +978,7 @@ void TestScene::Initialize()
 
 void TestScene::Finalize()
 {
+
 }
 
 void TestScene::Enter()
@@ -871,37 +1004,37 @@ void TestScene::Update(float deltaTime)
 		return; // 3초 지나기 전에는 행동트리 실행 X
 	}
 
-	// 카메라 이동량 계산
-	float dx = m_ScrollSpeed * deltaTime;
-	float dy = 0.f;
+	//// 카메라 이동량 계산
+	//float dx = m_ScrollSpeed * deltaTime;
+	//float dy = 0.f;
 
-	m_TotalXMove += dx;
+	//m_TotalXMove += dx;
 
-	auto camtrans = m_Camera->GetComponent<TransformComponent>();
-	auto curpos = camtrans->GetPosition();
-	camtrans->SetPosition({ curpos.x + 100 * deltaTime, curpos.y });
+	//auto camtrans = m_Camera->GetComponent<TransformComponent>();
+	//auto curpos = camtrans->GetPosition();
+	//camtrans->SetPosition({ curpos.x + 100 * deltaTime, curpos.y });
 
-	for (auto& telegraph : m_Telegraphs)
-	{
-		auto tr = telegraph->GetComponent<TransformComponent>();
-		auto pos = tr->GetPosition();
-		tr->SetPosition({ pos.x + dx, pos.y + dy });
-	}
+	//for (auto& telegraph : m_Telegraphs)
+	//{
+	//	auto tr = telegraph->GetComponent<TransformComponent>();
+	//	auto pos = tr->GetPosition();
+	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
+	//}
 
-	// 파이어 오브젝트 이동
-	for (auto& fire : m_Fires)
-	{
-		auto tr = fire->GetComponent<TransformComponent>();
-		auto pos = tr->GetPosition();
-		tr->SetPosition({ pos.x + dx, pos.y + dy });
-	}
+	//// 파이어 오브젝트 이동
+	//for (auto& fire : m_Fires)
+	//{
+	//	auto tr = fire->GetComponent<TransformComponent>();
+	//	auto pos = tr->GetPosition();
+	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
+	//}
 
-	{
-		auto tr = m_Phase_2_Arm->GetComponent<TransformComponent>();
-		auto pos = tr->GetPosition();
-		tr->SetPosition({ pos.x + dx, pos.y + dy });
+	//{
+	//	auto tr = m_Phase_2_Arm->GetComponent<TransformComponent>();
+	//	auto pos = tr->GetPosition();
+	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
 
-	}
+	//}
 
 
 	//---------------------

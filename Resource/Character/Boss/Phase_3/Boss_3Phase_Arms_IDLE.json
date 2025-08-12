@@ -154,7 +154,7 @@
     "meta": {
         "app": "CustomSpriteSheetTool",
         "version": "1.0",
-        "image": "Boss_3Phase_Arms_IDLE_Ani.png",
+        "image": "Boss_3Phase_Arms_IDLE.png",
         "size": {
             "w": 9600,
             "h": 5760

@@ -124,7 +124,7 @@ NodeState Lazer::Tick(BlackBoard& bb, float deltaTime)
             animComp->SetIsActive(false);
             auto sprite = m_CurrentAnimObj->GetComponent<SpriteRenderer>();
             sprite->SetIsActive(false);
-            sprite->SetOpacity(0);
+            sprite->SetOpacity(0.f);
 
             m_AnimPlaying = false;
 
@@ -219,7 +219,7 @@ void Lazer::StartWarning(BlackBoard& bb)
 
         auto sprite = m_CurrentAnimObj->GetComponent<SpriteRenderer>();
         sprite->SetIsActive(true);
-        sprite->SetOpacity(1);
+        sprite->SetOpacity(1.f);
 
         m_AnimPlaying = true;
     }

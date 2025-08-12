@@ -12,7 +12,7 @@ BossBlackBoard::BossBlackBoard(
 {
 	SetValue("ScrollSpeed", scrollspeed);
 
-	SetValue("BossMaxHP", 49.0f);
+	SetValue("BossMaxHP", 149.0f);
 	SetValue("BossCurrHP", GetValue<float>("BossMaxHP").value());
 	SetValue("IdleCoolDown", 1.0f);
 
