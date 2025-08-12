@@ -1,14 +1,34 @@
 #include "BossBlackBoard.h"
 
-BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegraphs, std::vector<std::shared_ptr<GameObject>>& anim)
+BossBlackBoard::BossBlackBoard(
+	float scrollspeed,
+	std::vector<std::shared_ptr<Telegraph>>& telegraphs, 
+	std::vector<std::shared_ptr<GameObject>>& anims, 
+	std::vector<std::shared_ptr<GameObject>>& fires,
+
+	std::unordered_map<std::string, std::vector<int>>& animIndexMap,
+	SoundManager& soundmanager)
+	: BlackBoard(soundmanager)
 {
-	SetValue("BossMaxHP", 49.0f);
+	SetValue("ScrollSpeed", scrollspeed);
+
+	SetValue("CanBeHit", false);
+
+	SetValue("IsDead", false);
+	SetValue("BossMaxHP", 100.0f);
 	SetValue("BossCurrHP", GetValue<float>("BossMaxHP").value());
+
+	//보스 쿨다운
 	SetValue("IdleCoolDown", 1.0f);
 
 	//보스 공격 장판 전체
 	SetValue("BossTelegraph", telegraphs);
-	SetValue("BossAnims", anim);
+
+	//보스 애니메이션 저장
+	SetValue("LazerFire", fires);
+
+	SetValue("BossAnims", anims);
+	SetValue("BossAnimIndexMap", animIndexMap);
 
 	//보스 패턴 활성화 지정?
 	// 나중에 패턴 이름있으면 여기에 Skill_1 대신 입력
@@ -40,11 +60,11 @@ BossBlackBoard::BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegrap
 	SetValue("3Phase", false);
 	SetValue("RandomValue", 0.0f);
 
-	SetValue("SkillWeight_1", 5001.0f);
+	SetValue("SkillWeight_1", 1.0f);
 	SetValue("SkillWeight_2", 1.0f);
 	SetValue("SkillWeight_3", 1.0f);
 	SetValue("SkillWeight_4", 1.0f);
-	SetValue("SkillWeight_5", 1.0f);
+	SetValue("SkillWeight_5", 5001.0f);
 
 	SetValue("SkillChance_1", 0.f);
 	SetValue("SkillChance_2", 0.f);

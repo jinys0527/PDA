@@ -4,9 +4,6 @@
 #include "BlackBoard.h"
 #include "BossBehaviorTree.h"
 
-class BossBehaviorTree;
-class BlackBoard;
-
 class TestScene : public Scene
 {
 public:
@@ -33,11 +30,20 @@ public:
 	void LoadPlayerInfo();
 
 private:
-	//Çàµ¿Æ®¸® Å×½ºÆ®¿ëµµ
+	float time = 0.f;
+
 	float m_BTElapsedTime = 0.0f;
 	float m_OneSecondTimer = 0.0f;
 	std::unique_ptr<BossBehaviorTree> m_BehaviorTree;
 	std::unique_ptr<BlackBoard> m_BlackBoard;
 	int cnt = 0;
+
+	std::vector<std::shared_ptr<Telegraph>> m_Telegraphs;
+	std::vector<std::shared_ptr<GameObject>> m_Fires;
+
+	std::shared_ptr<GameObject> m_Phase_2_Arm;
+
+	float m_TotalXMove = 0.0f;
+	float m_ScrollSpeed = 100.f;
 };
 

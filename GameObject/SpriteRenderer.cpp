@@ -24,6 +24,9 @@ void SpriteRenderer::SetPivotPreset(SpritePivotPreset spp, const D2D1_SIZE_F& si
 	case SpritePivotPreset::BottomRight:
 		m_Pivot = { size.width, size.height };
 		break;
+	case SpritePivotPreset::Phase_2_Arm:
+		m_Pivot = { size.width * 0.5f - 250.f, size.height - 450.f };
+		break;
 	}
 }
 

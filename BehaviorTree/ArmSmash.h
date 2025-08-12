@@ -26,5 +26,8 @@ private:
 
 	Math::Vector2F m_MoveStartPos = { 0,0 };
 	Math::Vector2F m_MoveTargetPos = { 0,0 };
+
+	std::shared_ptr<GameObject> m_CurrentAnimObj;
+
 };
 

@@ -18,7 +18,8 @@ enum class SpritePivotPreset
 	BottomLeft,
 	BottomCenter,
 	BottomRight,
-	Center
+	Center,
+	Phase_2_Arm
 };
 
 class SpriteRenderer : public Component

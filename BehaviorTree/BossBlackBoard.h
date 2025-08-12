@@ -8,8 +8,14 @@ class BossBlackBoard : public BlackBoard
 {
 public:
 	BossBlackBoard() = delete;
-	BossBlackBoard(std::vector<std::shared_ptr<Telegraph>>& telegraphs, std::vector<std::shared_ptr<GameObject>>& anim);
+	BossBlackBoard(
+		float scrollspeed,
+		std::vector<std::shared_ptr<Telegraph>>& telegraphs,
+		std::vector<std::shared_ptr<GameObject>>& anims, 
+		std::vector<std::shared_ptr<GameObject>>& fires,
 
-private:
+		std::unordered_map<std::string, std::vector<int>>& animIndexMap,
+		SoundManager& soundmanager);
+
 };
 
