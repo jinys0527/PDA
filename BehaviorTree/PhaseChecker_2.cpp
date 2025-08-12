@@ -99,10 +99,10 @@ NodeState PhaseChecker_2::Tick(BlackBoard& bb, float deltaTime)
             m_PrintState = 3;
         }
 
-        //if (hp < 45.f)
-        //{
-        //    bb.SetValue("3Phase", true);
-        //}
+        if (hp < 45.f)
+        {
+            bb.SetValue("3Phase", true);
+        }
         return NodeState::Success;
     }
 

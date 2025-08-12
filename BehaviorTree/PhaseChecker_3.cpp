@@ -10,6 +10,32 @@ NodeState PhaseChecker_3::Tick(BlackBoard& bb, float deltaTime)
     float hp = bb.GetValue<float>("BossCurrHP").value();
     bool isPhase3 = bb.GetValue<bool>("3Phase").value();
 
+    if (m_BackFadeOut)
+    {
+        bool allZero = true;
+        auto fadeOutObj = [&](std::shared_ptr<GameObject> obj)
+            {
+                auto sprite = obj->GetComponent<SpriteRenderer>();
+                float opacity = sprite->GetOpacity();
+                opacity -= m_FadeOutSpeed * deltaTime;
+                if (opacity < 0.f) opacity = 0.f;
+                sprite->SetOpacity(opacity);
+                if (opacity > 0.f) allZero = false;
+            };
+
+        fadeOutObj(m_Back_0);
+        fadeOutObj(m_Back_1);
+        fadeOutObj(m_Back_2);
+        fadeOutObj(m_Back_3);
+        fadeOutObj(m_Back_4);
+
+        if (allZero)
+        {
+            m_BackFadeOut = false; // 페이드아웃 완료
+        }
+        return NodeState::Running;
+    }
+
     if (m_PhaseChange)
     {
         auto trans = m_Boss_Phase_2_Arm->GetComponent<TransformComponent>();
@@ -73,8 +99,18 @@ NodeState PhaseChecker_3::Tick(BlackBoard& bb, float deltaTime)
 
         m_targetX += m_Boss_Phase_2_Arm->GetComponent<TransformComponent>()->GetPosition().x;
 
+        auto map = bb.GetValue<std::unordered_map<std::string, std::shared_ptr<GameObject>>>("Backgrounds");
+        auto& backgrounds = map.value();
+
+        m_Back_0 = backgrounds["Phase_1_Monitor"];
+        m_Back_1 = backgrounds["Phase_2_Monitor_1"];
+        m_Back_2 = backgrounds["Phase_2_Monitor_2"];
+        m_Back_3 = backgrounds["Phase_2_Monitor_3"];
+        m_Back_4 = backgrounds["Phase_2_Monitor_4"];
+
+        m_BackFadeOut = true;
+
         return NodeState::Running;
     }
-
     return NodeState::Failure;
 }
