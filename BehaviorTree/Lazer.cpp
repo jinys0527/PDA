@@ -16,6 +16,33 @@ NodeState Lazer::Tick(BlackBoard& bb, float deltaTime)
 
         m_StartTelIndex = (m_minIndex + m_maxIndex) / 2;
 
+
+        if (!m_Boss_Main)
+        {
+            auto animsOpt = bb.GetValue<std::vector<std::shared_ptr<GameObject>>>("BossAnims");
+            auto indexMapOpt = bb.GetValue<std::unordered_map<std::string, std::vector<int>>>("BossAnimIndexMap");
+
+            if (animsOpt.has_value() && indexMapOpt.has_value())
+            {
+                const auto& anims = animsOpt.value();
+                const auto& indexMap = indexMapOpt.value();
+
+                auto it = indexMap.find("Boss_Phase_1_Main");
+                if (it != indexMap.end() && !it->second.empty())
+                {
+                    int index = it->second[0];
+                    if (index >= 0 && index < static_cast<int>(anims.size()))
+                    {
+                        m_Boss_Main = anims[index];
+                    }
+                }
+            }
+        }
+
+
+        m_Lazer_CCTV = GetAvailableAnim(bb, "Boss_Lazer_CCTV");
+
+
         m_Initialized = true;
     }
 
@@ -168,7 +195,7 @@ void Lazer::StartWarning(BlackBoard& bb)
         {
             // 위치 설정 (원하는 위치로 조정 가능)
             float posX = m_Telegraphs[m_StartTelIndex]->GetComponent<TransformComponent>()->GetPosition().x + 750.f;
-            float posY = m_Telegraphs[m_StartTelIndex]->GetComponent<TransformComponent>()->GetPosition().y - 150.f;
+            float posY = m_Telegraphs[m_StartTelIndex]->GetComponent<TransformComponent>()->GetPosition().y - 250.f;
 
             animObj->GetComponent<TransformComponent>()->SetPosition({ posX, posY });
         }
@@ -183,6 +210,23 @@ void Lazer::StartWarning(BlackBoard& bb)
         sprite->SetOpacity(1);
 
         m_AnimPlaying = true;
+    }
+
+    if (m_Boss_Main)
+    {
+        m_Boss_Main->GetComponent<SpriteRenderer>()->SetOpacity(0);
+        auto anim = m_Boss_Main->GetComponent<AnimationComponent>();
+        anim->SetIsActive(false);
+
+    }
+
+
+    if (m_Lazer_CCTV)
+    {
+        m_Lazer_CCTV->GetComponent<SpriteRenderer>()->SetOpacity(1);
+        auto anim = m_Lazer_CCTV->GetComponent<AnimationComponent>();
+        anim->SetIsActive(true);
+        
     }
 }
 
@@ -244,4 +288,21 @@ void Lazer::Reset()
     __super::Reset();
     m_ActivateStep = 0;
     m_ActivateTimer = 0.0f;
+
+    if (m_Boss_Main)
+    {
+        m_Boss_Main->GetComponent<SpriteRenderer>()->SetOpacity(1);
+        auto anim = m_Boss_Main->GetComponent<AnimationComponent>();
+        anim->SetIsActive(true);
+
+    }
+
+
+    if (m_Lazer_CCTV)
+    {
+        m_Lazer_CCTV->GetComponent<SpriteRenderer>()->SetOpacity(0);
+        auto anim = m_Lazer_CCTV->GetComponent<AnimationComponent>();
+        anim->SetIsActive(false);
+
+    }
 }

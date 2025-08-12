@@ -1,0 +1,173 @@
+{
+    "frames": [
+        {
+            "filename": "frame_0",
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_1",
+            "frame": {
+                "x": 1920,
+                "y": 0,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_2",
+            "frame": {
+                "x": 3840,
+                "y": 0,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_3",
+            "frame": {
+                "x": 5760,
+                "y": 0,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_4",
+            "frame": {
+                "x": 7680,
+                "y": 0,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_5",
+            "frame": {
+                "x": 0,
+                "y": 1920,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_6",
+            "frame": {
+                "x": 1920,
+                "y": 1920,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_7",
+            "frame": {
+                "x": 3840,
+                "y": 1920,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_8",
+            "frame": {
+                "x": 5760,
+                "y": 1920,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_9",
+            "frame": {
+                "x": 7680,
+                "y": 1920,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_10",
+            "frame": {
+                "x": 0,
+                "y": 3840,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_11",
+            "frame": {
+                "x": 1920,
+                "y": 3840,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_12",
+            "frame": {
+                "x": 3840,
+                "y": 3840,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_13",
+            "frame": {
+                "x": 5760,
+                "y": 3840,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_14",
+            "frame": {
+                "x": 7680,
+                "y": 3840,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        }
+    ],
+    "meta": {
+        "app": "CustomSpriteSheetTool",
+        "version": "1.0",
+        "image": "Boss_3Phase_ArmSwip.png",
+        "size": {
+            "w": 9600,
+            "h": 5760
+        },
+      "frameTags": [
+        {
+          "name": "swip",
+          "from": 0,
+          "to": 14,
+          "direction": "forward",
+          "color": "#000000ff"
+        }
+      ],
+        "scale": "1"
+    }
+}

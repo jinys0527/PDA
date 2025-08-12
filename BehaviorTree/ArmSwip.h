@@ -31,5 +31,7 @@ private:
 	float m_MoveTimer = 0.f;
 	float m_MoveDuration = 0.7f;
 
+	std::shared_ptr<GameObject> m_CurrentAnimObj;
+
 };
 

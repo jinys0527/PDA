@@ -26,5 +26,8 @@ private:
 
 	std::shared_ptr<GameObject> m_CurrentAnimObj;
 
+	std::shared_ptr<GameObject> m_Lazer_CCTV;
+	std::shared_ptr<GameObject> m_Boss_Main;
+
 };
 

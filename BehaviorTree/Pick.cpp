@@ -105,7 +105,17 @@ void Pick::EndWarning(BlackBoard& bb)
         }
     }
 
-    auto animObj = GetAvailableAnim(bb, "Boss_Pick");
+    
+    std::shared_ptr<GameObject> animObj;
+    if (bb.GetValue<int>("CurrPhase").value() == 1)
+    {
+        animObj = GetAvailableAnim(bb, "Boss_Pick");
+    }
+    else if (bb.GetValue<int>("CurrPhase").value() == 3)
+    {
+        animObj = GetAvailableAnim(bb, "Boss_Phase3_Pick");
+    }
+
     if (animObj)
     {
         m_CurrentAnimObj = animObj;
