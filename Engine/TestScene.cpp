@@ -1050,7 +1050,7 @@ void TestScene::Update(float deltaTime)
 
 	if (m_BTElapsedTime >= 0.016f)
 	{
-		if (m_BehaviorTree)
+		if (m_BehaviorTree && !m_BlackBoard->GetValue<bool>("IsDead").value())
 		{
 			m_BehaviorTree->Tick(m_BTElapsedTime);
 		}

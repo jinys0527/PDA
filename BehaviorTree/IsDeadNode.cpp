@@ -85,8 +85,13 @@ NodeState IsDeadNode::Tick(BlackBoard& bb, float deltaTime)
     if (m_Boss_Main_Die)
     {
         auto anim = m_Boss_Main_Die->GetComponent<AnimationComponent>();
+        if (!anim->IsAnimationFinished())
+        {
+            return NodeState::Running;
+        }
         if (anim->IsAnimationFinished())
         {
+            bb.SetValue("IsDead", true);
             return NodeState::Failure;  // 죽음 애니메이션 완료
         }
     }
