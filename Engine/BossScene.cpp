@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "TestScene.h"
+#include "BossScene.h"
 #include "GameObject.h"
 #include "SpriteRenderer.h"
 #include "TransformComponent.h"
@@ -44,7 +44,7 @@
 
 
 
-void TestScene::Initialize()
+void BossScene::Initialize()
 {
 #pragma region camera
 
@@ -52,7 +52,7 @@ void TestScene::Initialize()
 	cameraObject->m_Name = "Camera";
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
 	trans3->SetPosition({ 960.0f, 540.f });
-	cameraObject->GetComponent<CameraComponent>()->SetZoom((9.0f/16.0f));
+	cameraObject->GetComponent<CameraComponent>()->SetZoom((9.0f / 16.0f));
 	BoxColliderComponent* cameraCol = cameraObject->AddComponent<BoxColliderComponent>();
 	cameraCol->Start();
 	//cameraCol->SetSize({ 1920, 1080 });
@@ -120,8 +120,8 @@ void TestScene::Initialize()
 		float width = clips.begin()->second.GetFrames().begin()->Width();
 		float height = clips.begin()->second.GetFrames().begin()->Height();
 
-		sr->SetPivotPreset(SpritePivotPreset::Center, {width, height});
-		
+		sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+
 		AddGameObject(animobj);
 
 		m_Anims.push_back(animobj);
@@ -171,7 +171,7 @@ void TestScene::Initialize()
 #pragma endregion
 
 #pragma region Anim_Pick
-	//1í˜ì´ì¦ˆ íŒ”
+	//1ÆäÀÌÁî ÆÈ
 	for (int i = 0; i < 5; i++)
 	{
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
@@ -208,13 +208,13 @@ void TestScene::Initialize()
 
 		AddGameObject(animobj);
 
-		// m_Anims, m_AnimIndexMapëŠ” í´ë˜ìŠ¤ ë©¤ë²„ë¼ê³  ê°€ì •
+		// m_Anims, m_AnimIndexMap´Â Å¬·¡½º ¸â¹ö¶ó°í °¡Á¤
 		m_Anims.push_back(animobj);
 		int index = static_cast<int>(m_Anims.size() - 1);
 		m_AnimIndexMap["Boss_Pick"].push_back(index);
 	}
 
-	//3í˜ì´ì¦ˆ íŒ”
+	//3ÆäÀÌÁî ÆÈ
 	for (int i = 0; i < 2; i++)
 	{
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
@@ -251,7 +251,7 @@ void TestScene::Initialize()
 
 		AddGameObject(animobj);
 
-		// m_Anims, m_AnimIndexMapëŠ” í´ë˜ìŠ¤ ë©¤ë²„ë¼ê³  ê°€ì •
+		// m_Anims, m_AnimIndexMap´Â Å¬·¡½º ¸â¹ö¶ó°í °¡Á¤
 		m_Anims.push_back(animobj);
 		int index = static_cast<int>(m_Anims.size() - 1);
 		m_AnimIndexMap["Boss_Phase3_Pick"].push_back(index);
@@ -299,7 +299,7 @@ void TestScene::Initialize()
 
 		AddGameObject(animobj);
 
-		// m_Anims, m_AnimIndexMapëŠ” í´ë˜ìŠ¤ ë©¤ë²„ë¼ê³  ê°€ì •
+		// m_Anims, m_AnimIndexMap´Â Å¬·¡½º ¸â¹ö¶ó°í °¡Á¤
 		m_Anims.push_back(animobj);
 		int index = static_cast<int>(m_Anims.size() - 1);
 		m_AnimIndexMap["Boss_ArmSmash"].push_back(index);
@@ -342,7 +342,7 @@ void TestScene::Initialize()
 
 		AddGameObject(animobj);
 
-		// m_Anims, m_AnimIndexMapëŠ” í´ë˜ìŠ¤ ë©¤ë²„ë¼ê³  ê°€ì •
+		// m_Anims, m_AnimIndexMap´Â Å¬·¡½º ¸â¹ö¶ó°í °¡Á¤
 		m_Anims.push_back(animobj);
 		int index = static_cast<int>(m_Anims.size() - 1);
 		m_AnimIndexMap["Boss_3Phase_Arm_Smash"].push_back(index);
@@ -431,7 +431,7 @@ void TestScene::Initialize()
 #pragma endregion
 
 #pragma region Anim_Lazer_VFX
-	//1í˜ì´ì¦ˆ
+	//1ÆäÀÌÁî
 	{
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Lazer";
@@ -467,13 +467,13 @@ void TestScene::Initialize()
 
 		AddGameObject(animobj);
 
-		// m_Anims, m_AnimIndexMapëŠ” í´ë˜ìŠ¤ ë©¤ë²„ë¼ê³  ê°€ì •
+		// m_Anims, m_AnimIndexMap´Â Å¬·¡½º ¸â¹ö¶ó°í °¡Á¤
 		m_Anims.push_back(animobj);
 		int index = static_cast<int>(m_Anims.size() - 1);
 		m_AnimIndexMap["Boss_Lazer"].push_back(index);
 	}
 
-	//3í˜ì´ì¦ˆ
+	//3ÆäÀÌÁî
 	{
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Lazer_Phase_3";
@@ -509,7 +509,7 @@ void TestScene::Initialize()
 
 		AddGameObject(animobj);
 
-		// m_Anims, m_AnimIndexMapëŠ” í´ë˜ìŠ¤ ë©¤ë²„ë¼ê³  ê°€ì •
+		// m_Anims, m_AnimIndexMap´Â Å¬·¡½º ¸â¹ö¶ó°í °¡Á¤
 		m_Anims.push_back(animobj);
 		int index = static_cast<int>(m_Anims.size() - 1);
 		m_AnimIndexMap["Boss_Lazer_Phase_3"].push_back(index);
@@ -561,8 +561,8 @@ void TestScene::Initialize()
 #pragma endregion
 
 #pragma region Anim_ArmSwip
-	//í‰ìƒì‹œ
-	//í™”ë©´ê¸°ì¤€ ì™¼íŒ”
+	//Æò»ó½Ã
+	//È­¸é±âÁØ ¿ŞÆÈ
 	{
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Anim_Arm_L";
@@ -601,7 +601,7 @@ void TestScene::Initialize()
 
 	}
 
-	//í™”ë©´ê¸°ì¤€ ì˜¤ë¥¸íŒ”
+	//È­¸é±âÁØ ¿À¸¥ÆÈ
 	{
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Anim_Arm_R";
@@ -641,8 +641,8 @@ void TestScene::Initialize()
 	}
 
 
-	//ê³µê²© ëª¨ì…˜
-	//í™”ë©´ê¸°ì¤€ ì™¼íŒ”
+	//°ø°İ ¸ğ¼Ç
+	//È­¸é±âÁØ ¿ŞÆÈ
 	{
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Anim_ArmSwip_L";
@@ -682,7 +682,7 @@ void TestScene::Initialize()
 
 	}
 
-	//í™”ë©´ê¸°ì¤€ ì˜¤ë¥¸íŒ”
+	//È­¸é±âÁØ ¿À¸¥ÆÈ
 	{
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Anim_ArmSwip_R";
@@ -724,7 +724,7 @@ void TestScene::Initialize()
 #pragma endregion
 
 #pragma region Anim_Dead
-	// ë³¸ì²´ ì‚¬ë§
+	// º»Ã¼ »ç¸Á
 	{
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_3Phase_DEAD_Ani";
@@ -764,7 +764,7 @@ void TestScene::Initialize()
 
 	}
 
-	//í™”ë©´ê¸°ì¤€ ì™¼íŒ”
+	//È­¸é±âÁØ ¿ŞÆÈ
 	{
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_3Phase_Arms_Dead_L";
@@ -804,7 +804,7 @@ void TestScene::Initialize()
 
 	}
 
-	//í™”ë©´ê¸°ì¤€ ì™¼íŒ”
+	//È­¸é±âÁØ ¿ŞÆÈ
 	{
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_3Phase_Arms_Dead_R";
@@ -897,7 +897,7 @@ void TestScene::Initialize()
 	const int columns = 5;
 	const int rows = 3;
 
-	const float startX = 960.f; // ê¸°ì¤€ ì¢Œí‘œ
+	const float startX = 960.f; // ±âÁØ ÁÂÇ¥
 	const float startY = 0.f;
 
 	const float marginX = 20.0f;
@@ -908,7 +908,7 @@ void TestScene::Initialize()
 	if (texture)
 		tileSize = texture->GetSize();
 
-	// ê¸°ì¤€ ì¸ë±ìŠ¤
+	// ±âÁØ ÀÎµ¦½º
 	const int baseIndex = 7;
 	const int baseCol = baseIndex % columns;
 	const int baseRow = baseIndex / columns;
@@ -924,7 +924,7 @@ void TestScene::Initialize()
 		int col = i % columns;
 		int row = i / columns;
 
-		// 7ë²ˆì´ startX, startYì— ìœ„ì¹˜í•˜ë„ë¡ ë³´ì •
+		// 7¹øÀÌ startX, startY¿¡ À§Ä¡ÇÏµµ·Ï º¸Á¤
 		float posX = startX + (col - baseCol) * (tileSize.width * 0.7f + marginX);
 		float posY = startY + (row - baseRow) * (tileSize.height * 0.7f + marginY);
 
@@ -937,7 +937,7 @@ void TestScene::Initialize()
 		AddGameObject(teleobj);
 		m_Telegraphs.push_back(teleobj);
 
-		//ì• ë‹ˆë©”ì´ì…˜ ì¶”ê°€
+		//¾Ö´Ï¸ŞÀÌ¼Ç Ãß°¡
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Fire_Ground" + std::to_string(i);;
 		auto trans = animobj->GetComponent<TransformComponent>();
@@ -974,7 +974,7 @@ void TestScene::Initialize()
 
 
 
-	m_BlackBoard = std::make_unique<BossBlackBoard>(m_ScrollSpeed ,m_Telegraphs, m_Anims, m_Fires, m_AnimIndexMap, m_SoundManager);
+	m_BlackBoard = std::make_unique<BossBlackBoard>(m_ScrollSpeed, m_Telegraphs, m_Anims, m_Fires, m_AnimIndexMap, m_SoundManager);
 	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
 #pragma endregion
 
@@ -983,35 +983,35 @@ void TestScene::Initialize()
 	AddGameObject(cameraObject);
 }
 
-void TestScene::Finalize()
+void BossScene::Finalize()
 {
 
 }
 
-void TestScene::Enter()
+void BossScene::Enter()
 {
 	LoadPlayerInfo();
 }
 
-void TestScene::Leave()
+void BossScene::Leave()
 {
 }
 
 
-void TestScene::FixedUpdate()
+void BossScene::FixedUpdate()
 {
 }
 
-void TestScene::Update(float deltaTime)
+void BossScene::Update(float deltaTime)
 {
 #pragma region BT
 	if (time < 3.0f)
 	{
 		time += deltaTime;
-		return; // 3ì´ˆ ì§€ë‚˜ê¸° ì „ì—ëŠ” í–‰ë™íŠ¸ë¦¬ ì‹¤í–‰ X
+		return; // 3ÃÊ Áö³ª±â Àü¿¡´Â Çàµ¿Æ®¸® ½ÇÇà X
 	}
 
-	//// ì¹´ë©”ë¼ ì´ë™ëŸ‰ ê³„ì‚°
+	//// Ä«¸Ş¶ó ÀÌµ¿·® °è»ê
 	//float dx = m_ScrollSpeed * deltaTime;
 	//float dy = 0.f;
 
@@ -1028,7 +1028,7 @@ void TestScene::Update(float deltaTime)
 	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
 	//}
 
-	//// íŒŒì´ì–´ ì˜¤ë¸Œì íŠ¸ ì´ë™
+	//// ÆÄÀÌ¾î ¿ÀºêÁ§Æ® ÀÌµ¿
 	//for (auto& fire : m_Fires)
 	//{
 	//	auto tr = fire->GetComponent<TransformComponent>();
@@ -1057,12 +1057,12 @@ void TestScene::Update(float deltaTime)
 		}
 
 
-	m_GameManager->m_scrollSpeed += deltaTime;
-	if (m_GameManager->m_scrollSpeed >= 500)
-		m_GameManager->m_scrollSpeed = 500;
+		m_GameManager->m_scrollSpeed += deltaTime;
+		if (m_GameManager->m_scrollSpeed >= 500)
+			m_GameManager->m_scrollSpeed = 500;
 
-	Vec2F move = { 0, 0 };
-	move.x += m_GameManager->m_scrollSpeed;
+		Vec2F move = { 0, 0 };
+		move.x += m_GameManager->m_scrollSpeed;
 
 		m_BTElapsedTime = 0.0f;
 
@@ -1086,7 +1086,7 @@ void TestScene::Update(float deltaTime)
 	m_UIManager.Update(deltaTime);
 }
 
-void TestScene::Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo, std::vector<UITextInfo>& uiTextInfo)
+void BossScene::Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo, std::vector<UITextInfo>& uiTextInfo)
 {
 	for (auto gameObject : m_GameObjects)
 	{
@@ -1096,10 +1096,10 @@ void TestScene::Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRender
 	m_UIManager.Render(uiRenderInfo, uiTextInfo);
 }
 
-void TestScene::SavePlayerInfo()
+void BossScene::SavePlayerInfo()
 {
 }
 
-void TestScene::LoadPlayerInfo()
+void BossScene::LoadPlayerInfo()
 {
 }

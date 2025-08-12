@@ -15,8 +15,10 @@ BossBlackBoard::BossBlackBoard(
 	SetValue("CanBeHit", false);
 
 	SetValue("IsDead", false);
-	SetValue("BossMaxHP", 10.0f);
+	SetValue("BossMaxHP", 100.0f);
 	SetValue("BossCurrHP", GetValue<float>("BossMaxHP").value());
+
+	//보스 쿨다운
 	SetValue("IdleCoolDown", 1.0f);
 
 	//보스 공격 장판 전체
@@ -55,11 +57,11 @@ BossBlackBoard::BossBlackBoard(
 	SetValue("WarningTime", 3.0f);
 
 
-	SetValue("3Phase", true);
+	SetValue("3Phase", false);
 	SetValue("RandomValue", 0.0f);
 
 	SetValue("SkillWeight_1", 1.0f);
-	SetValue("SkillWeight_2", 5001.0f);
+	SetValue("SkillWeight_2", 1.0f);
 	SetValue("SkillWeight_3", 1.0f);
 	SetValue("SkillWeight_4", 1.0f);
 	SetValue("SkillWeight_5", 1.0f);

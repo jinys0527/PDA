@@ -3,21 +3,29 @@
 #include "TitleScene.h"
 #include "TestScene.h"
 #include "RenderData.h"
+#include "BossScene.h"
 
 void SceneManager::Initialize()
 {
 	m_SoundManager.Init();
-	auto testScene = AddScene("TestScene", std::make_shared<TestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
-	testScene->SetSceneManager(this);
+	//auto testScene = AddScene("TestScene", std::make_shared<TestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
+	//testScene->SetSceneManager(this);
 //  auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
 // 	titleScene->SetSceneManager(this);
 
-	testScene->Initialize();
+	//testScene->Initialize();
 // 	titleScene->Initialize();
 // 	titleScene->SetName("TitleScene");
-	testScene->SetName("TestScene");
+	//testScene->SetName("TestScene");
 
-	SetCurrentScene("TestScene");
+	auto bossScene = AddScene("BossScene", std::make_shared<BossScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
+
+	bossScene->Initialize();
+	bossScene->SetName("BossScene");
+
+
+
+	SetCurrentScene("BossScene");
 }
 
 void SceneManager::Update(float deltaTime)

@@ -4,16 +4,17 @@
 #include "BlackBoard.h"
 #include "BossBehaviorTree.h"
 
-class TestScene : public Scene
+class BossScene : public Scene
 {
 public:
-	TestScene(EventDispatcher& eventDispatcher, 
-		AssetManager& assetManager, 
+	BossScene(EventDispatcher& eventDispatcher,
+		AssetManager& assetManager,
 		SoundAssetManager& soundAssetManager,
-		SoundManager& soundManager, 
-		D2DRenderer& renderer, 
-		UIManager& uiManager) : Scene(eventDispatcher, assetManager, soundAssetManager, soundManager, renderer, uiManager) {}
-	virtual ~TestScene() = default;
+		SoundManager& soundManager,
+		D2DRenderer& renderer,
+		UIManager& uiManager) : Scene(eventDispatcher, assetManager, soundAssetManager, soundManager, renderer, uiManager) {
+	}
+	virtual ~BossScene() = default;
 
 	void Initialize() override;
 	void Finalize()  override;
@@ -45,5 +46,6 @@ private:
 
 	float m_TotalXMove = 0.0f;
 	float m_ScrollSpeed = 100.f;
+
 };
 
