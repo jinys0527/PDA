@@ -564,6 +564,7 @@ void BossScene::Initialize()
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
+		sr->SetOpacity(0.f);
 
 		auto& clips = m_AssetManager.LoadAnimation(L"Boss_3Phase_Arms_IDLE", L"../Resource/Character/Boss/Phase_3/Boss_3Phase_Arms_IDLE.json");
 		auto anim = animobj->AddComponent<AnimationComponent>();
@@ -603,6 +604,7 @@ void BossScene::Initialize()
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
+		sr->SetOpacity(0.f);
 
 		auto& clips = m_AssetManager.LoadAnimation(L"Boss_3Phase_Arms_IDLE", L"../Resource/Character/Boss/Phase_3/Boss_3Phase_Arms_IDLE.json");
 		auto anim = animobj->AddComponent<AnimationComponent>();

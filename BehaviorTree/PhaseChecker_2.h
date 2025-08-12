@@ -12,8 +12,8 @@ public:
 private:
 	bool m_PhaseChange = false;
 
-	float m_targetY = 600.f;
-	float m_moveSpeed = 200.f;
+	float m_targetX = 1000.f;
+	float m_moveSpeed = 300.f;
 
 	std::shared_ptr<GameObject> m_Lazer_CCTV;
 

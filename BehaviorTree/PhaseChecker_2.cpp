@@ -3,6 +3,7 @@
 #include "SpriteRenderer.h"
 #include "TransformComponent.h"
 
+
 NodeState PhaseChecker_2::Tick(BlackBoard& bb, float deltaTime)
 {
     int currPhase = bb.GetValue<int>("CurrPhase").value();
@@ -15,17 +16,16 @@ NodeState PhaseChecker_2::Tick(BlackBoard& bb, float deltaTime)
 
         auto pos = trans->GetPosition();
 
-        if (pos.y < m_targetY)
+        if (pos.x < m_targetX)
         {
-            pos.y += m_moveSpeed * deltaTime;
-            if (pos.y > m_targetY)
+            pos.x += m_moveSpeed * deltaTime;
+            if (pos.x > m_targetX)
             {
-                pos.y = m_targetY; // 목표 도착 시 보정
+                pos.x = m_targetX; // 목표 도착 시 보정
             }
             trans->SetPosition(pos);
             return NodeState::Running;
         }
-        m_Lazer_CCTV->GetComponent<SpriteRenderer>()->SetOpacity(0.f);
 
         m_PhaseChange = false;
         return NodeState::Success;
@@ -40,7 +40,7 @@ NodeState PhaseChecker_2::Tick(BlackBoard& bb, float deltaTime)
     {
         m_Lazer_CCTV = GetAnim(bb, "Boss_Phase_1_Main");
 
-        m_targetY += m_Lazer_CCTV->GetComponent<TransformComponent>()->GetPosition().y;
+        m_targetX += m_Lazer_CCTV->GetComponent<TransformComponent>()->GetPosition().x;
 
         m_PhaseChange = true;
         bb.SetValue("CurrPhase", 2);
