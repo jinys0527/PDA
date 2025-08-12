@@ -38,5 +38,7 @@ private:
 
 	std::shared_ptr<GameObject> m_CurrentAnimObj;
 
+	float m_Moved = 0.f;
+	float m_ScrollSpeed = 0.f;
 };
 

@@ -61,25 +61,25 @@ void TestScene::Initialize()
 #pragma endregion
 
 #pragma region Background
-	{
-		auto texture = m_AssetManager.LoadTexture(L"3Chap_2Phase_View", L"../Resource/Character/Boss/Phase_3/3Chap_2Phase_View.png");
+	//{
+	//	auto texture = m_AssetManager.LoadTexture(L"3Chap_2Phase_View", L"../Resource/Character/Boss/Phase_3/3Chap_2Phase_View.png");
 
-		auto backobj = std::make_shared<GameObject>(m_EventDispatcher);
-		backobj->m_Name = "backgroundtest";
-		auto sr = backobj->AddComponent<SpriteRenderer>();
-		sr->SetTexture(texture);
-		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
+	//	auto backobj = std::make_shared<GameObject>(m_EventDispatcher);
+	//	backobj->m_Name = "backgroundtest";
+	//	auto sr = backobj->AddComponent<SpriteRenderer>();
+	//	sr->SetTexture(texture);
+	//	sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
 
 
-		auto tr = backobj->GetComponent<TransformComponent>();
-		tr->SetPosition({ 960.f, 540.f });
-		tr->SetScale({ 0.9f, 0.9f });
-		sr->SetOpacity(1.0f);
+	//	auto tr = backobj->GetComponent<TransformComponent>();
+	//	tr->SetPosition({ 960.f, 540.f });
+	//	tr->SetScale({ 0.9f, 0.9f });
+	//	sr->SetOpacity(1.0f);
 
-		tr->SetZOrder(-1);
+	//	tr->SetZOrder(-1);
 
-		AddGameObject(backobj);
-	}
+	//	AddGameObject(backobj);
+	//}
 #pragma endregion
 
 #pragma region anim_now
@@ -583,6 +583,7 @@ void TestScene::Initialize()
 		int index = static_cast<int>(m_Anims.size() - 1);
 		m_AnimIndexMap["Boss_Anim_Phase2_Arm"].push_back(index);
 
+		m_Phase_2_Arm = animobj;
 	}
 
 
@@ -752,9 +753,6 @@ void TestScene::Initialize()
 #pragma endregion
 
 #pragma region telegraph
-	std::vector<std::shared_ptr<Telegraph>> m_Telegraphs;
-	std::vector<std::shared_ptr<GameObject>> m_Fires;
-
 	m_Telegraphs.reserve(15);
 
 	const int columns = 5;
@@ -837,7 +835,7 @@ void TestScene::Initialize()
 
 
 
-	m_BlackBoard = std::make_unique<BossBlackBoard>(m_Telegraphs, m_Anims, m_Fires, m_AnimIndexMap, m_SoundManager);
+	m_BlackBoard = std::make_unique<BossBlackBoard>(m_ScrollSpeed ,m_Telegraphs, m_Anims, m_Fires, m_AnimIndexMap, m_SoundManager);
 	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
 #pragma endregion
 
@@ -873,9 +871,40 @@ void TestScene::Update(float deltaTime)
 		return; // 3초 지나기 전에는 행동트리 실행 X
 	}
 
+	// 카메라 이동량 계산
+	float dx = m_ScrollSpeed * deltaTime;
+	float dy = 0.f;
+
+	m_TotalXMove += dx;
+
 	auto camtrans = m_Camera->GetComponent<TransformComponent>();
 	auto curpos = camtrans->GetPosition();
 	camtrans->SetPosition({ curpos.x + 100 * deltaTime, curpos.y });
+
+	for (auto& telegraph : m_Telegraphs)
+	{
+		auto tr = telegraph->GetComponent<TransformComponent>();
+		auto pos = tr->GetPosition();
+		tr->SetPosition({ pos.x + dx, pos.y + dy });
+	}
+
+	// 파이어 오브젝트 이동
+	for (auto& fire : m_Fires)
+	{
+		auto tr = fire->GetComponent<TransformComponent>();
+		auto pos = tr->GetPosition();
+		tr->SetPosition({ pos.x + dx, pos.y + dy });
+	}
+
+	{
+		auto tr = m_Phase_2_Arm->GetComponent<TransformComponent>();
+		auto pos = tr->GetPosition();
+		tr->SetPosition({ pos.x + dx, pos.y + dy });
+
+	}
+
+
+	//---------------------
 
 	m_BTElapsedTime += deltaTime;
 	m_OneSecondTimer += deltaTime;

@@ -96,3 +96,9 @@ void Telegraph::SetInactiveAnimation()
     m_IsAnimationPlaying = false;
 
 }
+
+Math::Vector2F Telegraph::GetCurrPos()
+{
+    return m_Transform->GetPosition();
+
+}

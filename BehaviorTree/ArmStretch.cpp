@@ -26,12 +26,16 @@ NodeState ArmStretch::Tick(BlackBoard& bb, float deltaTime)
             }
             m_maxIndex = m_minIndex + 2;
         }
-        m_MoveStartPos = m_Telegraphs[m_minIndex]->GetInitPos();
-        m_MoveTargetPos = m_Telegraphs[m_maxIndex]->GetInitPos();
+        m_MoveStartPos = m_Telegraphs[m_minIndex]->GetCurrPos();
+        m_MoveTargetPos = m_Telegraphs[m_maxIndex]->GetCurrPos();
+
+        m_ScrollSpeed = bb.GetValue<float>("ScrollSpeed").value();
 
         m_Initialized = true;
     }
 #pragma endregion
+
+    m_Moved += m_ScrollSpeed * deltaTime;
 
     if (!m_HasStarted)
     {
@@ -43,15 +47,18 @@ NodeState ArmStretch::Tick(BlackBoard& bb, float deltaTime)
 
     m_ElapsedTime += deltaTime;
 
+
+
     if (m_IsMoving)
     {
         m_MoveTimer += deltaTime;
+
         float t = m_MoveTimer / m_MoveDuration;
         if (t > 1.0f) t = 1.0f;
 
         auto trans = m_Telegraphs[m_minIndex]->GetComponent<TransformComponent>();
         Math::Vector2F currPos;
-        currPos.x = m_MoveStartPos.x + (m_MoveTargetPos.x - m_MoveStartPos.x) * t;
+        currPos.x = m_Moved + m_MoveStartPos.x + (m_MoveTargetPos.x - m_MoveStartPos.x) * t;
         currPos.y = m_MoveStartPos.y + (m_MoveTargetPos.y - m_MoveStartPos.y) * t;
 
         trans->SetPosition(currPos);
@@ -75,7 +82,7 @@ NodeState ArmStretch::Tick(BlackBoard& bb, float deltaTime)
         {
             auto trans = m_CurrentAnimObj->GetComponent<TransformComponent>();
             Math::Vector2F currPos;
-            currPos.x = m_MoveFromPos.x + (m_MoveStartPos.x - m_MoveFromPos.x) * t;
+            currPos.x = m_Moved + m_MoveFromPos.x + (m_MoveStartPos.x - m_MoveFromPos.x) * t;
             currPos.y = m_MoveFromPos.y + (m_MoveStartPos.y - m_MoveFromPos.y) * t;
 
             trans->SetPosition(currPos);
@@ -204,11 +211,14 @@ void ArmStretch::Reset()
     __super::Reset();
     m_MoveTimer = 0.0f;
 
-    m_Telegraphs[m_minIndex]->GetComponent<TransformComponent>()->SetPosition(m_MoveStartPos);
+    m_Telegraphs[m_minIndex]->GetComponent<TransformComponent>()->SetPosition({ m_MoveStartPos.x + m_Moved, m_MoveStartPos.y });
 
     if (m_CurrentAnimObj)
     {
         m_CurrentAnimObj->GetComponent<TransformComponent>()->SetPosition(m_MoveStartPos);
         m_CurrentAnimObj->GetComponent<AnimationComponent>()->Play("idle");
     }
+
+    m_Moved = 0.f;
+    m_Initialized = false;
 }

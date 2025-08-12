@@ -20,6 +20,8 @@ public:
 		return m_InitPos;
 	}
 
+	Math::Vector2F GetCurrPos();
+
 private:
 	void SetInactiveAnimation();
 

@@ -9,6 +9,7 @@ class BossBlackBoard : public BlackBoard
 public:
 	BossBlackBoard() = delete;
 	BossBlackBoard(
+		float scrollspeed,
 		std::vector<std::shared_ptr<Telegraph>>& telegraphs,
 		std::vector<std::shared_ptr<GameObject>>& anims, 
 		std::vector<std::shared_ptr<GameObject>>& fires,

@@ -1,6 +1,7 @@
 #include "BossBlackBoard.h"
 
 BossBlackBoard::BossBlackBoard(
+	float scrollspeed,
 	std::vector<std::shared_ptr<Telegraph>>& telegraphs, 
 	std::vector<std::shared_ptr<GameObject>>& anims, 
 	std::vector<std::shared_ptr<GameObject>>& fires,
@@ -9,6 +10,8 @@ BossBlackBoard::BossBlackBoard(
 	SoundManager& soundmanager)
 	: BlackBoard(soundmanager)
 {
+	SetValue("ScrollSpeed", scrollspeed);
+
 	SetValue("BossMaxHP", 49.0f);
 	SetValue("BossCurrHP", GetValue<float>("BossMaxHP").value());
 	SetValue("IdleCoolDown", 1.0f);
@@ -49,7 +52,7 @@ BossBlackBoard::BossBlackBoard(
 	SetValue("WarningTime", 3.0f);
 
 
-	SetValue("3Phase", true);
+	SetValue("3Phase", false);
 	SetValue("RandomValue", 0.0f);
 
 	SetValue("SkillWeight_1", 1.0f);
