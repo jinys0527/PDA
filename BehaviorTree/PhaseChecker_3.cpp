@@ -2,6 +2,7 @@
 #include "BlackBoard.h"
 #include "SpriteRenderer.h"
 #include "AnimationComponent.h"
+#include "TransformComponent.h"
 
 NodeState PhaseChecker_3::Tick(BlackBoard& bb, float deltaTime)
 {
@@ -11,6 +12,22 @@ NodeState PhaseChecker_3::Tick(BlackBoard& bb, float deltaTime)
 
     if (m_PhaseChange)
     {
+        auto trans = m_Boss_Phase_2_Arm->GetComponent<TransformComponent>();
+
+        auto pos = trans->GetPosition();
+
+        if (pos.x > m_targetX)
+        {
+            pos.x -= m_moveSpeed * deltaTime;
+            if (pos.x < m_targetX)
+            {
+                pos.x = m_targetX; // 목표 도착 시 보정
+            }
+            trans->SetPosition(pos);
+            return NodeState::Running;
+        }
+
+
         bool allFinished = true;
         const float fadeSpeed = 0.5f; // 초당 1.0씩 증가 (0~1 사이)
 
@@ -52,6 +69,9 @@ NodeState PhaseChecker_3::Tick(BlackBoard& bb, float deltaTime)
         m_Boss_Main = GetAnim(bb, "Boss_3Phase_IDLE_ani");
         m_Boss_Arm_L = GetAnim(bb, "Boss_Anim_Arm_L");
         m_Boss_Arm_R = GetAnim(bb, "Boss_Anim_Arm_R");
+        m_Boss_Phase_2_Arm = GetAnim(bb, "Boss_Anim_Phase2_Arm");
+
+        m_targetX += m_Boss_Phase_2_Arm->GetComponent<TransformComponent>()->GetPosition().x;
 
         return NodeState::Running;
     }

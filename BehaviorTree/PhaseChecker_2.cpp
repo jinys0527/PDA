@@ -33,6 +33,10 @@ NodeState PhaseChecker_2::Tick(BlackBoard& bb, float deltaTime)
 
     if (currPhase == 2)
     {
+        if (hp < 45.f)
+        {
+            bb.SetValue("3Phase", true);
+        }
         return NodeState::Success;
     }
 
