@@ -15,7 +15,7 @@ BossBlackBoard::BossBlackBoard(
 	SetValue("CanBeHit", false);
 
 	SetValue("IsDead", false);
-	SetValue("BossMaxHP", 100.0f);
+	SetValue("BossMaxHP", 51.0f);
 	SetValue("BossCurrHP", GetValue<float>("BossMaxHP").value());
 
 	//º¸½º Äð´Ù¿î

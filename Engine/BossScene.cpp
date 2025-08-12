@@ -59,9 +59,6 @@ void BossScene::Initialize()
 	{
 		auto texture = m_AssetManager.LoadTexture(L"3Chap_2Phase_View", L"../Resource/Character/Boss/Phase_3/3Chap_2Phase_View.png");
 
-		//auto texture = m_AssetManager.LoadTexture(L"3Chap_1Phase_01", L"../Resource/Character/Boss/Phase_1/3Chap_1Phase_01.png");
-
-
 		auto backobj = std::make_shared<GameObject>(m_EventDispatcher);
 		backobj->m_Name = "backgroundtest";
 		auto sr = backobj->AddComponent<SpriteRenderer>();
@@ -95,7 +92,6 @@ void BossScene::Initialize()
 		trans->SetPosition({ 1700.f, 1320.f });
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
-		sr->SetOpacity(0.f);
 
 		auto& clips = m_AssetManager.LoadAnimation(L"Boss_Phase_1_Main", L"../Resource/Character/Boss/Boss_IDLE.json");
 		auto anim = animobj->AddComponent<AnimationComponent>();
@@ -133,6 +129,7 @@ void BossScene::Initialize()
 		trans->SetScale({ 2.f, 2.f });
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
+		sr->SetOpacity(0.f);
 
 
 		auto& clips = m_AssetManager.LoadAnimation(L"Boss_3Phase_IDLE_ani", L"../Resource/Character/Boss/Phase_3/Boss_3Phase_IDLE_ani.json");
@@ -145,6 +142,7 @@ void BossScene::Initialize()
 		}
 
 		anim->Play("idle");
+		anim->SetIsActive(false);
 
 		sr->SetPath("../Resource/Boss/Phase_3/Boss_3Phase_IDLE_ani.json");
 		sr->SetTextureKey("Boss_3Phase_IDLE_ani");
@@ -392,7 +390,7 @@ void BossScene::Initialize()
 		trans->SetScale({ 2.0f, 2.0f });
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
-
+		sr->SetOpacity(0.f);
 
 		auto& clips = m_AssetManager.LoadAnimation(L"Boss_3Phase_Laser_Ani", L"../Resource/Character/Boss/Phase_1/Boss_1Phase_Laser_Ani.json");
 		auto anim = animobj->AddComponent<AnimationComponent>();
@@ -532,7 +530,7 @@ void BossScene::Initialize()
 		}
 
 		anim->Play("idle");
-		anim->SetIsActive(true);
+		anim->SetIsActive(false);
 		anim->SetLoop(true);
 
 		sr->SetPath("../Resource/Boss/Phase_2/Boss_2Phase_Arms_Ani.json");
@@ -577,7 +575,7 @@ void BossScene::Initialize()
 		}
 
 		anim->Play("idle");
-		anim->SetIsActive(true);
+		anim->SetIsActive(false);
 		anim->SetLoop(true);
 
 		sr->SetPath("../Resource/Boss/Phase_3/Boss_3Phase_Arms_IDLE.json");
@@ -616,7 +614,7 @@ void BossScene::Initialize()
 		}
 
 		anim->Play("idle");
-		anim->SetIsActive(true);
+		anim->SetIsActive(false);
 		anim->SetLoop(true);
 
 		sr->SetPath("../Resource/Boss/Phase_3/Boss_3Phase_Arms_IDLE.json");
