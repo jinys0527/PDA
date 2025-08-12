@@ -56,11 +56,14 @@ void BossScene::Initialize()
 #pragma endregion
 
 #pragma region Background
+	std::unordered_map<std::string, std::shared_ptr<GameObject>> m_Backgrounds;
+
+	//2페 구멍 배경
 	{
-		auto texture = m_AssetManager.LoadTexture(L"3Chap_2Phase_View", L"../Resource/Character/Boss/Phase_3/3Chap_2Phase_View.png");
+		auto texture = m_AssetManager.LoadTexture(L"3Chap_2Phase_View", L"../Resource/Character/Boss/Phase_2/3Chap_2Phase_View.png");
 
 		auto backobj = std::make_shared<GameObject>(m_EventDispatcher);
-		backobj->m_Name = "backgroundtest";
+		backobj->m_Name = "Phase_2_Big_Hole";
 		auto sr = backobj->AddComponent<SpriteRenderer>();
 		sr->SetTexture(texture);
 		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
@@ -74,7 +77,125 @@ void BossScene::Initialize()
 		tr->SetZOrder(-1);
 
 		AddGameObject(backobj);
+
+		m_Backgrounds[backobj->m_Name] = backobj;
 	}
+
+	//1페 모니터 배경
+	{
+		auto texture = m_AssetManager.LoadTexture(L"3Chap_1Phase_01", L"../Resource/Character/Boss/Phase_2/3Chap_1Phase_01.png");
+
+		auto backobj = std::make_shared<GameObject>(m_EventDispatcher);
+		backobj->m_Name = "Phase_1_Monitor";
+		auto sr = backobj->AddComponent<SpriteRenderer>();
+		sr->SetTexture(texture);
+		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
+
+
+		auto tr = backobj->GetComponent<TransformComponent>();
+		tr->SetPosition({ 960.f, 840.f });
+		tr->SetScale({ 1.3f, 1.3f });
+		sr->SetOpacity(1.0f);
+
+		tr->SetZOrder(-1);
+
+		AddGameObject(backobj);
+		m_Backgrounds[backobj->m_Name] = backobj;
+
+	}
+
+	//2페 1번
+	{
+		auto texture = m_AssetManager.LoadTexture(L"3Chap_2Phase_02", L"../Resource/Character/Boss/Phase_2/3Chap_2Phase_02.png");
+
+		auto backobj = std::make_shared<GameObject>(m_EventDispatcher);
+		backobj->m_Name = "Phase_2_Monitor_1";
+		auto sr = backobj->AddComponent<SpriteRenderer>();
+		sr->SetTexture(texture);
+		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
+
+
+		auto tr = backobj->GetComponent<TransformComponent>();
+		tr->SetPosition({ 960.f, 840.f });
+		tr->SetScale({ 1.3f, 1.3f });
+		sr->SetOpacity(0.0f);
+
+		tr->SetZOrder(-1);
+
+		AddGameObject(backobj);
+		m_Backgrounds[backobj->m_Name] = backobj;
+
+	}
+
+	//2페 2번
+	{
+		auto texture = m_AssetManager.LoadTexture(L"3Chap_2Phase_03", L"../Resource/Character/Boss/Phase_2/3Chap_2Phase_03.png");
+
+		auto backobj = std::make_shared<GameObject>(m_EventDispatcher);
+		backobj->m_Name = "Phase_2_Monitor_2";
+		auto sr = backobj->AddComponent<SpriteRenderer>();
+		sr->SetTexture(texture);
+		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
+
+
+		auto tr = backobj->GetComponent<TransformComponent>();
+		tr->SetPosition({ 960.f, 840.f });
+		tr->SetScale({ 1.3f, 1.3f });
+		sr->SetOpacity(0.0f);
+
+		tr->SetZOrder(-1);
+
+		AddGameObject(backobj);
+		m_Backgrounds[backobj->m_Name] = backobj;
+
+	}
+
+	//2페 3번
+	{
+		auto texture = m_AssetManager.LoadTexture(L"3Chap_2Phase_04", L"../Resource/Character/Boss/Phase_2/3Chap_2Phase_04.png");
+
+		auto backobj = std::make_shared<GameObject>(m_EventDispatcher);
+		backobj->m_Name = "Phase_2_Monitor_3";
+		auto sr = backobj->AddComponent<SpriteRenderer>();
+		sr->SetTexture(texture);
+		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
+
+
+		auto tr = backobj->GetComponent<TransformComponent>();
+		tr->SetPosition({ 960.f, 840.f });
+		tr->SetScale({ 1.3f, 1.3f });
+		sr->SetOpacity(0.0f);
+
+		tr->SetZOrder(-1);
+
+		AddGameObject(backobj);
+		m_Backgrounds[backobj->m_Name] = backobj;
+
+	}
+
+	//2페 4번
+	{
+		auto texture = m_AssetManager.LoadTexture(L"3Chap_2Phase_05", L"../Resource/Character/Boss/Phase_2/3Chap_2Phase_05.png");
+
+		auto backobj = std::make_shared<GameObject>(m_EventDispatcher);
+		backobj->m_Name = "Phase_2_Monitor_4";
+		auto sr = backobj->AddComponent<SpriteRenderer>();
+		sr->SetTexture(texture);
+		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
+
+
+		auto tr = backobj->GetComponent<TransformComponent>();
+		tr->SetPosition({ 960.f, 840.f });
+		tr->SetScale({ 1.3f, 1.3f });
+		sr->SetOpacity(0.0f);
+
+		tr->SetZOrder(-1);
+
+		AddGameObject(backobj);
+		m_Backgrounds[backobj->m_Name] = backobj;
+
+	}
+
 #pragma endregion
 
 #pragma region anim_now
@@ -968,10 +1089,10 @@ void BossScene::Initialize()
 
 
 
-	m_BlackBoard = std::make_unique<BossBlackBoard>(m_ScrollSpeed, m_Telegraphs, m_Anims, m_Fires, m_AnimIndexMap, m_SoundManager);
-	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
 #pragma endregion
 
+	m_BlackBoard = std::make_unique<BossBlackBoard>(m_ScrollSpeed, m_Telegraphs, m_Anims, m_Fires, m_Backgrounds, m_AnimIndexMap, m_SoundManager);
+	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
 
 
 	AddGameObject(cameraObject);

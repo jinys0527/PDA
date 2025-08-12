@@ -5,7 +5,7 @@ BossBlackBoard::BossBlackBoard(
 	std::vector<std::shared_ptr<Telegraph>>& telegraphs, 
 	std::vector<std::shared_ptr<GameObject>>& anims, 
 	std::vector<std::shared_ptr<GameObject>>& fires,
-
+	std::unordered_map<std::string, std::shared_ptr<GameObject>>& backgrounds,
 	std::unordered_map<std::string, std::vector<int>>& animIndexMap,
 	SoundManager& soundmanager)
 	: BlackBoard(soundmanager)
@@ -29,6 +29,9 @@ BossBlackBoard::BossBlackBoard(
 
 	SetValue("BossAnims", anims);
 	SetValue("BossAnimIndexMap", animIndexMap);
+
+	//배경 저장
+	SetValue("Backgrounds", backgrounds);
 
 	//보스 패턴 활성화 지정?
 	// 나중에 패턴 이름있으면 여기에 Skill_1 대신 입력

@@ -24,6 +24,7 @@ public:
         std::vector<std::string>,
         std::vector<std::shared_ptr<Telegraph>>,
         std::vector<std::shared_ptr<GameObject>>,
+        std::unordered_map<std::string, std::shared_ptr<GameObject>>,
         std::unordered_map<std::string, std::vector<int>>,
         std::vector<int>
         >;
