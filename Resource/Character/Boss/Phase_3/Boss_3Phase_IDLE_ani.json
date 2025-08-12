@@ -161,9 +161,9 @@
         },
       "frameTags": [
         {
-          "name": "3phaseidle",
+          "name": "idle",
           "from": 0,
-          "to": 14,
+          "to": 13,
           "direction": "forward",
           "color": "#000000ff"
         }

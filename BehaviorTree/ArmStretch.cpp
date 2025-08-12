@@ -14,25 +14,7 @@ NodeState ArmStretch::Tick(BlackBoard& bb, float deltaTime)
 
         if (!m_CurrentAnimObj)
         {
-            auto animsOpt = bb.GetValue<std::vector<std::shared_ptr<GameObject>>>("BossAnims");
-            auto indexMapOpt = bb.GetValue<std::unordered_map<std::string, std::vector<int>>>("BossAnimIndexMap");
-
-            if (animsOpt.has_value() && indexMapOpt.has_value())
-            {
-                const auto& anims = animsOpt.value();
-                const auto& indexMap = indexMapOpt.value();
-
-                auto it = indexMap.find("Boss_Anim_Phase2_Arm");
-                if (it != indexMap.end() && !it->second.empty())
-                {
-                    int index = it->second[0];
-                    if (index >= 0 && index < static_cast<int>(anims.size()))
-                    {
-                        m_CurrentAnimObj = anims[index];
-                    }
-                }
-            }
-
+            m_CurrentAnimObj = GetAnim(bb, "Boss_Anim_Phase2_Arm");
             m_CurrentAnimObj->GetComponent<AnimationComponent>()->SetLoop(true);
         }
 

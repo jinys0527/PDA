@@ -3,11 +3,13 @@
 BossBlackBoard::BossBlackBoard(
 	std::vector<std::shared_ptr<Telegraph>>& telegraphs, 
 	std::vector<std::shared_ptr<GameObject>>& anims, 
+	std::vector<std::shared_ptr<GameObject>>& fires,
+
 	std::unordered_map<std::string, std::vector<int>>& animIndexMap,
 	SoundManager& soundmanager)
 	: BlackBoard(soundmanager)
 {
-	SetValue("BossMaxHP", 149.0f);
+	SetValue("BossMaxHP", 49.0f);
 	SetValue("BossCurrHP", GetValue<float>("BossMaxHP").value());
 	SetValue("IdleCoolDown", 1.0f);
 
@@ -15,6 +17,8 @@ BossBlackBoard::BossBlackBoard(
 	SetValue("BossTelegraph", telegraphs);
 
 	//보스 애니메이션 저장
+	SetValue("LazerFire", fires);
+
 	SetValue("BossAnims", anims);
 	SetValue("BossAnimIndexMap", animIndexMap);
 
@@ -45,12 +49,12 @@ BossBlackBoard::BossBlackBoard(
 	SetValue("WarningTime", 3.0f);
 
 
-	SetValue("3Phase", false);
+	SetValue("3Phase", true);
 	SetValue("RandomValue", 0.0f);
 
 	SetValue("SkillWeight_1", 1.0f);
-	SetValue("SkillWeight_2", 1.0f);
-	SetValue("SkillWeight_3", 5001.0f);
+	SetValue("SkillWeight_2", 5001.0f);
+	SetValue("SkillWeight_3", 1.0f);
 	SetValue("SkillWeight_4", 1.0f);
 	SetValue("SkillWeight_5", 1.0f);
 

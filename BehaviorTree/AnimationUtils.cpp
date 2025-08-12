@@ -36,3 +36,28 @@ bool IsAnimationAvailable(const std::shared_ptr<GameObject>& animObj)
 
     return !animComp->GetIsActive();
 }
+
+std::shared_ptr<GameObject> GetAnim(BlackBoard& bb, const std::string& animName)
+{
+    auto animsOpt = bb.GetValue<std::vector<std::shared_ptr<GameObject>>>("BossAnims");
+    auto mapOpt = bb.GetValue<std::unordered_map<std::string, std::vector<int>>>("BossAnimIndexMap");
+
+    if (animsOpt.has_value() && mapOpt.has_value())
+    {
+        const auto& anims = animsOpt.value();
+        const auto& indexMap = mapOpt.value();
+
+        auto it = indexMap.find(animName);
+        if (it != indexMap.end() && !it->second.empty())
+        {
+            int index = it->second[0];
+            if (index >= 0 && index < static_cast<int>(anims.size()))
+            {
+                return anims[index];
+            }
+        }
+    }
+
+
+    return nullptr;
+}

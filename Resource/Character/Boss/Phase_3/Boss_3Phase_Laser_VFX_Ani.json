@@ -311,12 +311,20 @@
         },
       "frameTags": [
         {
-          "name": "3phaselaservfx",
+          "name": "charge",
           "from": 0,
+          "to": 13,
+          "direction": "forward",
+          "color": "#000000ff"
+        },
+        {
+          "name": "fire",
+          "from": 14,
           "to": 29,
           "direction": "forward",
           "color": "#000000ff"
         }
+
       ],
         "scale": "1"
     }

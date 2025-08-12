@@ -151,23 +151,23 @@
             "duration": 100
         }
     ],
-    "meta": {
-        "app": "CustomSpriteSheetTool",
-        "version": "1.0",
-        "image": "Boss_3Phase_ArmSwip.png",
-        "size": {
-            "w": 9600,
-            "h": 5760
-        },
-      "frameTags": [
-        {
-          "name": "swip",
-          "from": 0,
-          "to": 14,
-          "direction": "forward",
-          "color": "#000000ff"
-        }
-      ],
-        "scale": "1"
-    }
+  "meta": {
+    "app": "CustomSpriteSheetTool",
+    "version": "1.0",
+    "image": "Boss_3Phase_ArmSwip.png",
+    "size": {
+      "w": 9600,
+      "h": 5760
+    },
+    "frameTags": [
+      {
+        "name": "swip",
+        "from": 0,
+        "to": 14,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "scale": "1"
+  }
 }

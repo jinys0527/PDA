@@ -73,9 +73,10 @@ void Telegraph::SetColliderActive(bool active)
 	box->SetIsActive(active);
 }
 
-void Telegraph::SetActiveAnimation()
-{
-    auto anim = GetComponent<AnimationComponent>();
+void Telegraph::SetActiveAnimation() 
+{ 
+    auto animobj = GetComponent<TransformComponent>()->GetChildrens().front();
+    auto anim = animobj->GetOwner()->GetComponent<AnimationComponent>();
     anim->SetIsActive(true);
     anim->Play();
     auto sprite = GetComponent<SpriteRenderer>();
@@ -89,6 +90,8 @@ void Telegraph::SetInactiveAnimation()
     anim->SetIsActive(false);
     auto sprite = GetComponent<SpriteRenderer>();
     sprite->SetOpacity(0);
+
+    sprite->SetTexture(m_WarningTexture);
 
     m_IsAnimationPlaying = false;
 

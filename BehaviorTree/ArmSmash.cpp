@@ -155,15 +155,25 @@ void ArmSmash::EndWarning(BlackBoard& bb)
 
     m_IsMoving = true;
 
+    std::shared_ptr<GameObject> animObj;
+    if (bb.GetValue<int>("CurrPhase").value() == 1)
+    {
+        animObj = GetAvailableAnim(bb, "Boss_ArmSmash");
 
-    auto animObj = GetAvailableAnim(bb, "Boss_ArmSmash");
+    }
+    else if (bb.GetValue<int>("CurrPhase").value() == 3)
+    {
+        animObj = GetAvailableAnim(bb, "Boss_3Phase_Arm_Smash");
+
+    }
+
     if (animObj)
     {
         m_CurrentAnimObj = animObj;
 
         if (!m_AttackRange.empty()) //위치 조정
         {
-            float posX = m_MoveStartPos.x + 900.f;
+            float posX = m_MoveStartPos.x + 1400.f;
             float posY = m_MoveStartPos.y - 210.f;
             animObj->GetComponent<TransformComponent>()->SetPosition({posX, posY});
 

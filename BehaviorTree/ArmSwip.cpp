@@ -18,12 +18,15 @@ NodeState ArmSwip::Tick(BlackBoard& bb, float deltaTime)
             m_MoveStartIndex.push_back(0);
             m_MoveStartIndex.push_back(5);
             m_MoveStartIndex.push_back(10);
+            m_Boss_Arm = GetAnim(bb, "Boss_Anim_Arm_L");
         }
         else if (m_Name == "Swip_R")
         {
             m_MoveStartIndex.push_back(4);
             m_MoveStartIndex.push_back(9);
             m_MoveStartIndex.push_back(14);
+            m_Boss_Arm = GetAnim(bb, "Boss_Anim_Arm_R");
+
         }
 
         m_TargetIndex.push_back(2);
@@ -67,6 +70,10 @@ NodeState ArmSwip::Tick(BlackBoard& bb, float deltaTime)
 
             m_AnimPlaying = false;
 
+            m_Boss_Arm->GetComponent<SpriteRenderer>()->SetOpacity(1);
+            auto anim = m_Boss_Arm->GetComponent<AnimationComponent>();
+            anim->SetIsActive(true);
+
             // 실행 종료한 애니메이션 이름 블랙보드에서 제거
             auto runningAnimsOpt = bb.GetValue<std::vector<std::string>>("RunningAnims");
             if (runningAnimsOpt.has_value())
@@ -82,29 +89,6 @@ NodeState ArmSwip::Tick(BlackBoard& bb, float deltaTime)
 
             m_CurrentAnimObj = nullptr;
         }
-    }
-
-
-    if (m_ElapsedTime >= m_WarningTime)
-    {
-        if (!m_AttackStarted)
-        {
-            bb.GetSoundManager().SFX_Shot(L"boss_arm_sweep");
-
-            EndWarning(bb);
-            m_AttackStarted = true;
-        }
-
-        // 애니메이션 끝났는지 체크
-        auto runningAnimsOpt = bb.GetValue<std::vector<std::string>>("RunningAnims");
-        if (runningAnimsOpt.has_value() && !runningAnimsOpt.value().empty())
-        {
-            return NodeState::Running;
-        }
-
-
-        Reset();
-        return NodeState::Success;
     }
 
     // 이동은 공격 시작 여부와 무관하게 매 프레임 처리
@@ -150,6 +134,30 @@ NodeState ArmSwip::Tick(BlackBoard& bb, float deltaTime)
         }
     }
 
+
+    if (m_ElapsedTime >= m_WarningTime)
+    {
+        if (!m_AttackStarted)
+        {
+            bb.GetSoundManager().SFX_Shot(L"boss_arm_sweep");
+
+            EndWarning(bb);
+            m_AttackStarted = true;
+        }
+
+        // 애니메이션 끝났는지 체크
+        auto runningAnimsOpt = bb.GetValue<std::vector<std::string>>("RunningAnims");
+        if (runningAnimsOpt.has_value() && !runningAnimsOpt.value().empty())
+        {
+            return NodeState::Running;
+        }
+
+
+        Reset();
+        return NodeState::Success;
+    }
+
+
     return NodeState::Running;
 }
 
@@ -189,14 +197,22 @@ void ArmSwip::EndWarning(BlackBoard& bb)
     
     m_IsMoving = true;
     
+    std::shared_ptr<GameObject> animObj;
+    if (m_Name == "Swip_L")
+    {
+        animObj = GetAvailableAnim(bb, "Boss_Anim_ArmSwip_L");
 
-    auto animObj = GetAvailableAnim(bb, "Boss_Anim_ArmSwip");
+    }
+    else if (m_Name == "Swip_R")
+    {
+        animObj = GetAvailableAnim(bb, "Boss_Anim_ArmSwip_R");
+
+    }
     if (animObj)
     {
         m_CurrentAnimObj = animObj;
 
-        auto trans = m_CurrentAnimObj->GetComponent<TransformComponent>();
-        trans->SetPosition(m_MoveStartPos[0]);
+        m_Boss_Arm->GetComponent<SpriteRenderer>()->SetOpacity(0);
 
         auto animComp = m_CurrentAnimObj->GetComponent<AnimationComponent>();
         animComp->SetIsActive(true);
@@ -235,14 +251,21 @@ void ArmSwip::Reset()
 
     m_MoveTimer = 0.0f;
 
-    for (int i = 0; i < m_MoveStartIndex.size(); i++)
-    {
-        m_Telegraphs[m_MoveStartIndex[i]]->GetComponent<TransformComponent>()->SetPosition(m_MoveStartPos[i]);
-    }
+    //for (int i = 0; i < m_MoveStartIndex.size(); i++)
+    //{
+    //    m_Telegraphs[m_MoveStartIndex[i]]->GetComponent<TransformComponent>()->SetPosition(m_MoveStartPos[i]);
+    //}
 
     m_MoveStartPos.clear();    // 좌표 버퍼 초기화
     m_MoveTargetPos.clear();
 
     m_Initialized = false;
+
+    if (m_Boss_Arm)
+    {
+        m_Boss_Arm->GetComponent<SpriteRenderer>()->SetOpacity(1);
+        auto anim = m_Boss_Arm->GetComponent<AnimationComponent>();
+        anim->SetIsActive(true);
+    }
 }
 

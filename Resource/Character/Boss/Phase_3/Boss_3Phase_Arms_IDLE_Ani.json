@@ -161,9 +161,9 @@
         },
       "frameTags": [
         {
-          "name": "3phasearmsidle",
+          "name": "idle",
           "from": 0,
-          "to": 14,
+          "to": 12,
           "direction": "forward",
           "color": "#000000ff"
         }

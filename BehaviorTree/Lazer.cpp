@@ -10,6 +10,7 @@ NodeState Lazer::Tick(BlackBoard& bb, float deltaTime)
     if (!m_Initialized)
     {
         m_Telegraphs = bb.GetValue<std::vector<std::shared_ptr<Telegraph>>>("BossTelegraph").value();
+        m_Fires = bb.GetValue<std::vector<std::shared_ptr<GameObject>>>("LazerFire").value();
         m_AttackRange = bb.GetValue<std::vector<int>>(m_Name).value();
         m_minIndex = m_AttackRange.front();
         m_maxIndex = m_AttackRange.back();
@@ -19,28 +20,21 @@ NodeState Lazer::Tick(BlackBoard& bb, float deltaTime)
 
         if (!m_Boss_Main)
         {
-            auto animsOpt = bb.GetValue<std::vector<std::shared_ptr<GameObject>>>("BossAnims");
-            auto indexMapOpt = bb.GetValue<std::unordered_map<std::string, std::vector<int>>>("BossAnimIndexMap");
-
-            if (animsOpt.has_value() && indexMapOpt.has_value())
+            if (bb.GetValue<int>("CurrPhase").value() == 1)
             {
-                const auto& anims = animsOpt.value();
-                const auto& indexMap = indexMapOpt.value();
+                m_Boss_Main = GetAnim(bb, "Boss_Phase_1_Main");
+                m_Lazer_CCTV = GetAvailableAnim(bb, "Boss_Lazer_CCTV");
 
-                auto it = indexMap.find("Boss_Phase_1_Main");
-                if (it != indexMap.end() && !it->second.empty())
-                {
-                    int index = it->second[0];
-                    if (index >= 0 && index < static_cast<int>(anims.size()))
-                    {
-                        m_Boss_Main = anims[index];
-                    }
-                }
+            }
+            else if (bb.GetValue<int>("CurrPhase").value() == 3)
+            {
+                m_Boss_Main = GetAnim(bb, "Boss_3Phase_IDLE_ani");
+                m_Lazer_CCTV = GetAvailableAnim(bb, "Boss_3Phase_Laser_CCTV");
+
             }
         }
 
 
-        m_Lazer_CCTV = GetAvailableAnim(bb, "Boss_Lazer_CCTV");
 
 
         m_Initialized = true;
@@ -59,13 +53,14 @@ NodeState Lazer::Tick(BlackBoard& bb, float deltaTime)
 
     m_ElapsedTime += deltaTime;
 
+    //공격 장판 활성화
     if (m_IsActivating)
     {
         // 첫 프레임: 중앙 활성화
         if (m_ActivateStep == 0)
         {
             m_Telegraphs[m_StartTelIndex]->SetColliderActive(true);
-
+            ActiveAnimation(m_StartTelIndex, true);
             m_PrevLeft = m_StartTelIndex;
             m_PrevRight = m_StartTelIndex;
             m_ActivateStep = 1;
@@ -81,12 +76,12 @@ NodeState Lazer::Tick(BlackBoard& bb, float deltaTime)
             if (curLeft >= m_minIndex)
             {
                 m_Telegraphs[curLeft]->SetColliderActive(true);
-                //m_Telegraphs[curLeft]->SetActiveAnimation();
+                ActiveAnimation(curLeft, true);
             }
             if (curRight <= m_maxIndex)
             {
                 m_Telegraphs[curRight]->SetColliderActive(true);
-                //m_Telegraphs[curRight]->SetActiveAnimation();
+                ActiveAnimation(curRight, true);
 
             }
 
@@ -94,10 +89,14 @@ NodeState Lazer::Tick(BlackBoard& bb, float deltaTime)
             if (m_PrevLeft >= 0) 
             {
                 m_Telegraphs[m_PrevLeft]->SetColliderActive(false);
+                ActiveAnimation(m_PrevLeft, false);
+
             }
             if (m_PrevRight >= 0) 
             {
                 m_Telegraphs[m_PrevRight]->SetColliderActive(false);
+                ActiveAnimation(m_PrevRight, false);
+
             }
 
             m_PrevLeft = curLeft;
@@ -186,19 +185,32 @@ void Lazer::StartWarning(BlackBoard& bb)
         }
     }
     // 경고 애니메이션 실행
-    auto animObj = GetAvailableAnim(bb, "Boss_Lazer");  // 경고용 애니메이션 키워드
+    std::shared_ptr<GameObject> animObj;
+
+    if (bb.GetValue<int>("CurrPhase").value() == 1)
+    {
+        animObj = GetAvailableAnim(bb, "Boss_Lazer"); 
+
+    }
+
+    else if (bb.GetValue<int>("CurrPhase").value() == 3)
+    {
+        animObj = GetAvailableAnim(bb, "Boss_Lazer_Phase_3");
+
+    }
+
     if (animObj)
     {
         m_CurrentAnimObj = animObj;
 
-        if (!m_AttackRange.empty())
-        {
-            // 위치 설정 (원하는 위치로 조정 가능)
-            float posX = m_Telegraphs[m_StartTelIndex]->GetComponent<TransformComponent>()->GetPosition().x + 750.f;
-            float posY = m_Telegraphs[m_StartTelIndex]->GetComponent<TransformComponent>()->GetPosition().y - 250.f;
+        //if (!m_AttackRange.empty())
+        //{
+        //    // 위치 설정 (원하는 위치로 조정 가능)
+        //    float posX = m_Telegraphs[m_StartTelIndex]->GetComponent<TransformComponent>()->GetPosition().x + 750.f;
+        //    float posY = m_Telegraphs[m_StartTelIndex]->GetComponent<TransformComponent>()->GetPosition().y - 250.f;
 
-            animObj->GetComponent<TransformComponent>()->SetPosition({ posX, posY });
-        }
+        //    animObj->GetComponent<TransformComponent>()->SetPosition({ posX, posY });
+        //}
 
         auto animComp = m_CurrentAnimObj->GetComponent<AnimationComponent>();
         animComp->SetIsActive(true);
@@ -247,13 +259,13 @@ void Lazer::EndWarning(BlackBoard& bb)
     m_ActivateTimer = 0.0f;
     m_IsActivating = true;
 
-    if (!m_AttackRange.empty())
-    {
-        float posX = m_Telegraphs[m_StartTelIndex]->GetComponent<TransformComponent>()->GetPosition().x + 750.f;
-        float posY = m_Telegraphs[m_StartTelIndex]->GetComponent<TransformComponent>()->GetPosition().x - 1300.f;
+    //if (!m_AttackRange.empty())
+    //{
+    //    float posX = m_Telegraphs[m_StartTelIndex]->GetComponent<TransformComponent>()->GetPosition().x + 750.f;
+    //    float posY = m_Telegraphs[m_StartTelIndex]->GetComponent<TransformComponent>()->GetPosition().x - 1300.f;
 
-        m_CurrentAnimObj->GetComponent<TransformComponent>()->SetPosition({ posX, posY });
-    }
+    //    m_CurrentAnimObj->GetComponent<TransformComponent>()->SetPosition({ posX, posY });
+    //}
 
     auto animComp = m_CurrentAnimObj->GetComponent<AnimationComponent>();
 
@@ -306,3 +318,24 @@ void Lazer::Reset()
 
     }
 }
+
+void Lazer::ActiveAnimation(int index, bool flag)
+{
+    auto anim = m_Fires[index]->GetComponent<AnimationComponent>();
+    if (flag)
+    {
+        anim->SetIsActive(true);
+        anim->Play();
+        m_Fires[index]->GetComponent<SpriteRenderer>()->SetOpacity(1);
+
+    }
+
+    else
+    {
+        anim->SetIsActive(false);
+        m_Fires[index]->GetComponent<SpriteRenderer>()->SetOpacity(0);
+
+    }
+
+}
+
