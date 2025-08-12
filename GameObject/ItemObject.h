@@ -13,8 +13,8 @@ public:
 	void SetZ(float value) { m_Z = value; }
 	float GetZ() { return m_Z; }
 
-	void Serialize(nlohmann::json& j) const;
-	void Deserialize(const nlohmann::json& j);
+	void Serialize(nlohmann::json& j) const override;
+	void Deserialize(const nlohmann::json& j) override;
 
 	bool m_isBullet = false;
 

@@ -177,6 +177,7 @@ void TransformComponent::Serialize(nlohmann::json& j) const
 	j["rotation"] = m_Rotation;
 	j["scale"]["x"] = m_Scale.x;
 	j["scale"]["y"] = m_Scale.y;
+	j["scale"]["y"] = m_Scale.y;
 }
 
 void TransformComponent::Deserialize(const nlohmann::json& j)

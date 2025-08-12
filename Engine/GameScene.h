@@ -1,6 +1,9 @@
 #pragma once
 #include "Scene.h"
 #include <memory>
+#include <unordered_map>
+
+class GameObject;
 
 class GameScene : public Scene
 {
@@ -24,7 +27,6 @@ public:
 	void FixedUpdate() override;
 	void Update(float deltaTime) override;
 	void Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo, std::vector<UITextInfo>& uiTextInfo) override;
-
-private:
+	
 };
 

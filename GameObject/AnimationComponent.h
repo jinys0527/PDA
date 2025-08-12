@@ -19,6 +19,8 @@ public:
 		m_Clips[name] = clip;
 	}
 
+	const AnimationClip* GetClip() const;
+
 	bool IsAnimationFinished()
 	{
 		if (!m_AnimationController.IsValid())

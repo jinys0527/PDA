@@ -5,6 +5,7 @@
 #include "TransformComponent.h"
 #include "GameObject.h"
 #include "Obstacle.h"
+#include "ItemObject.h"
 #include <fstream>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -107,7 +108,7 @@ void Editor::CameraControl(std::shared_ptr<Scene> currentScene)
 		cameraTrans->SetPosition(cameraPos);
 	}// 수동 이동
 
-	if (ImGui::SliderFloat("Offset X", &cameraPos.x, 960.0f, 5000.0f))
+	if (ImGui::SliderFloat("Offset X", &cameraPos.x, 960.0f, 500000.0f))
 	{
 		cameraTrans->SetPosition(cameraPos);
 	}
@@ -122,9 +123,36 @@ void Editor::DrawGameObjectHierarchy(std::shared_ptr<Scene> currentScene)
 {
 	int index = 0;
 
+	std::vector<std::pair<std::string, std::shared_ptr<GameObject>>> sortedObjects;
+
+	// map -> vector 복사
+	for (const auto& kv : currentScene->m_GameObjects)
+		sortedObjects.push_back(kv);
+
+	std::sort(sortedObjects.begin(), sortedObjects.end(),
+		[](const auto& a, const auto& b) {
+			auto extractNameAndNumber = [](const std::string& s) -> std::pair<std::string, int> {
+				size_t pos = s.find_first_of("0123456789");
+				if (pos != std::string::npos) {
+					return { s.substr(0, pos), std::stoi(s.substr(pos)) };
+				}
+				return { s, -1 };
+				};
+
+			auto [nameA, numA] = extractNameAndNumber(a.first);
+			auto [nameB, numB] = extractNameAndNumber(b.first);
+
+			if (nameA == nameB) {
+				// 같은 종류일 경우 숫자 비교
+				return numA < numB;
+			}
+			// 이름(문자) 기준 비교
+			return nameA < nameB;
+		}
+	);
+
 	ImGui::Begin("Hierarchy");
-	//GameObject 리스트
-	for (const auto& [key, goPtr] : currentScene->m_GameObjects)
+	for (const auto& [key, goPtr] : sortedObjects)
 	{
 		bool selected = (m_SelectedKey == key);
 		if (ImGui::Selectable(key.c_str(), selected))
@@ -163,6 +191,15 @@ void Editor::DrawGameObjectInspector(std::shared_ptr<Scene> currentScene)
 			if (ImGui::SliderInt("Lane", &lane, 0, 2))
 			{
 				obstacle->SetZ(static_cast<float>(lane));
+			}
+		}
+
+		if (auto* item = dynamic_cast<ItemObject*>(gameObject.get()))
+		{
+			int lane = static_cast<int>(item->GetZ());
+			if (ImGui::SliderInt("Lane", &lane, 0, 2))
+			{
+				item->SetZ(static_cast<float>(lane));
 			}
 		}
 

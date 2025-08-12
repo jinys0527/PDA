@@ -3,6 +3,11 @@
 #include "SpriteRenderer.h"
 #include "AssetManager.h"
 
+const AnimationClip* AnimationComponent::GetClip() const
+{
+	return m_AnimationController.GetClip();
+}
+
 void AnimationComponent::Play()
 {
 	m_AnimationController.SetClip(m_Clips[m_CurrentClipName]);

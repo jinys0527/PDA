@@ -27,8 +27,9 @@ public:
 
 	virtual void Render(std::vector<RenderInfo>& renderInfo);
 
-	void Serialize(nlohmann::json& j) const;
-	void Deserialize(const nlohmann::json& j);
+
+	virtual void Serialize(nlohmann::json& j) const;
+	virtual void Deserialize(const nlohmann::json& j);
 
 protected:
 	TransformComponent* m_Transform;

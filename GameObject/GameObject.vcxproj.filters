@@ -118,6 +118,12 @@
     <ClCompile Include="ControlComponent.cpp">
       <Filter>Components\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FixedObstacle_1.cpp" />
+    <ClCompile Include="SlidingObstacle.cpp" />
+    <ClCompile Include="FixedObstacle_2.cpp" />
+    <ClCompile Include="Drone.cpp" />
+    <ClCompile Include="FallingObstacle_Flowerpot.cpp" />
+    <ClCompile Include="FallingObstacle_Box.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h">
@@ -257,6 +263,12 @@
     <ClInclude Include="ControlComponent.h">
       <Filter>Components\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FixedObstacle_1.h" />
+    <ClInclude Include="SlidingObstacle.h" />
+    <ClInclude Include="FixedObstacle_2.h" />
+    <ClInclude Include="Drone.h" />
+    <ClInclude Include="FallingObstacle_Flowerpot.h" />
+    <ClInclude Include="FallingObstacle_Box.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Components">

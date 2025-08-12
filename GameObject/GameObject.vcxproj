@@ -249,8 +249,13 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ControlComponent.h" />
     <ClInclude Include="CoreTypes.h" />
+    <ClInclude Include="Drone.h" />
     <ClInclude Include="DroneComponent.h" />
     <ClInclude Include="DropObstacle.h" />
+    <ClInclude Include="FallingObstacle_Box.h" />
+    <ClInclude Include="FallingObstacle_Flowerpot.h" />
+    <ClInclude Include="FixedObstacle_1.h" />
+    <ClInclude Include="FixedObstacle_2.h" />
     <ClInclude Include="FlyingObstacleComponent.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="HeartUIComponent.h" />
@@ -263,6 +268,7 @@
     <ClInclude Include="RectTransformComponent.h" />
     <ClInclude Include="RigidbodyComponent.h" />
     <ClInclude Include="RunPlayerController.h" />
+    <ClInclude Include="SlidingObstacle.h" />
     <ClInclude Include="SoundUI.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="Telegraph.h" />
@@ -288,8 +294,13 @@
     <ClCompile Include="ColliderComponent.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ControlComponent.cpp" />
+    <ClCompile Include="Drone.cpp" />
     <ClCompile Include="DroneComponent.cpp" />
     <ClCompile Include="DropObstacle.cpp" />
+    <ClCompile Include="FallingObstacle_Box.cpp" />
+    <ClCompile Include="FallingObstacle_Flowerpot.cpp" />
+    <ClCompile Include="FixedObstacle_1.cpp" />
+    <ClCompile Include="FixedObstacle_2.cpp" />
     <ClCompile Include="FlyingObstacleComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="AnimationComponent.cpp" />
@@ -303,6 +314,7 @@
     <ClCompile Include="RectTransformComponent.cpp" />
     <ClCompile Include="RigidbodyComponent.cpp" />
     <ClCompile Include="RunPlayerController.cpp" />
+    <ClCompile Include="SlidingObstacle.cpp" />
     <ClCompile Include="SoundUI.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="Telegraph.cpp" />
