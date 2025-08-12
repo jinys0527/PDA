@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "SceneManager.h"
 #include "TitleScene.h"
-#include "TestScene.h"
 #include "InGameUITestScene.h"
 #include "CharacterScene.h"
 #include "RenderData.h"
@@ -9,8 +8,6 @@
 void SceneManager::Initialize()
 {
 	m_SoundManager.Init();
-	auto testScene = AddScene("TestScene", std::make_shared<TestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
-	testScene->SetSceneManager(this);
 	auto titleScene = AddScene("TitleScene", std::make_shared<TitleScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
  	titleScene->SetSceneManager(this);
 	auto inGameUITestScene = AddScene("InGameUITestScene", std::make_shared<InGameUITestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
@@ -18,8 +15,6 @@ void SceneManager::Initialize()
 // 	auto characterScene = AddScene("CharacterScene", std::make_shared<CharacterScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
 // 	characterScene->SetSceneManager(this);
 
-	testScene->Initialize();
-	testScene->SetName("TestScene");
 	titleScene->Initialize();
 	titleScene->SetName("TitleScene");
 	inGameUITestScene->Initialize();
@@ -65,6 +60,7 @@ void SceneManager::SetCurrentScene(const std::string& name)
 	{
 		m_CurrentScene = it->second;
 
+		m_CurrentScene->Enter();
 		m_Camera = m_CurrentScene->GetMainCamera();
 		m_Renderer.SetCamera(m_Camera);
 	}
@@ -86,5 +82,16 @@ void SceneManager::ChangeScene(const std::string& name)
 		m_CurrentScene->Enter();
 		m_Camera = m_CurrentScene->GetMainCamera();
 		m_Renderer.SetCamera(m_Camera);
+		m_UIManager.SetCurrentScene(name);
 	}
+}
+
+void SceneManager::ChangeScene()
+{
+	ChangeScene(m_ChangeSceneName);
+}
+
+void SceneManager::SetChangeScene(std::string name)
+{
+	m_ChangeSceneName = name;
 }

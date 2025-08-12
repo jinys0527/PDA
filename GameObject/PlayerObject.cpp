@@ -558,7 +558,7 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 			info.bitmap = m_ShadowBitmap;
 			Math::Vector2F pos = m_Transform->GetPosition();
 			float y = pos.y;
-			pos.y = m_Z * m_RailHeight;
+			pos.y = m_Z * m_RailHeight + 65.f;
 			m_Transform->SetPosition(pos);
 			info.size = { 1,1 };
 			D2D1::Matrix3x2F trans = D2D1::Matrix3x2F::Identity();

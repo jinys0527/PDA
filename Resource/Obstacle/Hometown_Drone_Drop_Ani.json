@@ -5,18 +5,18 @@
             "frame": {
                 "x": 0,
                 "y": 0,
-                "w": 400,
-                "h": 400
+                "w": 200,
+                "h": 200
             },
             "duration": 100
         },
         {
             "filename": "frame_1",
             "frame": {
-                "x": 400,
+                "x": 200,
                 "y": 0,
-                "w": 400,
-                "h": 400
+                "w": 200,
+                "h": 200
             },
             "duration": 100
         }
@@ -26,10 +26,18 @@
         "version": "1.0",
         "image": "Hometown_Drone_Drop_Ani.png",
         "size": {
-            "w": 800,
-            "h": 400
+            "w": 400,
+            "h": 200
         },
-        "frameTags": [],
+      "frameTags": [
+        {
+          "name": "dronedrop",
+          "from": 0,
+          "to": 1,
+          "direction": "forward",
+          "color": "#000000ff"
+        }
+      ],
         "scale": "1"
     }
 }

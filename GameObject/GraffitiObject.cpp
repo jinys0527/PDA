@@ -52,7 +52,12 @@ void GraffitiObject::Render(std::vector<RenderInfo>& renderInfo)
 
 			RenderInfo info;
 			info.bitmap = iter->Get();
-			info.worldMatrix = m_Transform->GetWorldMatrix();
+			D2D1::Matrix3x2F worldSize = D2D1::Matrix3x2F::Identity();
+			D2D1_SIZE_F bitSize = info.bitmap.Get()->GetSize();
+			float ratio = 512 / bitSize.width;
+			worldSize.m11 = ratio;
+			worldSize.m22 = ratio;
+			info.worldMatrix = worldSize * m_Transform->GetWorldMatrix();
 			Math::Vector2F pivot = { iter->Get()->GetSize().width * 0.5f, iter->Get()->GetSize().height * 0.5f };
 			info.pivot = pivot;
 			// Opacity Àû¿ë
@@ -78,11 +83,19 @@ void GraffitiObject::Render(std::vector<RenderInfo>& renderInfo)
 
 void GraffitiObject::SetGravitti(AssetManager* assetManager)
 {
-	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"brick", L"../Resource/Character/Sour/Graffiti/SOUR.png"));
-	//m_GraffitiTextures.push_back(assetManager->LoadTexture(L"cat_texture", L"../Resource/cat_texture.png"));
-	//m_GraffitiTextures.push_back(assetManager->LoadTexture(L"test", L"../Resource/test.png"));
-	//m_GraffitiTextures.push_back(assetManager->LoadTexture(L"test1", L"../Resource/test1.png"));
-	//m_GraffitiTextures.push_back(assetManager->LoadTexture(L"test2", L"../Resource/test2.png"));
+	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"sour", L"../Resource/Character/Sour/Graffiti/SOUR.png"));
+	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"01", L"../Resource/Character/Sour/Graffiti/01.png"));
+	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"02", L"../Resource/Character/Sour/Graffiti/02.png"));
+	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"03", L"../Resource/Character/Sour/Graffiti/03.png"));
+	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"04", L"../Resource/Character/Sour/Graffiti/04.png"));
+	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"pda", L"../Resource/Character/Sour/Graffiti/pda.png"));
+	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"IWantToGoHome", L"../Resource/Character/Sour/Graffiti/IWantToGoHome.png"));
+	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"Yoon", L"../Resource/Character/Sour/Graffiti/Yoon.png"));
+	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"Hye", L"../Resource/Character/Sour/Graffiti/Hye.png"));
+	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"Saze", L"../Resource/Character/Sour/Graffiti/Saze.png"));
+	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"Video", L"../Resource/Character/Sour/Graffiti/Video.png"));
+	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"ddhhssjj", L"../Resource/Character/Sour/Graffiti/ddhhssjj.png"));
+	m_GraffitiTextures.push_back(assetManager->LoadTexture(L"DoTheZac", L"../Resource/Character/Sour/Graffiti/DoTheZac.png"));
 
 	m_RandTexture = m_RandTexture % m_GraffitiTextures.size();
 }

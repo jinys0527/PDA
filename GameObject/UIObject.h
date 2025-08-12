@@ -10,7 +10,6 @@ class UIObject : public Object
 {
 	friend class UIManager;
 	friend class Scene;
-	friend class TestScene;
 	friend class TitleScene;
 	friend class InGameUITestScene;
 public:

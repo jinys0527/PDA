@@ -14,6 +14,9 @@ public:
 	static constexpr const char* StaticTypeName = "AnimationComponent";
 	const char* GetTypeName() const override { return StaticTypeName; }
 
+	const AnimationClip* GetClip() const;
+
+
 	void AddClip(const std::string& name, const AnimationClip* clip)
 	{
 		m_Clips[name] = clip;

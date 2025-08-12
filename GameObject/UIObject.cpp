@@ -118,6 +118,8 @@ void UIObject::Render(std::vector<UIRenderInfo>& renderInfo)
 				// Opacity Àû¿ë
 				info.opacity = image->GetOpacity();
 				info.srcRect = D2D1_RECT_F{ image->GetUV().left, image->GetUV().top, image->GetUV().right, image->GetUV().bottom };
+				if (!item->m_IsVisible)
+					info.parentSize = { 0, 0 };
 				renderInfo.emplace_back(info);
 			}
 		}

@@ -102,22 +102,14 @@
         }
     ],
     "meta": {
-       "app": "CustomSpriteSheetTool",
-       "version": "1.0",
-       "image": "Fire_Ground.png",
-       "size": {
-           "w": 1300,
-           "h": 520
-    },
-    "frameTags": [
-      {
-        "name": "fire",
-        "from": 0,
-        "to": 9,
-        "direction": "forward",
-        "color": "#000000ff"
-      }
-    ],
-    "scale": "1"
-  }
+        "app": "CustomSpriteSheetTool",
+        "version": "1.0",
+        "image": "Fire_Ground.png",
+        "size": {
+            "w": 1300,
+            "h": 520
+        },
+        "frameTags": [],
+        "scale": "1"
+    }
 }

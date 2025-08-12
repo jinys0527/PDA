@@ -27,7 +27,7 @@ public:
 
 	void Serialize(nlohmann::json& j) const;
 	void Deserialize(const nlohmann::json& j);
-private:
+protected:
 	float m_Z;
 	bool m_IsSlide;
 	BoxColliderComponent* m_Collider;

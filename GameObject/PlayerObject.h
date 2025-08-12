@@ -93,7 +93,7 @@ protected:
 
 	bool m_IsAttackSuccessed = false;
 
-	float m_RailHeight = 200;
+	float m_RailHeight = 108.f;
 
 	float m_KickCool = 0;
 

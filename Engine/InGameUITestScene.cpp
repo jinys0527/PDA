@@ -40,12 +40,18 @@
 #include "Inverter.h"
 #include "BossBehaviorTree.h"
 #include "BossBlackBoard.h"
+#include "Drone.h"
+#include "SlidingObstacle.h"
+#include "FixedObstacle_1.h"
 
 #include "GameManager.h"
 
 #include "ControlComponent.h"
 #include "SceneManager.h"
 #include "RectTransformComponent.h"
+#include "LoadingRollerComponent.h"
+#include "RollerBackComponent.h"
+#include "SwitchingAreaComponent.h"
 
 void InGameUITestScene::Initialize()
 {
@@ -58,8 +64,8 @@ void InGameUITestScene::Initialize()
 	cameraObject->GetComponent<CameraComponent>()->SetZoom(1.0f);
 	BoxColliderComponent* cameraCol = cameraObject->AddComponent<BoxColliderComponent>();
 	cameraCol->Start();
-	//cameraCol->SetSize({ 1920, 1080 });
-	cameraCol->SetSize({ 2120, 1080 });
+	cameraCol->SetSize({ 1920, 1080 });
+	//cameraCol->SetSize({ 2120, 1080 });
 
 	SetMainCamera(cameraObject);
 
@@ -307,26 +313,47 @@ void InGameUITestScene::Initialize()
 
 		auto chargeCountUI = std::make_shared<UIObject>(m_EventDispatcher);
 		chargeCountUI->m_Name = "chargeCountUI";
-		auto chargeCountUIText = chargeCountUI->AddComponent<UITextComponent>();
-		chargeCountUIText->SetDWriteFactory(m_Renderer.GetDWriteFactory());
-		chargeCountUIText->SetText(L"0");
-		chargeCountUIText->SetPosition({ -1050.0f, -395.0f });
-		chargeCountUIText->SetFontName(L"Segoe UI");
-		chargeCountUIText->SetFontSize(60.0f);
-		chargeCountUIText->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-		chargeCountUIText->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-		chargeCountUIText->SetLayoutSize(500.0f, 100.0f);
-
-		chargeCountUI->AddComponent<BulletUIComponent>()->Start();
-
-
 		auto chargeCountUIRect = chargeCountUI->GetComponent<RectTransformComponent>();
 		chargeCountUIRect->SetAnchorPreset(AnchorPrset::FullStretch);
 		chargeCountUIRect->SetPivotPreset(RectTransformPivotPreset::Center);
-		chargeCountUIRect->SetPosition({ 0.0f, 0.0f });
+		chargeCountUIRect->SetPosition({ -1080.0f, -597.5f });
 		chargeCountUIRect->SetSize({ 600.f, 600.f });
+		auto chargeCountUIGrid = chargeCountUI->AddComponent<UIGridComponent>();
+		chargeCountUIGrid->SetCellSize({ 50, 50 });
+		chargeCountUIGrid->SetPadding({ 0, 0 });
+		chargeCountUIGrid->SetSpacing({ -10, 0 });
+		chargeCountUIGrid->SetRowColumn(1, 2);
+
+		auto countUI = std::make_shared<UIObject>(m_EventDispatcher);
+		auto countUIImg = countUI->AddComponent<UIImageComponent>();
+		countUIImg->SetBitmap(m_AssetManager.LoadTexture(L"bullet_count_0", "../Resource/UI/InGame/bullet_count_0.png"));
+		countUIImg->SetUV({ 0.0f, 0.0f, 50.0f, 50.0f });
+		countUIImg->SetPivotPreset(ImagePivotPreset::Center, countUIImg->GetTexture()->GetSize());
+		auto countUIRect = countUI->GetComponent<RectTransformComponent>();
+		countUIRect->SetAnchorPreset(AnchorPrset::FullStretch);
+		countUIRect->SetPivotPreset(RectTransformPivotPreset::Center);
+		chargeCountUIGrid->AddItem(countUI);
+
+		auto countUI2 = std::make_shared<UIObject>(m_EventDispatcher);
+		auto countUI2Img = countUI2->AddComponent<UIImageComponent>();
+		countUI2Img->SetBitmap(m_AssetManager.LoadTexture(L"bullet_count_0", "../Resource/UI/InGame/bullet_count_0.png"));
+		countUI2Img->SetUV({ 0.0f, 0.0f, 50.0f, 50.0f });
+		countUI2Img->SetPivotPreset(ImagePivotPreset::Center, countUI2Img->GetTexture()->GetSize());
+		auto countUI2Rect = countUI2->GetComponent<RectTransformComponent>();
+		countUI2Rect->SetAnchorPreset(AnchorPrset::FullStretch);
+		countUI2Rect->SetPivotPreset(RectTransformPivotPreset::Center);
+		chargeCountUIGrid->AddItem(countUI2);
+
+		chargeCountUIGrid->UpdateLayout();
+
+		auto bulletUIComp = chargeCountUI->AddComponent<BulletUIComponent>();
+		bulletUIComp->Start();
+		bulletUIComp->SetNumbers(&m_AssetManager);
+
 		
 		m_UIManager.AddUI("InGameUITestScene", chargeCountUI);
+
+		m_UIManager.AddUI("InGameUITestScene", uiObject);
 
 		auto portraitUI = std::make_shared<UIObject>(m_EventDispatcher);
 		portraitUI->m_Name = "portraitUI";
@@ -515,6 +542,252 @@ void InGameUITestScene::Initialize()
 	exitButtonRect->SetAnchorPreset(AnchorPrset::FullStretch);
 	exitButtonRect->SetPivotPreset(RectTransformPivotPreset::Center);
 
+	auto escButton = std::make_shared<ButtonUI>(m_EventDispatcher);
+	escButton->m_Name = "escButton";
+	escButton->SetZOrder(1);
+	escButton->UpdateInteractableFlags();
+	auto escButtonImg = escButton->AddComponent<UIImageComponent>();
+	escButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"ingame_setting_icon", "../Resource/UI/InGame/ingame_setting_icon.png"));
+	auto escButtonComp = escButton->GetComponent<UIButtonComponent>();
+
+	auto escButtonRect = escButton->GetComponent<RectTransformComponent>();
+	escButtonRect->SetPosition({ 875.0, -525.0f });
+	escButtonRect->SetSize({ 72.0f, 71.0f });
+	escButtonRect->SetAnchorPreset(AnchorPrset::FullStretch);
+	escButtonRect->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	menuBox->SetIsVisible(false);
+	startButton->SetIsVisible(false);
+	settingButton->SetIsVisible(false);
+	mainButton->SetIsVisible(false);
+	retryButton->SetIsVisible(false);
+	exitButton->SetIsVisible(false);
+	escButton->SetIsVisible(true);
+
+#pragma endregion
+
+#pragma region gameover
+
+	auto gameoverBox = std::make_shared<UIObject>(m_EventDispatcher);
+	gameoverBox->m_Name = "gameoverBox";
+	gameoverBox->SetIsFullScreen(true);
+	gameoverBox->SetZOrder(3);
+	auto gameoverBoxImg = gameoverBox->AddComponent<UIImageComponent>();
+	gameoverBoxImg->SetBitmap(m_AssetManager.LoadTexture(L"gameover_popup", "../Resource/UI/GameOver/gameover_popup.png"));
+
+
+	auto gameoverBoxRect = gameoverBox->GetComponent<RectTransformComponent>();
+	gameoverBoxRect->SetSize({ 1920.0f, 1080.0f });
+	gameoverBoxRect->SetPosition({ 0.0f, 0.0f });
+	gameoverBoxRect->SetAnchorPreset(AnchorPrset::FullStretch);
+	gameoverBoxRect->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	gameoverBox->SetIsVisible(true);
+
+	m_UIManager.AddUI("InGameUITestScene", gameoverBox);
+
+	auto gameoverRetryButton = std::make_shared<ButtonUI>(m_EventDispatcher);
+	gameoverRetryButton->m_Name = "gameoverRetryButton";
+	gameoverRetryButton->SetZOrder(4);
+	gameoverRetryButton->UpdateInteractableFlags();
+	auto gameoverRetryButtonImg = gameoverRetryButton->AddComponent<UIImageComponent>();
+	gameoverRetryButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"gameover_retry_button_off", "../Resource/UI/GameOver/gameover_retry_button_off.png"));
+	auto gameoverRetryButtonComp = gameoverRetryButton->GetComponent<UIButtonComponent>();
+	gameoverRetryButtonComp->GetFSM().SetOnEnter("Hover", [gameoverRetryButtonImg, this]() {gameoverRetryButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"gameover_retry_button_on", "../Resource/UI/GameOver/gameover_retry_button_on.png")); });
+	gameoverRetryButtonComp->GetFSM().SetOnExit("Hover", [gameoverRetryButtonImg, this]() {gameoverRetryButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"gameover_retry_button_off", "../Resource/UI/GameOver/gameover_retry_button_off.png")); });
+
+	auto gameoverRetryButtonRect = gameoverRetryButton->GetComponent<RectTransformComponent>();
+	gameoverRetryButtonRect->SetPosition({ 370.0f, 130.0f });
+	gameoverRetryButtonRect->SetSize({ 460.0f, 116.0f });
+	gameoverRetryButtonRect->SetAnchorPreset(AnchorPrset::FullStretch);
+	gameoverRetryButtonRect->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	gameoverRetryButton->SetIsVisible(true);
+
+	m_UIManager.AddUI("InGameUITestScene", gameoverRetryButton);
+
+	auto gameoverMainButton = std::make_shared<ButtonUI>(m_EventDispatcher);
+	gameoverMainButton->m_Name = "gameoverMainButton";
+	gameoverMainButton->SetZOrder(4);
+	gameoverMainButton->UpdateInteractableFlags();
+	auto gameoverMainButtonImg = gameoverMainButton->AddComponent<UIImageComponent>();
+	gameoverMainButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"gameover_main_button_off", "../Resource/UI/GameOver/gameover_main_button_off.png"));
+	auto gameoverMainButtonComp = gameoverMainButton->GetComponent<UIButtonComponent>();
+	gameoverMainButtonComp->GetFSM().SetOnEnter("Hover", [gameoverMainButtonImg, this]() {gameoverMainButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"gameover_main_button_on", "../Resource/UI/GameOver/gameover_main_button_on.png")); });
+	gameoverMainButtonComp->GetFSM().SetOnExit("Hover", [gameoverMainButtonImg, this]() {gameoverMainButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"gameover_main_button_off", "../Resource/UI/GameOver/gameover_main_button_off.png")); });
+
+	auto gameoverMainButtonRect = gameoverMainButton->GetComponent<RectTransformComponent>();
+	gameoverMainButtonRect->SetPosition({ 370.0f, 270.0f });
+	gameoverMainButtonRect->SetSize({ 460.0f, 116.0f });
+	gameoverMainButtonRect->SetAnchorPreset(AnchorPrset::FullStretch);
+	gameoverMainButtonRect->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	gameoverMainButton->SetIsVisible(true);
+
+	m_UIManager.AddUI("InGameUITestScene", gameoverMainButton);
+
+#pragma endregion
+
+#pragma region loading
+
+
+	auto loadingBackGround = std::make_shared<UIObject>(m_EventDispatcher);
+	loadingBackGround->m_Name = "Roller1";
+	//exitBackGround->SetIsFullScreen(true);
+	loadingBackGround->SetZOrder(6);
+	auto loadingBackGroundImg = loadingBackGround->AddComponent<UIImageComponent>();
+	loadingBackGroundImg->SetBitmap(m_AssetManager.LoadTexture(L"Roller", "../Resource/UI/Loading/Roller.png"));
+	loadingBackGroundImg->SetUV({ 893.0f, 1932.0f });
+	auto loadingBackGroundRect = loadingBackGround->GetComponent<RectTransformComponent>();
+	loadingBackGroundRect->SetPosition({ -1220.0f, -550.0f });
+	loadingBackGroundRect->SetSize({ 1000.0f, 2000.0f });
+	loadingBackGroundRect->SetAnchorPreset(AnchorPrset::FullStretch);
+	loadingBackGroundRect->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	loadingBackGround->SetIsVisible(true);
+	auto loadingComp = loadingBackGround->AddComponent<LoadingRollerComponent>();
+	loadingComp->SetIndex(0);
+	loadingComp->SetScenePtr(this);
+
+
+
+	auto loadingBackGround2 = std::make_shared<UIObject>(m_EventDispatcher);
+	loadingBackGround2->m_Name = "Roller2";
+	//exitBackGround->SetIsFullScreen(true);
+	loadingBackGround2->SetZOrder(7);
+	auto loadingBackGroundImg2 = loadingBackGround2->AddComponent<UIImageComponent>();
+	loadingBackGroundImg2->SetBitmap(m_AssetManager.LoadTexture(L"Roller", "../Resource/UI/Loading/Roller.png"));
+	loadingBackGroundImg2->SetUV({ 893.0f, 1932.0f });
+	auto loadingBackGroundRect2 = loadingBackGround2->GetComponent<RectTransformComponent>();
+	loadingBackGroundRect2->SetPosition({ -500.0f, -550.0f });
+	loadingBackGroundRect2->SetSize({ 1000.0f, 2000.0f });
+	loadingBackGroundRect2->SetAnchorPreset(AnchorPrset::FullStretch);
+	loadingBackGroundRect2->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	loadingBackGround2->SetIsVisible(true);
+
+	auto loadingComp2 = loadingBackGround2->AddComponent<LoadingRollerComponent>();
+	loadingComp2->SetIndex(1);
+	loadingComp2->SetScenePtr(this);
+
+
+
+	auto loadingBackGround3 = std::make_shared<UIObject>(m_EventDispatcher);
+	loadingBackGround3->m_Name = "Roller3";
+	//exitBackGround->SetIsFullScreen(true);
+	loadingBackGround3->SetZOrder(8);
+	auto loadingBackGroundImg3 = loadingBackGround3->AddComponent<UIImageComponent>();
+	loadingBackGroundImg3->SetBitmap(m_AssetManager.LoadTexture(L"Roller", "../Resource/UI/Loading/Roller.png"));
+	loadingBackGroundImg3->SetUV({ 893.0f, 1932.0f });
+	auto loadingBackGroundRect3 = loadingBackGround3->GetComponent<RectTransformComponent>();
+	loadingBackGroundRect3->SetPosition({ 219.9f, -550.0f });
+	loadingBackGroundRect3->SetSize({ 1000.0f, 2000.0f });
+	loadingBackGroundRect3->SetAnchorPreset(AnchorPrset::FullStretch);
+	loadingBackGroundRect3->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	loadingBackGround3->SetIsVisible(true);
+
+	auto loadingComp3 = loadingBackGround3->AddComponent<LoadingRollerComponent>();
+	loadingComp3->SetIndex(2);
+	loadingComp3->SetScenePtr(this);
+	loadingComp3->SetFunc([this]
+		{
+			this->m_SceneManager->ChangeScene();
+		});
+
+	auto loadingBackGround4 = std::make_shared<UIObject>(m_EventDispatcher);
+	loadingBackGround4->m_Name = "Roller4";
+	loadingBackGround4->SetZOrder(9);
+	//loadingBackGround4->SetIsFullScreen(true);
+	auto loadingBackGroundImg4 = loadingBackGround4->AddComponent<UIImageComponent>();
+	loadingBackGroundImg4->SetBitmap(m_AssetManager.LoadTexture(L"LODING", "../Resource/UI/Loading/LODING.png"));
+	loadingBackGroundImg4->SetUV({ 1920.0f, 1080.0f });
+	auto loadingBackGroundRect4 = loadingBackGround4->GetComponent<RectTransformComponent>();
+	loadingBackGroundRect4->SetPosition({ -1920.0f, -540.0f });
+	loadingBackGroundRect4->SetSize({ 3000.0f, 1080.0f });
+	loadingBackGroundRect4->SetAnchorPreset(AnchorPrset::FullStretch);
+	loadingBackGroundRect4->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	loadingBackGround4->SetIsVisible(true);
+
+	auto loadingComp4 = loadingBackGround4->AddComponent<RollerBackComponent>();
+	loadingComp4->SetScenePtr(this);
+
+
+	m_EventDispatcher.AddListener(EventType::OnLoadedScene, loadingComp);
+	m_EventDispatcher.AddListener(EventType::OnLoadedScene, loadingComp2);
+	m_EventDispatcher.AddListener(EventType::OnLoadedScene, loadingComp3);
+	m_EventDispatcher.AddListener(EventType::OnLoadedScene, loadingComp4);
+
+	m_UIManager.AddUI("InGameUITestScene", loadingBackGround);
+	m_UIManager.AddUI("InGameUITestScene", loadingBackGround2);
+	m_UIManager.AddUI("InGameUITestScene", loadingBackGround3);
+	m_UIManager.AddUI("InGameUITestScene", loadingBackGround4);
+	m_SceneManager->SetChangeScene("TitleScene");
+
+#pragma endregion
+
+#pragma region swichingarea
+
+	auto switchingArea = std::make_shared<UIObject>(m_EventDispatcher);
+	switchingArea->m_Name = "switchingArea";
+	switchingArea->SetIsFullScreen(true);
+	switchingArea->SetZOrder(-1);
+	auto switchingAreaImg = switchingArea->AddComponent<UIImageComponent>();
+	switchingAreaImg->SetBitmap(m_AssetManager.LoadTexture(L"Switch_screen", "../Resource/UI/Loading/Switch_screen.png"));
+
+
+	auto switchingAreaRect = switchingArea->GetComponent<RectTransformComponent>();
+	switchingAreaRect->SetSize({ 2000.0f, 1080.0f });
+	switchingAreaRect->SetPosition({ 3840.0f, 0.0f });
+	switchingAreaRect->SetAnchorPreset(AnchorPrset::FullStretch);
+	switchingAreaRect->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	switchingArea->SetIsVisible(true);
+
+	switchingArea->AddComponent<SwitchingAreaComponent>()->Start(1);
+
+	m_UIManager.AddUI("InGameUITestScene", switchingArea);
+
+	auto switchingArea2 = std::make_shared<UIObject>(m_EventDispatcher);
+	switchingArea2->m_Name = "switchingArea2";
+	switchingArea2->SetIsFullScreen(true);
+	switchingArea2->SetZOrder(-1);
+	auto switchingAreaImg2 = switchingArea2->AddComponent<UIImageComponent>();
+	switchingAreaImg2->SetBitmap(m_AssetManager.LoadTexture(L"Switch_screen_2", "../Resource/UI/Loading/Switch_screen_2.png"));
+
+
+	auto switchingAreaRect2 = switchingArea2->GetComponent<RectTransformComponent>();
+	switchingAreaRect2->SetSize({ 2000.0f, 1080.0f });
+	switchingAreaRect2->SetPosition({ 1920.0f, 0.0f });
+	switchingAreaRect2->SetAnchorPreset(AnchorPrset::FullStretch);
+	switchingAreaRect2->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	switchingArea2->SetIsVisible(true);
+
+	switchingArea2->AddComponent<SwitchingAreaComponent>()->Start(0);
+
+	m_UIManager.AddUI("InGameUITestScene", switchingArea2);
+
+#pragma endregion
+	//AddGameObject(gameObject);
+  /*sr->SetTexture(bitmap);
+	sr2->SetTexture(bitmap);*/
+	//AddGameObject(gameObject);
+	//AddGameObject(gameObject2);
+	m_UIManager.AddUI("InGameUITestScene", settingBackGround);
+	m_UIManager.AddUI("InGameUITestScene", settingOkButton);
+	m_UIManager.AddUI("InGameUITestScene", menuBox);
+	m_UIManager.AddUI("InGameUITestScene", startButton);
+	m_UIManager.AddUI("InGameUITestScene", settingButton);
+	m_UIManager.AddUI("InGameUITestScene", mainButton);
+	m_UIManager.AddUI("InGameUITestScene", retryButton);
+	m_UIManager.AddUI("InGameUITestScene", exitButton);
+	m_UIManager.AddUI("InGameUITestScene", escButton);
+
+	std::weak_ptr<UIObject> weakGameOverBox = gameoverBox;
+	std::weak_ptr<ButtonUI> weakGameOverRetryButton = gameoverRetryButton;
+	std::weak_ptr<ButtonUI> weakGameOverMainButton = gameoverMainButton;
 
 	// 약한 참조 만들기
 	std::weak_ptr<UIObject> weakMenuBox = menuBox;
@@ -523,6 +796,39 @@ void InGameUITestScene::Initialize()
 	std::weak_ptr<ButtonUI> weakMainButton = mainButton;
 	std::weak_ptr<ButtonUI> weakRetryButton = retryButton;
 	std::weak_ptr<ButtonUI> weakExitButton = exitButton;
+
+	gameoverRetryButtonComp->GetFSM().SetOnEnter("Click", [weakMenuBox, weakStartButton, weakSettingButton, weakMainButton, weakRetryButton, weakExitButton, weakGameOverBox, weakGameOverMainButton, weakGameOverRetryButton, this]() {
+		if (auto bg = weakMenuBox.lock()) bg->SetIsVisible(false);
+		if (auto btn = weakStartButton.lock()) btn->SetIsVisible(false);
+		if (auto btn = weakSettingButton.lock()) btn->SetIsVisible(false);
+		if (auto btn = weakMainButton.lock()) btn->SetIsVisible(false);
+		if (auto btn = weakRetryButton.lock()) btn->SetIsVisible(false);
+		if (auto btn = weakExitButton.lock()) btn->SetIsVisible(false);
+		if (auto bg = weakGameOverBox.lock()) bg->SetIsVisible(false);
+		if (auto btn = weakGameOverMainButton.lock()) btn->SetIsVisible(false);
+		if (auto btn = weakGameOverRetryButton.lock()) btn->SetIsVisible(false);
+
+		LoadPlayerInfo();
+
+		m_UIManager.RefreshUIListForCurrentScene();
+		});
+
+	gameoverMainButtonComp->GetFSM().SetOnEnter("Click", [weakMenuBox, weakStartButton, weakSettingButton, weakMainButton, weakRetryButton, weakExitButton, loadingComp, loadingComp2, loadingComp3, this]() {
+		if (auto bg = weakMenuBox.lock()) bg->SetIsVisible(false);
+		if (auto btn = weakStartButton.lock()) btn->SetIsVisible(false);
+		if (auto btn = weakSettingButton.lock()) btn->SetIsVisible(false);
+		if (auto btn = weakMainButton.lock()) btn->SetIsVisible(false);
+		if (auto btn = weakRetryButton.lock()) btn->SetIsVisible(false);
+		if (auto btn = weakExitButton.lock()) btn->SetIsVisible(false);
+
+		m_SceneManager->SetChangeScene("TitleScene");
+
+		loadingComp->Start();
+		loadingComp2->Start();
+		loadingComp3->Start();
+
+		m_UIManager.RefreshUIListForCurrentScene();
+		});
 
 	startButtonComp->GetFSM().SetOnEnter("Click", [weakMenuBox, weakStartButton, weakSettingButton, weakMainButton, weakRetryButton, weakExitButton, this]() {
 		if (auto bg = weakMenuBox.lock()) bg->SetIsVisible(false);
@@ -582,13 +888,19 @@ void InGameUITestScene::Initialize()
 		m_UIManager.RefreshUIListForCurrentScene();
 		});
 
-	mainButtonComp->GetFSM().SetOnEnter("Click", [weakMenuBox, weakStartButton, weakSettingButton, weakMainButton, weakRetryButton, weakExitButton, this]() {
+	mainButtonComp->GetFSM().SetOnEnter("Click", [weakMenuBox, weakStartButton, weakSettingButton, weakMainButton, weakRetryButton, weakExitButton, loadingComp, loadingComp2, loadingComp3, this]() {
 		if (auto bg = weakMenuBox.lock()) bg->SetIsVisible(false);
 		if (auto btn = weakStartButton.lock()) btn->SetIsVisible(false);
 		if (auto btn = weakSettingButton.lock()) btn->SetIsVisible(false);
 		if (auto btn = weakMainButton.lock()) btn->SetIsVisible(false);
 		if (auto btn = weakRetryButton.lock()) btn->SetIsVisible(false);
 		if (auto btn = weakExitButton.lock()) btn->SetIsVisible(false);
+
+		m_SceneManager->SetChangeScene("TitleScene");
+
+		loadingComp->Start();
+		loadingComp2->Start();
+		loadingComp3->Start();
 
 		m_UIManager.RefreshUIListForCurrentScene();
 		});
@@ -601,12 +913,10 @@ void InGameUITestScene::Initialize()
 		if (auto btn = weakRetryButton.lock()) btn->SetIsVisible(false);
 		if (auto btn = weakExitButton.lock()) btn->SetIsVisible(false);
 
+		LoadPlayerInfo();
+
 		m_UIManager.RefreshUIListForCurrentScene();
 		});
-
-	//std::weak_ptr<UIObject> weakexitBackGround = exitBackGround;
-//std::weak_ptr<ButtonUI> weakexitOkButton = exitOkButton;
-//std::weak_ptr<ButtonUI> weakexitNoButton = exitNoButton;
 
 	exitButtonComp->GetFSM().SetOnEnter("Click", [weakMenuBox, weakStartButton, weakSettingButton, weakMainButton, weakRetryButton, weakExitButton, weakexitBackGround, weakexitOkButton, weakexitNoButton, this]() {
 		if (auto bg = weakMenuBox.lock()) bg->SetIsVisible(false);
@@ -623,28 +933,6 @@ void InGameUITestScene::Initialize()
 		m_UIManager.RefreshUIListForCurrentScene();
 		});
 
-	// 	startButtonRect->SetParent(menuBoxRect);
-	// 	settingButtonRect->SetParent(menuBoxRect);
-	// 	creditButtonRect->SetParent(menuBoxRect);
-
-	menuBox->SetIsVisible(false);
-	startButton->SetIsVisible(false);
-	settingButton->SetIsVisible(false);
-	mainButton->SetIsVisible(false);
-	retryButton->SetIsVisible(false);
-	exitButton->SetIsVisible(false);
-
-#pragma endregion
-
-	m_UIManager.AddUI("InGameUITestScene", settingBackGround);
-	m_UIManager.AddUI("InGameUITestScene", settingOkButton);
-	m_UIManager.AddUI("InGameUITestScene", menuBox);
-	m_UIManager.AddUI("InGameUITestScene", startButton);
-	m_UIManager.AddUI("InGameUITestScene", settingButton);
-	m_UIManager.AddUI("InGameUITestScene", mainButton);
-	m_UIManager.AddUI("InGameUITestScene", retryButton);
-	m_UIManager.AddUI("InGameUITestScene", exitButton);
-
 	auto controlObject = std::make_shared<GameObject>(m_EventDispatcher);
 	auto controlComp = controlObject->AddComponent<ControlComponent>();
 	controlComp->Start();
@@ -656,7 +944,7 @@ void InGameUITestScene::Initialize()
 	std::weak_ptr<ButtonUI> weakretryButton = retryButton;
 	std::weak_ptr<ButtonUI> weakexitButton = exitButton;
 
-	controlComp->RegisterKeyDownCallback(VK_ESCAPE, [weakmenuBox, weakstartButton, weaksettingButton, weakmainButton, weakretryButton, weakexitButton, weaksettingBackGround, weaksettingOkButton, weakSoundUI, weakexitBackGround, weakexitOkButton, weakexitNoButton, this]() {
+	escButtonComp->GetFSM().SetOnEnter("Click", [weakmenuBox, weakstartButton, weaksettingButton, weakmainButton, weakretryButton, weakexitButton, weaksettingBackGround, weaksettingOkButton, weakSoundUI, weakexitBackGround, weakexitOkButton, weakexitNoButton, this]() {
 		auto snd = weakSoundUI.lock();
 		auto eb = weakexitBackGround.lock();
 		if (snd && eb)
@@ -703,7 +991,72 @@ void InGameUITestScene::Initialize()
 				if (auto btn = weaksettingOkButton.lock()) btn->SetIsVisible(false);
 				snd->SetIsVisible(false);
 			}
-			if(eb->IsVisible())
+			if (eb->IsVisible())
+			{
+				eb->SetIsVisible(false);
+				if (auto btn = weakexitOkButton.lock()) btn->SetIsVisible(false);
+
+				if (auto btn = weakexitNoButton.lock()) btn->SetIsVisible(false);
+
+			}
+		}
+
+		m_UIManager.RefreshUIListForCurrentScene();
+		});
+
+	controlComp->RegisterKeyDownCallback(VK_ESCAPE, [weakmenuBox, weakstartButton, weaksettingButton, weakmainButton, weakretryButton, weakexitButton, weaksettingBackGround, weaksettingOkButton, weakSoundUI, weakexitBackGround, weakexitOkButton, weakexitNoButton, weakGameOverBox, this]() {
+		if (auto bg = weakGameOverBox.lock())
+		{
+			if(bg->IsVisible())
+				return;
+		}
+		auto snd = weakSoundUI.lock();
+		auto eb = weakexitBackGround.lock();
+		if (snd && eb)
+		{
+			if (snd->IsVisible() || eb->IsVisible())
+			{
+				if (auto bg = weakmenuBox.lock())	bg->SetIsVisible(true);
+				if (auto btn = weakstartButton.lock())	btn->SetIsVisible(true);
+				if (auto btn = weaksettingButton.lock())	btn->SetIsVisible(true);
+				if (auto btn = weakmainButton.lock())	btn->SetIsVisible(true);
+				if (auto btn = weakretryButton.lock())	btn->SetIsVisible(true);
+				if (auto btn = weakexitButton.lock())	btn->SetIsVisible(true);
+			}
+			else
+			{
+				if (auto bg = weakmenuBox.lock())
+				{
+					bg->SetIsVisible(!bg->IsVisible());
+				}
+				if (auto btn = weakstartButton.lock())
+				{
+					btn->SetIsVisible(!btn->IsVisible());
+				}
+				if (auto btn = weaksettingButton.lock())
+				{
+					btn->SetIsVisible(!btn->IsVisible());
+				}
+				if (auto btn = weakmainButton.lock())
+				{
+					btn->SetIsVisible(!btn->IsVisible());
+				}
+				if (auto btn = weakretryButton.lock())
+				{
+					btn->SetIsVisible(!btn->IsVisible());
+				}
+				if (auto btn = weakexitButton.lock())
+				{
+					btn->SetIsVisible(!btn->IsVisible());
+				}
+			}
+			if (snd->IsVisible())
+			{
+				if (auto bg = weaksettingBackGround.lock()) bg->SetIsVisible(false);
+				if (auto btn = weaksettingOkButton.lock()) btn->SetIsVisible(false);
+				snd->SetIsVisible(false);
+			}
+			if (eb->IsVisible())
 			{
 				eb->SetIsVisible(false);
 				if (auto btn = weakexitOkButton.lock()) btn->SetIsVisible(false);
@@ -723,46 +1076,23 @@ void InGameUITestScene::Initialize()
 	//	m_UIManager.RefreshUIListForCurrentScene();
 	//	});
 
-	//controlComp->RegisterAnyKeyCallback([weakmenuBox, weakstartButton, weaksettingButton, this]() {
-	//	if (auto bg = weakmenuBox.lock()) bg->SetIsVisible(true);
-	//	if (auto btn = weakstartButton.lock()) btn->SetIsVisible(true);
-	//	if (auto btn = weaksettingButton.lock()) btn->SetIsVisible(true);
-	//	m_UIManager.RefreshUIListForCurrentScene();
-	//	});
+	controlComp->RegisterAnyKeyCallback([loadingComp, loadingComp2, loadingComp3, loadingBackGround4, this]() {
+
+		//loadingComp->Start();
+		//loadingComp2->Start();
+		//loadingComp3->Start();
+
+		//loadingBackGround4->SetIsVisible(!loadingBackGround4->IsVisible());
+
+		m_UIManager.RefreshUIListForCurrentScene();
+		});
 
 	AddGameObject(controlObject);
-
-//#pragma region loading
-//
-//	auto loadingBackGround = std::make_shared<UIObject>(m_EventDispatcher);
-//	loadingBackGround->m_Name = "loadingUIGround";
-//	//exitBackGround->SetIsFullScreen(true);
-//	loadingBackGround->SetZOrder(6);
-//	auto loadingBackGroundImg = loadingBackGround->AddComponent<UIImageComponent>();
-//	loadingBackGroundImg->SetBitmap(m_AssetManager.LoadTexture(L"Switch_screen", "../Resource/UI/Loading/Switch_screen.png"));
-//	loadingBackGroundImg->SetUV({ 1920.0f, 1080.0f });
-//	auto loadingBackGroundRect = loadingBackGround->GetComponent<RectTransformComponent>();
-//	loadingBackGroundRect->SetPosition({ -960.0f, -540.0f });
-//	loadingBackGroundRect->SetSize({ 1920.0f, 1080.0f });
-//	loadingBackGroundRect->SetAnchorPreset(AnchorPrset::FullStretch);
-//	loadingBackGroundRect->SetPivotPreset(RectTransformPivotPreset::Center);
-//
-//	loadingBackGround->SetIsVisible(true);
-//
-//	m_UIManager.AddUI("InGameUITestScene", loadingBackGround);
-//
-//
-//#pragma endregion
-	//AddGameObject(gameObject);
-  /*sr->SetTexture(bitmap);
-	sr2->SetTexture(bitmap);*/
-	//AddGameObject(gameObject);
-	//AddGameObject(gameObject2);
-
 
 	//m_UIManager.AddUI(buttonUI);
 
 	m_UIManager.RefreshUIListForCurrentScene();
+
 	AddGameObject(cameraObject);
 
 	{
@@ -772,9 +1102,28 @@ void InGameUITestScene::Initialize()
 		trans->SetPosition({ 960.0f, 540.0f });
 		auto sr = gameObject->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
+		sr->SetTexture(m_AssetManager.LoadTexture(L"shadow", L"../Resource/Character/Sour/Shadow.png"));
 		auto animComp = gameObject->AddComponent<AnimationComponent>();
 		animComp->SetAssetManager(&m_AssetManager);
 		gameObject->SetShadowBitmap(m_AssetManager.LoadTexture(L"shadow", L"../Resource/Character/Sour/Shadow.png"));
+
+		std::weak_ptr<PlayerObject> weakplayer = gameObject;
+
+		gameObject->GetFSM().SetOnUpdate("Death", [weakplayer, weakGameOverBox, weakGameOverMainButton, weakGameOverRetryButton,this](float dt)
+			{
+				if (auto player = weakplayer.lock())
+				{
+					if (player->GetComponent<AnimationComponent>()->IsAnimationFinished())
+					{
+						if (auto bg = weakGameOverBox.lock())
+							bg->SetIsVisible(true);
+						if (auto btn = weakGameOverMainButton.lock())
+							btn->SetIsVisible(true);
+						if (auto btn = weakGameOverRetryButton.lock())
+							btn->SetIsVisible(true);
+					}
+				}
+			});
 
 		{
 			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Run_Ani", L"../Resource/Character/Sour/Sour_Run_Ani.json");
@@ -948,140 +1297,89 @@ void InGameUITestScene::Initialize()
 	}
 
 
+
+
+
 	{
-		//auto background = std::make_shared<GameObject>(m_EventDispatcher);
-		//background->m_Name = "background";
-		//auto obstacleTrans = background->GetComponent<TransformComponent>();
-		//obstacleTrans->SetPosition({ -500.0f, 0.0f });
-		//auto sr = background->AddComponent<SpriteRenderer>();
-		//sr->SetAssetManager(&m_AssetManager);
-		//auto bitmap = m_AssetManager.LoadTexture(L"Background", L"../Resource/Background/Background.png");
-		//sr->SetPath("../Resource/Background/Background.png");
-		//sr->SetTextureKey("Background");
-		//sr->SetTexture(bitmap);
-		//sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+		auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
+		obstacle->m_Name = "obstacle3";
+		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+		obstacleTrans->SetPosition({ 0.0f, 0.0f });
+		auto sr = obstacle->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
+		sr->SetPath("../Resource/cat.png");
+		sr->SetTextureKey("cat_texture");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
 
-		//AddGameObject(background);
+		obstacle->SetZ(1);
+		obstacle->SetSlide(false);
 
-		auto back1 = std::make_shared<Background>(m_EventDispatcher);
- 		back1->m_Name = "back1";
- 		auto backtr1 = back1->GetComponent<TransformComponent>();
- 		backtr1->SetPosition({ 0, 540 });
- 		auto backimage1 = m_AssetManager.LoadTexture(L"Background", L"../Resource/Background/Background.png");
- 		auto backsr1 = back1->AddComponent<SpriteRenderer>();
- 		backsr1->SetAssetManager(&m_AssetManager);
- 		backsr1->SetTexture(backimage1);
- 		backsr1->SetPivotPreset(SpritePivotPreset::Center, backimage1->GetSize());
- 
- 		AddGameObject(back1);
+		auto lambdaObstacle = obstacle.get();
+		auto lambdaCamera = cameraObject.get();
+
+		auto rect = obstacle->GetComponent<BoxColliderComponent>();
+		rect->SetCenter(obstacleTrans->GetPosition());
+		m_EventDispatcher.AddListener(EventType::CollisionTrigger, rect);
+		rect->SetOnTrigger(
+			[lambdaObstacle, lambdaCamera](const CollisionInfo& info)
+			{
+				if (info.self != lambdaObstacle->GetComponent<BoxColliderComponent>())
+					return;
+				lambdaObstacle->GetComponent<TransformComponent>()->SetParent(lambdaCamera->GetComponent<TransformComponent>());
+				auto component = lambdaObstacle->AddComponent<FlyingObstacleComponent>();
+				component->Start();
+				lambdaObstacle->GetComponent<BoxColliderComponent>()->OnTrigger();
+			}
+		);
+
+
+
+		AddGameObject(obstacle);
 	}
 
+	{
+		auto background = std::make_shared<GameObject>(m_EventDispatcher);
+		background->m_Name = "testback";
+		auto backtrans = background->GetComponent<TransformComponent>();
+		backtrans->SetPosition({ 0, 0 });
+		auto sr = background->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto bitmap = m_AssetManager.LoadTexture(L"Tile_1_1", L"../Resource/Background/1_Chapter/Tile_1_1.png");
+		sr->SetPath("../Resource/Background/1_Chapter/Tile_1_1.png");
+		sr->SetTextureKey("Tile_1_1");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
 
-	//{
-	//	auto obstacle = std::make_shared<Obstacle>(m_EventDispatcher);
-	//	obstacle->m_Name = "obstacle3";
-	//	auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
-	//	obstacleTrans->SetPosition({ 3000.0f, 350.0f });
-	//	auto sr = obstacle->AddComponent<SpriteRenderer>();
-	//	sr->SetAssetManager(&m_AssetManager);
-	//	auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
-	//	sr->SetPath("../Resource/cat.png");
-	//	sr->SetTextureKey("cat_texture");
-	//	sr->SetTexture(bitmap);
-	//	sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
+		AddGameObject(background);
 
-	//	obstacle->SetZ(1);
-	//	obstacle->SetSlide(false);
+		backtrans->SetZOrder(-10);
+	}
+	{
+		auto background = std::make_shared<GameObject>(m_EventDispatcher);
+		background->m_Name = "testback2";
+		auto backtrans = background->GetComponent<TransformComponent>();
+		backtrans->SetPosition({ 0, 0 });
+		auto sr = background->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		auto bitmap = m_AssetManager.LoadTexture(L"Tile_1", L"../Resource/Background/1_Chapter/Tile_1.png");
+		sr->SetPath("../Resource/Background/1_Chapter/Tile_1.png");
+		sr->SetTextureKey("Tile_1");
+		sr->SetTexture(bitmap);
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
 
-	//	auto lambdaObstacle = obstacle.get();
-	//	auto lambdaCamera = cameraObject.get();
+		AddGameObject(background);
 
-	//	auto rect = obstacle->GetComponent<BoxColliderComponent>();
-	//	rect->SetCenter(obstacleTrans->GetPosition());
-	//	m_EventDispatcher.AddListener(EventType::CollisionTrigger, rect);
-	//	rect->SetOnTrigger(
-	//		[lambdaObstacle, lambdaCamera](const CollisionInfo& info)
-	//		{
-	//			if (info.self != lambdaObstacle->GetComponent<BoxColliderComponent>())
-	//				return;
-	//			lambdaObstacle->GetComponent<TransformComponent>()->SetParent(lambdaCamera->GetComponent<TransformComponent>());
-	//			auto component = lambdaObstacle->AddComponent<FlyingObstacleComponent>();
-	//			component->Start();
-	//			lambdaObstacle->GetComponent<BoxColliderComponent>()->OnTrigger();
-	//		}
-	//	);
+		backtrans->SetZOrder(-10);
+	}
 
+	//auto drone = std::make_shared<Drone>(m_EventDispatcher);
+	//drone->m_Name = "Drone";
+	//drone->Start(&m_AssetManager);
+	//drone->GetComponent<TransformComponent>()->SetPosition({ 0,65.f });
+	//AddGameObject(drone);
 
-
-	//	AddGameObject(obstacle);
-	//}
-	//{
-	//	auto obstacle = std::make_shared<GameObject>(m_EventDispatcher);
-	//	obstacle->m_Name = "drone3";
-	//	auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
-	//	obstacleTrans->SetPosition({ 3000.0f, 350.0f });
-	//	auto sr = obstacle->AddComponent<SpriteRenderer>();
-	//	sr->SetAssetManager(&m_AssetManager);
-	//	auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
-	//	sr->SetPath("../Resource/cat.png");
-	//	sr->SetTextureKey("cat_texture");
-	//	sr->SetTexture(bitmap);
-	//	sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
-
-	//	auto lambdaObstacle = obstacle.get();
-	//	auto lambdaCamera = cameraObject.get();
-
-	//	auto rect = obstacle->AddComponent<BoxColliderComponent>();
-	//	//m_EventDispatcher.AddListener(EventType::CollisionTrigger, rect);
-	//	rect->SetSize({ 100, 100 });
-	//	rect->Start();
-	//	rect->SetOnTrigger(
-	//		[lambdaObstacle, lambdaCamera](const CollisionInfo& info)
-	//		{
-	//			if (info.self != lambdaObstacle->GetComponent<BoxColliderComponent>())
-	//				return;
-	//			lambdaObstacle->GetComponent<TransformComponent>()->SetParent(lambdaCamera->GetComponent<TransformComponent>());
-	//			auto component = lambdaObstacle->AddComponent<DroneComponent>();
-	//			component->Start();
-	//			lambdaObstacle->GetComponent<BoxColliderComponent>()->OnTrigger();
-	//		}
-	//	);
-
-
-	//	AddGameObject(obstacle);
-	//}
-	//{
-	//	auto obstacle = std::make_shared<GameObject>(m_EventDispatcher);
-	//	obstacle->m_Name = "savepoint";
-	//	auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
-	//	obstacleTrans->SetPosition({ 3000.0f, 350.0f });
-	//	auto sr = obstacle->AddComponent<SpriteRenderer>();
-	//	sr->SetAssetManager(&m_AssetManager);
-	//	auto bitmap = m_AssetManager.LoadTexture(L"cat_texture", L"../Resource/cat.png");
-	//	sr->SetPath("../Resource/cat.png");
-	//	sr->SetTextureKey("cat_texture");
-	//	sr->SetTexture(bitmap);
-	//	sr->SetPivotPreset(SpritePivotPreset::BottomCenter, bitmap->GetSize());
-
-	//	auto lambdaObstacle = obstacle.get();
-	//	auto lambdaCamera = cameraObject.get();
-
-	//	auto rect = obstacle->AddComponent<BoxColliderComponent>();
-	//	//m_EventDispatcher.AddListener(EventType::CollisionTrigger, rect);
-	//	rect->SetSize({ 100, 10000 });
-	//	rect->Start();
-	//	rect->SetOnTrigger(
-	//		[lambdaObstacle, this](const CollisionInfo& info)
-	//		{
-	//			if (info.self != lambdaObstacle->GetComponent<BoxColliderComponent>())
-	//				return;
-	//			this->SavePlayerInfo();
-	//		}
-	//	);
-
-
-	//	AddGameObject(obstacle);
-	//}
 }
 
 void InGameUITestScene::Finalize()
@@ -1093,6 +1391,8 @@ void InGameUITestScene::Enter()
 	//LoadPlayerInfo();
 	auto player = dynamic_cast<PlayerObject*>(m_GameObjects.find("player")->second.get());
 	player->SetScene(true);
+
+	m_EventDispatcher.Dispatch(EventType::OnLoadedScene, this);
 }
 
 void InGameUITestScene::Leave()

@@ -59,13 +59,13 @@ def spritesheet_to_json_with_tags_empty_tag(png_path, frame_width, frame_height,
     print(f"JSON saved to {output_json}")
 
 # 사용 예시
-filename_stem = "Fire_Ground"
+filename_stem = "Boss_3Phase_Arm_Right_Hit_Ani"
 filename = filename_stem + ".png"
 img = Image.open(filename)
 sheet_width, sheet_height = img.size
 
-frame_width = 260
-frame_height = 260
+frame_width = 1920
+frame_height = 1920
 frame_spacing_x = 0
 frame_spacing_y = 0
 # 캐릭터는 400, 400 고정

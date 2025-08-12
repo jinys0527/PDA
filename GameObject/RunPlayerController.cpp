@@ -8,7 +8,7 @@ RunPlayerController::RunPlayerController() : Component(), IEventListener()
 {
 	m_Z = 0;
 	m_Velocity = 0;
-	m_RailHeight = 200;
+	m_RailHeight = 108;
 }
 
 void RunPlayerController::Start()
@@ -70,9 +70,9 @@ void RunPlayerController::Update(float deltaTime)
 	Math::Vector2F pos = m_TransformComponent->GetPosition();
 	pos.y -= prevZ * m_RailHeight;
 
-	if (pos.y <= 0 && m_RigidBodyComponent->GetVelocity().y < 0) // 점프 
+	if (pos.y <= 65.f && m_RigidBodyComponent->GetVelocity().y < 0) // 점프 
 	{
-		pos.y = 0;
+		pos.y = 65.f;
 		Math::Vector2F vel = m_RigidBodyComponent->GetVelocity();
 		vel.y = 0;
 		m_RigidBodyComponent->SetVelocity(vel);
@@ -127,8 +127,11 @@ void RunPlayerController::Update(float deltaTime)
 				{
 					m_PlayerOwner->SetIsFlip(true);
 				}
-			}
-			
+			}			
+		}
+		else
+		{
+			m_PlayerOwner->SetIsFlip(false);
 		}
 
 		m_Owner->GetComponent<TransformComponent>()->Translate(delta);// 실제론 이거 써야해요
