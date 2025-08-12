@@ -14,6 +14,7 @@
 #include "ArmSwip.h"
 #include "ArmStretch.h"
 #include "HitNode.h"
+#include "IsDeadNode.h"
 
 void BossBehaviorTree::Initialize()
 {
@@ -462,8 +463,10 @@ void BossBehaviorTree::Initialize()
 	auto Phase_3_Parellel_CoolDown = std::make_shared<ParallelNode>("Phase_3_Parellel_CoolDown");
 	Phase_3_Parellel_CoolDown->AddChild(Phase_3_HitNode);
 	Phase_3_Parellel_CoolDown->AddChild(P3_BossCoolDown);
+	auto Phase_3_IsDeadNode = std::make_shared<IsDeadNode>("IsDeadNode");
 
 	Phase_3->AddChild(P3_PhaseChecker);
+	Phase_3->AddChild(Phase_3_IsDeadNode);
 	Phase_3->AddChild(Phase_3_Parellel_CoolDown);
 	Phase_3->AddChild(Phase_3_Skills);
 

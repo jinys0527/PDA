@@ -12,7 +12,9 @@ BossBlackBoard::BossBlackBoard(
 {
 	SetValue("ScrollSpeed", scrollspeed);
 
-	SetValue("BossMaxHP", 149.0f);
+	SetValue("CanBeHit", false);
+
+	SetValue("BossMaxHP", 10.0f);
 	SetValue("BossCurrHP", GetValue<float>("BossMaxHP").value());
 	SetValue("IdleCoolDown", 1.0f);
 
@@ -52,7 +54,7 @@ BossBlackBoard::BossBlackBoard(
 	SetValue("WarningTime", 3.0f);
 
 
-	SetValue("3Phase", false);
+	SetValue("3Phase", true);
 	SetValue("RandomValue", 0.0f);
 
 	SetValue("SkillWeight_1", 1.0f);

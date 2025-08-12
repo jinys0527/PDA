@@ -11,10 +11,15 @@ NodeState BossCoolDown::Tick(BlackBoard& bb, float deltaTime)
 
     if (elapsedTime < coolDown)
     {
+        bb.SetValue("CanBeHit", true);
+
 
         bb.SetValue("ElapsedIdleTime", elapsedTime);
         return NodeState::Running;
     }
+
+    bb.SetValue("CanBeHit", false);
+
 
     // 스킬 가중치 1~5 가져오기
     float skillWeight_1 = bb.GetValue<float>("SkillWeight_1").value();

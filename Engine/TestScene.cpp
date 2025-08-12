@@ -97,7 +97,7 @@ void TestScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Phase_1_Main";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 1700, 1320 });
+		trans->SetPosition({ 1700.f, 1320.f });
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
 		sr->SetOpacity(0.f);
@@ -177,7 +177,7 @@ void TestScene::Initialize()
 		animobj->m_Name = "Boss_Pick" + std::to_string(i);
 
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 960, 800 });
+		trans->SetPosition({ 960.f, 800.f });
 
 		trans->SetScale({ 1.0f, 2.0f });
 
@@ -220,7 +220,7 @@ void TestScene::Initialize()
 		animobj->m_Name = "Boss_Phase3_Pick" + std::to_string(i);
 
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 960, 800 });
+		trans->SetPosition({ 960.f, 800.f });
 
 		trans->SetScale({ 1.0f, 2.0f });
 
@@ -732,7 +732,7 @@ void TestScene::Initialize()
 		trans->SetScale({ 2.f, 2.f });
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
-
+		sr->SetOpacity(0.f);
 
 		auto& clips = m_AssetManager.LoadAnimation(L"Boss_3Phase_DEAD_Ani", L"../Resource/Character/Boss/Phase_3/Boss_3Phase_DEAD_Ani.json");
 		auto anim = animobj->AddComponent<AnimationComponent>();
@@ -744,6 +744,8 @@ void TestScene::Initialize()
 		}
 
 		anim->Play("dead");
+		anim->SetLoop(false);
+		anim->SetIsActive(false);
 
 		sr->SetPath("../Resource/Boss/Phase_3/Boss_3Phase_DEAD_Ani.json");
 		sr->SetTextureKey("Boss_3Phase_DEAD_Ani");
@@ -771,6 +773,7 @@ void TestScene::Initialize()
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
+		sr->SetOpacity(0.f);
 
 		auto& clips = m_AssetManager.LoadAnimation(L"Boss_3Phase_Arms_Dead_Ani", L"../Resource/Character/Boss/Phase_3/Boss_3Phase_Arms_Dead_Ani.json");
 		auto anim = animobj->AddComponent<AnimationComponent>();
@@ -782,8 +785,8 @@ void TestScene::Initialize()
 		}
 
 		anim->Play("dead");
-		anim->SetIsActive(true);
-		anim->SetLoop(true);
+		anim->SetIsActive(false);
+		anim->SetLoop(false);
 
 		sr->SetPath("../Resource/Boss/Phase_3/Boss_3Phase_Arms_Dead_Ani.json");
 		sr->SetTextureKey("Boss_3Phase_Arms_Dead_L");
@@ -810,6 +813,7 @@ void TestScene::Initialize()
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
+		sr->SetOpacity(0.f);
 
 		auto& clips = m_AssetManager.LoadAnimation(L"Boss_3Phase_Arms_Dead_Ani", L"../Resource/Character/Boss/Phase_3/Boss_3Phase_Arms_Dead_Ani.json");
 		auto anim = animobj->AddComponent<AnimationComponent>();
@@ -821,8 +825,8 @@ void TestScene::Initialize()
 		}
 
 		anim->Play("dead");
-		anim->SetIsActive(true);
-		anim->SetLoop(true);
+		anim->SetIsActive(false);
+		anim->SetLoop(false);
 
 		sr->SetPath("../Resource/Boss/Phase_3/Boss_3Phase_Arms_Dead_Ani.json");
 		sr->SetTextureKey("Boss_3Phase_Arms_Dead_R");
@@ -852,7 +856,7 @@ void TestScene::Initialize()
 		trans->SetScale({ 2.f, 2.f });
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
-
+		sr->SetOpacity(0.f);
 
 		auto& clips = m_AssetManager.LoadAnimation(L"Boss_3Phase_Shot_Ani", L"../Resource/Character/Boss/Phase_3/Boss_3Phase_Shot_Ani.json");
 		auto anim = animobj->AddComponent<AnimationComponent>();
@@ -864,6 +868,8 @@ void TestScene::Initialize()
 		}
 
 		anim->Play("shot");
+		anim->SetIsActive(false);
+		anim->SetLoop(false);
 
 		sr->SetPath("../Resource/Boss/Phase_3/Boss_3Phase_Shot_Ani.json");
 		sr->SetTextureKey("Boss_3Phase_Shot_Ani");
