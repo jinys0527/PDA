@@ -11,11 +11,15 @@ NodeState BossCoolDown::Tick(BlackBoard& bb, float deltaTime)
 
     if (elapsedTime < coolDown)
     {
-        //std::cout << "쿨타임: " << elapsedTime << std::endl;
+        bb.SetValue("CanBeHit", true);
+
 
         bb.SetValue("ElapsedIdleTime", elapsedTime);
         return NodeState::Running;
     }
+
+    bb.SetValue("CanBeHit", false);
+
 
     // 스킬 가중치 1~5 가져오기
     float skillWeight_1 = bb.GetValue<float>("SkillWeight_1").value();
@@ -43,6 +47,8 @@ NodeState BossCoolDown::Tick(BlackBoard& bb, float deltaTime)
     static std::uniform_real_distribution<float> dist(0.0f, 1.0f);
 
     float randVal = dist(gen);
+    std::cout << randVal << std::endl;
+
     bb.SetValue("RandomValue", randVal);
 
     bb.SetValue("ElapsedIdleTime", 0.f);

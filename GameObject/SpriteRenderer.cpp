@@ -26,6 +26,10 @@ void SpriteRenderer::SetPivotPreset(SpritePivotPreset spp, const D2D1_SIZE_F& si
 		break;
 	case SpritePivotPreset::HealPivot:
 		m_Pivot = { size.width * 0.5f, size.height * 1.5f };
+		break;
+	case SpritePivotPreset::Phase_2_Arm:
+		m_Pivot = { size.width * 0.5f - 250.f, size.height - 450.f };
+		break;
 	}
 }
 

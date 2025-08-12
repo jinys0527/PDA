@@ -8,10 +8,13 @@ NodeState PhaseChecker_2::Tick(BlackBoard& bb, float deltaTime)
     bool isPhase3 = bb.GetValue<bool>("3Phase").value();
 
     if (currPhase == 2)
+    {
         return NodeState::Success;
+    }
 
     if (hp < 50.f && !isPhase3)
     {
+        std::cout << "2Æä" << std::endl;
         bb.SetValue("CurrPhase", 2);
         return NodeState::Success;
     }

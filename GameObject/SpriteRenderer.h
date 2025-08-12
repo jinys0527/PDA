@@ -20,6 +20,7 @@ enum class SpritePivotPreset
 	BottomRight,
 	Center,
 	HealPivot
+	Phase_2_Arm
 };
 
 class SpriteRenderer : public Component

@@ -33,6 +33,8 @@ public:
 		return m_AnimationController.IsLastFrameFinished();
 	}
 
+
+
 	void SetLoop(bool loop)
 	{
 		m_AnimationController.SetLooping(loop);

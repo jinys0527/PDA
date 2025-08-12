@@ -4,6 +4,7 @@
 #include "InGameUITestScene.h"
 #include "CharacterScene.h"
 #include "RenderData.h"
+#include "BossScene.h"
 
 void SceneManager::Initialize()
 {
@@ -20,9 +21,13 @@ void SceneManager::Initialize()
 	inGameUITestScene->Initialize();
 	inGameUITestScene->SetName("InGameUITestScene");
 
+	auto bossScene = AddScene("BossScene", std::make_shared<BossScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
+
+	bossScene->Initialize();
+	bossScene->SetName("BossScene");
+	SetCurrentScene("BossScene");
 	ChangeScene("InGameUITestScene");
 	m_UIManager.Start();
-	//m_UIManager.SetCurrentScene("TitleScene");
 	m_UIManager.SetCurrentScene("InGameUITestScene");
 }
 
