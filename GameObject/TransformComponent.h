@@ -56,10 +56,6 @@ public:
 	float GetRotation() const { return m_Rotation; }
 	const Vec2F& GetScale() const { return m_Scale; }
 
-	void SetZOrder(const int zorder) { m_ZOrder = zorder; }
-
-	int GetZOrder() { return m_ZOrder; }
-
 	void Translate(const Vec2F& delta);
 	void Translate(const float x, const float y);
 

@@ -19,7 +19,7 @@ enum class SpritePivotPreset
 	BottomCenter,
 	BottomRight,
 	Center,
-	HealPivot
+	HealPivot,
 	Phase_2_Arm
 };
 
