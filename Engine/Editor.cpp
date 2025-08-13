@@ -25,7 +25,7 @@ void Editor::Update()
 
 	CameraControl(currentScene);
 
-	SaveAndLoadFile(currentScene);
+	//SaveAndLoadFile(currentScene);
 
 	DrawGameObjectHierarchy(currentScene);
 
@@ -103,7 +103,7 @@ void Editor::CameraControl(std::shared_ptr<Scene> currentScene)
 	ImGui::Text("Camera Offset");
 	auto cameraTrans = currentScene->GetMainCamera()->GetComponent<TransformComponent>();
 	Math::Vector2F cameraPos = cameraTrans->GetPosition();
-	if (ImGui::DragFloat2("Offset", &cameraPos.x, 1.0f))
+	if (ImGui::DragFloat2("Offset", &cameraPos.x, 0.5f))
 	{
 		cameraTrans->SetPosition(cameraPos);
 	}// 수동 이동

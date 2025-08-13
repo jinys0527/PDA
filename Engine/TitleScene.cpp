@@ -705,7 +705,7 @@ void TitleScene::Initialize()
 	std::weak_ptr<ButtonUI> weakcreditButton = creditButton;
 	std::weak_ptr<UIObject> weakpressAnyKey = pressAnyKey;
 	
-	backButtonComp->GetFSM().SetOnEnter("Click", [weakcharacterSelectBackGround, weaksourName, weakacidName, weaksourSelectButton, weakacidSelectButton, weakbackButton, weakselectButton, weakmenuBox, weakstartButton, weaksettingButton, weakcreditButton]() {
+	backButtonComp->GetFSM().SetOnEnter("Click", [weakcharacterSelectBackGround, weaksourBackGround, weakacidBackGround, weaksourName, weakacidName, weaksourSelectButton, weakacidSelectButton, weakbackButton, weakselectButton, weakmenuBox, weakstartButton, weaksettingButton, weakcreditButton]() {
 		if (auto bg = weakcharacterSelectBackGround.lock()) bg->SetIsVisible(false);
 		if (auto bg = weaksourName.lock()) bg->SetIsVisible(false);
 		if (auto bg = weakacidName.lock()) bg->SetIsVisible(false);
@@ -717,6 +717,8 @@ void TitleScene::Initialize()
 		if (auto btn = weakstartButton.lock()) btn->SetIsVisible(true);
 		if (auto btn = weaksettingButton.lock()) btn->SetIsVisible(true);
 		if (auto btn = weakcreditButton.lock()) btn->SetIsVisible(true);
+		if (auto bg = weaksourBackGround.lock()) bg->SetIsVisible(false);
+		if (auto bg = weakacidBackGround.lock()) bg->SetIsVisible(false);
 		});
 
 
