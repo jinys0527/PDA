@@ -65,7 +65,7 @@ BossBlackBoard::BossBlackBoard(
 
 	SetValue("SkillWeight_1", 1.0f);
 	SetValue("SkillWeight_2", 1.0f);
-	SetValue("SkillWeight_3", 1.0f);
+	SetValue("SkillWeight_3", 5001.0f);
 	SetValue("SkillWeight_4", 1.0f);
 	SetValue("SkillWeight_5", 1.0f);
 

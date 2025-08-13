@@ -3,6 +3,16 @@
 #include "SpriteRenderer.h"
 #include "AnimationComponent.h"
 #include "TransformComponent.h"
+#include <algorithm>
+#include "AnimationUtils.h"
+
+#ifdef max
+#undef max
+#endif
+
+#ifdef min
+#undef min
+#endif
 
 NodeState PhaseChecker_3::Tick(BlackBoard& bb, float deltaTime)
 {
@@ -10,34 +20,55 @@ NodeState PhaseChecker_3::Tick(BlackBoard& bb, float deltaTime)
     float hp = bb.GetValue<float>("BossCurrHP").value();
     bool isPhase3 = bb.GetValue<bool>("3Phase").value();
 
-    if (m_BackFadeOut)
-    {
-        bool allZero = true;
-        auto fadeOutObj = [&](std::shared_ptr<GameObject> obj)
-            {
-                auto sprite = obj->GetComponent<SpriteRenderer>();
-                float opacity = sprite->GetOpacity();
-                opacity -= m_FadeOutSpeed * deltaTime;
-                if (opacity < 0.f) opacity = 0.f;
-                sprite->SetOpacity(opacity);
-                if (opacity > 0.f) allZero = false;
-            };
-
-        fadeOutObj(m_Back_0);
-        fadeOutObj(m_Back_1);
-        fadeOutObj(m_Back_2);
-        fadeOutObj(m_Back_3);
-        fadeOutObj(m_Back_4);
-
-        if (allZero)
-        {
-            m_BackFadeOut = false; // 페이드아웃 완료
-        }
-        return NodeState::Running;
-    }
-
     if (m_PhaseChange)
     {
+        m_Hole->GetComponent<SpriteRenderer>()->SetOpacity(1.0f);
+
+
+        {
+            auto sr = m_Back_0->GetComponent<SpriteRenderer>();
+            float curOpacity = sr->GetOpacity();
+            float newOpacity = std::max(0.f, curOpacity - m_fadeSpeed * deltaTime);
+            sr->SetOpacity(newOpacity);
+        }
+
+        // 배경 1: 점차 선명해지기 (증가)
+        {
+            auto sr = m_Back_1->GetComponent<SpriteRenderer>();
+            float curOpacity = sr->GetOpacity();
+            float newOpacity = std::min(1.f, curOpacity + m_fadeSpeed * deltaTime);
+            sr->SetOpacity(newOpacity);
+        }
+
+        // 배경 2: 선명해졌다가 희미해지는 효과 (반복)
+        {
+            auto sr = m_Back_2->GetComponent<SpriteRenderer>();
+            float curOpacity = sr->GetOpacity();
+
+            // m_Back2FadeDirection: +1이면 증가, -1이면 감소 (멤버 변수로 bool 또는 int 설정 필요)
+            if (m_Back2FadeDirection > 0)
+            {
+                float newOpacity = curOpacity + m_fadeSpeed * deltaTime;
+                if (newOpacity >= 1.f)
+                {
+                    newOpacity = 1.f;
+                    m_Back2FadeDirection = -1; // 감소로 전환
+                }
+                sr->SetOpacity(newOpacity);
+            }
+            else
+            {
+                float newOpacity = curOpacity - m_fadeSpeed * deltaTime;
+                if (newOpacity <= 0.f)
+                {
+                    newOpacity = 0.f;
+                    m_Back2FadeDirection = 1; // 증가로 전환
+                }
+                sr->SetOpacity(newOpacity);
+            }
+        }
+
+
         auto trans = m_Boss_Phase_2_Arm->GetComponent<TransformComponent>();
 
         auto pos = trans->GetPosition();
@@ -102,13 +133,12 @@ NodeState PhaseChecker_3::Tick(BlackBoard& bb, float deltaTime)
         auto map = bb.GetValue<std::unordered_map<std::string, std::shared_ptr<GameObject>>>("Backgrounds");
         auto& backgrounds = map.value();
 
+        m_Hole = backgrounds["Phase_2_Big_Hole"];
         m_Back_0 = backgrounds["Phase_1_Monitor"];
         m_Back_1 = backgrounds["Phase_2_Monitor_1"];
         m_Back_2 = backgrounds["Phase_2_Monitor_2"];
         m_Back_3 = backgrounds["Phase_2_Monitor_3"];
         m_Back_4 = backgrounds["Phase_2_Monitor_4"];
-
-        m_BackFadeOut = true;
 
         return NodeState::Running;
     }

@@ -58,7 +58,7 @@ void BossScene::Initialize()
 #pragma region Background
 	std::unordered_map<std::string, std::shared_ptr<GameObject>> m_Backgrounds;
 
-	//2페 구멍 배경
+	//3페 구멍 배경
 	{
 		auto texture = m_AssetManager.LoadTexture(L"3Chap_2Phase_View", L"../Resource/Character/Boss/Phase_2/3Chap_2Phase_View.png");
 
@@ -72,7 +72,7 @@ void BossScene::Initialize()
 		auto tr = backobj->GetComponent<TransformComponent>();
 		tr->SetPosition({ 960.f, 540.f });
 		tr->SetScale({ 0.9f, 0.9f });
-		sr->SetOpacity(1.0f);
+		sr->SetOpacity(0.0f);
 
 		tr->SetZOrder(-1);
 
@@ -94,10 +94,10 @@ void BossScene::Initialize()
 
 		auto tr = backobj->GetComponent<TransformComponent>();
 		tr->SetPosition({ 960.f, 840.f });
-		tr->SetScale({ 1.3f, 1.3f });
-		sr->SetOpacity(1.0f);
+		tr->SetScale({ 1.6f, 1.6f });
+		sr->SetOpacity(0.0f);
 
-		tr->SetZOrder(-1);
+		tr->SetZOrder(-2);
 
 		AddGameObject(backobj);
 		m_Backgrounds[backobj->m_Name] = backobj;
@@ -117,10 +117,10 @@ void BossScene::Initialize()
 
 		auto tr = backobj->GetComponent<TransformComponent>();
 		tr->SetPosition({ 960.f, 840.f });
-		tr->SetScale({ 1.3f, 1.3f });
+		tr->SetScale({ 1.6f, 1.6f });
 		sr->SetOpacity(0.0f);
 
-		tr->SetZOrder(-1);
+		tr->SetZOrder(-2);
 
 		AddGameObject(backobj);
 		m_Backgrounds[backobj->m_Name] = backobj;
@@ -140,10 +140,10 @@ void BossScene::Initialize()
 
 		auto tr = backobj->GetComponent<TransformComponent>();
 		tr->SetPosition({ 960.f, 840.f });
-		tr->SetScale({ 1.3f, 1.3f });
+		tr->SetScale({ 1.6f, 1.6f });
 		sr->SetOpacity(0.0f);
 
-		tr->SetZOrder(-1);
+		tr->SetZOrder(-2);
 
 		AddGameObject(backobj);
 		m_Backgrounds[backobj->m_Name] = backobj;
@@ -163,10 +163,10 @@ void BossScene::Initialize()
 
 		auto tr = backobj->GetComponent<TransformComponent>();
 		tr->SetPosition({ 960.f, 840.f });
-		tr->SetScale({ 1.3f, 1.3f });
+		tr->SetScale({ 1.6f, 1.6f });
 		sr->SetOpacity(0.0f);
 
-		tr->SetZOrder(-1);
+		tr->SetZOrder(-2);
 
 		AddGameObject(backobj);
 		m_Backgrounds[backobj->m_Name] = backobj;
@@ -186,15 +186,101 @@ void BossScene::Initialize()
 
 		auto tr = backobj->GetComponent<TransformComponent>();
 		tr->SetPosition({ 960.f, 840.f });
-		tr->SetScale({ 1.3f, 1.3f });
+		tr->SetScale({ 1.6f, 1.6f });
 		sr->SetOpacity(0.0f);
 
-		tr->SetZOrder(-1);
+		tr->SetZOrder(-2);
 
 		AddGameObject(backobj);
 		m_Backgrounds[backobj->m_Name] = backobj;
 
 	}
+
+	//터널 진입 뒷배경 반복
+	{
+		auto texture = m_AssetManager.LoadTexture(L"3Chap_1Phase_Background_Repeat", L"../Resource/Character/Boss/Phase_1/3Chap_1Phase_Background_Repeat.png");
+
+		auto backobj = std::make_shared<GameObject>(m_EventDispatcher);
+		backobj->m_Name = "Phase_1_Background_Repeat";
+		auto sr = backobj->AddComponent<SpriteRenderer>();
+		sr->SetTexture(texture);
+		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
+
+
+		auto tr = backobj->GetComponent<TransformComponent>();
+		tr->SetPosition({ 960.f, 540.f });
+		tr->SetScale({ 1.f, 1.f });
+		sr->SetOpacity(0.0f);
+
+		tr->SetZOrder(-3);
+
+		AddGameObject(backobj);
+	}
+
+
+	//터널 -> 1페 뒷배경1
+	{
+		auto texture = m_AssetManager.LoadTexture(L"3Chap_1Phase_Background_01", L"../Resource/Character/Boss/Phase_1/3Chap_1Phase_Background_01.png");
+
+		auto backobj = std::make_shared<GameObject>(m_EventDispatcher);
+		backobj->m_Name = "Phase_1_Background_1";
+		auto sr = backobj->AddComponent<SpriteRenderer>();
+		sr->SetTexture(texture);
+		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
+
+
+		auto tr = backobj->GetComponent<TransformComponent>();
+		tr->SetPosition({ 960.f, 540.f });
+		tr->SetScale({ 1.f, 1.f });
+		sr->SetOpacity(0.0f);
+
+		tr->SetZOrder(-3);
+
+		AddGameObject(backobj);
+	}
+
+	//터널 -> 1페 뒷배경2
+	{
+		auto texture = m_AssetManager.LoadTexture(L"3Chap_1Phase_Background_02", L"../Resource/Character/Boss/Phase_1/3Chap_1Phase_Background_02.png");
+
+		auto backobj = std::make_shared<GameObject>(m_EventDispatcher);
+		backobj->m_Name = "Phase_1_Background_1";
+		auto sr = backobj->AddComponent<SpriteRenderer>();
+		sr->SetTexture(texture);
+		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
+
+
+		auto tr = backobj->GetComponent<TransformComponent>();
+		tr->SetPosition({ 960.f, 540.f });
+		tr->SetScale({ 1.f, 1.f });
+		sr->SetOpacity(0.0f);
+
+		tr->SetZOrder(-3);
+
+		AddGameObject(backobj);
+	}
+
+	//1 && 2페 반복
+	{
+		auto texture = m_AssetManager.LoadTexture(L"3Chap_1Phase_Background_02", L"../Resource/Character/Boss/Phase_1/3Chap_1Phase_Background_02.png");
+
+		auto backobj = std::make_shared<GameObject>(m_EventDispatcher);
+		backobj->m_Name = "Phase_1_Background_1";
+		auto sr = backobj->AddComponent<SpriteRenderer>();
+		sr->SetTexture(texture);
+		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
+
+
+		auto tr = backobj->GetComponent<TransformComponent>();
+		tr->SetPosition({ 960.f, 540.f });
+		tr->SetScale({ 1.f, 1.f });
+		sr->SetOpacity(0.0f);
+
+		tr->SetZOrder(-3);
+
+		AddGameObject(backobj);
+	}
+
 
 #pragma endregion
 
@@ -210,7 +296,11 @@ void BossScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Phase_1_Main";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 1700.f, 1320.f });
+		trans->SetPosition({ 1400.f, 1520.f });
+
+		float scale = 16.f / 9.f;
+		trans->SetScale({ scale, scale });
+
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
 
@@ -469,7 +559,11 @@ void BossScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Lazer_CCTV";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 1700.f, 1320.f });
+		trans->SetPosition({ 1400.f, 1520.f });
+
+		float scale = 16.f / 9.f;
+		trans->SetScale({ scale, scale });
+
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
 
@@ -508,7 +602,7 @@ void BossScene::Initialize()
 		animobj->m_Name = "Boss_3Phase_Laser_CCTV";
 		auto trans = animobj->GetComponent<TransformComponent>();
 		trans->SetPosition({ 960.f, 1740.f });
-		trans->SetScale({ 2.0f, 2.0f });
+		trans->SetScale({ 2.f, 2.f });
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
 		sr->SetOpacity(0.f);
@@ -802,7 +896,7 @@ void BossScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Anim_ArmSwip_R";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 1220.f, 1200.f });
+		trans->SetPosition({ 1200.f, 800.f });
 		trans->SetScale({ 1.5f, 1.5f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
@@ -1005,6 +1099,122 @@ void BossScene::Initialize()
 
 #pragma endregion
 
+#pragma region Effect_Boom
+
+	{
+		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
+		animobj->m_Name = "Bomb_1";
+		auto trans = animobj->GetComponent<TransformComponent>();
+		trans->SetPosition({ 560.f, 1740.f });
+		trans->SetScale({ 2.f, 2.f });
+		auto sr = animobj->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		sr->SetOpacity(0.f);
+
+		auto& clips = m_AssetManager.LoadAnimation(L"Bomb", L"../Resource/Character/Boss/Phase_3/Bomb.json");
+		auto anim = animobj->AddComponent<AnimationComponent>();
+		anim->SetAssetManager(&m_AssetManager);
+
+		for (const auto& [clipName, clip] : clips)
+		{
+			anim->AddClip(clipName, &clip);
+		}
+
+		anim->Play("bomb");
+		anim->SetIsActive(false);
+		anim->SetLoop(false);
+
+		sr->SetPath("../Resource/Boss/Phase_3/Bomb.json");
+		sr->SetTextureKey("Bomb");
+
+		float width = clips.begin()->second.GetFrames().begin()->Width();
+		float height = clips.begin()->second.GetFrames().begin()->Height();
+
+		sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+
+		AddGameObject(animobj);
+
+		m_Bombs.push_back(animobj);
+
+	}
+
+	{
+		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
+		animobj->m_Name = "Bomb_2";
+		auto trans = animobj->GetComponent<TransformComponent>();
+		trans->SetPosition({ 960.f, 740.f });
+		trans->SetScale({ 2.f, 2.f });
+		auto sr = animobj->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		sr->SetOpacity(0.f);
+
+		auto& clips = m_AssetManager.LoadAnimation(L"Bomb", L"../Resource/Character/Boss/Phase_3/Bomb.json");
+		auto anim = animobj->AddComponent<AnimationComponent>();
+		anim->SetAssetManager(&m_AssetManager);
+
+		for (const auto& [clipName, clip] : clips)
+		{
+			anim->AddClip(clipName, &clip);
+		}
+
+		anim->Play("bomb");
+		anim->SetIsActive(false);
+		anim->SetLoop(false);
+
+		sr->SetPath("../Resource/Boss/Phase_3/Bomb.json");
+		sr->SetTextureKey("Bomb");
+
+		float width = clips.begin()->second.GetFrames().begin()->Width();
+		float height = clips.begin()->second.GetFrames().begin()->Height();
+
+		sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+
+		AddGameObject(animobj);
+
+		m_Bombs.push_back(animobj);
+
+	}
+
+	{
+		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
+		animobj->m_Name = "Bomb_3";
+		auto trans = animobj->GetComponent<TransformComponent>();
+		trans->SetPosition({ 1560.f, 740.f });
+		trans->SetScale({ 2.f, 2.f });
+		auto sr = animobj->AddComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		sr->SetOpacity(0.f);
+
+		auto& clips = m_AssetManager.LoadAnimation(L"Bomb", L"../Resource/Character/Boss/Phase_3/Bomb.json");
+		auto anim = animobj->AddComponent<AnimationComponent>();
+		anim->SetAssetManager(&m_AssetManager);
+
+		for (const auto& [clipName, clip] : clips)
+		{
+			anim->AddClip(clipName, &clip);
+		}
+
+		anim->Play("bomb");
+		anim->SetIsActive(false);
+		anim->SetLoop(false);
+
+		sr->SetPath("../Resource/Boss/Phase_3/Bomb.json");
+		sr->SetTextureKey("Bomb");
+
+		float width = clips.begin()->second.GetFrames().begin()->Width();
+		float height = clips.begin()->second.GetFrames().begin()->Height();
+
+		sr->SetPivotPreset(SpritePivotPreset::Center, { width, height });
+
+		AddGameObject(animobj);
+
+		m_Bombs.push_back(animobj);
+
+	}
+
+
+#pragma endregion
+
 
 #pragma region telegraph
 	m_Telegraphs.reserve(15);
@@ -1189,6 +1399,15 @@ void BossScene::Update(float deltaTime)
 		float curHP = m_BlackBoard->GetValue<float>("BossCurrHP").value();
 		m_BlackBoard->SetValue("BossCurrHP", curHP - 1);
 		std::cout << curHP << std::endl;
+	}
+
+	if (m_BlackBoard->GetValue<int>("CurrPhase").value() == 3)
+	{
+		for (auto& obj : m_Bombs)
+		{
+			obj->GetComponent<SpriteRenderer>()->SetOpacity(1.0f);
+			obj->GetComponent<AnimationComponent>()->SetIsActive(true);
+		}
 	}
 
 #pragma endregion
