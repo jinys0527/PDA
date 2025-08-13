@@ -91,7 +91,7 @@ void BossScene::Initialize()
 
 
 		auto tr = backobj->GetComponent<TransformComponent>();
-		tr->SetPosition({ 960.f, 840.f });
+		tr->SetPosition({ 960.f, 740.f });
 		tr->SetScale({ 0.8f, 0.8f });
 		sr->SetOpacity(0.0f);
 
@@ -114,7 +114,7 @@ void BossScene::Initialize()
 
 
 		auto tr = backobj->GetComponent<TransformComponent>();
-		tr->SetPosition({ 960.f, 840.f });
+		tr->SetPosition({ 960.f, 740.f });
 		tr->SetScale({ 0.8f, 0.8f });
 		sr->SetOpacity(0.0f);
 
@@ -137,7 +137,7 @@ void BossScene::Initialize()
 
 
 		auto tr = backobj->GetComponent<TransformComponent>();
-		tr->SetPosition({ 960.f, 840.f });
+		tr->SetPosition({ 960.f, 740.f });
 		tr->SetScale({ 0.8f, 0.8f });
 		sr->SetOpacity(0.0f);
 
@@ -160,7 +160,7 @@ void BossScene::Initialize()
 
 
 		auto tr = backobj->GetComponent<TransformComponent>();
-		tr->SetPosition({ 960.f, 840.f });
+		tr->SetPosition({ 960.f, 740.f });
 		tr->SetScale({ 0.8f, 0.8f });
 		sr->SetOpacity(0.0f);
 
@@ -183,7 +183,7 @@ void BossScene::Initialize()
 
 
 		auto tr = backobj->GetComponent<TransformComponent>();
-		tr->SetPosition({ 960.f, 840.f });
+		tr->SetPosition({ 960.f, 740.f });
 		tr->SetScale({ 0.8f, 0.8f });
 		sr->SetOpacity(0.0f);
 
@@ -636,7 +636,7 @@ void BossScene::Initialize()
 		animobj->m_Name = "Boss_Lazer";
 
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 960.f, 500.f });
+		trans->SetPosition({ 1210.f, 1000.f });
 
 		trans->SetScale({ 0.4f, 1.f });
 
