@@ -7,6 +7,8 @@
 class TransformComponent;
 class AnimationComponent;
 
+class SoundManager;
+
 class PlayerEffectComponent : public Component, public IEventListener
 {
 public:
@@ -15,7 +17,7 @@ public:
 
 	~PlayerEffectComponent();
 
-	void Start();
+	void Start(SoundManager* soundmanager);
 
 	void Update(float deltaTime) override;
 	void OnEvent(EventType type, const void* data) override;
@@ -25,5 +27,7 @@ public:
 protected:
 	TransformComponent* m_TransformComponent;
 	AnimationComponent* m_AnimationComponent;
+
+	SoundManager* m_SoundManager;
 };
 

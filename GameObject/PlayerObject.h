@@ -35,7 +35,7 @@ public:
 
 	void Reset();
 
-	void Start(SoundManager soundmanager);
+	void Start(SoundManager* soundmanager);
 
 	RunPlayerController* m_Controller;
 	RigidbodyComponent* m_RigidbodyComponent;// 혹시 몰라 쓰는 포인터들 비용 커질 것 같으면 지워도 됩니다

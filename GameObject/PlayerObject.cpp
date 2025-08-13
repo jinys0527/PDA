@@ -226,12 +226,13 @@ void PlayerObject::Start(SoundManager* soundmanager)
 		}
 		{
 			State jumpUpState{
-				[this]()
+				[this, soundmanager]()
 				{
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
 					{
 						anim->Play("jumpup", false);
+						soundmanager->SFX_Shot(L"run_jump");
 						auto sr = this->GetComponent<SpriteRenderer>();
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
@@ -303,12 +304,13 @@ void PlayerObject::Start(SoundManager* soundmanager)
 		}
 		{
 			State slideState{
-				[this]()
+				[soundmanager, this]()
 				{
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
 					{
 						anim->Play("slide");
+						soundmanager->SFX_Shot(L"run_slide");
 						auto sr = this->GetComponent<SpriteRenderer>();
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
@@ -369,7 +371,7 @@ void PlayerObject::Start(SoundManager* soundmanager)
 		}
 		{
 			State sprayState{
-				[this]()
+				[soundmanager, this]()
 				{
 					std::cout << "spray µé¾î¿È" << std::endl;
 					PlayerAttackInfo info;
@@ -377,11 +379,13 @@ void PlayerObject::Start(SoundManager* soundmanager)
 					info.mousePos = m_Controller->GetMousePos();
 					info.player = this;
 					this->m_EventDispatcher.Dispatch(EventType::OnPlayerAttack, static_cast<const void*>(&info));
+					soundmanager->SFX_Shot(L"player_attack");
 					if (!m_IsAttackSuccessed)
 					{
 						m_Fsm.Trigger("FailSpray");
 						return;
 					}
+					soundmanager->SFX_Shot(L"player_graffiti_success");
 					m_IsAttackSuccessed = false;
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
@@ -410,12 +414,13 @@ void PlayerObject::Start(SoundManager* soundmanager)
 		}
 		{
 			State readySprayState{
-					[this]()
+					[soundmanager, this]()
 					{
 						auto anim = this->GetComponent<AnimationComponent>();
 						if (anim)
 						{
 							anim->Play("charge", true);
+							soundmanager->SFX_Shot(L"player_charge_keep");
 							auto sr = this->GetComponent<SpriteRenderer>();
 							sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 							sr->SetTextureKey("boss");
@@ -447,7 +452,7 @@ void PlayerObject::Start(SoundManager* soundmanager)
 		}
 		{
 			State StrongSprayState{
-				[this]()
+				[soundmanager, this]()
 				{
 					std::cout << "strongSpray µé¾î¿È" << std::endl;
 					PlayerAttackInfo info;
@@ -455,11 +460,13 @@ void PlayerObject::Start(SoundManager* soundmanager)
 					info.mousePos = m_Controller->GetMousePos();
 					info.player = this;
 					this->m_EventDispatcher.Dispatch(EventType::OnPlayerAttack, static_cast<const void*>(&info));
+					soundmanager->SFX_Shot(L"player_charge_shoot");
 					if (!m_IsAttackSuccessed)
 					{
 						m_Fsm.Trigger("FailSpray");
 						return;
 					}
+					soundmanager->SFX_Shot(L"player_graffiti_success");
 					m_IsAttackSuccessed = false;
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
@@ -488,12 +495,13 @@ void PlayerObject::Start(SoundManager* soundmanager)
 		}
 		{
 			State FailSprayState{
-				[this]()
+				[soundmanager, this]()
 				{
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
 					{
 						anim->Play("markingfail", false);
+						soundmanager->SFX_Shot(L"player_graffiti_fail");
 						auto sr = this->GetComponent<SpriteRenderer>();
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
@@ -548,11 +556,13 @@ void PlayerObject::Start(SoundManager* soundmanager)
 		}
 		{
 			State hurtState{
-				[this]()
+				[soundmanager, this]()
 				{
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
 					{
+						soundmanager->SFX_Shot(L"player_damage");
+						soundmanager->SFX_Shot(L"run_obstacle_hit");
 						anim->Play("hitted", false);
 						auto sr = this->GetComponent<SpriteRenderer>();
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");

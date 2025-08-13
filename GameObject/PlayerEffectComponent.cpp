@@ -2,17 +2,20 @@
 #include "TransformComponent.h"
 #include "AnimationComponent.h"
 #include "GameObject.h"
+#include "SoundManager.h"
 
 PlayerEffectComponent::~PlayerEffectComponent()
 {
 	GetEventDispatcher().RemoveListener(EventType::OnPlayerCollisonOccur, this);
 }
 
-void PlayerEffectComponent::Start()
+void PlayerEffectComponent::Start(SoundManager* soundmanager)
 {
 	m_TransformComponent = m_Owner->GetComponent<TransformComponent>();
 	m_AnimationComponent = m_Owner->GetComponent<AnimationComponent>();
 	GetEventDispatcher().AddListener(EventType::OnPlayerCollisonOccur, this);
+
+	m_SoundManager = soundmanager;
 }
 
 void PlayerEffectComponent::Update(float deltaTime)
@@ -32,6 +35,7 @@ void PlayerEffectComponent::OnEvent(EventType type, const void* data)
 		{
 			m_AnimationComponent->Finish();
 			m_AnimationComponent->Play("heal", false);
+			m_SoundManager->SFX_Shot(L"run_item_pickup_hp");
 		}
 	}
 }
