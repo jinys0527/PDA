@@ -16,7 +16,7 @@
 #include "UISliderComponent.h"
 #include "UIGridComponent.h"
 #include "UITextComponent.h"
-
+#include "ChapterBackgroundManager.h"
 #include "Telegraph.h"
 #include "Background.h"
 #include "InputManager.h"
@@ -87,12 +87,36 @@ void BossScene::Initialize()
 		//tr->SetScale({ 0.5f, 0.5f });
 		sr->SetOpacity(0.0f);
 
-		tr->SetZOrder(-1);
+		tr->SetZOrder(-3);
 
 		AddGameObject(backobj);
 
 		m_Backgrounds[backobj->m_Name] = backobj;
 	}
+
+	//3페 구멍 뒷배경
+	{
+		auto texture = m_AssetManager.LoadTexture(L"3Chap_2Phase_Background02", L"../Resource/Character/Background/Chapter3/3Chap_2Phase_Background02.png");
+
+		auto backobj = std::make_shared<GameObject>(m_EventDispatcher);
+		backobj->m_Name = "Phase_3_Hole_Background";
+		auto sr = backobj->AddComponent<SpriteRenderer>();
+		sr->SetTexture(texture);
+		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
+
+
+		auto tr = backobj->GetComponent<TransformComponent>();
+		tr->SetPosition({ 960.f, 540.f });
+		//tr->SetScale({ 0.5f, 0.5f });
+		sr->SetOpacity(0.0f);
+
+		tr->SetZOrder(-5);
+
+		AddGameObject(backobj);
+
+		m_Backgrounds[backobj->m_Name] = backobj;
+	}
+
 
 	//1페 모니터 배경
 	{
@@ -110,7 +134,7 @@ void BossScene::Initialize()
 		tr->SetScale({ 0.8f, 0.8f });
 		sr->SetOpacity(0.0f);
 
-		tr->SetZOrder(-2);
+		tr->SetZOrder(-4);
 
 		AddGameObject(backobj);
 		m_Backgrounds[backobj->m_Name] = backobj;
@@ -133,7 +157,7 @@ void BossScene::Initialize()
 		tr->SetScale({ 0.8f, 0.8f });
 		sr->SetOpacity(0.0f);
 
-		tr->SetZOrder(-2);
+		tr->SetZOrder(-4);
 
 		AddGameObject(backobj);
 		m_Backgrounds[backobj->m_Name] = backobj;
@@ -156,7 +180,7 @@ void BossScene::Initialize()
 		tr->SetScale({ 0.8f, 0.8f });
 		sr->SetOpacity(0.0f);
 
-		tr->SetZOrder(-2);
+		tr->SetZOrder(-4);
 
 		AddGameObject(backobj);
 		m_Backgrounds[backobj->m_Name] = backobj;
@@ -179,7 +203,7 @@ void BossScene::Initialize()
 		tr->SetScale({ 0.8f, 0.8f });
 		sr->SetOpacity(0.0f);
 
-		tr->SetZOrder(-2);
+		tr->SetZOrder(-4);
 
 		AddGameObject(backobj);
 		m_Backgrounds[backobj->m_Name] = backobj;
@@ -202,7 +226,7 @@ void BossScene::Initialize()
 		tr->SetScale({ 0.8f, 0.8f });
 		sr->SetOpacity(0.0f);
 
-		tr->SetZOrder(-2);
+		tr->SetZOrder(-4);
 
 		AddGameObject(backobj);
 		m_Backgrounds[backobj->m_Name] = backobj;
@@ -1221,6 +1245,58 @@ void BossScene::Initialize()
 
 #pragma endregion
 
+#pragma region AttackArea
+	auto snipeTexture = m_AssetManager.LoadTexture(L"Snipe", L"../Resource/Character/Boss/Snipe.png");
+
+
+	{
+		auto attackArea = std::make_shared<GraffitiObject>(m_EventDispatcher);
+		attackArea->SetName("Snipe1");
+		auto sr = attackArea->GetComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		sr->SetTexture(snipeTexture);
+		sr->SetPivotPreset(SpritePivotPreset::Center, snipeTexture->GetSize());
+		sr->SetTextureKey("Snipe");
+
+		sr->SetOpacity(0.f);
+
+		attackArea->SetGravittis(&m_AssetManager, 3);
+
+		attackArea->GetComponent<GraffitiComponent>()->Start();
+
+		auto attackAreaTrans = attackArea->GetComponent<TransformComponent>();
+		attackAreaTrans->SetPosition({1500.f, 800.f});
+		attackAreaTrans->SetZOrder(20);
+
+		AddGameObject(attackArea);
+		m_AttackArea.push_back(attackArea);
+	}
+
+	{
+		auto attackArea = std::make_shared<GraffitiObject>(m_EventDispatcher);
+		attackArea->SetName("Snipe3");
+		auto sr = attackArea->GetComponent<SpriteRenderer>();
+		sr->SetAssetManager(&m_AssetManager);
+		sr->SetTexture(snipeTexture);
+		sr->SetPivotPreset(SpritePivotPreset::Center, snipeTexture->GetSize());
+		sr->SetTextureKey("Snipe");
+
+		sr->SetOpacity(0.f);
+
+
+		attackArea->SetGravittis(&m_AssetManager, 3);
+
+		attackArea->GetComponent<GraffitiComponent>()->Start();
+
+		auto attackAreaTrans = attackArea->GetComponent<TransformComponent>();
+		attackAreaTrans->SetPosition({ 960.f, 800.f });
+		attackAreaTrans->SetZOrder(20);
+
+		AddGameObject(attackArea);
+		m_AttackArea.push_back(attackArea);
+	}
+#pragma endregion
+
 
 #pragma region telegraph
 	m_Telegraphs.reserve(15);
@@ -1229,7 +1305,7 @@ void BossScene::Initialize()
 	const int rows = 3;
 
 	const float startX = 960.f; // 기준 좌표
-	const float startY = 173.f;
+	const float startY = 143.f;
 
 	const float marginX = 20.0f;
 	const float marginY = 0.0f;
@@ -1311,8 +1387,13 @@ void BossScene::Initialize()
 
 #pragma endregion
 
-	m_BlackBoard = std::make_unique<BossBlackBoard>(m_ScrollSpeed, m_Telegraphs, m_Anims, m_Fires, m_Backgrounds, m_AnimIndexMap, m_SoundManager);
+
+
+	m_BlackBoard = std::make_unique<BossBlackBoard>(m_ScrollSpeed, m_AttackArea, m_EventDispatcher ,m_Telegraphs, m_Anims, m_Fires, m_Backgrounds, m_AnimIndexMap, m_SoundManager);
 	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
+
+	m_BossEventComponent = std::make_unique<BossEventComponent>(m_BlackBoard.get());
+	m_BossEventComponent->Start();
 
 #pragma region soundUI
 
@@ -2528,6 +2609,28 @@ void BossScene::Initialize()
 
 	AddGameObject(cameraObject);
 
+
+	{
+		/*auto tile = std::make_shared<GameObject>(m_EventDispatcher);
+		auto tileSr = tile->AddComponent<SpriteRenderer>();
+		tileSr->SetTexture(m_AssetManager.LoadTexture(L"4a", "../Resource/Character/Boss/Phase_1/4a.png"));
+		tileSr->SetPivotPreset(SpritePivotPreset::BottomCenter, tileSr->GetTexture()->GetSize());
+		auto tileTrans = tile->GetComponent<TransformComponent>();
+		tileTrans->SetPosition({ 960.0f, 0.0f });
+		tileTrans->SetZOrder(-2);
+		AddGameObject(tile);*/
+
+		m_ChapterBackgroundManager = std::make_shared<ChapterBackgroundManager>(&m_AssetManager, m_EventDispatcher);
+		m_ChapterBackgroundManager->m_Name = "bg";
+		m_ChapterBackgroundManager->LoadBackgroundSet(3);
+		
+		for (auto& bg : m_ChapterBackgroundManager->GetAllBackgrounds())
+		{
+			AddGameObject(bg);
+		}
+		AddGameObject(m_ChapterBackgroundManager);
+	}
+
 }
 
 void BossScene::Finalize()
@@ -2711,70 +2814,114 @@ void BossScene::FixedUpdate()
 void BossScene::Update(float deltaTime)
 {
 #pragma region BT
+
 	if (time < 3.0f)
 	{
 		time += deltaTime;
+
 		return; // 3초 지나기 전에는 행동트리 실행 X
 	}
 
+	if (m_BlackBoard->GetValue<int>("CurrPhase").value() == 1)
+	{
+		m_ChapterBackgroundManager->LoadBackgroundSet(4);
+		for (auto& bg : m_ChapterBackgroundManager->GetAllBackgrounds())
+		{
+			AddGameObject(bg);
+		}
+	}
 
-	//// 카메라 이동량 계산
-	//float dx = m_ScrollSpeed * deltaTime;
-	//float dy = 0.f;
+	if (m_BlackBoard->GetValue<int>("CurrPhase").value() == 2)
+	{
+		m_ScrollSpeed = 800.f;
+	}
 
-	//m_TotalXMove += dx;
+	if (m_BlackBoard->GetValue<int>("CurrPhase").value() == 3)
+	{
+		m_ScrollSpeed = 0.f;
+	}
 
-	//auto camtrans = m_Camera->GetComponent<TransformComponent>();
-	//auto curpos = camtrans->GetPosition();
-	//camtrans->SetPosition({ curpos.x + 100 * deltaTime, curpos.y });
+	m_BlackBoard->SetValue("ScrollSpeed", m_ScrollSpeed);
 
-	//for (auto& telegraph : m_Telegraphs)
-	//{
-	//	auto tr = telegraph->GetComponent<TransformComponent>();
-	//	auto pos = tr->GetPosition();
-	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
-	//}
+	// 카메라 이동량 계산
+	float dx = m_ScrollSpeed * deltaTime;
+	float dy = 0.f;
 
-	//for (auto& anim : m_Anims)
-	//{
-	//	if (anim->m_Name == "Boss_Anim_Phase2_Arm") continue;
-	//	auto tr = anim->GetComponent<TransformComponent>();
-	//	auto pos = tr->GetPosition();
-	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
+	m_TotalXMove += dx;
 
-	//}
+	auto camtrans = m_Camera->GetComponent<TransformComponent>();
+	auto curpos = camtrans->GetPosition();
+	camtrans->SetPosition({ curpos.x + dx , curpos.y });
 
-	//for (auto& bomb : m_Bombs)
-	//{
-	//	auto tr = bomb->GetComponent<TransformComponent>();
-	//	auto pos = tr->GetPosition();
-	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
 
-	//}
 
-	//for (auto& background : m_Backgrounds)
-	//{
-	//	auto tr = background.second->GetComponent<TransformComponent>();
-	//	auto pos = tr->GetPosition();
-	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
+	for (auto& telegraph : m_Telegraphs)
+	{
+		auto tr = telegraph->GetComponent<TransformComponent>();
+		auto pos = tr->GetPosition();
+		tr->SetPosition({ pos.x + dx, pos.y + dy });
+	}
 
-	//}
+	for (auto& obj : m_AttackArea)
+	{
+		auto tr = obj->GetComponent<TransformComponent>();
+		auto pos = tr->GetPosition();
+		tr->SetPosition({ pos.x + dx, pos.y + dy });
+	}
 
-	//// 파이어 오브젝트 이동
-	//for (auto& fire : m_Fires)
-	//{
-	//	auto tr = fire->GetComponent<TransformComponent>();
-	//	auto pos = tr->GetPosition();
-	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
-	//}
 
-	//{
-	//	auto tr = m_Phase_2_Arm->GetComponent<TransformComponent>();
-	//	auto pos = tr->GetPosition();
-	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
+	for (auto& anim : m_Anims)
+	{
+		if (anim->m_Name == "Boss_Anim_Phase2_Arm") continue;
+		auto tr = anim->GetComponent<TransformComponent>();
+		auto pos = tr->GetPosition();
+		tr->SetPosition({ pos.x + dx, pos.y + dy });
 
-	//}
+	}
 
+	for (auto& bomb : m_Bombs)
+	{
+		auto tr = bomb->GetComponent<TransformComponent>();
+		auto pos = tr->GetPosition();
+		tr->SetPosition({ pos.x + dx, pos.y + dy });
+
+	}
+
+	for (auto& background : m_Backgrounds)
+	{
+		auto tr = background.second->GetComponent<TransformComponent>();
+		auto pos = tr->GetPosition();
+		tr->SetPosition({ pos.x + dx, pos.y + dy });
+
+	}
+
+	// 파이어 오브젝트 이동
+	for (auto& fire : m_Fires)
+	{
+		auto tr = fire->GetComponent<TransformComponent>();
+		auto pos = tr->GetPosition();
+		tr->SetPosition({ pos.x + dx, pos.y + dy });
+	}
+
+	{
+		auto tr = m_Phase_2_Arm->GetComponent<TransformComponent>();
+		auto pos = tr->GetPosition();
+		tr->SetPosition({ pos.x + dx, pos.y + dy });
+
+	}
+
+	{
+		auto player = dynamic_cast<PlayerObject*>(m_GameObjects.find("player")->second.get());
+		auto tr = player->GetComponent<TransformComponent>();
+		auto pos = tr->GetPosition();
+		tr->SetPosition({ pos.x + dx, pos.y + dy });
+
+	}
+
+	if (m_ChapterBackgroundManager)
+	{
+		m_ChapterBackgroundManager->Update(deltaTime, GetMainCamera());
+	}
 
 	//---------------------
 
@@ -2800,11 +2947,12 @@ void BossScene::Update(float deltaTime)
 
 	}
 
+
 	if (m_OneSecondTimer >= 1.0f)
 	{
 		m_OneSecondTimer = 0.0f;
 		float curHP = m_BlackBoard->GetValue<float>("BossCurrHP").value();
-		m_BlackBoard->SetValue("BossCurrHP", curHP - 1);
+		m_BlackBoard->SetValue("BossCurrHP", curHP);
 		std::cout << curHP << std::endl;
 	}
 

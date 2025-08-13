@@ -215,7 +215,7 @@ void ArmStretch::Reset()
 
     if (m_CurrentAnimObj)
     {
-        m_CurrentAnimObj->GetComponent<TransformComponent>()->SetPosition({ m_MoveStartPos.x, m_MoveStartPos.y + 40.f });
+        //m_CurrentAnimObj->GetComponent<TransformComponent>()->SetPosition({ m_MoveStartPos.x + m_ScrollSpeed, m_MoveStartPos.y + 40.f });
         m_CurrentAnimObj->GetComponent<AnimationComponent>()->Play("idle");
     }
 

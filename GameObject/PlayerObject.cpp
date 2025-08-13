@@ -532,8 +532,6 @@ void PlayerObject::Update(float deltaTime)
 {
 	//float temp = m_Transform->GetPosition().y;
 
-	std::cout << "x: " << m_Transform->GetPosition().x << ", y: " << m_Transform->GetPosition().y << std::endl;
-
 	if (m_InvincibleTime > 0)
 		m_InvincibleTime -= deltaTime;
 	else

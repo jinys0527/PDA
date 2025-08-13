@@ -26,10 +26,10 @@ void ChapterBackgroundManager::LoadBackgroundSet(int chapter)
 	std::vector<std::wstring> tileTextures;
 	std::vector<std::wstring> tileEdgesTextures;
 
-	nearTextures = { L"../Resource/Background/Near_sight1.png",
-					L"../Resource/Background/Near_sight2.png" };
 	if (chapter == 1)
 	{
+		nearTextures = { L"../Resource/Background/Near_sight1.png",
+				L"../Resource/Background/Near_sight2.png" };
 		farTextures = { L"../Resource/Background/Chapter1/Background.png" };
 		foreTextures = { L"../Resource/Background/Chapter1/Foreground.png" };
 		backgroundTextures = { L"../Resource/Background/Chapter1/Building1.png",
@@ -42,6 +42,8 @@ void ChapterBackgroundManager::LoadBackgroundSet(int chapter)
 	}
 	else if (chapter == 2)
 	{
+		nearTextures = { L"../Resource/Background/Near_sight1.png",
+				L"../Resource/Background/Near_sight2.png" };
 		farTextures = { L"../Resource/Background/Chapter2/Background_Sky.png" };
 		foreTextures = { L"../Resource/Background/Chapter2/Foreground_2.png" };
 		backgroundTextures = { L"../Resource/Background/Chapter2/Background1.png",
@@ -51,24 +53,48 @@ void ChapterBackgroundManager::LoadBackgroundSet(int chapter)
 	}
 	else if (chapter == 3)
 	{
+		nearTextures;
+
 		farTextures;
 		foreTextures;
 		backgroundTextures = { L"../Resource/Background/Chapter3/background.png" };
 		tileTextures = { L"../Resource/Background/Chapter3/Tile3.png" };
 		tileEdgesTextures = { L"../Resource/Background/Chapter3/Tile_3_1.png" };
 	}
+
 	else if (chapter == 4)
 	{
+		nearTextures;
+		farTextures;
+		foreTextures;
+		backgroundTextures = { L"../Resource/Background/Chapter3/3Chap_1Phase_Background_03.png" };
+		tileTextures = { L"../Resource/Background/Chapter3/Tile3.png" };
+		tileEdgesTextures = { L"../Resource/Background/Chapter3/Tile_3_1.png" };
+	}
+
+	if (chapter == 1 || chapter == 2)
+	{
+		CreateLayerSet(m_NearLayers, nearTextures, 40.0f, 6);		  // �ٰ�
+		CreateLayerSet(m_Tiles, tileTextures, 0.0f, -1);			  // Ÿ��
+		CreateLayerSet(m_TileEdges, tileEdgesTextures, 0.0f, -2);     // Ÿ�� �׵θ�
+		CreateLayerSet(m_Backgrounds, backgroundTextures, 0.0f, -3);  // ���
+		CreateLayerSet(m_ForeLayers, foreTextures, 80.0f, -4);		  // ����
+		CreateLayerSet(m_FarLayers, farTextures, 20.0f, -5);		  // ����
 
 	}
 
-	// 레이어별 생성
-	CreateLayerSet(m_NearLayers, nearTextures, 40.0f, 6);		  // 근경
-	CreateLayerSet(m_Tiles, tileTextures, 0.0f, -1);			  // 타일
-	CreateLayerSet(m_TileEdges, tileEdgesTextures, 0.0f, -2);     // 타일 테두리
-	CreateLayerSet(m_Backgrounds, backgroundTextures, 0.0f, -3);  // 배경
-	CreateLayerSet(m_ForeLayers, foreTextures, 80.0f, -4);		  // 전경
-	CreateLayerSet(m_FarLayers, farTextures, 20.0f, -5);		  // 원경
+
+	if (chapter == 3 || chapter == 4)
+	{
+		CreateLayerSet(m_NearLayers, nearTextures, 40.0f, 6);		  // �ٰ�
+		CreateLayerSet(m_Tiles, tileTextures, 0.0f, -1);			  // Ÿ��
+		CreateLayerSet(m_TileEdges, tileEdgesTextures, 0.0f, -2);     // Ÿ�� �׵θ�
+		CreateLayerSet(m_Backgrounds, backgroundTextures, 0.0f, -7);  // ���
+		CreateLayerSet(m_ForeLayers, foreTextures, 80.0f, -8);		  // ����
+		CreateLayerSet(m_FarLayers, farTextures, 20.0f, -9);		  // ����
+
+	}
+
 }
 
 void ChapterBackgroundManager::Update(float deltaTime, const CameraObject* camera)

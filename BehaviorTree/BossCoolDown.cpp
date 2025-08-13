@@ -1,6 +1,9 @@
 #include "BossCoolDown.h"
 #include "BlackBoard.h"
 #include <random>
+#include "GraffitiObject.h"
+#include "SpriteRenderer.h"
+#include "GraffitiComponent.h"
 
 NodeState BossCoolDown::Tick(BlackBoard& bb, float deltaTime)
 {
@@ -9,15 +12,37 @@ NodeState BossCoolDown::Tick(BlackBoard& bb, float deltaTime)
 
     elapsedTime += deltaTime;
 
+    auto graffitis = bb.GetValue< std::vector<std::shared_ptr<GraffitiObject>>>("Graffiti").value();
+
     if (elapsedTime < coolDown)
     {
         bb.SetValue("CanBeHit", true);
+
+        if (bb.GetValue<int>("CurrPhase").value() == 1)
+        {
+            auto graffiti = graffitis[0];
+            graffiti->GetComponent<GraffitiComponent>()->SetIsActive(true);
+            graffiti->GetComponent<SpriteRenderer>()->SetOpacity(1.0f);
+        }
+
+        if (bb.GetValue<int>("CurrPhase").value() == 3)
+        {
+            auto graffiti = graffitis[1];
+            graffiti->GetComponent<GraffitiComponent>()->SetIsActive(true);
+            graffiti->GetComponent<SpriteRenderer>()->SetOpacity(1.0f);
+        }
 
 
         bb.SetValue("ElapsedIdleTime", elapsedTime);
         return NodeState::Running;
     }
 
+    for (auto& graffiti : graffitis)
+    {
+        graffiti->GetComponent<SpriteRenderer>()->SetOpacity(0.f);
+        graffiti->GetComponent<GraffitiComponent>()->SetIsActive(false);
+
+    }
     bb.SetValue("CanBeHit", false);
 
 

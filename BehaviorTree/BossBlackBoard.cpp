@@ -2,20 +2,28 @@
 
 BossBlackBoard::BossBlackBoard(
 	float scrollspeed,
+	std::vector<std::shared_ptr<GraffitiObject>>& graffitis,
+	EventDispatcher& eventdispatcher,
+
 	std::vector<std::shared_ptr<Telegraph>>& telegraphs, 
 	std::vector<std::shared_ptr<GameObject>>& anims, 
 	std::vector<std::shared_ptr<GameObject>>& fires,
 	std::unordered_map<std::string, std::shared_ptr<GameObject>>& backgrounds,
 	std::unordered_map<std::string, std::vector<int>>& animIndexMap,
 	SoundManager& soundmanager)
-	: BlackBoard(soundmanager)
+	: BlackBoard(soundmanager), m_EventDispatcher(eventdispatcher)
 {
+
+	SetValue("EventDispatcher", eventdispatcher);
+
+	SetValue("Graffiti", graffitis);
+
 	SetValue("ScrollSpeed", scrollspeed);
 
 	SetValue("CanBeHit", false);
 
 	SetValue("IsDead", false);
-	SetValue("BossMaxHP", 55.0f);
+	SetValue("BossMaxHP", 100.0f);
 	SetValue("BossCurrHP", GetValue<float>("BossMaxHP").value());
 
 	//º¸½º Äð´Ù¿î
@@ -65,8 +73,8 @@ BossBlackBoard::BossBlackBoard(
 
 	SetValue("SkillWeight_1", 1.0f);
 	SetValue("SkillWeight_2", 1.0f);
-	SetValue("SkillWeight_3", 5001.0f);
-	SetValue("SkillWeight_4", 1.0f);
+	SetValue("SkillWeight_3", 1.0f);
+	SetValue("SkillWeight_4", 5001.0f);
 	SetValue("SkillWeight_5", 1.0f);
 
 	SetValue("SkillChance_1", 0.f);
@@ -75,7 +83,8 @@ BossBlackBoard::BossBlackBoard(
 	SetValue("SkillChance_4", 0.f);
 	SetValue("SkillChance_5", 0.f);
 
-	SetValue("CurrPhase", 2);
+	SetValue("CurrPhase", 0);
 }
+
 
 

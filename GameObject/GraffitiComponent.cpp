@@ -48,6 +48,7 @@ void GraffitiComponent::OnEvent(EventType type, const void* data)
 				m_IsFirst = true;
 				int one = 1;
 				GetEventDispatcher().Dispatch(EventType::OnPlayerReinforcedCollisionOccur, (const void*)one);//player 받아와서 그냥 바꿔야하나
+				GetEventDispatcher().Dispatch(EventType::OnBossAttacked, attackInfo);
 				attackInfo->player->SetIsAttackSuccessed(true);
 			}
 			//attackInfo->damage 데미지도 가져옴

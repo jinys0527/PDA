@@ -36,6 +36,7 @@ enum class EventType
 	OnPlayerAttack,
 	Quit,
 
+	OnBossAttacked,
 	OnLoadedScene
 };
 
