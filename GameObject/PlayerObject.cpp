@@ -589,7 +589,7 @@ void PlayerObject::Start(SoundManager* soundmanager)
 		}
 		{
 			State deathState{
-				[this]()
+				[soundmanager,this]()
 				{
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
@@ -598,6 +598,8 @@ void PlayerObject::Start(SoundManager* soundmanager)
 						auto sr = this->GetComponent<SpriteRenderer>();
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
+						soundmanager->SFX_Shot(L"ui_gameover_transition");
+						soundmanager->BGM_Shot(L"bgm_gameover2", 1.0f);
 					}
 					std::cout << "death µé¾î¿È" << std::endl;
 				},

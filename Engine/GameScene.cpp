@@ -840,6 +840,8 @@ void GameScene::Initialize()
 		if (auto btn = weakGameOverMainButton.lock()) btn->SetIsVisible(false);
 		if (auto btn = weakGameOverRetryButton.lock()) btn->SetIsVisible(false);
 
+		m_SoundManager.SFX_Shot(L"ui_click");
+
 		LoadPlayerInfo();
 
 		m_UIManager.RefreshUIListForCurrentScene();
@@ -852,6 +854,9 @@ void GameScene::Initialize()
 		if (auto btn = weakMainButton.lock()) btn->SetIsVisible(false);
 		if (auto btn = weakRetryButton.lock()) btn->SetIsVisible(false);
 		if (auto btn = weakExitButton.lock()) btn->SetIsVisible(false);
+
+		m_SoundManager.SFX_Shot(L"ui_click");
+		m_SoundManager.SFX_Shot(L"ui_screen_transition");
 
 		m_SceneManager->SetChangeScene("TitleScene");
 
@@ -870,6 +875,8 @@ void GameScene::Initialize()
 		if (auto btn = weakRetryButton.lock()) btn->SetIsVisible(false);
 		if (auto btn = weakExitButton.lock()) btn->SetIsVisible(false);
 
+		m_SoundManager.SFX_Shot(L"ui_click");
+
 		m_UIManager.RefreshUIListForCurrentScene();
 		});
 
@@ -885,6 +892,8 @@ void GameScene::Initialize()
 		if (auto bg = weaksettingBackGround.lock()) bg->SetIsVisible(true);
 		if (auto btn = weaksettingOkButton.lock()) btn->SetIsVisible(true);
 		if (auto soundUI = weakSoundUI.lock()) soundUI->SetIsVisible(true);
+
+		m_SoundManager.SFX_Shot(L"ui_click");
 
 		m_UIManager.RefreshUIListForCurrentScene();
 		});
@@ -902,6 +911,8 @@ void GameScene::Initialize()
 		if (auto btn = weaksettingOkButton.lock()) btn->SetIsVisible(false);
 		if (auto soundUI = weakSoundUI.lock()) soundUI->SetIsVisible(false);
 
+		m_SoundManager.SFX_Shot(L"ui_click");
+
 		m_UIManager.RefreshUIListForCurrentScene();
 		});
 
@@ -917,6 +928,8 @@ void GameScene::Initialize()
 		if (auto bg = weakexitBackGround.lock()) bg->SetIsVisible(false);
 		if (auto btn = weakexitOkButton.lock()) btn->SetIsVisible(false);
 		if (auto btn = weakexitNoButton.lock()) btn->SetIsVisible(false);
+		m_SoundManager.SFX_Shot(L"ui_click");
+
 		m_UIManager.RefreshUIListForCurrentScene();
 		});
 
@@ -927,6 +940,9 @@ void GameScene::Initialize()
 		if (auto btn = weakMainButton.lock()) btn->SetIsVisible(false);
 		if (auto btn = weakRetryButton.lock()) btn->SetIsVisible(false);
 		if (auto btn = weakExitButton.lock()) btn->SetIsVisible(false);
+
+		m_SoundManager.SFX_Shot(L"ui_click");
+		m_SoundManager.SFX_Shot(L"ui_screen_transition");
 
 		m_SceneManager->SetChangeScene("TitleScene");
 
@@ -945,6 +961,8 @@ void GameScene::Initialize()
 		if (auto btn = weakRetryButton.lock()) btn->SetIsVisible(false);
 		if (auto btn = weakExitButton.lock()) btn->SetIsVisible(false);
 
+		m_SoundManager.SFX_Shot(L"ui_click");
+
 		LoadPlayerInfo();
 
 		m_UIManager.RefreshUIListForCurrentScene();
@@ -961,6 +979,8 @@ void GameScene::Initialize()
 		if (auto bg = weakexitBackGround.lock()) bg->SetIsVisible(true);
 		if (auto btn = weakexitOkButton.lock()) btn->SetIsVisible(true);
 		if (auto btn = weakexitNoButton.lock()) btn->SetIsVisible(true);
+
+		m_SoundManager.SFX_Shot(L"ui_click");
 
 		m_UIManager.RefreshUIListForCurrentScene();
 		});
@@ -982,6 +1002,8 @@ void GameScene::Initialize()
 		auto eb = weakexitBackGround.lock();
 		if (snd && eb)
 		{
+			m_SoundManager.SFX_Shot(L"ui_click");
+
 			if (snd->IsVisible() || eb->IsVisible())
 			{
 				if (auto bg = weakmenuBox.lock())	bg->SetIsVisible(true);
@@ -1038,6 +1060,9 @@ void GameScene::Initialize()
 		});
 
 	controlComp->RegisterKeyDownCallback(VK_ESCAPE, [weakmenuBox, weakstartButton, weaksettingButton, weakmainButton, weakretryButton, weakexitButton, weaksettingBackGround, weaksettingOkButton, weakSoundUI, weakexitBackGround, weakexitOkButton, weakexitNoButton, weakGameOverBox, this]() {
+		
+		m_SoundManager.SFX_Shot(L"ui_click");
+
 		if (auto bg = weakGameOverBox.lock())
 		{
 			if (bg->IsVisible())
@@ -1978,4 +2003,6 @@ void GameScene::LoadPlayerInfo()
 	uiobjects.find("gameoverBox")->second->SetIsVisible(false);
 	uiobjects.find("gameoverRetryButton")->second->SetIsVisible(false);
 	uiobjects.find("gameoverMainButton")->second->SetIsVisible(false);
+
+	m_SoundManager.BGM_Shot(L"bgm_run_longver2", 1.0f);
 }
