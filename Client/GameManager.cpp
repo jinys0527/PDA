@@ -43,3 +43,9 @@ void GameManager::OnEvent(EventType type, const void* data)
 		break;
 	}
 }
+
+void GameManager::Initial()
+{
+	m_playerHp = m_initialHp;
+	m_playerReinforcedAttack = m_initialReinforcedAttack;
+}

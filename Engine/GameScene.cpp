@@ -1421,7 +1421,7 @@ void GameScene::Initialize()
 		triggerBox->m_Name = "TriggerBox" + std::format("{:03}", 0);
 		triggerBox->Start(&m_AssetManager);
 		auto triggerBoxTrans = triggerBox->GetComponent<TransformComponent>();
-		triggerBoxTrans->SetPosition({ 2000, 100 });
+		triggerBoxTrans->SetPosition({ 6000, 100 });
 		triggerBoxTrans->SetZOrder(0);
 		auto triggerBoxbox = triggerBox->AddComponent<BoxColliderComponent>();
 		triggerBoxbox->SetSize({ 100, 10000 });
@@ -1443,7 +1443,7 @@ void GameScene::Initialize()
 		triggerBox->m_Name = "TriggerBox" + std::format("{:03}", 1);
 		triggerBox->Start(&m_AssetManager);
 		auto triggerBoxTrans = triggerBox->GetComponent<TransformComponent>();
-		triggerBoxTrans->SetPosition({ 4000, 100 });
+		triggerBoxTrans->SetPosition({ 10000, 100 });
 		triggerBoxTrans->SetZOrder(0);
 		auto triggerBoxbox = triggerBox->AddComponent<BoxColliderComponent>();
 		triggerBoxbox->SetSize({ 100, 10000 });
@@ -1509,6 +1509,8 @@ void GameScene::Leave()
 	escController->Leave();
 	auto player = dynamic_cast<PlayerObject*>(m_GameObjects.find("player")->second.get());
 	player->SetScene(false);
+
+	m_GameManager->Initial();
 }
 
 void ObjectCollisionLeave(EventDispatcher& eventDispatcher, BoxColliderComponent* enemy, BoxColliderComponent* player)
@@ -1847,8 +1849,7 @@ void GameScene::LoadPlayerInfo()
 	}
 
 	//if()
-	m_ChapterBackgroundManager->LoadBackgroundSet(1);
-	//m_ChapterBackgroundManager->LoadBackgroundSet(1);
+	m_ChapterBackgroundManager->LoadBackgroundSet(2);
 
 	for (auto& bg : m_ChapterBackgroundManager->GetAllBackgrounds())
 	{

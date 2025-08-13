@@ -30,7 +30,7 @@ void Background::Update(float deltaTime, const CameraObject* camera)
 
 	TransformComponent* trans = GetComponent<TransformComponent>();
 	float x = trans->GetPosition().x;
-	int xSize = GetComponent<SpriteRenderer>()->GetTexture()->GetSize().width * m_Transform->GetScale().x;
+	float xSize = GetComponent<SpriteRenderer>()->GetTexture()->GetSize().width * m_Transform->GetScale().x;
 
 	// 카메라 위치 + 화면 절반 크기 가져오기
 	auto cameraComp = camera->GetComponent<CameraComponent>();

@@ -22,6 +22,8 @@ public:
 
 	void OnEvent(EventType type, const void* data);
 
+	void Initial();
+
 	int m_playerHp = 5;
 	int m_playerReinforcedAttack = 3;
 	float m_playerXLoc = 960.0f;
