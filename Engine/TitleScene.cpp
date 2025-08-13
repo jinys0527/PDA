@@ -13,6 +13,8 @@
 #include "BoxColliderComponent.h"
 #include "SoundUI.h"
 #include "UIImageComponent.h"
+#include "LoadingRollerComponent.h"
+#include "RollerBackComponent.h"
 
 void TitleScene::Initialize()
 {
@@ -654,6 +656,111 @@ void TitleScene::Initialize()
 	backButtonRect->SetPivotPreset(RectTransformPivotPreset::Center);
 #pragma endregion
 
+#pragma region loading
+
+
+	auto loadingBackGround = std::make_shared<UIObject>(m_EventDispatcher);
+	loadingBackGround->m_Name = "Roller1";
+	//exitBackGround->SetIsFullScreen(true);
+	loadingBackGround->SetZOrder(8);
+	auto loadingBackGroundImg = loadingBackGround->AddComponent<UIImageComponent>();
+	loadingBackGroundImg->SetBitmap(m_AssetManager.LoadTexture(L"Roller", "../Resource/UI/Loading/Roller.png"));
+	loadingBackGroundImg->SetUV({ 893.0f, 1932.0f });
+	auto loadingBackGroundRect = loadingBackGround->GetComponent<RectTransformComponent>();
+	loadingBackGroundRect->SetPosition({ -1220.0f, -550.0f });
+	loadingBackGroundRect->SetSize({ 1000.0f, 2000.0f });
+	loadingBackGroundRect->SetAnchorPreset(AnchorPrset::FullStretch);
+	loadingBackGroundRect->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	loadingBackGround->SetIsVisible(true);
+	auto loadingComp = loadingBackGround->AddComponent<LoadingRollerComponent>();
+	loadingComp->SetIndex(0);
+	loadingComp->SetScenePtr(this);
+	loadingComp->SetOpacity(0);
+
+
+
+	auto loadingBackGround2 = std::make_shared<UIObject>(m_EventDispatcher);
+	loadingBackGround2->m_Name = "Roller2";
+	//exitBackGround->SetIsFullScreen(true);
+	loadingBackGround2->SetZOrder(9);
+	auto loadingBackGroundImg2 = loadingBackGround2->AddComponent<UIImageComponent>();
+	loadingBackGroundImg2->SetBitmap(m_AssetManager.LoadTexture(L"Roller", "../Resource/UI/Loading/Roller.png"));
+	loadingBackGroundImg2->SetUV({ 893.0f, 1932.0f });
+	auto loadingBackGroundRect2 = loadingBackGround2->GetComponent<RectTransformComponent>();
+	loadingBackGroundRect2->SetPosition({ -500.0f, -550.0f });
+	loadingBackGroundRect2->SetSize({ 1000.0f, 2000.0f });
+	loadingBackGroundRect2->SetAnchorPreset(AnchorPrset::FullStretch);
+	loadingBackGroundRect2->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	loadingBackGround2->SetIsVisible(true);
+
+	auto loadingComp2 = loadingBackGround2->AddComponent<LoadingRollerComponent>();
+	loadingComp2->SetIndex(1);
+	loadingComp2->SetScenePtr(this);
+	loadingComp2->SetOpacity(0);
+
+
+
+	auto loadingBackGround3 = std::make_shared<UIObject>(m_EventDispatcher);
+	loadingBackGround3->m_Name = "Roller3";
+	//exitBackGround->SetIsFullScreen(true);
+	loadingBackGround3->SetZOrder(10);
+	auto loadingBackGroundImg3 = loadingBackGround3->AddComponent<UIImageComponent>();
+	loadingBackGroundImg3->SetBitmap(m_AssetManager.LoadTexture(L"Roller", "../Resource/UI/Loading/Roller.png"));
+	loadingBackGroundImg3->SetUV({ 893.0f, 1932.0f });
+	auto loadingBackGroundRect3 = loadingBackGround3->GetComponent<RectTransformComponent>();
+	loadingBackGroundRect3->SetPosition({ 219.9f, -550.0f });
+	loadingBackGroundRect3->SetSize({ 1000.0f, 2000.0f });
+	loadingBackGroundRect3->SetAnchorPreset(AnchorPrset::FullStretch);
+	loadingBackGroundRect3->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	loadingBackGround3->SetIsVisible(true);
+
+	auto loadingComp3 = loadingBackGround3->AddComponent<LoadingRollerComponent>();
+	loadingComp3->SetIndex(2);
+	loadingComp3->SetScenePtr(this);
+	loadingComp3->SetFunc([this]
+		{
+			this->m_SceneManager->ChangeScene();
+		});
+	loadingComp3->SetOpacity(0);
+
+	auto loadingBackGround4 = std::make_shared<UIObject>(m_EventDispatcher);
+	loadingBackGround4->m_Name = "Roller4";
+	loadingBackGround4->SetZOrder(11);
+	//loadingBackGround4->SetIsFullScreen(true);
+	auto loadingBackGroundImg4 = loadingBackGround4->AddComponent<UIImageComponent>();
+	loadingBackGroundImg4->SetBitmap(m_AssetManager.LoadTexture(L"LODING", "../Resource/UI/Loading/LODING.png"));
+	loadingBackGroundImg4->SetUV({ 1920.0f, 1080.0f });
+	auto loadingBackGroundRect4 = loadingBackGround4->GetComponent<RectTransformComponent>();
+	loadingBackGroundRect4->SetPosition({ -1920.0f, -540.0f });
+	loadingBackGroundRect4->SetSize({ 3000.0f, 1080.0f });
+	loadingBackGroundRect4->SetAnchorPreset(AnchorPrset::FullStretch);
+	loadingBackGroundRect4->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	loadingBackGround4->SetIsVisible(true);
+
+	auto loadingComp4 = loadingBackGround4->AddComponent<RollerBackComponent>();
+	loadingComp4->SetScenePtr(this);
+	loadingComp4->SetOpacity(0);
+
+
+	m_EventDispatcher.AddListener(EventType::OnLoadedScene, loadingComp);
+	m_EventDispatcher.AddListener(EventType::OnLoadedScene, loadingComp2);
+	m_EventDispatcher.AddListener(EventType::OnLoadedScene, loadingComp3);
+	m_EventDispatcher.AddListener(EventType::OnLoadedScene, loadingComp4);
+
+	m_UIManager.AddUI("TitleScene", loadingBackGround);
+	m_UIManager.AddUI("TitleScene", loadingBackGround2);
+	m_UIManager.AddUI("TitleScene", loadingBackGround3);
+	m_UIManager.AddUI("TitleScene", loadingBackGround4);
+	m_SceneManager->SetChangeScene("TitleScene");
+
+
+
+#pragma endregion
+
 #pragma region select
 	auto selectButton = std::make_shared<ButtonUI>(m_EventDispatcher);
 	selectButton->m_Name = "selectButton";
@@ -666,11 +773,13 @@ void TitleScene::Initialize()
 	auto selectButtonComp = selectButton->GetComponent<UIButtonComponent>();
 	selectButtonComp->GetFSM().SetOnEnter("Hover", [selectButtonImg, this]() { selectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"charselect_selectbutton_on", "../Resource/UI/CharacterSelect/charselect_selectbutton_on.png")); });
 	selectButtonComp->GetFSM().SetOnExit("Hover", [selectButtonImg, this]() { selectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"charselect_selectbutton_off", "../Resource/UI/CharacterSelect/charselect_selectbutton_off.png")); });
-	selectButtonComp->GetFSM().SetOnEnter("Click", [this]() {
+	selectButtonComp->GetFSM().SetOnEnter("Click", [loadingComp, loadingComp2, loadingComp3, this]() {
 		if(!m_isAcid)
 		{
-			m_SceneManager->ChangeScene("GameScene");
-			m_UIManager.SetCurrentScene("GameScene");
+			m_SceneManager->SetChangeScene("GameScene");
+			loadingComp->Start();
+			loadingComp2->Start();
+			loadingComp3->Start();
 		}
 		});
 
@@ -705,7 +814,7 @@ void TitleScene::Initialize()
 	std::weak_ptr<ButtonUI> weakcreditButton = creditButton;
 	std::weak_ptr<UIObject> weakpressAnyKey = pressAnyKey;
 	
-	backButtonComp->GetFSM().SetOnEnter("Click", [weakcharacterSelectBackGround, weaksourName, weakacidName, weaksourSelectButton, weakacidSelectButton, weakbackButton, weakselectButton, weakmenuBox, weakstartButton, weaksettingButton, weakcreditButton]() {
+	backButtonComp->GetFSM().SetOnEnter("Click", [weakcharacterSelectBackGround, weaksourBackGround, weakacidBackGround, weaksourName, weakacidName, weaksourSelectButton, weakacidSelectButton, weakbackButton, weakselectButton, weakmenuBox, weakstartButton, weaksettingButton, weakcreditButton]() {
 		if (auto bg = weakcharacterSelectBackGround.lock()) bg->SetIsVisible(false);
 		if (auto bg = weaksourName.lock()) bg->SetIsVisible(false);
 		if (auto bg = weakacidName.lock()) bg->SetIsVisible(false);
@@ -717,6 +826,8 @@ void TitleScene::Initialize()
 		if (auto btn = weakstartButton.lock()) btn->SetIsVisible(true);
 		if (auto btn = weaksettingButton.lock()) btn->SetIsVisible(true);
 		if (auto btn = weakcreditButton.lock()) btn->SetIsVisible(true);
+		if (auto bg = weaksourBackGround.lock()) bg->SetIsVisible(false);
+		if (auto bg = weakacidBackGround.lock()) bg->SetIsVisible(false);
 		});
 
 
@@ -735,6 +846,7 @@ void TitleScene::Initialize()
 		});
 #pragma region controlObject
 	auto controlObject = std::make_shared<GameObject>(m_EventDispatcher);
+	controlObject->SetName("Control");
 	auto controlComp = controlObject->AddComponent<ControlComponent>();
 	controlComp->Start();
 
@@ -777,6 +889,8 @@ void TitleScene::Initialize()
 
 	AddGameObject(cameraObject);
 #pragma endregion
+
+
 }
 
 void TitleScene::Finalize()
@@ -786,10 +900,14 @@ void TitleScene::Finalize()
 
 void TitleScene::Enter()
 {
+	auto escController = m_GameObjects.find("Control")->second->GetComponent<ControlComponent>();
+	escController->Enter();
 }
 
 void TitleScene::Leave()
 {
+	auto escController = m_GameObjects.find("Control")->second->GetComponent<ControlComponent>();
+	escController->Leave();
 }
 
 

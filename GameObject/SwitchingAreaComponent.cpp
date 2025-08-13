@@ -20,14 +20,14 @@ void SwitchingAreaComponent::Update(float deltaTime)
 	pos.x = pos.x - 960.0f + (m_RectTransComp->GetSize().x / 2.0f);
 	pos.y = pos.y - 540.0f + (m_RectTransComp->GetSize().y / 2.0f);
 
-	if (pos.x > -1920)
+	if (pos.x > -2000)
 	{
 		pos.x -= deltaTime * switchingSpeed;
 	}
 
-	if (pos.x < -1920)
+	if (pos.x < -2000)
 	{
-		pos.x = -1920;
+		pos.x = -2000;
 	}
 
 	m_RectTransComp->SetPosition(pos);

@@ -934,6 +934,7 @@ void InGameUITestScene::Initialize()
 		});
 
 	auto controlObject = std::make_shared<GameObject>(m_EventDispatcher);
+	controlObject->SetName("Control");
 	auto controlComp = controlObject->AddComponent<ControlComponent>();
 	controlComp->Start();
 

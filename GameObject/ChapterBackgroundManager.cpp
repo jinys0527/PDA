@@ -65,9 +65,9 @@ void ChapterBackgroundManager::LoadBackgroundSet(int chapter)
 
 void ChapterBackgroundManager::Update(float deltaTime, const CameraObject* camera)
 {
-	for (auto& bg : m_FarLayers)  bg->Update(deltaTime);
-	for (auto& bg : m_NearLayers)  bg->Update(deltaTime);
-	for (auto& bg : m_ForeLayers) bg->Update(deltaTime);
+	for (auto& bg : m_FarLayers)  bg->Update(deltaTime, camera);
+	for (auto& bg : m_NearLayers)  bg->Update(deltaTime, camera);
+	for (auto& bg : m_ForeLayers) bg->Update(deltaTime, camera);
 	for (auto& bg : m_Backgrounds) bg->Update(deltaTime, camera);
 	for (auto& tile : m_Tiles) tile->Update(deltaTime, camera);
 	for (auto& tileEdge : m_TileEdges) tileEdge->Update(deltaTime, camera);
@@ -108,7 +108,7 @@ void ChapterBackgroundManager::CreateLayerSet(
 		int width = tex->GetSize().width;
 
 		// 2세트 생성
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 3; i++)
 		{
 			auto bg = std::make_shared<Background>(m_EventDispatcher);
 			std::string name = std::string(key.begin(), key.end()) + std::to_string(i);
@@ -122,9 +122,11 @@ void ChapterBackgroundManager::CreateLayerSet(
 			// m_Backgrounds에 해당하는 벡터일 때만 스케일 조정
 			if (&layerVec == &m_Backgrounds)
 			{
-				// pivot이 BottomCenter이므로 좌측 끝 맞춤을 위해 절반만큼 빼기
-				float adjustedStartX = startX + width * 0.5f;
 				trans->SetScale({ 0.98f, 0.98f });
+				// pivot이 BottomCenter이므로 좌측 끝 맞춤을 위해 절반만큼 빼기
+				width = tex->GetSize().width * 0.98;
+				float adjustedStartX = startX + width * 0.5f;
+
 				trans->SetPosition({ adjustedStartX + width * i, 0 });
 			}
 			else
@@ -138,6 +140,6 @@ void ChapterBackgroundManager::CreateLayerSet(
 			bg->ToggleScroll();
 			layerVec.push_back(bg);
 		}
-		startX += width * 2; // 다음 세트 위치로
+		startX += width * 3; // 다음 세트 위치로
 	}
 }

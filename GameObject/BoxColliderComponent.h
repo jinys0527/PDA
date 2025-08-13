@@ -16,6 +16,7 @@ public:
 	void SetSize(const Vec2F& size) {
 		m_Size = size;
 	}
+	Vec2F GetCenter();
 
 	void OnTrigger()
 	{

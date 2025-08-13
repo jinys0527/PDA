@@ -115,6 +115,8 @@ protected:
 
 	bool m_IsScene = false;
 
+	int m_Layer = 0;
+
 	GameObject* m_CameraObject;
 
 	Microsoft::WRL::ComPtr<ID2D1Bitmap1> m_ShadowBitmap;

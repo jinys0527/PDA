@@ -51,7 +51,7 @@ void LoadingRollerComponent::Update(float deltaTime)
 		if (m_SceneLoadFunc && m_IsStart)
 		{
 			m_SceneLoadFunc();
-			m_SceneLoadFunc = nullptr;
+			m_IsStart = false;
 		}
 	}
 

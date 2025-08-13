@@ -545,6 +545,19 @@ void PlayerObject::Update(float deltaTime)
 	GameObject::Update(deltaTime);
 
 	m_Fsm.Update(deltaTime);
+
+	if (m_Z == 2)
+	{
+		m_Layer = 0;
+	}
+	else if (m_Z >= 1)
+	{
+		m_Layer = 2;
+	}
+	else
+	{
+		m_Layer = 4;
+	}
 }
 
 void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
@@ -573,6 +586,7 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 			forSin = forSin > asin(1) ? asin(1) : forSin;
 			float opacity = sin(forSin);
 			info.opacity = 1.0f - opacity;
+			info.layer = m_Layer;
 			renderInfo.push_back(info);
 			pos.y = y;
 			m_Transform->SetPosition(pos);
@@ -596,6 +610,7 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 			info.opacity = opacity;
 			info.useSrcRect = sprite->GetUseSrcRect();
 			info.srcRect = sprite->GetSrcRect();
+			info.layer = m_Layer;
 			renderInfo.push_back(info);
 		}
 	}
