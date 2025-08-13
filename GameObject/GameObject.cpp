@@ -45,6 +45,8 @@ bool GameObject::IsInView(CameraObject* camera) const
 	{
 		objPos += trans->GetParent()->GetPosition();
 	}
+	if (!spriteRenderer->GetTexture())
+		return false;
 	auto objSize = spriteRenderer->GetTexture()->GetSize();
 	/*auto objPivot = spriteRenderer->GetPivot();*/
 

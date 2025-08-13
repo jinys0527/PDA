@@ -36,7 +36,6 @@
 #include "DroneComponent.h"
 #include "TriggerBox.h"
 #include <iostream>
-
 #include "Telegraph.h"
 
 void GameScene::Initialize()
@@ -58,6 +57,7 @@ void GameScene::Initialize()
 	AddGameObject(cameraObject);
 
 #pragma endregion
+
 
 #pragma region soundUI
 
@@ -616,6 +616,48 @@ void GameScene::Initialize()
 
 #pragma endregion
 
+	auto creditBackGround = std::make_shared<UIObject>(m_EventDispatcher);
+	creditBackGround->m_Name = "creditBackGround";
+	creditBackGround->SetIsFullScreen(true);
+	creditBackGround->SetZOrder(4);
+	auto creditBackGroundImg = creditBackGround->AddComponent<UIImageComponent>();
+	creditBackGroundImg->SetBitmap(m_AssetManager.LoadTexture(L"credits_popup", "../Resource/UI/Credit/credits_popup.png"));
+	creditBackGroundImg->SetUV({ 1920.0f, 1080.0f });
+	auto creditBackGroundRect = creditBackGround->GetComponent<RectTransformComponent>();
+	creditBackGroundRect->SetPosition({ -960.0f, -540.0f });
+	creditBackGroundRect->SetSize({ 1920.0f, 1080.0f });
+	creditBackGroundRect->SetAnchorPreset(AnchorPrset::FullStretch);
+	creditBackGroundRect->SetPivotPreset(RectTransformPivotPreset::Center);
+
+
+	auto creditMainButton = std::make_shared<ButtonUI>(m_EventDispatcher);
+	creditMainButton->SetZOrder(5);
+	creditMainButton->m_Name = "creditMainButton";
+	creditMainButton->UpdateInteractableFlags();
+	auto creditMainButtonImg = creditMainButton->AddComponent<UIImageComponent>();
+	creditMainButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"credits_button_off", "../Resource/UI/Credit/credits_button_off.png"));
+	creditMainButtonImg->SetUV({ 460.0f, 116.0f });
+	auto creditMainButtonComp = creditMainButton->GetComponent<UIButtonComponent>();
+	creditMainButtonComp->GetFSM().SetOnEnter("Hover", [creditMainButtonImg, this]() { creditMainButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"credits_button_on", "../Resource/UI/Credit/credits_button_on.png")); });
+	creditMainButtonComp->GetFSM().SetOnExit("Hover", [creditMainButtonImg, this]() { creditMainButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"credits_button_off", "../Resource/UI/Credit/credits_button_off.png")); });
+
+	std::weak_ptr<UIObject> weakcreditBackGround = creditBackGround;
+	std::weak_ptr<ButtonUI> weakcreditMainButton = creditMainButton;
+
+	auto creditMainButtonRect = creditMainButton->GetComponent<RectTransformComponent>();
+	creditMainButtonRect->SetPosition({ 380.0f, 240.0f }); // 후보 1
+	creditMainButtonRect->SetSize({ 460.0f, 116.0f });
+	creditMainButtonRect->SetAnchorPreset(AnchorPrset::FullStretch);
+	creditMainButtonRect->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	/*creditBackGroundRect->AddChild(creditMainButtonRect);*/
+
+	creditBackGround->SetIsVisible(false);
+	creditMainButton->SetIsVisible(false);
+
+	m_UIManager.AddUI("GameScene", creditBackGround);
+	m_UIManager.AddUI("GameScene", creditMainButton);
+
 #pragma region loading
 
 
@@ -784,6 +826,8 @@ void GameScene::Initialize()
 	std::weak_ptr<ButtonUI> weakMainButton = mainButton;
 	std::weak_ptr<ButtonUI> weakRetryButton = retryButton;
 	std::weak_ptr<ButtonUI> weakExitButton = exitButton;
+	std::weak_ptr<UIObject> weakCreditBack = creditBackGround;
+	std::weak_ptr<ButtonUI> weakCreditMainButton = creditMainButton;
 
 	gameoverRetryButtonComp->GetFSM().SetOnEnter("Click", [weakMenuBox, weakStartButton, weakSettingButton, weakMainButton, weakRetryButton, weakExitButton, weakGameOverBox, weakGameOverMainButton, weakGameOverRetryButton, this]() {
 		if (auto bg = weakMenuBox.lock()) bg->SetIsVisible(false);
@@ -1421,7 +1465,7 @@ void GameScene::Initialize()
 		triggerBox->m_Name = "TriggerBox" + std::format("{:03}", 0);
 		triggerBox->Start(&m_AssetManager);
 		auto triggerBoxTrans = triggerBox->GetComponent<TransformComponent>();
-		triggerBoxTrans->SetPosition({ 6000, 100 });
+		triggerBoxTrans->SetPosition({ 208124.56, 100 });
 		triggerBoxTrans->SetZOrder(0);
 		auto triggerBoxbox = triggerBox->AddComponent<BoxColliderComponent>();
 		triggerBoxbox->SetSize({ 100, 10000 });
@@ -1443,7 +1487,7 @@ void GameScene::Initialize()
 		triggerBox->m_Name = "TriggerBox" + std::format("{:03}", 1);
 		triggerBox->Start(&m_AssetManager);
 		auto triggerBoxTrans = triggerBox->GetComponent<TransformComponent>();
-		triggerBoxTrans->SetPosition({ 10000, 100 });
+		triggerBoxTrans->SetPosition({ 214370.84, 100 });
 		triggerBoxTrans->SetZOrder(0);
 		auto triggerBoxbox = triggerBox->AddComponent<BoxColliderComponent>();
 		triggerBoxbox->SetSize({ 100, 10000 });
@@ -1458,6 +1502,60 @@ void GameScene::Initialize()
 					}
 
 					m_ChapterBackgroundManager->LoadBackgroundSet(2);
+
+					for (auto& bg : m_ChapterBackgroundManager->GetAllBackgrounds())
+					{
+						AddGameObject(bg);
+					}
+					switchingAreComp->Start(3);
+					switchingAreComp2->Start(2);
+					triggerBoxbox->SetIsTrigger(false);
+				}
+			});
+		AddGameObject(triggerBox);
+	}
+	{
+		auto triggerBox = std::make_shared<TriggerBox>(m_EventDispatcher);
+		triggerBox->m_Name = "TriggerBox" + std::format("{:03}", 2);
+		triggerBox->Start(&m_AssetManager);
+		auto triggerBoxTrans = triggerBox->GetComponent<TransformComponent>();
+		triggerBoxTrans->SetPosition({ 409237.76, 100 });
+		triggerBoxTrans->SetZOrder(0);
+		auto triggerBoxbox = triggerBox->AddComponent<BoxColliderComponent>();
+		triggerBoxbox->SetSize({ 100, 10000 });
+		triggerBoxbox->Start();
+		triggerBoxbox->SetOnTrigger([triggerBoxbox, triggerBoxTrans, switchingAreComp, switchingAreComp2, this](const CollisionInfo& col)
+			{
+				if (triggerBoxbox == col.self)
+				{
+					SavePlayerInfo();
+					switchingAreComp->Start(1);
+					switchingAreComp2->Start(0);
+					triggerBoxbox->SetIsTrigger(false);
+				}
+			});
+		AddGameObject(triggerBox);
+	}
+	{
+		auto triggerBox = std::make_shared<TriggerBox>(m_EventDispatcher);
+		triggerBox->m_Name = "TriggerBox" + std::format("{:03}", 3);
+		triggerBox->Start(&m_AssetManager);
+		auto triggerBoxTrans = triggerBox->GetComponent<TransformComponent>();
+		triggerBoxTrans->SetPosition({ 413746.0f, 100 });
+		triggerBoxTrans->SetZOrder(0);
+		auto triggerBoxbox = triggerBox->AddComponent<BoxColliderComponent>();
+		triggerBoxbox->SetSize({ 100, 10000 });
+		triggerBoxbox->Start();
+		triggerBoxbox->SetOnTrigger([triggerBoxbox, triggerBoxTrans, switchingAreComp, switchingAreComp2, this](const CollisionInfo& col)
+			{
+				if (triggerBoxbox == col.self)
+				{
+					for (auto& bg : m_ChapterBackgroundManager->GetAllBackgrounds())
+					{
+						RemoveGameObject(bg);
+					}
+
+					m_ChapterBackgroundManager->LoadBackgroundSet(3);
 
 					for (auto& bg : m_ChapterBackgroundManager->GetAllBackgrounds())
 					{
@@ -1671,9 +1769,14 @@ void GameScene::Update(float deltaTime)
 	if (!uiObjects.find("menuBox")->second->IsVisible() && !uiObjects.find("settingBackGround")->second->IsVisible()) //"menuBox" find("settingBackGround")
 	{
 
-			m_GameManager->m_scrollSpeed += deltaTime * 500;
+			m_GameManager->m_scrollSpeed += deltaTime * 100;
 		if (m_GameManager->m_scrollSpeed >= 2000)
 			m_GameManager->m_scrollSpeed = 2000;
+
+		if (m_GameObjects.find("player")->second->GetComponent<RunPlayerController>()->GetIsBoss())
+		{
+			m_GameManager->m_scrollSpeed = 0;
+		}
 
 		Vec2F move = { 0, 0 };
 		move.x += m_GameManager->m_scrollSpeed * deltaTime;
@@ -1695,6 +1798,16 @@ void GameScene::Update(float deltaTime)
 			m_ChapterBackgroundManager->Update(deltaTime, GetMainCamera());
 		}
 	}
+
+	auto cameraPos = m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->GetPosition();
+	auto playerPos = m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->GetPosition();
+
+	if (playerPos.x > cameraPos.x + 900)
+		playerPos.x = cameraPos.x + 900;
+	if (playerPos.x < cameraPos.x - 900)
+		playerPos.x = cameraPos.x - 900;
+
+	m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->SetPosition(playerPos);
 
 	m_UIManager.Update(deltaTime);
 }
@@ -1818,7 +1931,7 @@ void GameScene::LoadPlayerInfo()
 #pragma endregion
 
 #pragma region triggerBox
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		auto name = "TriggerBox" + std::format("{:03}", i);
 		auto triggerBox = dynamic_cast<TriggerBox*>((m_GameObjects[name]).get());
@@ -1832,6 +1945,8 @@ void GameScene::LoadPlayerInfo()
 	std::ifstream ifs(fileName);
 	ifs >> j;
 	Deserialize(j);
+
+	//m_GameManager->m_playerXLoc = 409237.76;
 
 	auto player = dynamic_cast<PlayerObject*>(m_GameObjects.find("player")->second.get());
 	player->SetHp(m_GameManager->m_playerHp);
@@ -1849,11 +1964,16 @@ void GameScene::LoadPlayerInfo()
 	}
 
 	//if()
-	m_ChapterBackgroundManager->LoadBackgroundSet(2);
+	m_ChapterBackgroundManager->LoadBackgroundSet(1);
 
 	for (auto& bg : m_ChapterBackgroundManager->GetAllBackgrounds())
 	{
 		AddGameObject(bg);
 	}
 
+	auto uiobjects = m_UIManager.GetUIObjects().find("GameScene")->second;
+
+	uiobjects.find("gameoverBox")->second->SetIsVisible(false);
+	uiobjects.find("gameoverRetryButton")->second->SetIsVisible(false);
+	uiobjects.find("gameoverMainButton")->second->SetIsVisible(false);
 }

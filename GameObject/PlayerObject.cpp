@@ -5,6 +5,7 @@
 #include "UIImageComponent.h"
 #include "BoxColliderComponent.h"
 #include "AnimationComponent.h"
+#include "SoundManager.h"
 
 PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventDispatcher)
 {
@@ -18,6 +19,116 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 	GetComponent<BoxColliderComponent>()->Start();
 
 	//AddComponent<AnimationComponent>()->AddClip("Idle");
+
+
+	//m_Fsm.AddState();
+}
+
+void PlayerObject::Update(float deltaTime)
+{
+	//float temp = m_Transform->GetPosition().y;
+
+	if (m_InvincibleTime > 0)
+		m_InvincibleTime -= deltaTime;
+	else
+		m_InvincibleTime = 0;
+
+	if (m_SlideCool > 0)
+		m_SlideCool -= deltaTime;
+	else
+		m_SlideCool = 0;
+
+	GameObject::Update(deltaTime);
+
+	m_Fsm.Update(deltaTime);
+
+	if (m_Z == 2)
+	{
+		m_Layer = 0;
+	}
+	else if (m_Z >= 1)
+	{
+		m_Layer = 2;
+	}
+	else
+	{
+		m_Layer = 4;
+	}
+}
+
+void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
+{
+	auto sprite = GetComponent<SpriteRenderer>();
+
+	if (sprite)
+	{
+		{
+			RenderInfo info;
+			info.bitmap = m_ShadowBitmap;
+			Math::Vector2F pos = m_Transform->GetPosition();
+			float y = pos.y;
+			pos.y = m_Z * m_RailHeight + 65.f;
+			m_Transform->SetPosition(pos);
+			info.size = { 1,1 };
+			D2D1::Matrix3x2F trans = D2D1::Matrix3x2F::Identity();
+			trans._22 = 0.7f;
+			trans._32 = 15.0f;
+			info.worldMatrix = trans * m_Transform->GetWorldMatrix();
+
+			info.pivot = { m_ShadowBitmap.Get()->GetSize().width * 0.5f, m_ShadowBitmap.Get()->GetSize().height * 0.5f }; // 바꾸어 놓음
+			// UI가 아닌 일반 오브젝트 위치로 설정
+			//float opacity = sprite->GetTexture().Get()->GetSize().height / (y + 1);
+			float forSin = (y - m_Z * m_RailHeight) / (sprite->GetTexture().Get()->GetSize().height);
+			forSin = forSin > asin(1) ? asin(1) : forSin;
+			float opacity = sin(forSin);
+			info.opacity = 1.0f - opacity;
+			info.layer = m_Layer;
+			renderInfo.push_back(info);
+			pos.y = y;
+			m_Transform->SetPosition(pos);
+		}
+		{
+			RenderInfo info;
+			auto box = GetComponent<BoxColliderComponent>();
+			info.bitmap = sprite->GetTexture();
+			D2D1::Matrix3x2F flip = D2D1::Matrix3x2F::Identity();
+			if(m_IsFlip)
+				flip.m11 = -1;
+			info.worldMatrix = flip * m_Transform->GetWorldMatrix(); // D2D1::Matrix3x2F::Translation(0, z * m_RailHeight) *  
+			//info.size = { 1,1 };
+			D2D1_SIZE_F size;
+			size.width = sprite->GetSrcRect().right - sprite->GetSrcRect().left;
+			size.height = sprite->GetSrcRect().bottom - sprite->GetSrcRect().top;
+			sprite->SetPivotPreset(SpritePivotPreset::BottomCenter, size);
+
+			info.pivot = sprite->GetPivot(); // 바꾸어 놓음
+			// UI가 아닌 일반 오브젝트 위치로 설정
+			float opacity = abs(cos(m_InvincibleTime * 5));
+			info.opacity = opacity;
+			info.useSrcRect = sprite->GetUseSrcRect();
+			info.srcRect = sprite->GetSrcRect();
+			info.layer = m_Layer;
+			renderInfo.push_back(info);
+
+			//std::cout << "x : " << m_Transform->GetPosition().x << ", y : " << m_Transform->GetPosition().y << std::endl;
+			//std::cout << "x : " << GetComponent<BoxColliderComponent>()->GetCenter().x << ", y : " << GetComponent<BoxColliderComponent>()->GetCenter().y << std::endl;
+			Vec2F vec = GetComponent<BoxColliderComponent>()->GetCenter();
+			Vec2F colSize = GetComponent<BoxColliderComponent>()->GetSize();
+			std::cout << "left : " << vec.x - colSize.x << ", top : " << vec.y - colSize.y << ", right : " << vec.x + colSize.x << ", bottom : " << vec.y + colSize.y << std::endl;
+		}
+	}
+
+}
+
+void PlayerObject::Reset()
+{
+	m_Fsm.SetInitialState("Idle");
+	m_InvincibleTime = 0;
+	m_SlideCool = 0;
+}
+
+void PlayerObject::Start(SoundManager* soundmanager)
+{
 
 	{ // 좀 많이 길어서 이걸로 닫아주시길
 		{
@@ -73,7 +184,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 						this->GetFSM().Trigger("Kick");
 					}
 
-					if (m_Controller->GetIsBoss()&&!m_Controller->GetIsMoving())
+					if (m_Controller->GetIsBoss() && !m_Controller->GetIsMoving())
 						m_Fsm.Trigger("Idle");
 				},
 				[]() { std::cout << "run 나감" << std::endl; }
@@ -96,7 +207,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					std::cout << "kick 들어옴" << std::endl;
 					//this->GetFSM().Trigger("Idle");// 나중에 애니메이션을 쓰게 될때 애니메이션 끝 프레임이라면 탈출을 넣을것이다
 				},
-				[this](float dt) 
+				[this](float dt)
 				{
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
@@ -115,7 +226,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 		}
 		{
 			State jumpUpState{
-				[this]() 
+				[this]()
 				{
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
@@ -125,7 +236,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
 					}
-					std::cout << "jumpUp 들어옴" << std::endl; 
+					std::cout << "jumpUp 들어옴" << std::endl;
 				},
 				[this](float dt) {
 					if (this->GetComponent<RigidbodyComponent>()->GetVelocity().y < -3)
@@ -142,7 +253,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 		}
 		{
 			State jumpPoseState{
-				[this]() 
+				[this]()
 				{
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
@@ -152,7 +263,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
 					}
-					std::cout << "jumpPose 들어옴" << std::endl; 
+					std::cout << "jumpPose 들어옴" << std::endl;
 				},
 				[this](float dt)
 				{
@@ -168,7 +279,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 		}
 		{
 			State jumpDownState{
-				[this]() 
+				[this]()
 				{
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
@@ -178,7 +289,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
 					}
-					std::cout << "jumpDown 들어옴" << std::endl; 
+					std::cout << "jumpDown 들어옴" << std::endl;
 				},
 				[this](float dt)
 				{
@@ -242,23 +353,23 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					},
 					[this](float dt)
 					{
-					if(this->m_Controller->GetIsHoldingAttack())
+					if (this->m_Controller->GetIsHoldingAttack())
 						this->m_HoldingAttack += dt;
-						if(m_HoldingAttack >= 1 && this->m_Controller->GetIsBoss())
+						if (m_HoldingAttack >= 1 && this->m_Controller->GetIsBoss())
 							this->GetFSM().Trigger("ReadySpray");
 						else if (m_HoldingAttack >= 10)
 							this->GetFSM().Trigger("Shoot");
 					},
-					[this]() 
-					{ 
-						std::cout << "waitSpray 나감" << std::endl; 
+					[this]()
+					{
+						std::cout << "waitSpray 나감" << std::endl;
 					} // 착지하면서 공격 끝나면 isJump 꺼지게 할 예정
 			};
 			m_Fsm.AddState("WaitSpray", waitingSprayState);
 		}
 		{
 			State sprayState{
-				[this]() 
+				[this]()
 				{
 					std::cout << "spray 들어옴" << std::endl;
 					PlayerAttackInfo info;
@@ -313,24 +424,24 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 					},
 					[this](float dt)
 					{
-						//auto anim = this->GetComponent<AnimationComponent>();
-						//if (anim)
-						//{
-						//	if (anim->IsAnimationFinished())
-						//	{
-						//		anim->Play("attack");
-						//		this->GetFSM().Trigger("Idle");
-						//	}
-						//}
-						if (this->m_Controller->GetIsHoldingAttack())
-						this->m_HoldingAttack += dt;
-						if (m_HoldingAttack >= 10)
-							this->GetFSM().Trigger("Shoot");
-					},
-					[this]() 
-					{ 
-						std::cout << "sprayReady 나감" << std::endl;
-					} // 착지하면서 공격 끝나면 isJump 꺼지게 할 예정
+					//auto anim = this->GetComponent<AnimationComponent>();
+					//if (anim)
+					//{
+					//	if (anim->IsAnimationFinished())
+					//	{
+					//		anim->Play("attack");
+					//		this->GetFSM().Trigger("Idle");
+					//	}
+					//}
+					if (this->m_Controller->GetIsHoldingAttack())
+					this->m_HoldingAttack += dt;
+					if (m_HoldingAttack >= 10)
+						this->GetFSM().Trigger("Shoot");
+				},
+				[this]()
+				{
+					std::cout << "sprayReady 나감" << std::endl;
+				} // 착지하면서 공격 끝나면 isJump 꺼지게 할 예정
 			};
 			m_Fsm.AddState("ReadySpray", readySprayState);
 		}
@@ -437,7 +548,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 		}
 		{
 			State hurtState{
-				[this]() 
+				[this]()
 				{
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
@@ -447,7 +558,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
 					}
-					std::cout << "hurt 들어옴" << std::endl; 
+					std::cout << "hurt 들어옴" << std::endl;
 					this->m_InvincibleTime = 3.0f;
 				},
 				[this](float dt)
@@ -468,7 +579,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 		}
 		{
 			State deathState{
-				[this]() 
+				[this]()
 				{
 					auto anim = this->GetComponent<AnimationComponent>();
 					if (anim)
@@ -478,7 +589,7 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 						sr->SetPath("../Resource/Boss/Boss_Arm_Right_Hit/boss.json");
 						sr->SetTextureKey("boss");
 					}
-					std::cout << "death 들어옴" << std::endl; 
+					std::cout << "death 들어옴" << std::endl;
 				},
 				[](float dt) {},
 				[]() { std::cout << "death 나감" << std::endl; }
@@ -524,111 +635,6 @@ PlayerObject::PlayerObject(EventDispatcher& eventDispatcher) : GameObject(eventD
 			m_Fsm.SetInitialState("Idle");
 		}
 	}
-
-	//m_Fsm.AddState();
-}
-
-void PlayerObject::Update(float deltaTime)
-{
-	//float temp = m_Transform->GetPosition().y;
-
-	if (m_InvincibleTime > 0)
-		m_InvincibleTime -= deltaTime;
-	else
-		m_InvincibleTime = 0;
-
-	if (m_SlideCool > 0)
-		m_SlideCool -= deltaTime;
-	else
-		m_SlideCool = 0;
-
-	GameObject::Update(deltaTime);
-
-	m_Fsm.Update(deltaTime);
-
-	if (m_Z == 2)
-	{
-		m_Layer = 0;
-	}
-	else if (m_Z >= 1)
-	{
-		m_Layer = 2;
-	}
-	else
-	{
-		m_Layer = 4;
-	}
-}
-
-void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
-{
-	auto sprite = GetComponent<SpriteRenderer>();
-
-	if (sprite)
-	{
-		{
-			RenderInfo info;
-			info.bitmap = m_ShadowBitmap;
-			Math::Vector2F pos = m_Transform->GetPosition();
-			float y = pos.y;
-			pos.y = m_Z * m_RailHeight + 65.f;
-			m_Transform->SetPosition(pos);
-			info.size = { 1,1 };
-			D2D1::Matrix3x2F trans = D2D1::Matrix3x2F::Identity();
-			trans._22 = 0.7f;
-			trans._32 = 15.0f;
-			info.worldMatrix = trans * m_Transform->GetWorldMatrix();
-
-			info.pivot = { m_ShadowBitmap.Get()->GetSize().width * 0.5f, m_ShadowBitmap.Get()->GetSize().height * 0.5f }; // 바꾸어 놓음
-			// UI가 아닌 일반 오브젝트 위치로 설정
-			//float opacity = sprite->GetTexture().Get()->GetSize().height / (y + 1);
-			float forSin = (y - m_Z * m_RailHeight) / (sprite->GetTexture().Get()->GetSize().height);
-			forSin = forSin > asin(1) ? asin(1) : forSin;
-			float opacity = sin(forSin);
-			info.opacity = 1.0f - opacity;
-			info.layer = m_Layer;
-			renderInfo.push_back(info);
-			pos.y = y;
-			m_Transform->SetPosition(pos);
-		}
-		{
-			RenderInfo info;
-			auto box = GetComponent<BoxColliderComponent>();
-			info.bitmap = sprite->GetTexture();
-			D2D1::Matrix3x2F flip = D2D1::Matrix3x2F::Identity();
-			if(m_IsFlip)
-				flip.m11 = -1;
-			info.worldMatrix = flip * m_Transform->GetWorldMatrix(); // D2D1::Matrix3x2F::Translation(0, z * m_RailHeight) *  
-			//info.size = { 1,1 };
-			D2D1_SIZE_F size;
-			size.width = sprite->GetSrcRect().right - sprite->GetSrcRect().left;
-			size.height = sprite->GetSrcRect().bottom - sprite->GetSrcRect().top;
-			sprite->SetPivotPreset(SpritePivotPreset::BottomCenter, size);
-
-			info.pivot = sprite->GetPivot(); // 바꾸어 놓음
-			// UI가 아닌 일반 오브젝트 위치로 설정
-			float opacity = abs(cos(m_InvincibleTime * 5));
-			info.opacity = opacity;
-			info.useSrcRect = sprite->GetUseSrcRect();
-			info.srcRect = sprite->GetSrcRect();
-			info.layer = m_Layer;
-			renderInfo.push_back(info);
-
-			//std::cout << "x : " << m_Transform->GetPosition().x << ", y : " << m_Transform->GetPosition().y << std::endl;
-			//std::cout << "x : " << GetComponent<BoxColliderComponent>()->GetCenter().x << ", y : " << GetComponent<BoxColliderComponent>()->GetCenter().y << std::endl;
-			Vec2F vec = GetComponent<BoxColliderComponent>()->GetCenter();
-			Vec2F colSize = GetComponent<BoxColliderComponent>()->GetSize();
-			std::cout << "left : " << vec.x - colSize.x << ", top : " << vec.y - colSize.y << ", right : " << vec.x + colSize.x << ", bottom : " << vec.y + colSize.y << std::endl;
-		}
-	}
-
-}
-
-void PlayerObject::Reset()
-{
-	m_Fsm.SetInitialState("Idle");
-	m_InvincibleTime = 0;
-	m_SlideCool = 0;
 }
 
 void PlayerObject::SetShadowBitmap(Microsoft::WRL::ComPtr<ID2D1Bitmap1> shadow)

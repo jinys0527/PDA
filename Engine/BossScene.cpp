@@ -2973,6 +2973,16 @@ void BossScene::Update(float deltaTime)
 		gameObject.second->Update(deltaTime);
 	}
 
+	auto cameraPos = m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->GetPosition();
+	auto playerPos = m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->GetPosition();
+
+	if (playerPos.x > cameraPos.x + 900)
+		playerPos.x = cameraPos.x + 900;
+	if (playerPos.x < cameraPos.x - 900)
+		playerPos.x = cameraPos.x - 900;
+
+	m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->SetPosition(playerPos);
+
 	m_UIManager.Update(deltaTime);
 }
 
