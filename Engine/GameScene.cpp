@@ -1475,6 +1475,8 @@ void GameScene::Leave()
 {
 	auto escController = m_GameObjects.find("Control")->second->GetComponent<ControlComponent>();
 	escController->Leave();
+	auto player = dynamic_cast<PlayerObject*>(m_GameObjects.find("player")->second.get());
+	player->SetScene(false);
 }
 
 void ObjectCollisionLeave(EventDispatcher& eventDispatcher, BoxColliderComponent* enemy, BoxColliderComponent* player)
