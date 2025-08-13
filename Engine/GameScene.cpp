@@ -139,17 +139,54 @@ void GameScene::Initialize()
 	}
 #pragma endregion
 
-	m_ChapterBackgroundManager = std::make_shared<ChapterBackgroundManager>(&m_AssetManager, m_EventDispatcher);
-	m_ChapterBackgroundManager->m_Name = "chapterBackgroundManager";
-	m_ChapterBackgroundManager->LoadBackgroundSet(1);
+	//m_ChapterBackgroundManager = std::make_shared<ChapterBackgroundManager>(&m_AssetManager, m_EventDispatcher);
+	//m_ChapterBackgroundManager->m_Name = "chapterBackgroundManager";
+	//m_ChapterBackgroundManager->LoadBackgroundSet(1);
 
-	for (auto& bg : m_ChapterBackgroundManager->GetAllBackgrounds())
+	//for (auto& bg : m_ChapterBackgroundManager->GetAllBackgrounds())
+	//{
+	//	AddGameObject(bg);
+	//}
+
+	//AddGameObject(m_ChapterBackgroundManager);
+
+#pragma region BackGround_1
+	for (int i = 1; i <= 22; i++)
 	{
-		AddGameObject(bg);
+		auto backGround = std::make_shared<GameObject>(m_EventDispatcher);
+		backGround->m_Name = "backGround" + std::to_string(i);
+		auto backGroundTrans = backGround->GetComponent<TransformComponent>();
+		float position_x = 4702.53f + (9405.06f * (i - 1));
+		backGroundTrans->SetScale({ 0.98f, 0.98f });
+		backGroundTrans->SetPosition({ position_x, 0.0f });
+		auto sr = backGround->AddComponent<SpriteRenderer>();
+		std::wstring key = L"Building" + std::to_wstring(i % 5 + 1);
+		std::wstring path = L"../Resource/Background/Chapter1/Building" + std::to_wstring(i % 5 + 1) + L".png";
+		sr->SetTexture(m_AssetManager.LoadTexture(key, path));
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, sr->GetTexture()->GetSize());
+		AddGameObject(backGround);
 	}
 
-	AddGameObject(m_ChapterBackgroundManager);
+#pragma endregion
 
+#pragma region BackGround_2
+	for (int i = 1; i <= 25; i++)
+	{
+		auto backGround = std::make_shared<GameObject>(m_EventDispatcher);
+		backGround->m_Name = "backGround2_" + std::to_string(i);
+		auto backGroundTrans = backGround->GetComponent<TransformComponent>();
+		float position_x = 225134.04f + (7526.4f * (i - 1));
+		backGroundTrans->SetScale({ 0.98f, 0.98f });
+		backGroundTrans->SetPosition({ position_x, 0.0f });
+		auto sr = backGround->AddComponent<SpriteRenderer>();
+		std::wstring key = L"Background" + std::to_wstring(i % 2 + 1);
+		std::wstring path = L"../Resource/Background/Chapter2/Background" + std::to_wstring(i % 2 + 1) + L".png";
+		sr->SetTexture(m_AssetManager.LoadTexture(key, path));
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, sr->GetTexture()->GetSize());
+		AddGameObject(backGround);
+	}
+
+#pragma endregion
 
 #pragma region Camera
 	auto cameraObject = std::make_shared<CameraObject>(m_EventDispatcher, 1920.0f, 1080.0f);
