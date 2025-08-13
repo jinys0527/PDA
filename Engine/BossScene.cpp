@@ -1255,6 +1255,8 @@ void BossScene::Initialize()
 		int col = i % columns;
 		int row = i / columns;
 
+		teleobj->SetZ(row);
+
 		// 7번이 startX, startY에 위치하도록 보정
 		float posX = startX + (col - baseCol) * (tileSize.width * 0.4f + marginX);
 		float posY = startY + (row - baseRow) * (tileSize.height * 0.3f + marginY);

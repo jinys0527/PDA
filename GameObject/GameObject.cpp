@@ -6,6 +6,7 @@
 #include "GraffitiComponent.h"
 #include "CameraObject.h"
 #include "CameraComponent.h"
+#include "BoxColliderComponent.h"
 
 GameObject::GameObject(EventDispatcher& eventDispatcher) : Object(eventDispatcher)
 {
@@ -61,6 +62,12 @@ void GameObject::Render(std::vector<RenderInfo>& renderInfo)
 	for(auto& spriteRenderer : GetComponents<SpriteRenderer>())
 	{
 		RenderInfo info;
+		auto box = GetComponent<BoxColliderComponent>();
+		if (box)
+		{
+			info.center = box->GetCenter();
+			info.size = box->GetSize();
+		}
 		info.bitmap = spriteRenderer->GetTexture();
 		info.worldMatrix = m_Transform->GetWorldMatrix();
 		info.pivot = spriteRenderer->GetPivot();
