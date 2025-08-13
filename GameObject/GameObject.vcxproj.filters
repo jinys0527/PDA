@@ -243,9 +243,6 @@
     <ClInclude Include="Object.h">
       <Filter>Objects\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RunPlayerController.h">
-      <Filter>Components\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="UISliderComponent.h">
       <Filter>Components\Header Files</Filter>
     </ClInclude>
@@ -326,6 +323,9 @@
     </ClInclude>
     <ClInclude Include="CoreTypes.h" />
     <ClInclude Include="UIUtils.h" />
+    <ClInclude Include="RunPlayerController.h">
+      <Filter>Components\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Components">

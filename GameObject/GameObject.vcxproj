@@ -214,6 +214,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer; $(SolutionDir)ResourceManager; $(SolutionDir)AI;$(SolutionDir)Event; $(SolutionDir)Engine; $(SolutionDir)Client;$(SolutionDir)SoundSystem; $(SolutionDir)ThirdParty\FMOD\inc;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -229,6 +230,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer; $(SolutionDir)ResourceManager; $(SolutionDir)AI;$(SolutionDir)Event; $(SolutionDir)Engine; $(SolutionDir)Client;$(SolutionDir)SoundSystem; $(SolutionDir)ThirdParty\FMOD\inc;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -278,6 +280,7 @@
     <ClInclude Include="SwitchingAreaComponent.h" />
     <ClInclude Include="Telegraph.h" />
     <ClInclude Include="TransformComponent.h" />
+    <ClInclude Include="TriggerBox.h" />
     <ClInclude Include="UIButtonComponent.h" />
     <ClInclude Include="UIComponent.h" />
     <ClInclude Include="UIGridComponent.h" />
@@ -329,6 +332,7 @@
     <ClCompile Include="SwitchingAreaComponent.cpp" />
     <ClCompile Include="Telegraph.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
+    <ClCompile Include="TriggerBox.cpp" />
     <ClCompile Include="UIButtonComponent.cpp" />
     <ClCompile Include="UIComponent.cpp" />
     <ClCompile Include="UIGridComponent.cpp" />

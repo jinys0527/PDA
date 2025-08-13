@@ -241,8 +241,6 @@ void D2DRenderer::DrawGameObject(std::vector<RenderInfo>& renderInfo, D2D1::Matr
 				nullptr
 			);
 		}
-
-
 	}
 
 	m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());

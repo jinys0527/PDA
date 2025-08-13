@@ -33,7 +33,11 @@
 #include "SwitchingAreaComponent.h"
 #include "PlayerObject.h"
 #include "PlayerEffectComponent.h"
+#include "DroneComponent.h"
+#include "TriggerBox.h"
 #include <iostream>
+
+#include "Telegraph.h"
 
 void GameScene::Initialize()
 {
@@ -728,7 +732,7 @@ void GameScene::Initialize()
 	switchingAreaRect->SetPivotPreset(RectTransformPivotPreset::Center);
 
 	switchingArea->SetIsVisible(true);
-	switchingArea->AddComponent<SwitchingAreaComponent>();
+	auto switchingAreComp = switchingArea->AddComponent<SwitchingAreaComponent>();
 	//switchingArea->AddComponent<SwitchingAreaComponent>()->Start(1);
 
 	m_UIManager.AddUI("GameScene", switchingArea);
@@ -748,7 +752,7 @@ void GameScene::Initialize()
 	switchingAreaRect2->SetPivotPreset(RectTransformPivotPreset::Center);
 
 	switchingArea2->SetIsVisible(true);
-	switchingArea2->AddComponent<SwitchingAreaComponent>();
+	auto switchingAreComp2 = switchingArea2->AddComponent<SwitchingAreaComponent>();
 	//switchingArea2->AddComponent<SwitchingAreaComponent>()->Start(0);
 
 	m_UIManager.AddUI("GameScene", switchingArea2);
@@ -773,7 +777,7 @@ void GameScene::Initialize()
 	std::weak_ptr<ButtonUI> weakGameOverRetryButton = gameoverRetryButton;
 	std::weak_ptr<ButtonUI> weakGameOverMainButton = gameoverMainButton;
 
-	// ¾àÇÑ ÂüÁ¶ ¸¸µé±â
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 	std::weak_ptr<UIObject> weakMenuBox = menuBox;
 	std::weak_ptr<ButtonUI> weakStartButton = startButton;
 	std::weak_ptr<ButtonUI> weakSettingButton = settingButton;
@@ -825,7 +829,7 @@ void GameScene::Initialize()
 		m_UIManager.RefreshUIListForCurrentScene();
 		});
 
-	// SettingButton Å¬¸¯ ½Ã
+	// SettingButton Å¬ï¿½ï¿½ ï¿½ï¿½
 	settingButtonComp->GetFSM().SetOnEnter("Click", [weakMenuBox, weakStartButton, weakSettingButton, weakMainButton, weakRetryButton, weakExitButton, weaksettingBackGround, weaksettingOkButton, weakSoundUI, this]() {
 		if (auto bg = weakMenuBox.lock()) bg->SetIsVisible(false);
 		if (auto btn = weakStartButton.lock()) btn->SetIsVisible(false);
@@ -1327,6 +1331,18 @@ void GameScene::Initialize()
 		drone->Start(&m_AssetManager);
 		auto droneTrans = drone->GetComponent<TransformComponent>();
 		droneTrans->SetZOrder(0);
+		auto boxDrone = drone->AddComponent<BoxColliderComponent>();
+		boxDrone->SetSize({ 100, 10000 });
+		boxDrone->Start();
+		boxDrone->SetOnTrigger([boxDrone, droneTrans, this](const CollisionInfo& col)
+			{
+				if (boxDrone == col.self)
+				{
+					droneTrans->SetParent(GetMainCamera()->GetComponent<TransformComponent>());
+					boxDrone->GetOwner()->AddComponent<DroneComponent>()->Start();
+					boxDrone->SetIsTrigger(false);
+				}
+			});
 		AddGameObject(drone);
 	}
 #pragma endregion
@@ -1339,6 +1355,16 @@ void GameScene::Initialize()
 		box->Start(&m_AssetManager);
 		auto boxTrans = box->GetComponent<TransformComponent>();
 		boxTrans->SetZOrder(0);
+		auto boxbox = box->GetComponent<BoxColliderComponent>();
+		boxbox->SetOnTrigger([boxbox, boxTrans, this](const CollisionInfo& col)
+			{
+				if (boxbox == col.self)
+				{
+					boxTrans->SetParent(GetMainCamera()->GetComponent<TransformComponent>());
+					boxbox->GetOwner()->AddComponent<FlyingObstacleComponent>()->Start();
+					boxbox->SetIsTrigger(false);
+				}
+			});
 		AddGameObject(box);
 	}
 #pragma endregion
@@ -1351,6 +1377,16 @@ void GameScene::Initialize()
 		flowerpot->Start(&m_AssetManager);
 		auto flowerpotTrans = flowerpot->GetComponent<TransformComponent>();
 		flowerpotTrans->SetZOrder(0);
+		auto flowerpotbox = flowerpot->GetComponent<BoxColliderComponent>();
+		flowerpotbox->SetOnTrigger([flowerpotbox, flowerpotTrans, this](const CollisionInfo& col)
+			{
+				if (flowerpotbox == col.self)
+				{
+					flowerpotTrans->SetParent(GetMainCamera()->GetComponent<TransformComponent>());
+					flowerpotbox->GetOwner()->AddComponent<FlyingObstacleComponent>()->Start();
+					flowerpotbox->SetIsTrigger(false);
+				}
+			});
 		AddGameObject(flowerpot);
 	}
 #pragma endregion
@@ -1359,6 +1395,8 @@ void GameScene::Initialize()
 	for (int i = 0; i < 20; i++)
 	{
 		auto graffiti = std::make_shared<GraffitiObject>(m_EventDispatcher);
+		auto graffitiComp = graffiti->GetComponent<GraffitiComponent>();
+		graffitiComp->Start();
 		graffiti->m_Name = "Graffiti" + std::format("{:03}", i);
 		if (i <= 11)
 		{
@@ -1370,20 +1408,72 @@ void GameScene::Initialize()
 			graffiti->SetGravittis(&m_AssetManager, 2);
 			graffiti->Start(&m_AssetManager, 2);
 		}
+		
 		auto graffitiTrans = graffiti->GetComponent<TransformComponent>();
 		graffitiTrans->SetZOrder(-1);
 		AddGameObject(graffiti);
 	}
 #pragma endregion
 
+#pragma TriggerBox
+	{
+		auto triggerBox = std::make_shared<TriggerBox>(m_EventDispatcher);
+		triggerBox->m_Name = "TriggerBox" + std::format("{:03}", 0);
+		triggerBox->Start(&m_AssetManager);
+		auto triggerBoxTrans = triggerBox->GetComponent<TransformComponent>();
+		triggerBoxTrans->SetPosition({ 6000, 100 });
+		triggerBoxTrans->SetZOrder(0);
+		auto triggerBoxbox = triggerBox->AddComponent<BoxColliderComponent>();
+		triggerBoxbox->SetSize({ 100, 10000 });
+		triggerBoxbox->Start();
+		triggerBoxbox->SetOnTrigger([triggerBoxbox, triggerBoxTrans, switchingAreComp, switchingAreComp2, this](const CollisionInfo& col)
+			{
+				if (triggerBoxbox == col.self)
+				{
+					SavePlayerInfo();
+					switchingAreComp->Start(1);
+					switchingAreComp2->Start(0);
+					triggerBoxbox->SetIsTrigger(false);
+				}
+			});
+		AddGameObject(triggerBox);
+	}
+	{
+		auto triggerBox = std::make_shared<TriggerBox>(m_EventDispatcher);
+		triggerBox->m_Name = "TriggerBox" + std::format("{:03}", 1);
+		triggerBox->Start(&m_AssetManager);
+		auto triggerBoxTrans = triggerBox->GetComponent<TransformComponent>();
+		triggerBoxTrans->SetPosition({ 10000, 100 });
+		triggerBoxTrans->SetZOrder(0);
+		auto triggerBoxbox = triggerBox->AddComponent<BoxColliderComponent>();
+		triggerBoxbox->SetSize({ 100, 10000 });
+		triggerBoxbox->Start();
+		triggerBoxbox->SetOnTrigger([triggerBoxbox, triggerBoxTrans, switchingAreComp, switchingAreComp2, this](const CollisionInfo& col)
+			{
+				if (triggerBoxbox == col.self)
+				{
+					for (auto& bg : m_ChapterBackgroundManager->GetAllBackgrounds())
+					{
+						RemoveGameObject(bg);
+					}
+
+					m_ChapterBackgroundManager->LoadBackgroundSet(2);
+
+					for (auto& bg : m_ChapterBackgroundManager->GetAllBackgrounds())
+					{
+						AddGameObject(bg);
+					}
+					switchingAreComp->Start(3);
+					switchingAreComp2->Start(2);
+					triggerBoxbox->SetIsTrigger(false);
+				}
+			});
+		AddGameObject(triggerBox);
+	}
+#pragma endregion
+
 	m_ChapterBackgroundManager = std::make_shared<ChapterBackgroundManager>(&m_AssetManager, m_EventDispatcher);
 	m_ChapterBackgroundManager->m_Name = "chapterBackgroundManager";
-	m_ChapterBackgroundManager->LoadBackgroundSet(1);
-
-	for (auto& bg : m_ChapterBackgroundManager->GetAllBackgrounds())
-	{
-		AddGameObject(bg);
-	}
 
 	AddGameObject(m_ChapterBackgroundManager);
 
@@ -1396,12 +1486,6 @@ void GameScene::Finalize()
 
 void GameScene::Enter()
 {
-	nlohmann::json j;
-	std::string fileName = GetName() + ".json";
-	std::ifstream ifs(fileName);
-	ifs >> j;
-	Deserialize(j);
-
 	auto player = dynamic_cast<PlayerObject*>(m_GameObjects.find("player")->second.get());
 	player->SetScene(true);
 
@@ -1410,65 +1494,13 @@ void GameScene::Enter()
 
 	m_EventDispatcher.Dispatch(EventType::OnLoadedScene, this);
 
-#pragma region Garbage_bag
-	for (int i = 0; i < 144; i++)
-	{
-		auto name = "Obstacle" + std::format("{:03}", i); // C++20
-		auto obstacle = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
-		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
-		obstacleTrans->SetZOrder(5 - (2 * obstacle->GetZ()));
-	}
-#pragma endregion
+	nlohmann::json j;
+	std::string fileName = GetName() + ".json";
+	std::ifstream ifs(fileName);
+	ifs >> j;
+	Deserialize(j);
 
-#pragma region Wastebasket
-	for (int i = 0; i < 96; i++)
-	{
-		auto name = "WasteBasket" + std::format("{:03}", i);
-		auto wasteBasket = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
-		auto wasteBasketTrans = wasteBasket->GetComponent<TransformComponent>();
-		wasteBasketTrans->SetZOrder(5 - (2 * wasteBasket->GetZ()));
-	}
-#pragma endregion
-
-#pragma region Sliding
-	for (int i = 0; i < 73; i++)
-	{
-		auto name = "SlidingObstacle" + std::format("{:03}", i);
-		auto slidingObstacle = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
-		auto slidingObstacleTrans = slidingObstacle->GetComponent<TransformComponent>();
-		slidingObstacleTrans->SetZOrder(5 - (2 * slidingObstacle->GetZ()));
-	}
-#pragma endregion
-
-#pragma region Item
-	for (int i = 0; i < 11; i++)
-	{
-		auto name = "Item" + std::format("{:03}", i);
-		auto item = dynamic_cast<ItemObject*>((m_GameObjects[name]).get());
-		auto itemTrans = item->GetComponent<TransformComponent>();
-		itemTrans->SetZOrder(5 - (2 * item->GetZ()));
-	}
-#pragma endregion
-
-#pragma region Box
-	for (int i = 0; i < 24; i++)
-	{
-		auto name = "Box" + std::format("{:03}", i);
-		auto box = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
-		auto boxTrans = box->GetComponent<TransformComponent>();
-		boxTrans->SetZOrder(5 - (2 * box->GetZ()));
-	}
-#pragma endregion
-
-#pragma region flowerpot
-	for (int i = 0; i < 14; i++)
-	{
-		auto name = "Flowerpot" + std::format("{:03}", i);
-		auto flowerpot = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
-		auto flowerpotTrans = flowerpot->GetComponent<TransformComponent>();
-		flowerpotTrans->SetZOrder(5 - (2 * flowerpot->GetZ()));
-	}
-#pragma endregion
+	LoadPlayerInfo();
 }
 
 void GameScene::Leave()
@@ -1477,6 +1509,8 @@ void GameScene::Leave()
 	escController->Leave();
 	auto player = dynamic_cast<PlayerObject*>(m_GameObjects.find("player")->second.get());
 	player->SetScene(false);
+
+	m_GameManager->Initial();
 }
 
 void ObjectCollisionLeave(EventDispatcher& eventDispatcher, BoxColliderComponent* enemy, BoxColliderComponent* player)
@@ -1541,7 +1575,7 @@ void GameScene::FixedUpdate()
 
 			opponentPos = opponentBox->GetCenter();
 
-			if (opponentPos.x > cameraPos.x + 1500 || cameraPos.x - 1500 > opponentPos.x)
+			if (opponentPos.x > cameraPos.x + 1920 || cameraPos.x - 1920 > opponentPos.x)
 			{
 				continue;
 			}
@@ -1556,7 +1590,6 @@ void GameScene::FixedUpdate()
 				info.penetrationDepth;
 
 				m_EventDispatcher.Dispatch(EventType::CollisionTrigger, &info);
-
 			}
 
 
@@ -1639,8 +1672,8 @@ void GameScene::Update(float deltaTime)
 	{
 
 			m_GameManager->m_scrollSpeed += deltaTime * 500;
-		if (m_GameManager->m_scrollSpeed >= 1500)
-			m_GameManager->m_scrollSpeed = 1500;
+		if (m_GameManager->m_scrollSpeed >= 2000)
+			m_GameManager->m_scrollSpeed = 2000;
 
 		Vec2F move = { 0, 0 };
 		move.x += m_GameManager->m_scrollSpeed * deltaTime;
@@ -1685,12 +1718,142 @@ void GameScene::Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRender
 
 void GameScene::SavePlayerInfo()
 {
+	auto player = dynamic_cast<PlayerObject*>(m_GameObjects.find("player")->second.get());
+	m_GameManager->m_playerHp = player->GetHp();
+	m_GameManager->m_playerReinforcedAttack = player->GetBullet();
+	m_GameManager->m_playerXLoc = player->GetComponent<TransformComponent>()->GetPosition().x - 1000;
 }
 
 void GameScene::LoadPlayerInfo()
 {
+#pragma region Garbage_bag
+	for (int i = 0; i < 144; i++)
+	{
+		auto name = "Obstacle" + std::format("{:03}", i); // C++20
+		auto obstacle = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
+		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+		obstacleTrans->SetZOrder(5 - (2 * obstacle->GetZ()));
+	}
+#pragma endregion
+
+#pragma region Wastebasket
+	for (int i = 0; i < 96; i++)
+	{
+		auto name = "WasteBasket" + std::format("{:03}", i);
+		auto wasteBasket = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
+		auto wasteBasketTrans = wasteBasket->GetComponent<TransformComponent>();
+		wasteBasketTrans->SetZOrder(5 - (2 * wasteBasket->GetZ()));
+	}
+#pragma endregion
+
+#pragma region Graffiti
+	for (int i = 0; i < 20; i++)
+	{
+		auto name = "Graffiti" + std::format("{:03}", i);
+		auto graffiti = dynamic_cast<GraffitiObject*>((m_GameObjects[name]).get());
+		graffiti->GetComponent<TransformComponent>()->SetZOrder(-1);
+		graffiti->GetComponent<GraffitiComponent>()->Reset();
+	}
+#pragma endregion
+
+#pragma region Sliding
+	for (int i = 0; i < 73; i++)
+	{
+		auto name = "SlidingObstacle" + std::format("{:03}", i);
+		auto slidingObstacle = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
+		auto slidingObstacleTrans = slidingObstacle->GetComponent<TransformComponent>();
+		slidingObstacleTrans->SetZOrder(5 - (2 * slidingObstacle->GetZ()));
+	}
+#pragma endregion
+
+#pragma region Item
+	for (int i = 0; i < 11; i++)
+	{
+		auto name = "Item" + std::format("{:03}", i);
+		auto item = dynamic_cast<ItemObject*>((m_GameObjects[name]).get());
+		auto itemTrans = item->GetComponent<TransformComponent>();
+		itemTrans->SetZOrder(5 - (2 * item->GetZ()));
+	}
+#pragma endregion
+
+#pragma region Drone
+	for (int i = 0; i < 11; i++)
+	{
+		auto name = "Drone" + std::format("{:03}", i);
+		auto drone = dynamic_cast<GameObject*>((m_GameObjects[name]).get());
+		auto droneTrans = drone->GetComponent<TransformComponent>();
+		droneTrans->DetachFromParent();
+		auto droneBox = drone->GetComponent<BoxColliderComponent>();
+		droneBox->SetIsTrigger(true);
+		drone->RemoveComponent(drone->GetComponent<DroneComponent>());
+	}
+#pragma endregion
+
+#pragma region Box
+	for (int i = 0; i < 24; i++)
+	{
+		auto name = "Box" + std::format("{:03}", i);
+		auto box = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
+		auto boxTrans = box->GetComponent<TransformComponent>();
+		boxTrans->DetachFromParent();
+		boxTrans->SetZOrder(5 - (2 * box->GetZ()));
+		auto boxBox = box->GetComponent<BoxColliderComponent>();
+		boxBox->SetIsTrigger(true);
+		box->RemoveComponent(box->GetComponent<FlyingObstacleComponent>());
+	}
+#pragma endregion
+
+#pragma region flowerpot
+	for (int i = 0; i < 14; i++)
+	{
+		auto name = "Flowerpot" + std::format("{:03}", i);
+		auto flowerpot = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
+		auto flowerpotTrans = flowerpot->GetComponent<TransformComponent>();
+		flowerpotTrans->SetZOrder(5 - (2 * flowerpot->GetZ()));
+		flowerpotTrans->DetachFromParent();
+		auto flowerBox = flowerpot->GetComponent<BoxColliderComponent>();
+		flowerBox->SetIsTrigger(true);
+		flowerpot->RemoveComponent(flowerpot->GetComponent<FlyingObstacleComponent>());
+	}
+#pragma endregion
+
+#pragma region triggerBox
+	for (int i = 0; i < 2; i++)
+	{
+		auto name = "TriggerBox" + std::format("{:03}", i);
+		auto triggerBox = dynamic_cast<TriggerBox*>((m_GameObjects[name]).get());
+		auto triggerBoxBox = triggerBox->GetComponent<BoxColliderComponent>();
+		triggerBoxBox->SetIsTrigger(true);
+	}
+#pragma endregion
+
+	nlohmann::json j;
+	std::string fileName = GetName() + ".json";
+	std::ifstream ifs(fileName);
+	ifs >> j;
+	Deserialize(j);
+
 	auto player = dynamic_cast<PlayerObject*>(m_GameObjects.find("player")->second.get());
-	player->SetScene(true);
-	player->SetHp(2);
-	player->GetFSM().SetInitialState("Idle");
+	player->SetHp(m_GameManager->m_playerHp);
+	player->SetBullet(m_GameManager->m_playerReinforcedAttack);
+	m_GameManager->m_scrollSpeed = 0;
+	player->Reset();
+	player->GetComponent<TransformComponent>()->SetPosition({ m_GameManager->m_playerXLoc - 450 , 240 });
+
+	auto camera = dynamic_cast<CameraObject*>(m_GameObjects.find("Camera")->second.get());
+	camera->GetComponent<TransformComponent>()->SetPosition({ m_GameManager->m_playerXLoc - 450 , 540.f });
+
+	for (auto& bg : m_ChapterBackgroundManager->GetAllBackgrounds())
+	{
+		RemoveGameObject(bg);
+	}
+
+	//if()
+	m_ChapterBackgroundManager->LoadBackgroundSet(2);
+
+	for (auto& bg : m_ChapterBackgroundManager->GetAllBackgrounds())
+	{
+		AddGameObject(bg);
+	}
+
 }
