@@ -8,7 +8,7 @@ ItemObject::ItemObject(EventDispatcher& eventDispatcher) : GameObject(eventDispa
 {
 	m_Collider = AddComponent<BoxColliderComponent>();
 	m_Collider->Start();
-	m_Collider->SetSize(Vec2F(100, 100));
+	m_Collider->SetSize(Vec2F(52, 112));
 	m_Sprite = GetComponent<SpriteRenderer>();
 	m_Z = 1;
 

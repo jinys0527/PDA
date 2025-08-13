@@ -41,13 +41,13 @@ bool GameObject::IsInView(CameraObject* camera) const
 
 	auto objPos = trans->GetPosition();
 	auto objSize = spriteRenderer->GetTexture()->GetSize();
-	auto objPivot = spriteRenderer->GetPivot();
+	/*auto objPivot = spriteRenderer->GetPivot();*/
 
 	// 오브젝트 좌상단 좌표 계산 (pivot 적용)
-	float objLeft = objPos.x - objSize.width * objPivot.x;
-	float objTop = objPos.y - objSize.height * objPivot.y;
-	float objRight = objLeft + objSize.width;
-	float objBottom = objTop + objSize.height;
+	float objLeft = objPos.x - objSize.width * 0.5f;
+	float objTop = objPos.y - objSize.height * 0.5f;
+	float objRight = objPos.x + objSize.width * 0.5f;
+	float objBottom = objPos.y + objSize.height * 0.5f;
 
 	// AABB 충돌 검사
 	bool isVisible = !(objRight < cameraLeft || objLeft > cameraRight ||
@@ -84,7 +84,14 @@ void GameObject::Serialize(nlohmann::json& j) const
 		for (const auto& comp : component.second)
 		{
 			const char* typeName = comp->GetTypeName();
-			if (strcmp(typeName, "TransformComponent") == 0 || strcmp(typeName, "SpriteRenderer") == 0)
+			if (strcmp(typeName, "TransformComponent") == 0)
+			{
+				nlohmann::json compJson;
+				compJson["type"] = typeName;
+				comp->Serialize(compJson["data"]);
+				j["components"].push_back(compJson);
+			}
+			else if(strcmp(typeName, "SpriteRenderer") == 0)
 			{
 				nlohmann::json compJson;
 				compJson["type"] = typeName;

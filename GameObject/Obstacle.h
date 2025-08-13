@@ -25,10 +25,12 @@ public:
 
 	virtual void Render(std::vector<RenderInfo>& renderInfo);
 
-	void Serialize(nlohmann::json& j) const;
-	void Deserialize(const nlohmann::json& j);
+
+	void Serialize(nlohmann::json& j) const override;
+	void Deserialize(const nlohmann::json& j) override;
 protected:
-	float m_Z;
+	float m_Z = 1.0f;
+
 	bool m_IsSlide;
 	BoxColliderComponent* m_Collider;
 	SpriteRenderer* m_Sprite;

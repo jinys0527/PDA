@@ -12,8 +12,10 @@ class Object
 {
 	friend class Scene;
 	friend class TitleScene;
+	friend class GameScene;
 	friend class CharacterScene;
 	friend class InGameUITestScene;
+
 public:
 	Object(EventDispatcher& eventDispatcher);
 	virtual ~Object() = default;
@@ -66,6 +68,16 @@ public:
 	virtual void Update(float deltaTime);
 
 	virtual void FixedUpdate();
+
+	void SetName(std::string name)
+	{
+		m_Name = name;
+	}
+
+	std::string GetName() const
+	{
+		return m_Name;
+	}
 
 	void SendMessages(const myCore::MessageID msg, void* data = nullptr);
 

@@ -29,8 +29,14 @@ public:
 
 	virtual void Render(std::vector<RenderInfo>& renderInfo);
 
-	void Serialize(nlohmann::json& j) const;
-	void Deserialize(const nlohmann::json& j);
+
+	virtual void Serialize(nlohmann::json& j) const;
+	virtual void Deserialize(const nlohmann::json& j);
+
+	GameObject(const GameObject&) = delete;
+	GameObject& operator=(const GameObject&) = delete;
+	GameObject(GameObject&&) = delete;
+	GameObject& operator=(GameObject&&) = delete;
 
 protected:
 	TransformComponent* m_Transform;
