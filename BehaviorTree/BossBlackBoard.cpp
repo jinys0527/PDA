@@ -60,13 +60,13 @@ BossBlackBoard::BossBlackBoard(
 	SetValue("WarningTime", 3.0f);
 
 
-	SetValue("3Phase", false);
+	SetValue("3Phase", true);
 	SetValue("RandomValue", 0.0f);
 
 	SetValue("SkillWeight_1", 1.0f);
 	SetValue("SkillWeight_2", 1.0f);
-	SetValue("SkillWeight_3", 5001.0f);
-	SetValue("SkillWeight_4", 1.0f);
+	SetValue("SkillWeight_3", 1.0f);
+	SetValue("SkillWeight_4", 5001.0f);
 	SetValue("SkillWeight_5", 1.0f);
 
 	SetValue("SkillChance_1", 0.f);
