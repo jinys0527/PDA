@@ -27,6 +27,8 @@
 #include "Background.h"
 #include <iostream>
 
+#include "Telegraph.h"
+
 void GameScene::Initialize()
 {
 #pragma region Garbage_bag
@@ -139,6 +141,44 @@ void GameScene::Initialize()
 	}
 #pragma endregion
 
+#pragma region BackGround_1
+	for (int i = 1; i <= 22; i++)
+	{
+		auto backGround = std::make_shared<GameObject>(m_EventDispatcher);
+		backGround->m_Name = "backGround" + std::to_string(i);
+		auto backGroundTrans = backGround->GetComponent<TransformComponent>();
+		float position_x = 4702.53f + (9405.06f * (i - 1));
+		backGroundTrans->SetScale({ 0.98f, 0.98f });
+		backGroundTrans->SetPosition({ position_x, 0.0f });
+		auto sr = backGround->AddComponent<SpriteRenderer>();
+		std::wstring key = L"Building" + std::to_wstring(i % 5 + 1);
+		std::wstring path = L"../Resource/Background/Chapter1/Building" + std::to_wstring(i % 5 + 1) + L".png";
+		sr->SetTexture(m_AssetManager.LoadTexture(key, path));
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, sr->GetTexture()->GetSize());
+		AddGameObject(backGround);
+	}
+
+#pragma endregion
+
+#pragma region BackGround_2
+	for (int i = 1; i <= 25; i++)
+	{
+		auto backGround = std::make_shared<GameObject>(m_EventDispatcher);
+		backGround->m_Name = "backGround2_" + std::to_string(i);
+		auto backGroundTrans = backGround->GetComponent<TransformComponent>();
+		float position_x = 225134.04f + (7526.4f * (i - 1));
+		backGroundTrans->SetScale({ 0.98f, 0.98f });
+		backGroundTrans->SetPosition({ position_x, 0.0f });
+		auto sr = backGround->AddComponent<SpriteRenderer>();
+		std::wstring key = L"Background" + std::to_wstring(i % 2 + 1);
+		std::wstring path = L"../Resource/Background/Chapter2/Background" + std::to_wstring(i % 2 + 1) + L".png";
+		sr->SetTexture(m_AssetManager.LoadTexture(key, path));
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, sr->GetTexture()->GetSize());
+		AddGameObject(backGround);
+	}
+
+#pragma endregion
+
 	m_ChapterBackgroundManager = std::make_shared<ChapterBackgroundManager>(&m_AssetManager, m_EventDispatcher);
 	m_ChapterBackgroundManager->m_Name = "chapterBackgroundManager";
 	m_ChapterBackgroundManager->LoadBackgroundSet(1);
@@ -173,71 +213,71 @@ void GameScene::Finalize()
 
 void GameScene::Enter()
 {
-	nlohmann::json j;
-	std::string fileName = GetName() + ".json";
-	std::ifstream ifs(fileName);
-	ifs >> j;
-	Deserialize(j);
-
-#pragma region Garbage_bag
-	for (int i = 0; i < 144; i++)
-	{
-		auto name = "Obstacle" + std::format("{:03}", i); // C++20
-		auto obstacle = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
-		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
-		obstacleTrans->SetZOrder(5 - (2 * obstacle->GetZ()));
-	}
-#pragma endregion
-
-#pragma region Wastebasket
-	for (int i = 0; i < 96; i++)
-	{
-		auto name = "WasteBasket" + std::format("{:03}", i);
-		auto wasteBasket = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
-		auto wasteBasketTrans = wasteBasket->GetComponent<TransformComponent>();
-		wasteBasketTrans->SetZOrder(5 - (2 * wasteBasket->GetZ()));
-	}
-#pragma endregion
-
-#pragma region Sliding
-	for (int i = 0; i < 73; i++)
-	{
-		auto name = "SlidingObstacle" + std::format("{:03}", i);
-		auto slidingObstacle = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
-		auto slidingObstacleTrans = slidingObstacle->GetComponent<TransformComponent>();
-		slidingObstacleTrans->SetZOrder(5 - (2 * slidingObstacle->GetZ()));
-	}
-#pragma endregion
-
-#pragma region Item
-	for (int i = 0; i < 11; i++)
-	{
-		auto name = "Item" + std::format("{:03}", i);
-		auto item = dynamic_cast<ItemObject*>((m_GameObjects[name]).get());
-		auto itemTrans = item->GetComponent<TransformComponent>();
-		itemTrans->SetZOrder(5 - (2 * item->GetZ()));
-	}
-#pragma endregion
-
-#pragma region Box
-	for (int i = 0; i < 24; i++)
-	{
-		auto name = "Box" + std::format("{:03}", i);
-		auto box = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
-		auto boxTrans = box->GetComponent<TransformComponent>();
-		boxTrans->SetZOrder(5 - (2 * box->GetZ()));
-	}
-#pragma endregion
-
-#pragma region flowerpot
-	for (int i = 0; i < 14; i++)
-	{
-		auto name = "Flowerpot" + std::format("{:03}", i);
-		auto flowerpot = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
-		auto flowerpotTrans = flowerpot->GetComponent<TransformComponent>();
-		flowerpotTrans->SetZOrder(5 - (2 * flowerpot->GetZ()));
-	}
-#pragma endregion
+//	nlohmann::json j;
+//	std::string fileName = GetName() + ".json";
+//	std::ifstream ifs(fileName);
+//	ifs >> j;
+//	Deserialize(j);
+//
+//#pragma region Garbage_bag
+//	for (int i = 0; i < 144; i++)
+//	{
+//		auto name = "Obstacle" + std::format("{:03}", i); // C++20
+//		auto obstacle = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
+//		auto obstacleTrans = obstacle->GetComponent<TransformComponent>();
+//		obstacleTrans->SetZOrder(5 - (2 * obstacle->GetZ()));
+//	}
+//#pragma endregion
+//
+//#pragma region Wastebasket
+//	for (int i = 0; i < 96; i++)
+//	{
+//		auto name = "WasteBasket" + std::format("{:03}", i);
+//		auto wasteBasket = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
+//		auto wasteBasketTrans = wasteBasket->GetComponent<TransformComponent>();
+//		wasteBasketTrans->SetZOrder(5 - (2 * wasteBasket->GetZ()));
+//	}
+//#pragma endregion
+//
+//#pragma region Sliding
+//	for (int i = 0; i < 73; i++)
+//	{
+//		auto name = "SlidingObstacle" + std::format("{:03}", i);
+//		auto slidingObstacle = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
+//		auto slidingObstacleTrans = slidingObstacle->GetComponent<TransformComponent>();
+//		slidingObstacleTrans->SetZOrder(5 - (2 * slidingObstacle->GetZ()));
+//	}
+//#pragma endregion
+//
+//#pragma region Item
+//	for (int i = 0; i < 11; i++)
+//	{
+//		auto name = "Item" + std::format("{:03}", i);
+//		auto item = dynamic_cast<ItemObject*>((m_GameObjects[name]).get());
+//		auto itemTrans = item->GetComponent<TransformComponent>();
+//		itemTrans->SetZOrder(5 - (2 * item->GetZ()));
+//	}
+//#pragma endregion
+//
+//#pragma region Box
+//	for (int i = 0; i < 24; i++)
+//	{
+//		auto name = "Box" + std::format("{:03}", i);
+//		auto box = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
+//		auto boxTrans = box->GetComponent<TransformComponent>();
+//		boxTrans->SetZOrder(5 - (2 * box->GetZ()));
+//	}
+//#pragma endregion
+//
+//#pragma region flowerpot
+//	for (int i = 0; i < 14; i++)
+//	{
+//		auto name = "Flowerpot" + std::format("{:03}", i);
+//		auto flowerpot = dynamic_cast<Obstacle*>((m_GameObjects[name]).get());
+//		auto flowerpotTrans = flowerpot->GetComponent<TransformComponent>();
+//		flowerpotTrans->SetZOrder(5 - (2 * flowerpot->GetZ()));
+//	}
+//#pragma endregion
 }
 
 void GameScene::Leave()

@@ -119,42 +119,41 @@
       <Filter>Components\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FixedObstacle_1.cpp">
-		<Filter>Objects\Source Files</Filter>
+      <Filter>Objects\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SlidingObstacle.cpp">
-		<Filter>Objects\Source Files</Filter>
+      <Filter>Objects\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FixedObstacle_2.cpp">
-		<Filter>Objects\Source Files</Filter>
+      <Filter>Objects\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Drone.cpp">
-		<Filter>Objects\Source Files</Filter>
+      <Filter>Objects\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FallingObstacle_Flowerpot.cpp">
-		<Filter>Objects\Source Files</Filter>
+      <Filter>Objects\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FallingObstacle_Box.cpp">
-		<Filter>Objects\Source Files</Filter>
+      <Filter>Objects\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ChapterBackgroundManager.cpp">
-		<Filter>Objects\Source Files</Filter>
+      <Filter>Objects\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ControlComponent.cpp">
-		<Filter>Components\Source Files</Filter>
+      <Filter>Components\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PlayerEffectComponent.cpp">
-		<Filter>Components\Source Files</Filter>
+      <Filter>Components\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LoadingRollerComponent.cpp">
-		<Filter>Components\Source Files</Filter>
+      <Filter>Components\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RollerBackComponent.cpp">
-		<Filter>Components\Source Files</Filter>
+      <Filter>Components\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SwitchingAreaComponent.cpp">
-		<Filter>Components\Source Files</Filter>
+      <Filter>Components\Source Files</Filter>
     </ClCompile>
-
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h">
@@ -244,9 +243,6 @@
     <ClInclude Include="Object.h">
       <Filter>Objects\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RunPlayerController.h">
-      <Filter>Components\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="UISliderComponent.h">
       <Filter>Components\Header Files</Filter>
     </ClInclude>
@@ -293,40 +289,43 @@
       <Filter>Components\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FixedObstacle_1.h">
-		<Filter>Objects\Header Files</Filter>
+      <Filter>Objects\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SlidingObstacle.h">
-		<Filter>Objects\Header Files</Filter>
+      <Filter>Objects\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FixedObstacle_2.h">
-		<Filter>Objects\Header Files</Filter>
+      <Filter>Objects\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Drone.h">
-		<Filter>Objects\Header Files</Filter>
+      <Filter>Objects\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FallingObstacle_Flowerpot.h">
-		<Filter>Objects\Header Files</Filter>
+      <Filter>Objects\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FallingObstacle_Box.h">
-		<Filter>Objects\Header Files</Filter>
+      <Filter>Objects\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ChapterBackgroundManager.h">
-		<Filter>Objects\Header Files</Filter>
+      <Filter>Objects\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PlayerEffectComponent.h">
-		<Filter>Components\Header Files</Filter>
+      <Filter>Components\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LoadingRollerComponent.h">
-		<Filter>Components\Header Files</Filter>
+      <Filter>Components\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RollerBackComponent.h">
-		<Filter>Components\Header Files</Filter>
+      <Filter>Components\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SwitchingAreaComponent.h">
-		<Filter>Components\Header Files</Filter>
+      <Filter>Components\Header Files</Filter>
     </ClInclude>
-	<ClInclude Include="CoreTypes.h" />
+    <ClInclude Include="CoreTypes.h" />
     <ClInclude Include="UIUtils.h" />
+    <ClInclude Include="RunPlayerController.h">
+      <Filter>Components\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Components">

@@ -214,7 +214,13 @@ void D2DRenderer::DrawGameObject(std::vector<RenderInfo>& renderInfo, D2D1::Matr
 		}
 
 		m_d2dContext->DrawRectangle(&destRect, m_brush.Get());
-		//m_d2dContext->DrawRectangle({-10, 10, 10, -10}, m_brush.Get());
+
+		float left = info.center.x - (info.size.x  / 2);
+		float top = info.center.y - (info.size.y / 2);
+		float right = info.center.x + (info.size.x / 2);
+		float bottom = info.center.y + (info.size.y / 2);
+
+		m_d2dContext->DrawRectangle({ left, top, right, bottom }, m_brush.Get());
 	}
 
 	m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());

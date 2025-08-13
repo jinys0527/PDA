@@ -2,6 +2,7 @@
 #include "SoundManager.h"
 #include "Fmod_Error.h"
 #include <unordered_map>
+#include <chrono>
 
 constexpr int ChannelCount = 128;
 
@@ -85,6 +86,41 @@ void SoundManager::CreateUISource(const std::unordered_map<std::wstring, std::fi
 
 void SoundManager::Update() //매 프레임 마다 필수 호출
 {
+	auto now = std::chrono::steady_clock::now();
+
+	if (m_FadeOutChannel)
+	{
+		float elapsed = std::chrono::duration<float>(now - m_FadeOutStartTime).count();
+		float t = elapsed / m_FadeOutDuration;
+		float volume = 1.0f - t;
+
+		if (volume < 0.0f) volume = 0.0f;
+		m_FadeOutChannel->setVolume(volume);
+
+		if (t >= 1.0f)
+		{
+			m_FadeOutChannel->stop();
+			m_FadeOutChannel = nullptr;
+			m_FadeOutActive = false;
+		}
+	}
+
+	if (m_FadeInChannel)
+	{
+		float elapsed = std::chrono::duration<float>(now - m_FadeInStartTime).count();
+		float t = elapsed / m_FadeInDuration;
+		float volume = t;
+
+		if (volume > 1.0f) volume = 1.0f;
+		m_FadeInChannel->setVolume(volume);
+
+		if (t >= 1.0f)
+		{
+			m_FadeInChannel = nullptr;
+			m_FadeInActive = false;
+		}
+	}
+
 	m_CoreSystem->update();
 }
 
@@ -96,24 +132,44 @@ void SoundManager::Shutdown()
 	m_CoreSystem->release();
 }
 
-void SoundManager::BGM_Shot(const std::wstring& fileName)
+void SoundManager::BGM_Shot(const std::wstring& fileName, float fadeTime)
 {
-	bool isBGMPlaying = false;
-	if (m_BGMGroup->isPlaying(&isBGMPlaying))
-	{
-		m_BGMGroup->stop();
-	}
-
-	FMOD::Channel* channel = nullptr;
 	auto it = m_BGMs.find(fileName);
 
-
-	if (it != m_BGMs.end())
+	if (it == m_BGMs.end())
 	{
-		m_CoreSystem->playSound(it->second, m_BGMGroup, false, &channel);
+		return;
+	}
+	
+	FMOD::Sound* newSound = it->second;
+
+	if (m_CurrentFileName == fileName)
+	{
+		return;
 	}
 
+	if (m_CurrentChannel)
+	{
+		m_FadeOutChannel = m_CurrentChannel;
+		m_FadeOutStartTime = std::chrono::steady_clock::now();
+		m_FadeOutDuration = fadeTime;
+		m_FadeOutActive = true;
+	}
+
+	m_FadeInChannel = nullptr;
+	m_CoreSystem->playSound(newSound, m_BGMGroup, true, &m_FadeInChannel);
+	m_FadeInChannel->setVolume(0.0f);
+	m_FadeInChannel->setPaused(false);
+
+	m_CurrentChannel = m_FadeInChannel;
+	m_CurrentSound = newSound;
+	m_CurrentFileName = fileName;
+
+	m_FadeInStartTime = std::chrono::steady_clock::now();
+	m_FadeInDuration = fadeTime;
+	m_FadeInActive = true;
 }
+
 
 void SoundManager::SFX_Shot(const std::wstring& fileName)
 {

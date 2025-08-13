@@ -122,9 +122,10 @@ void ChapterBackgroundManager::CreateLayerSet(
 			// m_Backgrounds에 해당하는 벡터일 때만 스케일 조정
 			if (&layerVec == &m_Backgrounds)
 			{
-				// pivot이 BottomCenter이므로 좌측 끝 맞춤을 위해 절반만큼 빼기
-				float adjustedStartX = startX + width * 0.5f;
 				trans->SetScale({ 0.98f, 0.98f });
+				// pivot이 BottomCenter이므로 좌측 끝 맞춤을 위해 절반만큼 빼기
+				int width = tex->GetSize().width;
+				float adjustedStartX = startX + width * 0.5f;
 				trans->SetPosition({ adjustedStartX + width * i, 0 });
 			}
 			else
