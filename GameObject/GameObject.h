@@ -9,8 +9,10 @@ class GameObject : public Object
 {
 	friend class Editor;
 	friend class Scene;
-	friend class TestScene;
 	friend class TitleScene;
+	friend class InGameUITestScene;
+	friend class BossScene;
+
 public:
 	GameObject(EventDispatcher& eventDispatcher);
 	virtual ~GameObject() = default;

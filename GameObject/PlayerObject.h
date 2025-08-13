@@ -51,6 +51,12 @@ public:
 
 	void SetSlide(bool value) { m_IsSlide = value; }
 
+	float GetSlideCool() { return m_SlideCool; }
+	void SetSlideCool(float value) { m_SlideCool = value; }
+
+	float GetSlideDuration() { return m_SlideDuration; }
+	void SetSlideDuration(float value) { m_SlideDuration = value; }
+
 	float GetInvincibleTime() { return m_InvincibleTime; }
 
 	int GetHp() { return m_Hp; }
@@ -71,6 +77,10 @@ public:
 	
 	GameObject* GetCameraObject();
 
+	void SetScene(bool value) { m_IsScene = value; }
+
+	bool GetScene() { return m_IsScene; }
+
 protected:
 
 	FSM m_Fsm;
@@ -83,11 +93,13 @@ protected:
 
 	bool m_IsAttackSuccessed = false;
 
-	float m_RailHeight = 200;
+	float m_RailHeight = 108.f;
 
 	float m_KickCool = 0;
 
 	float m_SlideCool = 0;
+
+	float m_SlideDuration = 0;
 
 	//float m_SprayCool = 0;
 
@@ -95,11 +107,13 @@ protected:
 
 	float m_Z = 0;
 
-	int m_Hp = 3;
+	int m_Hp = 5;
 
 	float m_HoldingAttack = 0;
 
 	int m_ReinforcedBullet = 0;
+
+	bool m_IsScene = false;
 
 	GameObject* m_CameraObject;
 

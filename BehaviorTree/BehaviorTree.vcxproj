@@ -230,6 +230,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationUtils.h" />
     <ClInclude Include="ArmSmash.h" />
     <ClInclude Include="ArmStretch.h" />
     <ClInclude Include="ArmSwip.h" />
@@ -241,7 +242,9 @@
     <ClInclude Include="CompositeNode.h" />
     <ClInclude Include="Decorator.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="HitNode.h" />
     <ClInclude Include="Inverter.h" />
+    <ClInclude Include="IsDeadNode.h" />
     <ClInclude Include="Lazer.h" />
     <ClInclude Include="ParallelNode.h" />
     <ClInclude Include="pch.h" />
@@ -258,6 +261,7 @@
     <ClInclude Include="WaitNode.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationUtils.cpp" />
     <ClCompile Include="ArmSmash.cpp" />
     <ClCompile Include="ArmStretch.cpp" />
     <ClCompile Include="ArmSwip.cpp" />
@@ -268,7 +272,9 @@
     <ClCompile Include="BTNode.cpp" />
     <ClCompile Include="CompositeNode.cpp" />
     <ClCompile Include="Decorator.cpp" />
+    <ClCompile Include="HitNode.cpp" />
     <ClCompile Include="Inverter.cpp" />
+    <ClCompile Include="IsDeadNode.cpp" />
     <ClCompile Include="Lazer.cpp" />
     <ClCompile Include="ParallelNode.cpp" />
     <ClCompile Include="pch.cpp">

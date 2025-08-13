@@ -13,7 +13,7 @@ FlyingObstacleComponent::FlyingObstacleComponent()
 void FlyingObstacleComponent::Start()
 {
 	m_TransformComponent = m_Owner->GetComponent<TransformComponent>();
-	Math::Vector2F delta = { 3000, 250};
+	Math::Vector2F delta = { 3000, 200};
 	m_TransformComponent->SetPosition(delta);
 	if (dynamic_cast<Obstacle*>(m_Owner))
 		m_Z = dynamic_cast<Obstacle*>(m_Owner)->GetZ();

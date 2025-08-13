@@ -18,6 +18,7 @@ void Drone::Start(AssetManager* assetManager)
 	{
 		m_Anim->AddClip(clipName, &clip);
 	}
+
 	m_Sprite->SetTexture(m_AssetManager->LoadTexture(L"Hometown_Drone_IDLE", "../Resource/Obstacle/Hometown_Drone_IDLE.png"));
 	m_Sprite->SetPivotPreset(SpritePivotPreset::BottomCenter, m_Sprite->GetTexture()->GetSize());
 	m_Sprite->SetPath("../Resource/Obstacle/Hometown_Drone_IDLE.png");

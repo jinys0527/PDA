@@ -77,6 +77,10 @@ public:
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;
 
+	std::vector<TransformComponent*>& GetChildrens()
+	{
+		return m_Children;
+	}
 private:
 	void SetDirty()
 	{

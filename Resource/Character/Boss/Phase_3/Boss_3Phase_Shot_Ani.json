@@ -1,0 +1,84 @@
+{
+    "frames": [
+        {
+            "filename": "frame_0",
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_1",
+            "frame": {
+                "x": 1920,
+                "y": 0,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_2",
+            "frame": {
+                "x": 3840,
+                "y": 0,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_3",
+            "frame": {
+                "x": 5760,
+                "y": 0,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_4",
+            "frame": {
+                "x": 7680,
+                "y": 0,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_4",
+            "frame": {
+                "x": 9600,
+                "y": 0,
+                "w": 1920,
+                "h": 1920
+            },
+            "duration": 100
+        }
+
+    ],
+    "meta": {
+        "app": "CustomSpriteSheetTool",
+        "version": "1.0",
+        "image": "Boss_3Phase_Shot_Ani.png",
+        "size": {
+            "w": 11520,
+            "h": 1920
+        },
+      "frameTags": [
+        {
+          "name": "shot",
+          "from": 0,
+          "to": 4,
+          "direction": "forward",
+          "color": "#000000ff"
+        }
+      ],
+        "scale": "1"
+    }
+}

@@ -60,6 +60,9 @@ public:
 	void SetGameManager(GameManager* gameManager);
 	void SetSceneManager(SceneManager* sceneManager);
 
+	void SetIsPause(bool value) { m_Pause = value; }
+	bool GetIsPause() { return m_Pause; }
+
 protected:
 	std::unordered_map<std::string, std::shared_ptr<GameObject>> m_GameObjects;
 	EventDispatcher& m_EventDispatcher;
@@ -72,6 +75,8 @@ protected:
 	GameManager* m_GameManager = nullptr;
 	CameraObject* m_Camera;
 	std::string m_Name;
+
+	bool m_Pause;
 private:
 	Scene(const Scene&) = delete;
 	Scene& operator=(const Scene&) = delete;

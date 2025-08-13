@@ -8,7 +8,7 @@ public:
 	Background() = default;
 	Background(EventDispatcher& eventDispatcher) : GameObject(eventDispatcher) 
 	{
-		m_moveSpeed = 1000.0f;
+		m_moveSpeed = 100.0f;
 	}
 
 	void SetMoveSpeed(float moveSpeed) { m_moveSpeed = moveSpeed; }
@@ -17,6 +17,9 @@ public:
 	void Update(float deltaTime) override;
 	void Update(float deltaTime, const CameraObject* camera);
 	void FixedUpdate() override;
+
+	void Render(std::vector<RenderInfo>& renderInfo);
+
 private:
 	void Scroll(float deltaTime);
 private:

@@ -34,7 +34,9 @@ enum class EventType
 	OnScoreChange,
 	OnBossScene,
 	OnPlayerAttack,
-	Quit
+	Quit,
+
+	OnLoadedScene
 };
 
 class IEventListener

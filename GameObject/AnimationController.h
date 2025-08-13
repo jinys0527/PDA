@@ -15,6 +15,8 @@ public:
 
 	bool IsLastFrameFinished() const;
 
+	void FinishFrame();
+
 	void SetClip(const AnimationClip* clip);
 	const AnimationClip* GetClip() const { return m_Clip; }
 
