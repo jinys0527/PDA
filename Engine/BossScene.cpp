@@ -73,7 +73,7 @@ void BossScene::Initialize()
 
 	//3Æä ±¸¸Û ¹è°æ
 	{
-		auto texture = m_AssetManager.LoadTexture(L"3Chap_2Phase_View", L"../Resource/Character/Boss/Phase_2/3Chap_2Phase_View.png");
+		auto texture = m_AssetManager.LoadTexture(L"3Chap_2Phase_View", L"../Resource/Character/Background/Chapter3/3Chap_2Phase_View.png");
 
 		auto backobj = std::make_shared<GameObject>(m_EventDispatcher);
 		backobj->m_Name = "Phase_2_Big_Hole";
@@ -944,7 +944,7 @@ void BossScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_3Phase_DEAD_Ani";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 960.f, 1740.f });
+		trans->SetPosition({ 960.f, 1050.f });
 		trans->SetScale({ 1.f, 1.f });
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
@@ -984,7 +984,7 @@ void BossScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_3Phase_Arms_Dead_L";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 920.f, 690.f });
+		trans->SetPosition({ 820.f, 690.f });
 		trans->SetScale({ -0.9f, 0.9f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
@@ -1024,7 +1024,7 @@ void BossScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_3Phase_Arms_Dead_R";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 1000.f, 690.f });
+		trans->SetPosition({ 1100.f, 690.f });
 		trans->SetScale({ 0.9f, 0.9f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
