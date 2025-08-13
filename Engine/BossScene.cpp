@@ -1407,6 +1407,7 @@ void BossScene::Update(float deltaTime)
 		{
 			obj->GetComponent<SpriteRenderer>()->SetOpacity(1.0f);
 			obj->GetComponent<AnimationComponent>()->SetIsActive(true);
+			m_SoundManager.SFX_Shot(L"boss_laser_explosion");
 		}
 	}
 
