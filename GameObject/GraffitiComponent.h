@@ -25,6 +25,13 @@ public :
 		return m_IsClicked;
 	}
 
+	bool GetIsFirst()
+	{
+		return m_IsFirst;
+	}
+
+	void Reset() { m_IsFirst = false; }
+
 	void Serialize(nlohmann::json& j) const override{};
 	void Deserialize(const nlohmann::json& j) override{};
 

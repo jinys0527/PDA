@@ -65,6 +65,19 @@ public:
 		return result;
 	}
 
+	template<typename T>
+	void RemoveComponent(T* Component)
+	{
+		auto it = m_Components.find(T::StaticTypeName);
+		if (it == m_Components.end())
+			return;
+		auto& vec = it->second;
+
+		// 3. vector가 비면 map에서 key 제거
+		if (vec.empty())
+			m_Components.erase(it);
+	}
+
 	virtual void Update(float deltaTime);
 
 	virtual void FixedUpdate();

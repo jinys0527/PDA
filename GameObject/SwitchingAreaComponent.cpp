@@ -2,12 +2,26 @@
 #include "UIObject.h"
 #include "RectTransformComponent.h"
 
-#define switchingSpeed 250
+#define switchingSpeed 2500
 
 void SwitchingAreaComponent::Start(int index)
 {
-	auto rect = m_Owner->GetComponent<RectTransformComponent>();
-	rect->SetPosition({ 1920.0f * (index+1), 0.0f});
+	if (index > 1)
+	{
+		m_IsLoaded = true;
+	}
+	else
+	{
+		index = index % 2;
+
+		if (index == 1)
+		{
+			m_IsStart = true;
+		}
+
+		auto rect = m_Owner->GetComponent<RectTransformComponent>();
+		rect->SetPosition({ 1920.0f * (index + 1), 0.0f });
+	}
 }
 
 void SwitchingAreaComponent::Update(float deltaTime)
@@ -20,15 +34,32 @@ void SwitchingAreaComponent::Update(float deltaTime)
 	pos.x = pos.x - 960.0f + (m_RectTransComp->GetSize().x / 2.0f);
 	pos.y = pos.y - 540.0f + (m_RectTransComp->GetSize().y / 2.0f);
 
-	if (pos.x > -2000)
+	if (m_IsStart)
+	{
+		pos.x -= 1900;
+	}
+
+	if (pos.x > -4000 && m_IsLoaded)
+	{
+		pos.x -= deltaTime * switchingSpeed;
+	}
+	else if (pos.x > -750)
 	{
 		pos.x -= deltaTime * switchingSpeed;
 	}
 
-	if (pos.x < -2000)
+	if (m_IsStart)
 	{
-		pos.x = -2000;
+		pos.x += 1900;
 	}
+
+	if (pos.x <= -4000 && m_IsLoaded)
+	{
+		pos.x = -4000;
+		m_IsLoaded = false;
+		m_IsStart = false;
+	}
+
 
 	m_RectTransComp->SetPosition(pos);
 }

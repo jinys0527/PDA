@@ -10,7 +10,7 @@ Telegraph::Telegraph(EventDispatcher& eventDispatcher) : Obstacle(eventDispatche
 {
 	auto box = GetComponent<BoxColliderComponent>();
     box->SetIsActive(false);
-    
+    box->SetSize({ 729.f, 349.f });
 }
 
 void Telegraph::Update(float deltaTime)

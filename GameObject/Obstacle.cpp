@@ -39,7 +39,6 @@ Obstacle::Obstacle(EventDispatcher& eventDispatcher) : GameObject(eventDispatche
 				return;
 			info.self->GetFSM().Trigger("CollisionStay");
 			auto trans = this->GetComponent<TransformComponent>();
-			trans->Translate(Vec2F(0.1f, 0));
 			this->GetEventDispatcher().Dispatch(EventType::OnPlayerCollisonOccur, (const void*)1);
 		}
 	);

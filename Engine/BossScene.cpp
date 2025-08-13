@@ -1273,6 +1273,8 @@ void BossScene::Initialize()
 		p_trans->SetPosition({ posX, posY });
 		p_trans->SetScale({ 0.7f, 0.7f });
 		sr->SetOpacity(0.0f);
+		
+		teleobj->SetZ(row);
 
 		AddGameObject(teleobj);
 		m_Telegraphs.push_back(teleobj);

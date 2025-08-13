@@ -24,7 +24,7 @@ public:
 
 	int m_playerHp = 5;
 	int m_playerReinforcedAttack = 3;
-	float m_playerXLoc = -1000;
+	float m_playerXLoc = 960.0f;
 
 	int m_score = 0;
 	int m_hitCount = 0;
@@ -36,6 +36,7 @@ private:
 	int m_initialHp = 5;
 	int m_initialReinforcedAttack = 3;
 
+	int m_forhitHp = 5;
 	int m_prevHp = 5;
 
 

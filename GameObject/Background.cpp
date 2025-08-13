@@ -39,9 +39,10 @@ void Background::Update(float deltaTime, const CameraObject* camera)
 	float cameraLeft = cameraPos.x - cameraWidth * 0.5f;
 
 	// 배경이 왼쪽 화면 범위를 벗어났을 때 뒤로 보내기
-	if (x + xSize < cameraLeft)
+	while(x + xSize < cameraLeft)
 	{
-		trans->SetPosition({ x + xSize * 3, trans->GetPosition().y });
+		x += xSize * 3;
+		trans->SetPosition({ x, trans->GetPosition().y });
 	}
 }
 

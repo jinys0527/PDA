@@ -10,13 +10,14 @@ DroneComponent::DroneComponent()
 void DroneComponent::Start()
 {
 	m_TransformComponent = m_Owner->GetComponent<TransformComponent>();
-	Math::Vector2F delta = { 3000, 200 };
+	Math::Vector2F delta = { 900, 200 };
 	m_TransformComponent->SetPosition(delta);
 }
 
 void DroneComponent::Update(float deltaTime)
 {
-
+	if(!m_TransformComponent->GetParent())
+		return;
 	Math::Vector2F delta = { 0, 0 };
 
 
@@ -30,6 +31,9 @@ void DroneComponent::Update(float deltaTime)
 		m_Delay -= deltaTime;
 		if(m_Delay <= 0)
 			delta.x = -deltaTime * 1000;
+
+		if (m_Owner->GetComponent<TransformComponent>()->GetPosition().x < -2000)
+			m_Owner->GetComponent<TransformComponent>()->DetachFromParent();
 	}
 
 	m_Owner->GetComponent<TransformComponent>()->Translate(delta);

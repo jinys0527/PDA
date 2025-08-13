@@ -850,7 +850,14 @@ void TitleScene::Initialize()
 	auto controlComp = controlObject->AddComponent<ControlComponent>();
 	controlComp->Start();
 
-	controlComp->RegisterKeyDownCallback(VK_ESCAPE, [weakbackGround, weakexitBackGround, weakexitOkButton, weakexitNoButton, weakmenuBox, weakstartButton, weaksettingButton, weakcreditButton, this]() {
+	controlComp->RegisterKeyDownCallback(VK_ESCAPE, [weakbackGround, weakexitBackGround, weakexitOkButton, weakexitNoButton, weakmenuBox, weakstartButton, weaksettingButton, weakcreditButton, weakacidBackGround, weaksourBackGround, this]() {
+		if (auto bg = weakacidBackGround.lock())
+		{
+			bg->SetIsVisible(false);
+			if (auto bg = weaksourBackGround.lock())
+				bg->SetIsVisible(false);
+		}
+		
 		if (auto bg = weakbackGround.lock()) bg->SetIsVisible(false);
 		if (auto bg = weakexitBackGround.lock()) bg->SetIsVisible(true);
 		if (auto btn = weakexitOkButton.lock()) btn->SetIsVisible(true);
