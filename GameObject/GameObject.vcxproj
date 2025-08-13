@@ -197,7 +197,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer; $(SolutionDir)ResourceManager; $(SolutionDir)AI;$(SolutionDir)Event; $(SolutionDir)Engine; $(SolutionDir)Client; $(SolutionDir)SoundSystem;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer; $(SolutionDir)ResourceManager; $(SolutionDir)AI;$(SolutionDir)Event; $(SolutionDir)Engine; $(SolutionDir)Client;$(SolutionDir)SoundSystem; $(SolutionDir)ThirdParty\FMOD\inc;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -213,7 +213,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer; $(SolutionDir)ResourceManager; $(SolutionDir)AI;$(SolutionDir)Event; $(SolutionDir)Engine; $(SolutionDir)Client;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer; $(SolutionDir)ResourceManager; $(SolutionDir)AI;$(SolutionDir)Event; $(SolutionDir)Engine; $(SolutionDir)Client;$(SolutionDir)SoundSystem; $(SolutionDir)ThirdParty\FMOD\inc;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -228,7 +228,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer; $(SolutionDir)ResourceManager; $(SolutionDir)AI;$(SolutionDir)Event; $(SolutionDir)Engine; $(SolutionDir)Client;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer; $(SolutionDir)ResourceManager; $(SolutionDir)AI;$(SolutionDir)Event; $(SolutionDir)Engine; $(SolutionDir)Client;$(SolutionDir)SoundSystem; $(SolutionDir)ThirdParty\FMOD\inc;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -244,6 +244,7 @@
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="BoxColliderComponent.h" />
+    <ClInclude Include="ChapterBackgroundManager.h" />
     <ClInclude Include="CircleColliderComponent.h" />
     <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="Component.h" />
@@ -252,7 +253,10 @@
     <ClInclude Include="Drone.h" />
     <ClInclude Include="DroneComponent.h" />
     <ClInclude Include="DropObstacle.h" />
+    <ClInclude Include="FallingObstacle_Box.h" />
+    <ClInclude Include="FallingObstacle_Flowerpot.h" />
     <ClInclude Include="FixedObstacle_1.h" />
+    <ClInclude Include="FixedObstacle_2.h" />
     <ClInclude Include="FlyingObstacleComponent.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="HeartUIComponent.h" />
@@ -291,6 +295,7 @@
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="CameraObject.cpp" />
     <ClCompile Include="BoxColliderComponent.cpp" />
+    <ClCompile Include="ChapterBackgroundManager.cpp" />
     <ClCompile Include="CircleColliderComponent.cpp" />
     <ClCompile Include="ColliderComponent.cpp" />
     <ClCompile Include="Component.cpp" />
@@ -298,7 +303,10 @@
     <ClCompile Include="Drone.cpp" />
     <ClCompile Include="DroneComponent.cpp" />
     <ClCompile Include="DropObstacle.cpp" />
+    <ClCompile Include="FallingObstacle_Box.cpp" />
+    <ClCompile Include="FallingObstacle_Flowerpot.cpp" />
     <ClCompile Include="FixedObstacle_1.cpp" />
+    <ClCompile Include="FixedObstacle_2.cpp" />
     <ClCompile Include="FlyingObstacleComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="AnimationComponent.cpp" />

@@ -18,11 +18,10 @@ void Drone::Start(AssetManager* assetManager)
 	{
 		m_Anim->AddClip(clipName, &clip);
 	}
-	m_Anim->Play("droneidle");
-	std::wstring key = m_Anim->GetClip()->GetTextureKey();
-	std::wstring path = L"../Resource/Obstacle/" + key + L".png";
-	m_Sprite->SetTexture(m_AssetManager->LoadTexture(key, path));
+
+	m_Sprite->SetTexture(m_AssetManager->LoadTexture(L"Hometown_Drone_IDLE", "../Resource/Obstacle/Hometown_Drone_IDLE.png"));
 	m_Sprite->SetPivotPreset(SpritePivotPreset::BottomCenter, m_Sprite->GetTexture()->GetSize());
-	m_Sprite->SetPath("../Resource/Obstacle/Hometown_Drone_IDLE_Ani.json");
-	m_Sprite->SetTextureKey("Hometown_Drone_IDLE_Ani");
+	m_Sprite->SetPath("../Resource/Obstacle/Hometown_Drone_IDLE.png");
+	m_Sprite->SetTextureKey("Hometown_Drone_IDLE");
+	m_Anim->Play("droneidle");
 }

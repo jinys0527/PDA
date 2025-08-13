@@ -1,0 +1,41 @@
+{
+    "frames": [
+        {
+            "filename": "frame_0",
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 250,
+                "h": 250
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_1",
+            "frame": {
+                "x": 250,
+                "y": 0,
+                "w": 250,
+                "h": 250
+            },
+            "duration": 100
+        }
+    ],
+    "meta": {
+        "app": "CustomSpriteSheetTool",
+        "version": "1.0",
+        "image": "Flowerpot_Drop_Ani.png",
+        "size": {
+            "w": 500,
+            "h": 250
+        },
+        "frameTags": [{
+  "name": "flowerpotdrop",
+  "from": 0,
+  "to": 1,
+  "direction": "forward",
+  "color": "#000000ff"
+}],
+        "scale": "1"
+    }
+}
