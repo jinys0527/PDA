@@ -9,6 +9,7 @@
 
 class Telegraph;
 class GameObject;
+class GraffitiObject;
 
 // 행동트리 노드들이 공유하는 데이터 저장소
 // AI가 판단하거나 행동할 때 참고하는 모든 상태, 변수, 정보들을 담음
@@ -23,6 +24,7 @@ public:
         std::string, 
         std::vector<std::string>,
         std::vector<std::shared_ptr<Telegraph>>,
+        std::vector<std::shared_ptr<GraffitiObject>>,
         std::vector<std::shared_ptr<GameObject>>,
         std::unordered_map<std::string, std::shared_ptr<GameObject>>,
         std::unordered_map<std::string, std::vector<int>>,

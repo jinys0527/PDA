@@ -23,6 +23,7 @@ NodeState PhaseChecker_3::Tick(BlackBoard& bb, float deltaTime)
     if (m_PhaseChange)
     {
         m_Hole->GetComponent<SpriteRenderer>()->SetOpacity(1.0f);
+        m_Hole_Back->GetComponent<SpriteRenderer>()->SetOpacity(1.0f);
 
 
         {
@@ -125,6 +126,7 @@ NodeState PhaseChecker_3::Tick(BlackBoard& bb, float deltaTime)
         auto& backgrounds = map.value();
 
         m_Hole = backgrounds["Phase_2_Big_Hole"];
+        m_Hole_Back = backgrounds["Phase_3_Hole_Background"];
         m_Back_0 = backgrounds["Phase_1_Monitor"];
         m_Back_1 = backgrounds["Phase_2_Monitor_1"];
         m_Back_2 = backgrounds["Phase_2_Monitor_2"];

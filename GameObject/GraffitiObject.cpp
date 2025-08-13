@@ -9,7 +9,7 @@ GraffitiObject::GraffitiObject(EventDispatcher& eventDispatcher) : GameObject(ev
 	m_Sprite = AddComponent<SpriteRenderer>();
 
 	srand((unsigned int)time(NULL));
-	m_RandTexture = rand();
+	m_RandTexture = rand()%5; // 여기서 나머지 5 안해서 인데스 초과함
 }
 
 void GraffitiObject::Render(std::vector<RenderInfo>& renderInfo)
@@ -37,6 +37,7 @@ void GraffitiObject::Render(std::vector<RenderInfo>& renderInfo)
 				}
 
 				info.bitmap = sprite->GetTexture();
+				info.layer = m_Transform->GetZOrder();
 				info.worldMatrix = m_Transform->GetWorldMatrix();
 				info.pivot = sprite->GetPivot();
 				// Opacity 적용
@@ -68,6 +69,15 @@ void GraffitiObject::SetGravittis(AssetManager* assetManager, int chapter)
 		{
 			std::wstring key = L"statue" + std::to_wstring(i + 1);
 			std::wstring path = L"../Resource/Background/Chapter2/" + key + L".png";
+			m_GraffitiTextures[i] = assetManager->LoadTexture(key, path);
+		}
+	}
+	else if (chapter == 3 || chapter == 4)
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			std::wstring key = L"Snipe";
+			std::wstring path = L"../Resource/Character/Boss/" + key + L".png";
 			m_GraffitiTextures[i] = assetManager->LoadTexture(key, path);
 		}
 	}

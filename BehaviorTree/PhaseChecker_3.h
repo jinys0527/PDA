@@ -27,6 +27,7 @@ private:
 	std::shared_ptr<GameObject> m_Boss_Phase_2_Arm;
 
 	std::shared_ptr<GameObject> m_Hole;
+	std::shared_ptr<GameObject> m_Hole_Back;
 	std::shared_ptr<GameObject> m_Back_0;
 	std::shared_ptr<GameObject> m_Back_1;
 	std::shared_ptr<GameObject> m_Back_2;
