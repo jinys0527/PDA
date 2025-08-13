@@ -26,6 +26,8 @@ public:
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;
 
+	void SetOpacity(float value) { m_Opacity = value; }
+
 private:
 	float m_Opacity = 1;
 	bool m_IsStart = false;

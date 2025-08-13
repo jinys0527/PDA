@@ -18,7 +18,7 @@ void Background::Update(float deltaTime)
 
 	if (x < -xSize)
 	{
-		trans->SetPosition({ x + xSize * 2, trans->GetPosition().y });
+		trans->SetPosition({ x + xSize * 3, trans->GetPosition().y });
 	}
 
 	__super::Update(deltaTime);
@@ -30,7 +30,7 @@ void Background::Update(float deltaTime, const CameraObject* camera)
 
 	TransformComponent* trans = GetComponent<TransformComponent>();
 	float x = trans->GetPosition().x;
-	int xSize = GetComponent<SpriteRenderer>()->GetTexture()->GetSize().width;
+	int xSize = GetComponent<SpriteRenderer>()->GetTexture()->GetSize().width * m_Transform->GetScale().x;
 
 	// 카메라 위치 + 화면 절반 크기 가져오기
 	auto cameraComp = camera->GetComponent<CameraComponent>();
@@ -41,7 +41,7 @@ void Background::Update(float deltaTime, const CameraObject* camera)
 	// 배경이 왼쪽 화면 범위를 벗어났을 때 뒤로 보내기
 	if (x + xSize < cameraLeft)
 	{
-		trans->SetPosition({ x + xSize * 2, trans->GetPosition().y });
+		trans->SetPosition({ x + xSize * 3, trans->GetPosition().y });
 	}
 }
 

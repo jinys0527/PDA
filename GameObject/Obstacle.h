@@ -31,7 +31,7 @@ public:
 protected:
 	float m_Z = 1.0f;
 
-	bool m_IsSlide;
+	bool m_IsSlide = false;
 	BoxColliderComponent* m_Collider;
 	SpriteRenderer* m_Sprite;
 };

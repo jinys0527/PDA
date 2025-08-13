@@ -582,7 +582,7 @@ void InGameUITestScene::Initialize()
 	gameoverBoxRect->SetAnchorPreset(AnchorPrset::FullStretch);
 	gameoverBoxRect->SetPivotPreset(RectTransformPivotPreset::Center);
 
-	gameoverBox->SetIsVisible(true);
+	gameoverBox->SetIsVisible(false);
 
 	m_UIManager.AddUI("InGameUITestScene", gameoverBox);
 
@@ -602,7 +602,7 @@ void InGameUITestScene::Initialize()
 	gameoverRetryButtonRect->SetAnchorPreset(AnchorPrset::FullStretch);
 	gameoverRetryButtonRect->SetPivotPreset(RectTransformPivotPreset::Center);
 
-	gameoverRetryButton->SetIsVisible(true);
+	gameoverRetryButton->SetIsVisible(false);
 
 	m_UIManager.AddUI("InGameUITestScene", gameoverRetryButton);
 
@@ -622,7 +622,7 @@ void InGameUITestScene::Initialize()
 	gameoverMainButtonRect->SetAnchorPreset(AnchorPrset::FullStretch);
 	gameoverMainButtonRect->SetPivotPreset(RectTransformPivotPreset::Center);
 
-	gameoverMainButton->SetIsVisible(true);
+	gameoverMainButton->SetIsVisible(false);
 
 	m_UIManager.AddUI("InGameUITestScene", gameoverMainButton);
 
@@ -739,7 +739,7 @@ void InGameUITestScene::Initialize()
 
 	auto switchingAreaRect = switchingArea->GetComponent<RectTransformComponent>();
 	switchingAreaRect->SetSize({ 2000.0f, 1080.0f });
-	switchingAreaRect->SetPosition({ 3840.0f, 0.0f });
+	switchingAreaRect->SetPosition({ -1920.0f, 0.0f });
 	switchingAreaRect->SetAnchorPreset(AnchorPrset::FullStretch);
 	switchingAreaRect->SetPivotPreset(RectTransformPivotPreset::Center);
 
@@ -759,7 +759,7 @@ void InGameUITestScene::Initialize()
 
 	auto switchingAreaRect2 = switchingArea2->GetComponent<RectTransformComponent>();
 	switchingAreaRect2->SetSize({ 2000.0f, 1080.0f });
-	switchingAreaRect2->SetPosition({ 1920.0f, 0.0f });
+	switchingAreaRect2->SetPosition({ -1920.0f, 0.0f });
 	switchingAreaRect2->SetAnchorPreset(AnchorPrset::FullStretch);
 	switchingAreaRect2->SetPivotPreset(RectTransformPivotPreset::Center);
 
@@ -934,6 +934,7 @@ void InGameUITestScene::Initialize()
 		});
 
 	auto controlObject = std::make_shared<GameObject>(m_EventDispatcher);
+	controlObject->SetName("Control");
 	auto controlComp = controlObject->AddComponent<ControlComponent>();
 	controlComp->Start();
 
