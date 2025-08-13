@@ -15,7 +15,7 @@ void ChapterBackgroundManager::LoadBackgroundSet(int chapter)
 	m_NearLayers.clear();
 	m_ForeLayers.clear();
 	m_Backgrounds.clear();
-	m_Tiles.clear();
+	m_Tiles.clear(); 
 	m_TileEdges.clear();
 
 	// 챕터별 이미지 경로

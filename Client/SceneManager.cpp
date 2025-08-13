@@ -3,7 +3,6 @@
 #include "TitleScene.h"
 #include "GameScene.h"
 #include "InGameUITestScene.h"
-#include "CharacterScene.h"
 #include "RenderData.h"
 #include "BossScene.h"
 
@@ -23,9 +22,9 @@ void SceneManager::Initialize()
 	gameScene->Initialize();
 	gameScene->SetName("GameScene");
 
-	ChangeScene("GameScene");
+	ChangeScene("TitleScene");
 	m_UIManager.Start();
-	m_UIManager.SetCurrentScene("GameScene");
+	m_UIManager.SetCurrentScene("TitleScene");
 
 // 	auto inGameUITestScene = AddScene("InGameUITestScene", std::make_shared<InGameUITestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
 // 	inGameUITestScene->SetSceneManager(this);
@@ -79,7 +78,6 @@ void SceneManager::SetCurrentScene(const std::string& name)
 	{
 		m_CurrentScene = it->second;
 
-		m_CurrentScene->Enter();
 		m_Camera = m_CurrentScene->GetMainCamera();
 		m_Renderer.SetCamera(m_Camera);
 	}
