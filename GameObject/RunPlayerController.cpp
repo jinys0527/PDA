@@ -252,7 +252,9 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 		tempMousePos = viewMatrix.TransformPoint(tempMousePos);
 
 		mousePos.x = tempMousePos.x;
-		mousePos.y = tempMousePos.y;
+		mousePos.y = tempMousePos.y - 400;
+
+		std::cout << mousePos.x << " " << mousePos.y << std::endl;
 
 		m_PlayerOwner->GetFSM().Trigger("Shoot");
 	}

@@ -43,7 +43,7 @@ void ChapterBackgroundManager::LoadBackgroundSet(int chapter)
 	else if (chapter == 2)
 	{
 		farTextures = { L"../Resource/Background/Chapter2/Background_Sky.png" };
-		foreTextures = { L"../Resource/Background/Chapter2/Foreground.png" };
+		foreTextures = { L"../Resource/Background/Chapter2/Foreground_2.png" };
 		backgroundTextures = { L"../Resource/Background/Chapter2/Background1.png",
 		L"../Resource/Background/Chapter2/Background2.png" };
 		tileTextures = { L"../Resource/Background/Chapter2/Tile_2.png" };
@@ -51,7 +51,11 @@ void ChapterBackgroundManager::LoadBackgroundSet(int chapter)
 	}
 	else if (chapter == 3)
 	{
-
+		farTextures;
+		foreTextures;
+		backgroundTextures = { L"../Resource/Background/Chapter3/background.png" };
+		tileTextures = { L"../Resource/Background/Chapter3/Tile3.png" };
+		tileEdgesTextures = { L"../Resource/Background/Chapter3/Tile_3_1.png" };
 	}
 	else if (chapter == 4)
 	{
@@ -142,7 +146,8 @@ void ChapterBackgroundManager::CreateLayerSet(
 			trans->SetZOrder(zOrder);  // 여기서 ZOrder 세팅
 
 			bg->SetMoveSpeed(moveSpeed);
-			bg->ToggleScroll();
+			if(moveSpeed == 0.0f)
+				bg->ToggleScroll();
 			layerVec.push_back(bg);
 		}
 		startX += width * 3; // 다음 세트 위치로

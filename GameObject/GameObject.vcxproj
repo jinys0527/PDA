@@ -280,6 +280,7 @@
     <ClInclude Include="SwitchingAreaComponent.h" />
     <ClInclude Include="Telegraph.h" />
     <ClInclude Include="TransformComponent.h" />
+    <ClInclude Include="TriggerBox.h" />
     <ClInclude Include="UIButtonComponent.h" />
     <ClInclude Include="UIComponent.h" />
     <ClInclude Include="UIGridComponent.h" />
@@ -331,6 +332,7 @@
     <ClCompile Include="SwitchingAreaComponent.cpp" />
     <ClCompile Include="Telegraph.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
+    <ClCompile Include="TriggerBox.cpp" />
     <ClCompile Include="UIButtonComponent.cpp" />
     <ClCompile Include="UIComponent.cpp" />
     <ClCompile Include="UIGridComponent.cpp" />

@@ -12,7 +12,7 @@ Telegraph::Telegraph(EventDispatcher& eventDispatcher) : Obstacle(eventDispatche
   
     box->SetSize({ 291.6f, 349.f });
     box->SetIsActive(false);
-    
+    box->SetSize({ 729.f, 349.f });
 }
 
 void Telegraph::Update(float deltaTime)

@@ -570,7 +570,6 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 	{
 		{
 			RenderInfo info;
-			auto box = GetComponent<BoxColliderComponent>();
 			info.bitmap = m_ShadowBitmap;
 			Math::Vector2F pos = m_Transform->GetPosition();
 			float y = pos.y;
@@ -607,12 +606,7 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 			size.width = sprite->GetSrcRect().right - sprite->GetSrcRect().left;
 			size.height = sprite->GetSrcRect().bottom - sprite->GetSrcRect().top;
 			sprite->SetPivotPreset(SpritePivotPreset::BottomCenter, size);
-			auto box = GetComponent<BoxColliderComponent>();
-			if (box)
-			{
-				info.center = box->GetCenter();
-				info.size = box->GetSize();
-			}
+
 			info.pivot = sprite->GetPivot(); // 바꾸어 놓음
 			// UI가 아닌 일반 오브젝트 위치로 설정
 			float opacity = abs(cos(m_InvincibleTime * 5));
@@ -620,20 +614,23 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 			info.useSrcRect = sprite->GetUseSrcRect();
 			info.srcRect = sprite->GetSrcRect();
 			info.layer = m_Layer;
+			renderInfo.push_back(info);
 
+			//std::cout << "x : " << m_Transform->GetPosition().x << ", y : " << m_Transform->GetPosition().y << std::endl;
+			//std::cout << "x : " << GetComponent<BoxColliderComponent>()->GetCenter().x << ", y : " << GetComponent<BoxColliderComponent>()->GetCenter().y << std::endl;
 			Vec2F vec = GetComponent<BoxColliderComponent>()->GetCenter();
 			Vec2F colSize = GetComponent<BoxColliderComponent>()->GetSize();
-			//std::cout << "left : " << vec.x - colSize.x << ", top : " << vec.y - colSize.y << ", right : " << vec.x + colSize.x << ", bottom : " << vec.y + colSize.y << std::endl;
-
-			if (box)
-			{
-				info.center = box->GetCenter();
-				info.size = box->GetSize();
-			}
-			renderInfo.push_back(info);
+			std::cout << "left : " << vec.x - colSize.x << ", top : " << vec.y - colSize.y << ", right : " << vec.x + colSize.x << ", bottom : " << vec.y + colSize.y << std::endl;
 		}
 	}
 
+}
+
+void PlayerObject::Reset()
+{
+	m_Fsm.SetInitialState("Idle");
+	m_InvincibleTime = 0;
+	m_SlideCool = 0;
 }
 
 void PlayerObject::SetShadowBitmap(Microsoft::WRL::ComPtr<ID2D1Bitmap1> shadow)
