@@ -15,10 +15,10 @@ void ChapterBackgroundManager::LoadBackgroundSet(int chapter)
 	m_NearLayers.clear();
 	m_ForeLayers.clear();
 	m_Backgrounds.clear();
-	m_Tiles.clear(); 
+	m_Tiles.clear();
 	m_TileEdges.clear();
 
-	// Ã©ÅÍº° ÀÌ¹ÌÁö °æ·Î
+	// ì±•í„°ë³„ ì´ë¯¸ì§€ ê²½ë¡œ
 	std::vector<std::wstring> farTextures;
 	std::vector<std::wstring> nearTextures;
 	std::vector<std::wstring> foreTextures;
@@ -33,9 +33,9 @@ void ChapterBackgroundManager::LoadBackgroundSet(int chapter)
 		farTextures = { L"../Resource/Background/Chapter1/Background.png" };
 		foreTextures = { L"../Resource/Background/Chapter1/Foreground.png" };
 		backgroundTextures = { L"../Resource/Background/Chapter1/Building1.png",
-		L"../Resource/Background/Chapter1/Building2.png", 
-		L"../Resource/Background/Chapter1/Building3.png", 
-		L"../Resource/Background/Chapter1/Building4.png", 
+		L"../Resource/Background/Chapter1/Building2.png",
+		L"../Resource/Background/Chapter1/Building3.png",
+		L"../Resource/Background/Chapter1/Building4.png",
 		L"../Resource/Background/Chapter1/Building5.png" };
 		tileTextures = { L"../Resource/Background/Chapter1/Tile_1.png" };
 		tileEdgesTextures = { L"../Resource/Background/Chapter1/Tile_1_1.png" };
@@ -45,7 +45,7 @@ void ChapterBackgroundManager::LoadBackgroundSet(int chapter)
 		farTextures = { L"../Resource/Background/Chapter2/Background_Sky.png" };
 		foreTextures = { L"../Resource/Background/Chapter2/Foreground_2.png" };
 		backgroundTextures = { L"../Resource/Background/Chapter2/Background1.png",
-		L"../Resource/Background/Chapter2/Background2.png"};
+		L"../Resource/Background/Chapter2/Background2.png" };
 		tileTextures = { L"../Resource/Background/Chapter2/Tile_2.png" };
 		tileEdgesTextures = { L"../Resource/Background/Chapter2/Tile_2_1.png" };
 	}
@@ -57,14 +57,18 @@ void ChapterBackgroundManager::LoadBackgroundSet(int chapter)
 		tileTextures = { L"../Resource/Background/Chapter3/Tile3.png" };
 		tileEdgesTextures = { L"../Resource/Background/Chapter3/Tile_3_1.png" };
 	}
+	else if (chapter == 4)
+	{
 
-	// ·¹ÀÌ¾îº° »ı¼º
-	CreateLayerSet(m_NearLayers, nearTextures, 40.0f, 6);		  // ±Ù°æ
-	CreateLayerSet(m_Tiles, tileTextures, 0.0f, -1);			  // Å¸ÀÏ
-	CreateLayerSet(m_TileEdges, tileEdgesTextures, 0.0f, -2);     // Å¸ÀÏ Å×µÎ¸®
-	CreateLayerSet(m_Backgrounds, backgroundTextures, 0.0f, -3);  // ¹è°æ
-	CreateLayerSet(m_ForeLayers, foreTextures, 80.0f, -4);		  // Àü°æ
-	CreateLayerSet(m_FarLayers, farTextures, 20.0f, -5);		  // ¿ø°æ
+	}
+
+	// ë ˆì´ì–´ë³„ ìƒì„±
+	CreateLayerSet(m_NearLayers, nearTextures, 40.0f, 6);		  // ê·¼ê²½
+	CreateLayerSet(m_Tiles, tileTextures, 0.0f, -1);			  // íƒ€ì¼
+	CreateLayerSet(m_TileEdges, tileEdgesTextures, 0.0f, -2);     // íƒ€ì¼ í…Œë‘ë¦¬
+	CreateLayerSet(m_Backgrounds, backgroundTextures, 0.0f, -3);  // ë°°ê²½
+	CreateLayerSet(m_ForeLayers, foreTextures, 80.0f, -4);		  // ì „ê²½
+	CreateLayerSet(m_FarLayers, farTextures, 20.0f, -5);		  // ì›ê²½
 }
 
 void ChapterBackgroundManager::Update(float deltaTime, const CameraObject* camera)
@@ -106,12 +110,12 @@ void ChapterBackgroundManager::CreateLayerSet(
 
 	for (auto& texPath : texturePaths)
 	{
-		// È®ÀåÀÚ Á¦°Å
+		// í™•ì¥ì ì œê±°
 		std::wstring key = std::filesystem::path(texPath).stem();
 		auto tex = m_AssetManager->LoadTexture(key, texPath);
 		int width = tex->GetSize().width;
 
-		// 2¼¼Æ® »ı¼º
+		// 2ì„¸íŠ¸ ìƒì„±
 		for (int i = 0; i < 3; i++)
 		{
 			auto bg = std::make_shared<Background>(m_EventDispatcher);
@@ -123,11 +127,12 @@ void ChapterBackgroundManager::CreateLayerSet(
 
 			auto trans = bg->GetComponent<TransformComponent>();
 
-			// m_Backgrounds¿¡ ÇØ´çÇÏ´Â º¤ÅÍÀÏ ¶§¸¸ ½ºÄÉÀÏ Á¶Á¤
+			// m_Backgroundsì— í•´ë‹¹í•˜ëŠ” ë²¡í„°ì¼ ë•Œë§Œ ìŠ¤ì¼€ì¼ ì¡°ì •
 			if (&layerVec == &m_Backgrounds)
 			{
 				trans->SetScale({ 0.98f, 0.98f });
-				// pivotÀÌ BottomCenterÀÌ¹Ç·Î ÁÂÃø ³¡ ¸ÂÃãÀ» À§ÇØ Àı¹İ¸¸Å­ »©±â
+				// pivotì´ BottomCenterì´ë¯€ë¡œ ì¢Œì¸¡ ë ë§ì¶¤ì„ ìœ„í•´ ì ˆë°˜ë§Œí¼ ë¹¼ê¸°
+
 				width = tex->GetSize().width * 0.98;
 				float adjustedStartX = startX + width * 0.5f;
 
@@ -138,13 +143,13 @@ void ChapterBackgroundManager::CreateLayerSet(
 				trans->SetPosition({ startX + width * i, 0 });
 			}
 			
-			trans->SetZOrder(zOrder);  // ¿©±â¼­ ZOrder ¼¼ÆÃ
+			trans->SetZOrder(zOrder);  // ì—¬ê¸°ì„œ ZOrder ì„¸íŒ…
 
 			bg->SetMoveSpeed(moveSpeed);
 			if(moveSpeed == 0.0f)
 				bg->ToggleScroll();
 			layerVec.push_back(bg);
 		}
-		startX += width * 3; // ´ÙÀ½ ¼¼Æ® À§Ä¡·Î
+		startX += width * 3; // ë‹¤ìŒ ì„¸íŠ¸ ìœ„ì¹˜ë¡œ
 	}
 }

@@ -83,7 +83,7 @@ NodeState ArmStretch::Tick(BlackBoard& bb, float deltaTime)
             auto trans = m_CurrentAnimObj->GetComponent<TransformComponent>();
             Math::Vector2F currPos;
             currPos.x = m_Moved + m_MoveFromPos.x + (m_MoveStartPos.x - m_MoveFromPos.x) * t;
-            currPos.y = m_MoveFromPos.y + (m_MoveStartPos.y - m_MoveFromPos.y) * t;
+            currPos.y = 40.f + m_MoveFromPos.y + (m_MoveStartPos.y - m_MoveFromPos.y) * t;
 
             trans->SetPosition(currPos);
 
@@ -211,11 +211,11 @@ void ArmStretch::Reset()
     __super::Reset();
     m_MoveTimer = 0.0f;
 
-    m_Telegraphs[m_minIndex]->GetComponent<TransformComponent>()->SetPosition({ m_MoveStartPos.x + m_Moved, m_MoveStartPos.y });
+    m_Telegraphs[m_minIndex]->GetComponent<TransformComponent>()->SetPosition({ m_MoveStartPos.x + m_Moved, m_MoveStartPos.y});
 
     if (m_CurrentAnimObj)
     {
-        m_CurrentAnimObj->GetComponent<TransformComponent>()->SetPosition(m_MoveStartPos);
+        m_CurrentAnimObj->GetComponent<TransformComponent>()->SetPosition({ m_MoveStartPos.x, m_MoveStartPos.y + 40.f });
         m_CurrentAnimObj->GetComponent<AnimationComponent>()->Play("idle");
     }
 

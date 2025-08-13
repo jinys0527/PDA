@@ -11,7 +11,7 @@ public:
 	void Update();
 	void Shutdown();
 
-	void BGM_Shot(const std::wstring& eventPath);
+	void BGM_Shot(const std::wstring& eventPath, float fadeTime);
 	void SFX_Shot(const std::wstring& eventPath);
 	void UI_Shot(const std::wstring& eventPath);
 
@@ -40,6 +40,18 @@ private:
 	std::unordered_map<std::wstring, FMOD::Sound*> m_BGMs;
 	std::unordered_map<std::wstring, FMOD::Sound*> m_SFXs;
 	std::unordered_map<std::wstring, FMOD::Sound*> m_UIs;
+
+	FMOD::Sound* m_CurrentSound = nullptr;
+	std::wstring m_CurrentFileName;
+	FMOD::Channel* m_CurrentChannel = nullptr;
+	FMOD::Channel* m_FadeOutChannel = nullptr;
+	std::chrono::steady_clock::time_point m_FadeOutStartTime;
+	float m_FadeOutDuration;
+	bool m_FadeOutActive;
+	FMOD::Channel* m_FadeInChannel = nullptr;
+	std::chrono::steady_clock::time_point m_FadeInStartTime;
+	float m_FadeInDuration;
+	bool m_FadeInActive;
 
 	FMOD::ChannelGroup* m_MasterGroup = nullptr;
 	FMOD::ChannelGroup* m_BGMGroup = nullptr;

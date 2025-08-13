@@ -8,7 +8,9 @@
 struct RenderInfo
 {
 	Microsoft::WRL::ComPtr<ID2D1Bitmap1> bitmap;
+	Math::Vector2F center;
 	Math::Vector2F size;
+	Math::Vector2F center;
 	Math::Vector2F pivot;
 	Math::Vector2F center;
 	D2D1::Matrix3x2F worldMatrix; 

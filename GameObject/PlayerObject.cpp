@@ -532,6 +532,8 @@ void PlayerObject::Update(float deltaTime)
 {
 	//float temp = m_Transform->GetPosition().y;
 
+	std::cout << "x: " << m_Transform->GetPosition().x << ", y: " << m_Transform->GetPosition().y << std::endl;
+
 	if (m_InvincibleTime > 0)
 		m_InvincibleTime -= deltaTime;
 	else
@@ -593,20 +595,17 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 		}
 		{
 			RenderInfo info;
+			auto box = GetComponent<BoxColliderComponent>();
 			info.bitmap = sprite->GetTexture();
 			D2D1::Matrix3x2F flip = D2D1::Matrix3x2F::Identity();
 			if(m_IsFlip)
 				flip.m11 = -1;
 			info.worldMatrix = flip * m_Transform->GetWorldMatrix(); // D2D1::Matrix3x2F::Translation(0, z * m_RailHeight) *  
-			info.size = { 1,1 };
+			//info.size = { 1,1 };
 			D2D1_SIZE_F size;
 			size.width = sprite->GetSrcRect().right - sprite->GetSrcRect().left;
 			size.height = sprite->GetSrcRect().bottom - sprite->GetSrcRect().top;
 			sprite->SetPivotPreset(SpritePivotPreset::BottomCenter, size);
-
-			auto box = GetComponent<BoxColliderComponent>();
-			info.center = box->GetCenter();
-			info.size = box->GetSize();
 
 			info.pivot = sprite->GetPivot(); // 바꾸어 놓음
 			// UI가 아닌 일반 오브젝트 위치로 설정

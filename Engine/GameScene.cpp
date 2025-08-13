@@ -37,6 +37,8 @@
 #include "TriggerBox.h"
 #include <iostream>
 
+#include "Telegraph.h"
+
 void GameScene::Initialize()
 {
 #pragma region camera
@@ -775,7 +777,7 @@ void GameScene::Initialize()
 	std::weak_ptr<ButtonUI> weakGameOverRetryButton = gameoverRetryButton;
 	std::weak_ptr<ButtonUI> weakGameOverMainButton = gameoverMainButton;
 
-	// ¾àÇÑ ÂüÁ¶ ¸¸µé±â
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 	std::weak_ptr<UIObject> weakMenuBox = menuBox;
 	std::weak_ptr<ButtonUI> weakStartButton = startButton;
 	std::weak_ptr<ButtonUI> weakSettingButton = settingButton;
@@ -827,7 +829,7 @@ void GameScene::Initialize()
 		m_UIManager.RefreshUIListForCurrentScene();
 		});
 
-	// SettingButton Å¬¸¯ ½Ã
+	// SettingButton Å¬ï¿½ï¿½ ï¿½ï¿½
 	settingButtonComp->GetFSM().SetOnEnter("Click", [weakMenuBox, weakStartButton, weakSettingButton, weakMainButton, weakRetryButton, weakExitButton, weaksettingBackGround, weaksettingOkButton, weakSoundUI, this]() {
 		if (auto bg = weakMenuBox.lock()) bg->SetIsVisible(false);
 		if (auto btn = weakStartButton.lock()) btn->SetIsVisible(false);
