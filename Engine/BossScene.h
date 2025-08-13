@@ -3,6 +3,7 @@
 #include <memory>
 #include "BlackBoard.h"
 #include "BossBehaviorTree.h"
+#include "BossEventComponent.h"
 
 class ChapterBackgroundManager;
 class GraffitiObject;
@@ -51,7 +52,7 @@ private:
 	std::vector<std::shared_ptr<GraffitiObject>> m_AttackArea;
 
 	std::unordered_map<std::string, std::shared_ptr<GameObject>> m_Backgrounds;
-
+	std::unique_ptr<BossEventComponent> m_BossEventComponent;
 	std::shared_ptr<ChapterBackgroundManager> m_ChapterBackgroundManager;
 
 	std::shared_ptr<GameObject> m_Phase_2_Arm;

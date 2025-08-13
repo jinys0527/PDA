@@ -102,6 +102,9 @@
     <ClInclude Include="IsDeadNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BossEventComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -183,6 +186,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IsDeadNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BossEventComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

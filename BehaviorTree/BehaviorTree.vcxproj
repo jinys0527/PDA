@@ -238,6 +238,7 @@
     <ClInclude Include="BossBehaviorTree.h" />
     <ClInclude Include="BossBlackBoard.h" />
     <ClInclude Include="BossCoolDown.h" />
+    <ClInclude Include="BossEventComponent.h" />
     <ClInclude Include="BTNode.h" />
     <ClInclude Include="CompositeNode.h" />
     <ClInclude Include="Decorator.h" />
@@ -269,6 +270,7 @@
     <ClCompile Include="BossBehaviorTree.cpp" />
     <ClCompile Include="BossBlackBoard.cpp" />
     <ClCompile Include="BossCoolDown.cpp" />
+    <ClCompile Include="BossEventComponent.cpp" />
     <ClCompile Include="BTNode.cpp" />
     <ClCompile Include="CompositeNode.cpp" />
     <ClCompile Include="Decorator.cpp" />

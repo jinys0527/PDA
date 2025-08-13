@@ -1385,8 +1385,13 @@ void BossScene::Initialize()
 
 #pragma endregion
 
-	m_BlackBoard = std::make_unique<BossBlackBoard>(m_ScrollSpeed, m_AttackArea, m_Telegraphs, m_Anims, m_Fires, m_Backgrounds, m_AnimIndexMap, m_SoundManager);
+
+
+	m_BlackBoard = std::make_unique<BossBlackBoard>(m_ScrollSpeed, m_AttackArea, m_EventDispatcher ,m_Telegraphs, m_Anims, m_Fires, m_Backgrounds, m_AnimIndexMap, m_SoundManager);
 	m_BehaviorTree = std::make_unique<BossBehaviorTree>(*m_BlackBoard);	m_BehaviorTree->Initialize();
+
+	m_BossEventComponent = std::make_unique<BossEventComponent>(m_BlackBoard.get());
+	m_BossEventComponent->Start();
 
 #pragma region soundUI
 
@@ -2945,7 +2950,7 @@ void BossScene::Update(float deltaTime)
 	{
 		m_OneSecondTimer = 0.0f;
 		float curHP = m_BlackBoard->GetValue<float>("BossCurrHP").value();
-		m_BlackBoard->SetValue("BossCurrHP", curHP - 1);
+		m_BlackBoard->SetValue("BossCurrHP", curHP);
 		std::cout << curHP << std::endl;
 	}
 

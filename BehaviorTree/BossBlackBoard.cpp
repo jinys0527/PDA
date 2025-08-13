@@ -3,6 +3,7 @@
 BossBlackBoard::BossBlackBoard(
 	float scrollspeed,
 	std::vector<std::shared_ptr<GraffitiObject>>& graffitis,
+	EventDispatcher& eventdispatcher,
 
 	std::vector<std::shared_ptr<Telegraph>>& telegraphs, 
 	std::vector<std::shared_ptr<GameObject>>& anims, 
@@ -10,8 +11,11 @@ BossBlackBoard::BossBlackBoard(
 	std::unordered_map<std::string, std::shared_ptr<GameObject>>& backgrounds,
 	std::unordered_map<std::string, std::vector<int>>& animIndexMap,
 	SoundManager& soundmanager)
-	: BlackBoard(soundmanager)
+	: BlackBoard(soundmanager), m_EventDispatcher(eventdispatcher)
 {
+
+	SetValue("EventDispatcher", eventdispatcher);
+
 	SetValue("Graffiti", graffitis);
 
 	SetValue("ScrollSpeed", scrollspeed);
@@ -19,7 +23,7 @@ BossBlackBoard::BossBlackBoard(
 	SetValue("CanBeHit", false);
 
 	SetValue("IsDead", false);
-	SetValue("BossMaxHP", 155.0f);
+	SetValue("BossMaxHP", 100.0f);
 	SetValue("BossCurrHP", GetValue<float>("BossMaxHP").value());
 
 	//º¸½º Äð´Ù¿î
@@ -81,5 +85,6 @@ BossBlackBoard::BossBlackBoard(
 
 	SetValue("CurrPhase", 0);
 }
+
 
 

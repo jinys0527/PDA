@@ -5,7 +5,7 @@
 #include <memory>
 #include <variant>
 #include "SoundManager.h"
-
+#include "EventDispatcher.h"
 
 class Telegraph;
 class GameObject;
@@ -16,11 +16,12 @@ class GraffitiObject;
 class BlackBoard
 {
 public:
-	using BBValue = std::variant
+    using BBValue = std::variant
         <
-        int, 
+        int,
         float,
-        bool, 
+        bool,
+        EventDispatcher,
         std::string, 
         std::vector<std::string>,
         std::vector<std::shared_ptr<Telegraph>>,
@@ -34,7 +35,7 @@ public:
 public:
 
     BlackBoard(SoundManager& soundmanager) : m_SoundManager(soundmanager) {}
-
+    virtual ~BlackBoard() = default;
 	void SetValue(const std::string& key, const BBValue& value);
 
     // 데이터 확인
