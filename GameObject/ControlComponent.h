@@ -11,6 +11,7 @@ public:
 	static constexpr const char* StaticTypeName = "ControlComponent";
 	const char* GetTypeName() const override { return StaticTypeName; }
 
+
 	void Start();
 	void Update(float deltaTime) override;
 
@@ -22,13 +23,19 @@ public:
 	void RegisterKeyDownCallback(int vkKey, std::function<void()> callback);
 	void UnregisterKeyDownCallback(int vkKey);
 
+	void Enter();
+	void Leave();
+
 	void RegisterAnyKeyCallback(std::function<void()> callback)
 	{
 		m_AnyKeyCallback = callback;
 	}
+
 private:
 	std::function<void()> m_AnyKeyCallback;
-
+	std::string m_CurrentSceneName;
 	std::unordered_map<int, std::function<void()>> m_KeyDownCallbacks;
+
+	bool m_IsCorrectScene = false;
 };
 

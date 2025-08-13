@@ -169,7 +169,36 @@ void D2DRenderer::DrawGameObject(std::vector<RenderInfo>& renderInfo, D2D1::Matr
 
 		mat = D2D1::Matrix3x2F::Scale(1, -1) * mat * cameraMatrix;
 
+		//m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());
+		////m_d2dContext->DrawRectangle(&destRect, m_brush.Get());
+		////m_d2dContext->DrawRectangle({-10, 10, 10, -10}, m_brush.Get());
+		//float left = info.center.x - (info.size.x / 2);
+		//float right = info.center.x + (info.size.x / 2);
+		//float top = info.center.y - (info.size.y / 2);
+		//float bottom = info.center.y + (info.size.y / 2);
+		//D2D1_RECT_F rect = { left,top, right, bottom };
+		//std::cout <<  "left : " << left << ", top : " << top << ", right : " << right << ", bottom : " << bottom << std::endl;
+		//m_d2dContext->DrawRectangle(&rect, m_brush.Get());
+
+
+
 		m_d2dContext->SetTransform(mat); // 여기서 행렬 적용
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		D2D1_RECT_F destRect;
 
@@ -212,15 +241,6 @@ void D2DRenderer::DrawGameObject(std::vector<RenderInfo>& renderInfo, D2D1::Matr
 				nullptr
 			);
 		}
-
-		m_d2dContext->DrawRectangle(&destRect, m_brush.Get());
-
-		float left = info.center.x - (info.size.x  / 2);
-		float top = info.center.y - (info.size.y / 2);
-		float right = info.center.x + (info.size.x / 2);
-		float bottom = info.center.y + (info.size.y / 2);
-
-		m_d2dContext->DrawRectangle({ left, top, right, bottom }, m_brush.Get());
 	}
 
 	m_d2dContext->SetTransform(D2D1::Matrix3x2F::Identity());

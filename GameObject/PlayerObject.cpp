@@ -532,6 +532,8 @@ void PlayerObject::Update(float deltaTime)
 {
 	//float temp = m_Transform->GetPosition().y;
 
+	std::cout << "x: " << m_Transform->GetPosition().x << ", y: " << m_Transform->GetPosition().y << std::endl;
+
 	if (m_InvincibleTime > 0)
 		m_InvincibleTime -= deltaTime;
 	else
@@ -545,6 +547,19 @@ void PlayerObject::Update(float deltaTime)
 	GameObject::Update(deltaTime);
 
 	m_Fsm.Update(deltaTime);
+
+	if (m_Z == 2)
+	{
+		m_Layer = 0;
+	}
+	else if (m_Z >= 1)
+	{
+		m_Layer = 2;
+	}
+	else
+	{
+		m_Layer = 4;
+	}
 }
 
 void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
@@ -555,6 +570,7 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 	{
 		{
 			RenderInfo info;
+			auto box = GetComponent<BoxColliderComponent>();
 			info.bitmap = m_ShadowBitmap;
 			Math::Vector2F pos = m_Transform->GetPosition();
 			float y = pos.y;
@@ -573,18 +589,20 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 			forSin = forSin > asin(1) ? asin(1) : forSin;
 			float opacity = sin(forSin);
 			info.opacity = 1.0f - opacity;
+			info.layer = m_Layer;
 			renderInfo.push_back(info);
 			pos.y = y;
 			m_Transform->SetPosition(pos);
 		}
 		{
 			RenderInfo info;
+			auto box = GetComponent<BoxColliderComponent>();
 			info.bitmap = sprite->GetTexture();
 			D2D1::Matrix3x2F flip = D2D1::Matrix3x2F::Identity();
 			if(m_IsFlip)
 				flip.m11 = -1;
 			info.worldMatrix = flip * m_Transform->GetWorldMatrix(); // D2D1::Matrix3x2F::Translation(0, z * m_RailHeight) *  
-			info.size = { 1,1 };
+			//info.size = { 1,1 };
 			D2D1_SIZE_F size;
 			size.width = sprite->GetSrcRect().right - sprite->GetSrcRect().left;
 			size.height = sprite->GetSrcRect().bottom - sprite->GetSrcRect().top;
@@ -601,6 +619,17 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 			info.opacity = opacity;
 			info.useSrcRect = sprite->GetUseSrcRect();
 			info.srcRect = sprite->GetSrcRect();
+			info.layer = m_Layer;
+
+			Vec2F vec = GetComponent<BoxColliderComponent>()->GetCenter();
+			Vec2F colSize = GetComponent<BoxColliderComponent>()->GetSize();
+			//std::cout << "left : " << vec.x - colSize.x << ", top : " << vec.y - colSize.y << ", right : " << vec.x + colSize.x << ", bottom : " << vec.y + colSize.y << std::endl;
+
+			if (box)
+			{
+				info.center = box->GetCenter();
+				info.size = box->GetSize();
+			}
 			renderInfo.push_back(info);
 		}
 	}

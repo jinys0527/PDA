@@ -46,9 +46,9 @@ bool GameObject::IsInView(CameraObject* camera) const
 
 	// 오브젝트 좌상단 좌표 계산 (pivot 적용)
 	float objLeft = objPos.x - objSize.width * 0.5f;
-	float objTop = objPos.y - objSize.height * 0.5f;
+	float objTop = objPos.y;
 	float objRight = objPos.x + objSize.width * 0.5f;
-	float objBottom = objPos.y + objSize.height * 0.5f;
+	float objBottom = objPos.y + objSize.height;
 
 	// AABB 충돌 검사
 	bool isVisible = !(objRight < cameraLeft || objLeft > cameraRight ||
@@ -62,6 +62,12 @@ void GameObject::Render(std::vector<RenderInfo>& renderInfo)
 	for(auto& spriteRenderer : GetComponents<SpriteRenderer>())
 	{
 		RenderInfo info;
+		auto box = GetComponent<BoxColliderComponent>();
+		if (box)
+		{
+			info.center = box->GetCenter();
+			info.size = box->GetSize();
+		}
 		info.bitmap = spriteRenderer->GetTexture();
 		info.worldMatrix = m_Transform->GetWorldMatrix();
 		info.pivot = spriteRenderer->GetPivot();

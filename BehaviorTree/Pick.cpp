@@ -26,7 +26,24 @@ NodeState Pick::Tick(BlackBoard& bb, float deltaTime)
 
     if (m_AnimPlaying && m_CurrentAnimObj)
     {
-        auto animComp = m_CurrentAnimObj->GetComponent<AnimationComponent>();
+        m_AttackElapsedTime += deltaTime;
+
+        // 5프레임 ~ 8프레임 사이에만 콜라이더 켜기
+        if (!m_ColliderOn && m_AttackElapsedTime >= 0.5f && m_AttackElapsedTime < 0.8f)
+        {
+            for (int idx : m_AttackRange)
+                if (m_Telegraphs[idx]) m_Telegraphs[idx]->SetColliderActive(true);
+            m_ColliderOn = true;
+        }
+
+        // 8프레임 이후에는 콜라이더 끄기
+        if (m_ColliderOn && m_AttackElapsedTime >= 0.8f)
+        {
+            for (int idx : m_AttackRange)
+                if (m_Telegraphs[idx]) m_Telegraphs[idx]->SetColliderActive(false);
+            m_ColliderOn = false;
+        }        auto animComp = m_CurrentAnimObj->GetComponent<AnimationComponent>();
+
         if (animComp->IsAnimationFinished())
         {
             animComp->SetIsActive(false);
@@ -101,7 +118,6 @@ void Pick::EndWarning(BlackBoard& bb)
         if (telegraph)
         {
             telegraph->SetInactive();
-            telegraph->SetColliderActive(true);
         }
     }
 
@@ -124,7 +140,7 @@ void Pick::EndWarning(BlackBoard& bb)
         {
             int idx = m_AttackRange[0];
             auto pos = m_Telegraphs[idx]->GetInitPos();
-            pos.y -= 120.f;  // 위치 조정
+            pos.y -= 20.f;  // 위치 조정
 
             auto trans = m_CurrentAnimObj->GetComponent<TransformComponent>();
             trans->SetPosition(pos);

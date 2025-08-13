@@ -20,6 +20,10 @@ NodeState IsDeadNode::Tick(BlackBoard& bb, float deltaTime)
         m_Boss_Arm_L_Die = GetAnim(bb, "Boss_3Phase_Arms_Dead_L");
         m_Boss_Arm_R_Die = GetAnim(bb, "Boss_3Phase_Arms_Dead_R");
 
+        bb.GetSoundManager().SFX_Shot(L"boss_destroy_explosion");
+
+
+
         if (m_Boss_Main)
         {
             auto anim = m_Boss_Main->GetComponent<AnimationComponent>();

@@ -9,11 +9,12 @@ void RollerBackComponent::Start()
 void RollerBackComponent::Update(float deltaTime)
 {
 	if (m_Opacity > 0)
-		m_Opacity -= deltaTime * 0.5f;
+		m_Opacity -= deltaTime * 1.f;
 	else
 	{
 		m_Opacity = 0;
 	}
+
 	m_Owner->GetComponent<UIImageComponent>()->SetOpacity(m_Opacity);
 }
 

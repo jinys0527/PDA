@@ -26,6 +26,8 @@ public:
 	void Update(float deltaTime) override;
 	void OnEvent(EventType type, const void* data) override;
 
+	void SetOpacity(float value) { m_Opacity = value; }
+
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;
 
