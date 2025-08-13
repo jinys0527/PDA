@@ -881,6 +881,8 @@ void TitleScene::Initialize()
 	controlComp->RegisterKeyDownCallback(VK_ESCAPE, [weakbackGround, weakexitBackGround, weakexitOkButton, weakexitNoButton, weakmenuBox, weakstartButton, weaksettingButton, weakcreditButton, weakacidBackGround, weaksourBackGround, this]() {
 		if (auto bg = weakacidBackGround.lock())
 		{
+			m_SoundManager.BGM_Shot(L"bgm_boss_longver2");
+			m_SoundManager.SFX_Shot(L"ui_screen_transition");
 			bg->SetIsVisible(false);
 			if (auto bg = weaksourBackGround.lock())
 				bg->SetIsVisible(false);

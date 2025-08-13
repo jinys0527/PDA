@@ -1672,8 +1672,8 @@ void GameScene::Update(float deltaTime)
 	{
 
 			m_GameManager->m_scrollSpeed += deltaTime * 500;
-		if (m_GameManager->m_scrollSpeed >= 2000)
-			m_GameManager->m_scrollSpeed = 2000;
+		if (m_GameManager->m_scrollSpeed >= 1500)
+			m_GameManager->m_scrollSpeed = 1500;
 
 		Vec2F move = { 0, 0 };
 		move.x += m_GameManager->m_scrollSpeed * deltaTime;
