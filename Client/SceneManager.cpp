@@ -3,7 +3,6 @@
 #include "TitleScene.h"
 #include "GameScene.h"
 #include "InGameUITestScene.h"
-#include "CharacterScene.h"
 #include "RenderData.h"
 #include "BossScene.h"
 
@@ -79,7 +78,6 @@ void SceneManager::SetCurrentScene(const std::string& name)
 	{
 		m_CurrentScene = it->second;
 
-		m_CurrentScene->Enter();
 		m_Camera = m_CurrentScene->GetMainCamera();
 		m_Renderer.SetCamera(m_Camera);
 	}

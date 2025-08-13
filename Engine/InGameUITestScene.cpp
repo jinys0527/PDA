@@ -1290,9 +1290,6 @@ void InGameUITestScene::Initialize()
 		sr->SetPivotPreset(SpritePivotPreset::Center, bitmap->GetSize());
 		graffiti->GetComponent<GraffitiComponent>()->Start();
 
-		graffiti->SetGravitti(&m_AssetManager);
-
-
 		AddGameObject(graffiti);
 	}
 

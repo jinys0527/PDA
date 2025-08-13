@@ -18,8 +18,6 @@ public:
 	void Update(float deltaTime, const CameraObject* camera);
 	void FixedUpdate() override;
 
-	void Render(std::vector<RenderInfo>& renderInfo);
-
 private:
 	void Scroll(float deltaTime);
 private:
