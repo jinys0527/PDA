@@ -15,7 +15,7 @@ void ChapterBackgroundManager::LoadBackgroundSet(int chapter)
 	m_NearLayers.clear();
 	m_ForeLayers.clear();
 	m_Backgrounds.clear();
-	m_Tiles.clear(); 
+	m_Tiles.clear();
 	m_TileEdges.clear();
 
 	// 챕터별 이미지 경로
@@ -33,9 +33,9 @@ void ChapterBackgroundManager::LoadBackgroundSet(int chapter)
 		farTextures = { L"../Resource/Background/Chapter1/Background.png" };
 		foreTextures = { L"../Resource/Background/Chapter1/Foreground.png" };
 		backgroundTextures = { L"../Resource/Background/Chapter1/Building1.png",
-		L"../Resource/Background/Chapter1/Building2.png", 
-		L"../Resource/Background/Chapter1/Building3.png", 
-		L"../Resource/Background/Chapter1/Building4.png", 
+		L"../Resource/Background/Chapter1/Building2.png",
+		L"../Resource/Background/Chapter1/Building3.png",
+		L"../Resource/Background/Chapter1/Building4.png",
 		L"../Resource/Background/Chapter1/Building5.png" };
 		tileTextures = { L"../Resource/Background/Chapter1/Tile_1.png" };
 		tileEdgesTextures = { L"../Resource/Background/Chapter1/Tile_1_1.png" };
@@ -45,11 +45,15 @@ void ChapterBackgroundManager::LoadBackgroundSet(int chapter)
 		farTextures = { L"../Resource/Background/Chapter2/Background_Sky.png" };
 		foreTextures = { L"../Resource/Background/Chapter2/Foreground.png" };
 		backgroundTextures = { L"../Resource/Background/Chapter2/Background1.png",
-		L"../Resource/Background/Chapter2/Background2.png"};
+		L"../Resource/Background/Chapter2/Background2.png" };
 		tileTextures = { L"../Resource/Background/Chapter2/Tile_2.png" };
 		tileEdgesTextures = { L"../Resource/Background/Chapter2/Tile_2_1.png" };
 	}
 	else if (chapter == 3)
+	{
+
+	}
+	else if (chapter == 4)
 	{
 
 	}

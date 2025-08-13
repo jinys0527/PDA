@@ -775,7 +775,7 @@ void GameScene::Initialize()
 	std::weak_ptr<ButtonUI> weakGameOverRetryButton = gameoverRetryButton;
 	std::weak_ptr<ButtonUI> weakGameOverMainButton = gameoverMainButton;
 
-	// 약한 참조 만들기
+	// ���� ���� �����
 	std::weak_ptr<UIObject> weakMenuBox = menuBox;
 	std::weak_ptr<ButtonUI> weakStartButton = startButton;
 	std::weak_ptr<ButtonUI> weakSettingButton = settingButton;
@@ -827,7 +827,7 @@ void GameScene::Initialize()
 		m_UIManager.RefreshUIListForCurrentScene();
 		});
 
-	// SettingButton 클릭 시
+	// SettingButton Ŭ�� ��
 	settingButtonComp->GetFSM().SetOnEnter("Click", [weakMenuBox, weakStartButton, weakSettingButton, weakMainButton, weakRetryButton, weakExitButton, weaksettingBackGround, weaksettingOkButton, weakSoundUI, this]() {
 		if (auto bg = weakMenuBox.lock()) bg->SetIsVisible(false);
 		if (auto btn = weakStartButton.lock()) btn->SetIsVisible(false);
@@ -843,7 +843,7 @@ void GameScene::Initialize()
 		m_UIManager.RefreshUIListForCurrentScene();
 		});
 
-	//Setting창 Ok
+	//Settingâ Ok
 	settingOkButtoComp->GetFSM().SetOnEnter("Click", [weakMenuBox, weakStartButton, weakSettingButton, weakMainButton, weakRetryButton, weakExitButton, weaksettingBackGround, weaksettingOkButton, weakSoundUI, this]() {
 		if (auto bg = weakMenuBox.lock()) bg->SetIsVisible(true);
 		if (auto btn = weakStartButton.lock()) btn->SetIsVisible(true);
