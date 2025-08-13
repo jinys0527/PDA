@@ -53,9 +53,6 @@
     <ClCompile Include="InputManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Editor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

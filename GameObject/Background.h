@@ -15,6 +15,7 @@ public:
 
 	void ToggleScroll() { m_isScroll = !m_isScroll; }
 	void Update(float deltaTime) override;
+	void Update(float deltaTime, const CameraObject* camera);
 	void FixedUpdate() override;
 private:
 	void Scroll(float deltaTime);

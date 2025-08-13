@@ -124,6 +124,7 @@
     <ClCompile Include="Drone.cpp" />
     <ClCompile Include="FallingObstacle_Flowerpot.cpp" />
     <ClCompile Include="FallingObstacle_Box.cpp" />
+    <ClCompile Include="ChapterBackgroundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h">
@@ -269,6 +270,7 @@
     <ClInclude Include="Drone.h" />
     <ClInclude Include="FallingObstacle_Flowerpot.h" />
     <ClInclude Include="FallingObstacle_Box.h" />
+    <ClInclude Include="ChapterBackgroundManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Components">

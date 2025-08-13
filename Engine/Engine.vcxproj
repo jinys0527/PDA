@@ -263,7 +263,6 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='DebugEditor|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>

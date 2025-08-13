@@ -67,6 +67,16 @@ public:
 
 	virtual void FixedUpdate();
 
+	void SetName(std::string name)
+	{
+		m_Name = name;
+	}
+
+	std::string GetName() const
+	{
+		return m_Name;
+	}
+
 	void SendMessages(const myCore::MessageID msg, void* data = nullptr);
 
 	void SendEvent(const std::string& evt);

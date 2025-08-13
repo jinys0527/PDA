@@ -244,6 +244,7 @@
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="BoxColliderComponent.h" />
+    <ClInclude Include="ChapterBackgroundManager.h" />
     <ClInclude Include="CircleColliderComponent.h" />
     <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="Component.h" />
@@ -290,6 +291,7 @@
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="CameraObject.cpp" />
     <ClCompile Include="BoxColliderComponent.cpp" />
+    <ClCompile Include="ChapterBackgroundManager.cpp" />
     <ClCompile Include="CircleColliderComponent.cpp" />
     <ClCompile Include="ColliderComponent.cpp" />
     <ClCompile Include="Component.cpp" />
