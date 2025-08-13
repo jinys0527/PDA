@@ -41,6 +41,7 @@ private:
 
 	std::vector<std::shared_ptr<Telegraph>> m_Telegraphs;
 	std::vector<std::shared_ptr<GameObject>> m_Fires;
+	std::vector<std::shared_ptr<GameObject>> m_Bombs;
 
 	std::shared_ptr<GameObject> m_Phase_2_Arm;
 

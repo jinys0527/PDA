@@ -5,7 +5,7 @@ BossBlackBoard::BossBlackBoard(
 	std::vector<std::shared_ptr<Telegraph>>& telegraphs, 
 	std::vector<std::shared_ptr<GameObject>>& anims, 
 	std::vector<std::shared_ptr<GameObject>>& fires,
-
+	std::unordered_map<std::string, std::shared_ptr<GameObject>>& backgrounds,
 	std::unordered_map<std::string, std::vector<int>>& animIndexMap,
 	SoundManager& soundmanager)
 	: BlackBoard(soundmanager)
@@ -15,7 +15,7 @@ BossBlackBoard::BossBlackBoard(
 	SetValue("CanBeHit", false);
 
 	SetValue("IsDead", false);
-	SetValue("BossMaxHP", 100.0f);
+	SetValue("BossMaxHP", 55.0f);
 	SetValue("BossCurrHP", GetValue<float>("BossMaxHP").value());
 
 	//보스 쿨다운
@@ -29,6 +29,9 @@ BossBlackBoard::BossBlackBoard(
 
 	SetValue("BossAnims", anims);
 	SetValue("BossAnimIndexMap", animIndexMap);
+
+	//배경 저장
+	SetValue("Backgrounds", backgrounds);
 
 	//보스 패턴 활성화 지정?
 	// 나중에 패턴 이름있으면 여기에 Skill_1 대신 입력
@@ -62,9 +65,9 @@ BossBlackBoard::BossBlackBoard(
 
 	SetValue("SkillWeight_1", 1.0f);
 	SetValue("SkillWeight_2", 1.0f);
-	SetValue("SkillWeight_3", 1.0f);
+	SetValue("SkillWeight_3", 5001.0f);
 	SetValue("SkillWeight_4", 1.0f);
-	SetValue("SkillWeight_5", 5001.0f);
+	SetValue("SkillWeight_5", 1.0f);
 
 	SetValue("SkillChance_1", 0.f);
 	SetValue("SkillChance_2", 0.f);
@@ -72,7 +75,7 @@ BossBlackBoard::BossBlackBoard(
 	SetValue("SkillChance_4", 0.f);
 	SetValue("SkillChance_5", 0.f);
 
-	SetValue("CurrPhase", 0);
+	SetValue("CurrPhase", 2);
 }
 
 
