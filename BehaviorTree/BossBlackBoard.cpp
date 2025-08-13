@@ -15,7 +15,7 @@ BossBlackBoard::BossBlackBoard(
 	SetValue("CanBeHit", false);
 
 	SetValue("IsDead", false);
-	SetValue("BossMaxHP", 155.0f);
+	SetValue("BossMaxHP", 55.0f);
 	SetValue("BossCurrHP", GetValue<float>("BossMaxHP").value());
 
 	//º¸½º Äð´Ù¿î
@@ -60,7 +60,7 @@ BossBlackBoard::BossBlackBoard(
 	SetValue("WarningTime", 3.0f);
 
 
-	SetValue("3Phase", true);
+	SetValue("3Phase", false);
 	SetValue("RandomValue", 0.0f);
 
 	SetValue("SkillWeight_1", 1.0f);

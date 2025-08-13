@@ -70,11 +70,11 @@ NodeState PhaseChecker_3::Tick(BlackBoard& bb, float deltaTime)
         m_elapsedTime += deltaTime;
 
         auto trans = m_Boss_Phase_2_Arm->GetComponent<TransformComponent>();
-
         auto pos = trans->GetPosition();
 
-        pos.x -= (m_moveSpeed / m_moveDuration) * deltaTime; // m_moveSpeed = 총 이동 거리
+        pos.x -= m_moveSpeed * deltaTime; // m_moveSpeed = 총 이동 거리
         trans->SetPosition(pos);
+
 
         bool allFinished = true;
         const float fadeSpeed = 0.5f; // 초당 1.0씩 증가 (0~1 사이)
@@ -97,7 +97,8 @@ NodeState PhaseChecker_3::Tick(BlackBoard& bb, float deltaTime)
         if (!fadeObj(m_Boss_Arm_R)) allFinished = false;
 
         // 세 개 다 완전히 나타나면 PhaseChange 종료
-        if (allFinished)
+
+        if (allFinished && m_elapsedTime >= m_moveDuration)
         {
             m_PhaseChange = false;
             m_elapsedTime = 0.0f;
