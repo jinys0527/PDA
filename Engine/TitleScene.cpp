@@ -18,10 +18,12 @@
 
 void TitleScene::Initialize()
 {
+	m_SoundManager.BGM_Shot(L"bgm_run_longver2", 1.0f);
 #pragma region Setting
 	auto soundUI = std::make_shared<SoundUI>(m_SoundManager, m_EventDispatcher);
 	soundUI->SetZOrder(5);
 	soundUI->m_Name = "soundUI";
+	soundUI->SetSlider();
 	auto soundUIRect = soundUI->GetComponent<RectTransformComponent>();
 	soundUIRect->SetPosition({ -321.0f, -50.0f });
 	soundUIRect->SetSize({ 642.0f, 308.0f });
@@ -208,6 +210,7 @@ void TitleScene::Initialize()
 	exitOkButtonComp->GetFSM().SetOnEnter("Hover", [exitOkButtonImg, this]() { exitOkButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"exitconfirm_ok_button_on", "../Resource/UI/Exit/exitconfirm_ok_button_on.png")); });
 	exitOkButtonComp->GetFSM().SetOnExit("Hover", [exitOkButtonImg, this]() { exitOkButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"exitconfirm_ok_button_off", "../Resource/UI/Exit/exitconfirm_ok_button_off.png")); });
 	exitOkButtonComp->GetFSM().SetOnEnter("Click", [this]() {
+		m_SoundManager.SFX_Shot(L"ui_click");
 		if (m_SceneManager)
 		{
 			m_SceneManager->RequestQuit();
@@ -351,6 +354,9 @@ void TitleScene::Initialize()
 
 	// SettingButton 클릭 시
 	settingButtonComp->GetFSM().SetOnEnter("Click", [weakbackGround, weakMenuBox, weakStartButton, weakSettingButton, weakCreditButton, weaksettingBackGround, weaksettingOkButton, weakSoundUI, this]() {
+		m_SoundManager.BGM_Shot(L"bgm_run_longver2", 1.0f);
+		m_SoundManager.SFX_Shot(L"ui_screen_transition");
+		m_SoundManager.SFX_Shot(L"ui_click");
 		if (auto bg = weakbackGround.lock()) bg->SetIsVisible(false);
 		if (auto box = weakMenuBox.lock()) box->SetIsVisible(false);
 		if (auto startBtn = weakStartButton.lock()) startBtn->SetIsVisible(false);
@@ -366,6 +372,9 @@ void TitleScene::Initialize()
 
 	// CreditButton 클릭 시
 	creditButtonComp->GetFSM().SetOnEnter("Click", [weakbackGround, weakMenuBox, weakStartButton, weakSettingButton, weakCreditButton, weakcreditBackGround, weakcreditMainButton, this]() {
+		m_SoundManager.BGM_Shot(L"bgm_credits2", 1.0f);
+		m_SoundManager.SFX_Shot(L"ui_screen_transition");
+		m_SoundManager.SFX_Shot(L"ui_click");
 		if (auto bg = weakbackGround.lock()) bg->SetIsVisible(false);
 		if (auto box = weakMenuBox.lock()) box->SetIsVisible(false);
 		if (auto startBtn = weakStartButton.lock()) startBtn->SetIsVisible(false);
@@ -380,6 +389,9 @@ void TitleScene::Initialize()
 
 	//Setting창 Ok
 	settingOkButtoComp->GetFSM().SetOnEnter("Click", [weakbackGround, weakMenuBox, weakStartButton, weakSettingButton, weakCreditButton, weaksettingBackGround, weaksettingOkButton, weakSoundUI, this]() {
+		m_SoundManager.BGM_Shot(L"bgm_run_longver2", 1.0f);
+		m_SoundManager.SFX_Shot(L"ui_screen_transition");
+		m_SoundManager.SFX_Shot(L"ui_click");
 		if (auto box = weakMenuBox.lock()) box->SetIsVisible(true);
 		if (auto bg = weakbackGround.lock()) bg->SetIsVisible(true);
 		if (auto startBtn = weakStartButton.lock()) startBtn->SetIsVisible(true);
@@ -395,6 +407,9 @@ void TitleScene::Initialize()
 
 	//CreditMain
 	creditMainButtonComp->GetFSM().SetOnEnter("Click", [weakbackGround, weakMenuBox, weakStartButton, weakSettingButton, weakCreditButton, weakcreditBackGround, weakcreditMainButton, this]() {
+		m_SoundManager.SFX_Shot(L"ui_click");
+		m_SoundManager.SFX_Shot(L"ui_screen_transition");
+		m_SoundManager.BGM_Shot(L"bgm_run_longver2", 1.0f);
 		if (auto box = weakMenuBox.lock()) box->SetIsVisible(true);
 		if (auto bg = weakbackGround.lock()) bg->SetIsVisible(true);
 		if (auto startBtn = weakStartButton.lock()) startBtn->SetIsVisible(true);
@@ -408,6 +423,9 @@ void TitleScene::Initialize()
 
 	//ExitNo
 	exitNoButtonComp->GetFSM().SetOnEnter("Click", [weakbackGround, weakMenuBox, weakStartButton, weakSettingButton, weakCreditButton, weakexitBackGround, weakexitOkButton, weakexitNoButton, this]() {
+		m_SoundManager.SFX_Shot(L"ui_click");
+		m_SoundManager.SFX_Shot(L"ui_screen_transition");
+		m_SoundManager.BGM_Shot(L"bgm_run_longver2", 1.0f);
 		if (auto box = weakMenuBox.lock()) box->SetIsVisible(true);
 		if (auto bg = weakbackGround.lock()) bg->SetIsVisible(true);
 		if (auto startBtn = weakStartButton.lock()) startBtn->SetIsVisible(true);
@@ -592,6 +610,8 @@ void TitleScene::Initialize()
 #pragma endregion
 
 	sourSelectButtonComp->GetFSM().SetOnEnter("Click", [sourSelectButtonComp, acidSelectButtonComp, acidNameImg, weakacidBackGround, acidSelectButtonImg, sourNameImg, weaksourBackGround, sourSelectButtonImg, this]() {
+		m_SoundManager.BGM_Shot(L"bgm_run_longver2", 1.0f);
+		m_SoundManager.SFX_Shot(L"ui_click");
 		m_isAcid = false;
 		sourSelectButtonComp->GetFSM().SetOnExit("Hover", []() {
 			});
@@ -614,6 +634,7 @@ void TitleScene::Initialize()
 		if (auto bg = weakacidBackGround.lock()) bg->SetIsVisible(false);
 		});
 	acidSelectButtonComp->GetFSM().SetOnEnter("Click", [acidSelectButtonComp, sourSelectButtonComp, sourNameImg, weaksourBackGround, sourSelectButtonImg, acidNameImg, weakacidBackGround, acidSelectButtonImg, this]() {
+		m_SoundManager.SFX_Shot(L"ui_click");
 		m_isAcid = true;
 		acidSelectButtonComp->GetFSM().SetOnExit("Hover", []() {
 			});
@@ -774,6 +795,9 @@ void TitleScene::Initialize()
 	selectButtonComp->GetFSM().SetOnEnter("Hover", [selectButtonImg, this]() { selectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"charselect_selectbutton_on", "../Resource/UI/CharacterSelect/charselect_selectbutton_on.png")); });
 	selectButtonComp->GetFSM().SetOnExit("Hover", [selectButtonImg, this]() { selectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"charselect_selectbutton_off", "../Resource/UI/CharacterSelect/charselect_selectbutton_off.png")); });
 	selectButtonComp->GetFSM().SetOnEnter("Click", [loadingComp, loadingComp2, loadingComp3, this]() {
+		m_SoundManager.BGM_Shot(L"bgm_run_longver2", 1.0f);
+		m_SoundManager.SFX_Shot(L"ui_click");
+		m_SoundManager.SFX_Shot(L"ui_screen_transition");
 		if(!m_isAcid)
 		{
 			m_SceneManager->SetChangeScene("GameScene");
@@ -814,7 +838,10 @@ void TitleScene::Initialize()
 	std::weak_ptr<ButtonUI> weakcreditButton = creditButton;
 	std::weak_ptr<UIObject> weakpressAnyKey = pressAnyKey;
 	
-	backButtonComp->GetFSM().SetOnEnter("Click", [weakcharacterSelectBackGround, weaksourBackGround, weakacidBackGround, weaksourName, weakacidName, weaksourSelectButton, weakacidSelectButton, weakbackButton, weakselectButton, weakmenuBox, weakstartButton, weaksettingButton, weakcreditButton]() {
+	backButtonComp->GetFSM().SetOnEnter("Click", [weakcharacterSelectBackGround, weaksourBackGround, weakacidBackGround, weaksourName, weakacidName, weaksourSelectButton, weakacidSelectButton, weakbackButton, weakselectButton, weakmenuBox, weakstartButton, weaksettingButton, weakcreditButton, this]() {
+		m_SoundManager.BGM_Shot(L"bgm_run_longver2", 1.0f);
+		m_SoundManager.SFX_Shot(L"ui_click");
+		m_SoundManager.SFX_Shot(L"ui_screen_transition");
 		if (auto bg = weakcharacterSelectBackGround.lock()) bg->SetIsVisible(false);
 		if (auto bg = weaksourName.lock()) bg->SetIsVisible(false);
 		if (auto bg = weakacidName.lock()) bg->SetIsVisible(false);
@@ -831,7 +858,8 @@ void TitleScene::Initialize()
 		});
 
 
-	startButtonComp->GetFSM().SetOnEnter("Click", [weakcharacterSelectBackGround, weaksourName, weakacidName, weaksourSelectButton, weakacidSelectButton, weakbackButton, weakselectButton, weakmenuBox, weakstartButton, weaksettingButton, weakcreditButton]() {
+	startButtonComp->GetFSM().SetOnEnter("Click", [weakcharacterSelectBackGround, weaksourName, weakacidName, weaksourSelectButton, weakacidSelectButton, weakbackButton, weakselectButton, weakmenuBox, weakstartButton, weaksettingButton, weakcreditButton, this]() {
+		m_SoundManager.SFX_Shot(L"ui_click");
 		if (auto bg = weakcharacterSelectBackGround.lock()) bg->SetIsVisible(true);
 		if (auto bg = weaksourName.lock()) bg->SetIsVisible(true);
 		if (auto bg = weakacidName.lock()) bg->SetIsVisible(true);

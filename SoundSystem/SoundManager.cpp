@@ -134,6 +134,24 @@ void SoundManager::Shutdown()
 
 void SoundManager::BGM_Shot(const std::wstring& fileName, float fadeTime)
 {
+	if (m_CurrentFileName == fileName)
+		return;
+
+	// 기존 페이드 채널 있으면 즉시 정리
+	if (m_FadeOutActive && m_FadeOutChannel)
+	{
+		m_FadeOutChannel->stop();
+		m_FadeOutChannel = nullptr;
+		m_FadeOutActive = false;
+	}
+
+	if (m_FadeInActive && m_FadeInChannel)
+	{
+		m_FadeInChannel->stop();
+		m_FadeInChannel = nullptr;
+		m_FadeInActive = false;
+	}
+
 	auto it = m_BGMs.find(fileName);
 
 	if (it == m_BGMs.end())
@@ -142,11 +160,6 @@ void SoundManager::BGM_Shot(const std::wstring& fileName, float fadeTime)
 	}
 	
 	FMOD::Sound* newSound = it->second;
-
-	if (m_CurrentFileName == fileName)
-	{
-		return;
-	}
 
 	if (m_CurrentChannel)
 	{
