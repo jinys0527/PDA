@@ -9,6 +9,7 @@
 Telegraph::Telegraph(EventDispatcher& eventDispatcher) : Obstacle(eventDispatcher)
 {
 	auto box = GetComponent<BoxColliderComponent>();
+  
     box->SetSize({ 291.6f, 349.f });
     box->SetIsActive(false);
     
@@ -29,7 +30,7 @@ void Telegraph::Update(float deltaTime)
     {
         m_Time += deltaTime;
 
-        float opacity = 0.5f + 0.5f * sinf(m_Time * m_FadeSpeed);  // 0 ~ 1�� �ε巴�� �Դٰ���
+        float opacity = 0.5f + 0.5f * sinf(m_Time * m_FadeSpeed);  // 0 ~ 1·Î ºÎµå·´°Ô ¿Ô´Ù°¬´Ù
 
         auto sr = GetComponent<SpriteRenderer>();
         if (sr)

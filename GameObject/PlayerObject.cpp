@@ -607,7 +607,12 @@ void PlayerObject::Render(std::vector<RenderInfo>& renderInfo)
 			size.width = sprite->GetSrcRect().right - sprite->GetSrcRect().left;
 			size.height = sprite->GetSrcRect().bottom - sprite->GetSrcRect().top;
 			sprite->SetPivotPreset(SpritePivotPreset::BottomCenter, size);
-
+			auto box = GetComponent<BoxColliderComponent>();
+			if (box)
+			{
+				info.center = box->GetCenter();
+				info.size = box->GetSize();
+			}
 			info.pivot = sprite->GetPivot(); // 바꾸어 놓음
 			// UI가 아닌 일반 오브젝트 위치로 설정
 			float opacity = abs(cos(m_InvincibleTime * 5));

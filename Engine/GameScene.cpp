@@ -35,6 +35,8 @@
 #include "PlayerEffectComponent.h"
 #include <iostream>
 
+#include "Telegraph.h"
+
 void GameScene::Initialize()
 {
 #pragma region camera
@@ -773,7 +775,7 @@ void GameScene::Initialize()
 	std::weak_ptr<ButtonUI> weakGameOverRetryButton = gameoverRetryButton;
 	std::weak_ptr<ButtonUI> weakGameOverMainButton = gameoverMainButton;
 
-	// ¾àÇÑ ÂüÁ¶ ¸¸µé±â
+	// ì•½í•œ ì°¸ì¡° ë§Œë“¤ê¸°
 	std::weak_ptr<UIObject> weakMenuBox = menuBox;
 	std::weak_ptr<ButtonUI> weakStartButton = startButton;
 	std::weak_ptr<ButtonUI> weakSettingButton = settingButton;
@@ -825,7 +827,7 @@ void GameScene::Initialize()
 		m_UIManager.RefreshUIListForCurrentScene();
 		});
 
-	// SettingButton Å¬¸¯ ½Ã
+	// SettingButton í´ë¦­ ì‹œ
 	settingButtonComp->GetFSM().SetOnEnter("Click", [weakMenuBox, weakStartButton, weakSettingButton, weakMainButton, weakRetryButton, weakExitButton, weaksettingBackGround, weaksettingOkButton, weakSoundUI, this]() {
 		if (auto bg = weakMenuBox.lock()) bg->SetIsVisible(false);
 		if (auto btn = weakStartButton.lock()) btn->SetIsVisible(false);
@@ -841,7 +843,7 @@ void GameScene::Initialize()
 		m_UIManager.RefreshUIListForCurrentScene();
 		});
 
-	//SettingÃ¢ Ok
+	//Settingì°½ Ok
 	settingOkButtoComp->GetFSM().SetOnEnter("Click", [weakMenuBox, weakStartButton, weakSettingButton, weakMainButton, weakRetryButton, weakExitButton, weaksettingBackGround, weaksettingOkButton, weakSoundUI, this]() {
 		if (auto bg = weakMenuBox.lock()) bg->SetIsVisible(true);
 		if (auto btn = weakStartButton.lock()) btn->SetIsVisible(true);
@@ -1376,6 +1378,44 @@ void GameScene::Initialize()
 	}
 #pragma endregion
 
+#pragma region BackGround_1
+	for (int i = 1; i <= 22; i++)
+	{
+		auto backGround = std::make_shared<GameObject>(m_EventDispatcher);
+		backGround->m_Name = "backGround" + std::to_string(i);
+		auto backGroundTrans = backGround->GetComponent<TransformComponent>();
+		float position_x = 4702.53f + (9405.06f * (i - 1));
+		backGroundTrans->SetScale({ 0.98f, 0.98f });
+		backGroundTrans->SetPosition({ position_x, 0.0f });
+		auto sr = backGround->AddComponent<SpriteRenderer>();
+		std::wstring key = L"Building" + std::to_wstring(i % 5 + 1);
+		std::wstring path = L"../Resource/Background/Chapter1/Building" + std::to_wstring(i % 5 + 1) + L".png";
+		sr->SetTexture(m_AssetManager.LoadTexture(key, path));
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, sr->GetTexture()->GetSize());
+		AddGameObject(backGround);
+	}
+
+#pragma endregion
+
+#pragma region BackGround_2
+	for (int i = 1; i <= 25; i++)
+	{
+		auto backGround = std::make_shared<GameObject>(m_EventDispatcher);
+		backGround->m_Name = "backGround2_" + std::to_string(i);
+		auto backGroundTrans = backGround->GetComponent<TransformComponent>();
+		float position_x = 225134.04f + (7526.4f * (i - 1));
+		backGroundTrans->SetScale({ 0.98f, 0.98f });
+		backGroundTrans->SetPosition({ position_x, 0.0f });
+		auto sr = backGround->AddComponent<SpriteRenderer>();
+		std::wstring key = L"Background" + std::to_wstring(i % 2 + 1);
+		std::wstring path = L"../Resource/Background/Chapter2/Background" + std::to_wstring(i % 2 + 1) + L".png";
+		sr->SetTexture(m_AssetManager.LoadTexture(key, path));
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, sr->GetTexture()->GetSize());
+		AddGameObject(backGround);
+	}
+
+#pragma endregion
+
 	m_ChapterBackgroundManager = std::make_shared<ChapterBackgroundManager>(&m_AssetManager, m_EventDispatcher);
 	m_ChapterBackgroundManager->m_Name = "chapterBackgroundManager";
 	m_ChapterBackgroundManager->LoadBackgroundSet(1);
@@ -1396,6 +1436,7 @@ void GameScene::Finalize()
 
 void GameScene::Enter()
 {
+
 	nlohmann::json j;
 	std::string fileName = GetName() + ".json";
 	std::ifstream ifs(fileName);

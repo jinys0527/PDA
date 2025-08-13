@@ -67,6 +67,12 @@ void Obstacle::Render(std::vector<RenderInfo>& renderInfo)
 		info.worldMatrix = m_Transform->GetWorldMatrix();
 		info.pivot = spriteRenderer->GetPivot();
 		// Opacity 적용
+		auto box = GetComponent<BoxColliderComponent>();
+		if (box)
+		{
+			info.center = box->GetCenter();
+			info.size = box->GetSize();
+		}
 		info.opacity = spriteRenderer->GetOpacity();
 		// UI가 아닌 일반 오브젝트 위치로 설정
 		info.useSrcRect = spriteRenderer->GetUseSrcRect();
