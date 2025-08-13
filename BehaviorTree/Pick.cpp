@@ -124,7 +124,8 @@ void Pick::EndWarning(BlackBoard& bb)
         {
             int idx = m_AttackRange[0];
             auto pos = m_Telegraphs[idx]->GetInitPos();
-            pos.y -= 120.f;  // 위치 조정
+            //pos.x += .f;
+            pos.y -= 20.f;  // 위치 조정
 
             auto trans = m_CurrentAnimObj->GetComponent<TransformComponent>();
             trans->SetPosition(pos);

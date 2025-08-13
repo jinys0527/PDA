@@ -61,7 +61,6 @@ void BossScene::Initialize()
 	cameraObject->m_Name = "Camera";
 	auto trans3 = cameraObject->GetComponent<TransformComponent>();
 	trans3->SetPosition({ 960.0f, 540.f });
-	cameraObject->GetComponent<CameraComponent>()->SetZoom((9.0f / 16.0f));
 	BoxColliderComponent* cameraCol = cameraObject->AddComponent<BoxColliderComponent>();
 	cameraCol->Start();
 	//cameraCol->SetSize({ 1920, 1080 });
@@ -85,7 +84,7 @@ void BossScene::Initialize()
 
 		auto tr = backobj->GetComponent<TransformComponent>();
 		tr->SetPosition({ 960.f, 540.f });
-		tr->SetScale({ 0.9f, 0.9f });
+		//tr->SetScale({ 0.5f, 0.5f });
 		sr->SetOpacity(0.0f);
 
 		tr->SetZOrder(-1);
@@ -107,8 +106,8 @@ void BossScene::Initialize()
 
 
 		auto tr = backobj->GetComponent<TransformComponent>();
-		tr->SetPosition({ 960.f, 840.f });
-		tr->SetScale({ 1.6f, 1.6f });
+		tr->SetPosition({ 960.f, 740.f });
+		tr->SetScale({ 0.8f, 0.8f });
 		sr->SetOpacity(0.0f);
 
 		tr->SetZOrder(-2);
@@ -130,8 +129,8 @@ void BossScene::Initialize()
 
 
 		auto tr = backobj->GetComponent<TransformComponent>();
-		tr->SetPosition({ 960.f, 840.f });
-		tr->SetScale({ 1.6f, 1.6f });
+		tr->SetPosition({ 960.f, 740.f });
+		tr->SetScale({ 0.8f, 0.8f });
 		sr->SetOpacity(0.0f);
 
 		tr->SetZOrder(-2);
@@ -153,8 +152,8 @@ void BossScene::Initialize()
 
 
 		auto tr = backobj->GetComponent<TransformComponent>();
-		tr->SetPosition({ 960.f, 840.f });
-		tr->SetScale({ 1.6f, 1.6f });
+		tr->SetPosition({ 960.f, 740.f });
+		tr->SetScale({ 0.8f, 0.8f });
 		sr->SetOpacity(0.0f);
 
 		tr->SetZOrder(-2);
@@ -176,8 +175,8 @@ void BossScene::Initialize()
 
 
 		auto tr = backobj->GetComponent<TransformComponent>();
-		tr->SetPosition({ 960.f, 840.f });
-		tr->SetScale({ 1.6f, 1.6f });
+		tr->SetPosition({ 960.f, 740.f });
+		tr->SetScale({ 0.8f, 0.8f });
 		sr->SetOpacity(0.0f);
 
 		tr->SetZOrder(-2);
@@ -199,8 +198,8 @@ void BossScene::Initialize()
 
 
 		auto tr = backobj->GetComponent<TransformComponent>();
-		tr->SetPosition({ 960.f, 840.f });
-		tr->SetScale({ 1.6f, 1.6f });
+		tr->SetPosition({ 960.f, 740.f });
+		tr->SetScale({ 0.8f, 0.8f });
 		sr->SetOpacity(0.0f);
 
 		tr->SetZOrder(-2);
@@ -309,10 +308,8 @@ void BossScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Phase_1_Main";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 1400.f, 1520.f });
+		trans->SetPosition({ 960.f, 1000.f });
 
-		float scale = 16.f / 9.f;
-		trans->SetScale({ scale, scale });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
@@ -349,8 +346,8 @@ void BossScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_3Phase_IDLE_ani";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 960.f, 1740.f });
-		trans->SetScale({ 2.f, 2.f });
+		trans->SetPosition({ 960.f, 1050.f });
+		//trans->SetScale({ 2.f, 2.f });
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
 		sr->SetOpacity(0.f);
@@ -396,7 +393,7 @@ void BossScene::Initialize()
 		auto trans = animobj->GetComponent<TransformComponent>();
 		trans->SetPosition({ 960.f, 800.f });
 
-		trans->SetScale({ 1.0f, 2.0f });
+		trans->SetScale({ 0.5f, 1.0f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
@@ -439,7 +436,7 @@ void BossScene::Initialize()
 		auto trans = animobj->GetComponent<TransformComponent>();
 		trans->SetPosition({ 960.f, 800.f });
 
-		trans->SetScale({ 1.0f, 2.0f });
+		trans->SetScale({ 0.5f, 1.0f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
@@ -487,7 +484,7 @@ void BossScene::Initialize()
 		auto trans = animobj->GetComponent<TransformComponent>();
 		trans->SetPosition({ 960.f, 800.f });
 
-		trans->SetScale({ 1.8f, 1.0f });
+		trans->SetScale({ 1.0f, 0.4f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
@@ -530,7 +527,7 @@ void BossScene::Initialize()
 		auto trans = animobj->GetComponent<TransformComponent>();
 		trans->SetPosition({ 960.f, 800.f });
 
-		trans->SetScale({ 1.8f, 1.0f });
+		trans->SetScale({ 1.0f, 0.4f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
@@ -572,10 +569,7 @@ void BossScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Lazer_CCTV";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 1400.f, 1520.f });
-
-		float scale = 16.f / 9.f;
-		trans->SetScale({ scale, scale });
+		trans->SetPosition({ 960.f, 1000.f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
@@ -614,8 +608,8 @@ void BossScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_3Phase_Laser_CCTV";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 960.f, 1740.f });
-		trans->SetScale({ 2.f, 2.f });
+		trans->SetPosition({ 960.f, 1050.f });
+		//trans->SetScale({ 2.f, 2.f });
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
 		sr->SetOpacity(0.f);
@@ -657,9 +651,9 @@ void BossScene::Initialize()
 		animobj->m_Name = "Boss_Lazer";
 
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 1720.f, 1530.f });
+		trans->SetPosition({ 1210.f, 1000.f });
 
-		trans->SetScale({ 1.0f, 2.0f });
+		trans->SetScale({ 0.4f, 1.f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
@@ -699,9 +693,9 @@ void BossScene::Initialize()
 		animobj->m_Name = "Boss_Lazer_Phase_3";
 
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 960.f, 2030.f });
+		trans->SetPosition({ 960.f, 1200.f });
 
-		trans->SetScale({ 3.0f, 3.0f });
+		trans->SetScale({ 1.5f, 1.5f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
@@ -743,7 +737,7 @@ void BossScene::Initialize()
 		animobj->m_Name = "Boss_Anim_Phase2_Arm";
 		auto trans = animobj->GetComponent<TransformComponent>();
 		trans->SetPosition({ -900.f, 240.f });
-		trans->SetScale({ 1.0f, 1.0f });
+		trans->SetScale({ 0.5f, 0.5f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
@@ -787,8 +781,8 @@ void BossScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Anim_Arm_L";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 500.f, 800.f });
-		trans->SetScale({ -1.75f, 1.75f });
+		trans->SetPosition({ 600.f, 750.f });
+		trans->SetScale({ -0.9f, 0.9f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
@@ -827,8 +821,8 @@ void BossScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Anim_Arm_R";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 1420.f, 800.f });
-		trans->SetScale({ 1.75f, 1.75f });
+		trans->SetPosition({ 1320.f, 750.f });
+		trans->SetScale({ 0.9f, 0.9f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
@@ -869,9 +863,8 @@ void BossScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Anim_ArmSwip_L";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 700.f, 800.f });
-		trans->SetScale({ -1.5f, 1.5f });
-		trans->SetZOrder(200);
+		trans->SetPosition({ 750.f, 770.f });
+		trans->SetScale({ -0.9f, 0.9f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
@@ -909,8 +902,8 @@ void BossScene::Initialize()
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_Anim_ArmSwip_R";
 		auto trans = animobj->GetComponent<TransformComponent>();
-		trans->SetPosition({ 1200.f, 800.f });
-		trans->SetScale({ 1.5f, 1.5f });
+		trans->SetPosition({ 1170.f, 770.f });
+		trans->SetScale({ 0.9f, 0.9f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
@@ -952,7 +945,7 @@ void BossScene::Initialize()
 		animobj->m_Name = "Boss_3Phase_DEAD_Ani";
 		auto trans = animobj->GetComponent<TransformComponent>();
 		trans->SetPosition({ 960.f, 1740.f });
-		trans->SetScale({ 2.f, 2.f });
+		trans->SetScale({ 1.f, 1.f });
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
 		sr->SetOpacity(0.f);
@@ -992,7 +985,7 @@ void BossScene::Initialize()
 		animobj->m_Name = "Boss_3Phase_Arms_Dead_L";
 		auto trans = animobj->GetComponent<TransformComponent>();
 		trans->SetPosition({ 920.f, 690.f });
-		trans->SetScale({ -1.75f, 1.75f });
+		trans->SetScale({ -0.9f, 0.9f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
@@ -1026,13 +1019,13 @@ void BossScene::Initialize()
 
 	}
 
-	//화면기준 왼팔
+	//화면기준 오른팔
 	{
 		auto animobj = std::make_shared<GameObject>(m_EventDispatcher);
 		animobj->m_Name = "Boss_3Phase_Arms_Dead_R";
 		auto trans = animobj->GetComponent<TransformComponent>();
 		trans->SetPosition({ 1000.f, 690.f });
-		trans->SetScale({ 1.75f, 1.75f });
+		trans->SetScale({ 0.9f, 0.9f });
 
 		auto sr = animobj->AddComponent<SpriteRenderer>();
 		sr->SetAssetManager(&m_AssetManager);
@@ -1236,10 +1229,10 @@ void BossScene::Initialize()
 	const int rows = 3;
 
 	const float startX = 960.f; // 기준 좌표
-	const float startY = 0.f;
+	const float startY = 173.f;
 
 	const float marginX = 20.0f;
-	const float marginY = 20.0f;
+	const float marginY = 0.0f;
 
 	D2D1_SIZE_F tileSize = { 0 };
 	auto texture = m_AssetManager.LoadTexture(L"WarningSign", L"../Resource/Character/WarningSign.png");
@@ -1257,19 +1250,19 @@ void BossScene::Initialize()
 		teleobj->m_Name = "tele" + std::to_string(i);
 		auto sr = teleobj->AddComponent<SpriteRenderer>();
 		sr->SetTexture(texture);
-		sr->SetPivotPreset(SpritePivotPreset::Center, texture->GetSize());
+		sr->SetPivotPreset(SpritePivotPreset::BottomCenter, texture->GetSize());
 
 		int col = i % columns;
 		int row = i / columns;
 
 		// 7번이 startX, startY에 위치하도록 보정
-		float posX = startX + (col - baseCol) * (tileSize.width * 0.7f + marginX);
-		float posY = startY + (row - baseRow) * (tileSize.height * 0.7f + marginY);
+		float posX = startX + (col - baseCol) * (tileSize.width * 0.4f + marginX);
+		float posY = startY + (row - baseRow) * (tileSize.height * 0.3f + marginY);
 
 		std::cout << "posx: " << posX << " posy: " << posY << std::endl;
 		auto p_trans = teleobj->GetComponent<TransformComponent>();
 		p_trans->SetPosition({ posX, posY });
-		p_trans->SetScale({ 0.7f, 0.7f });
+		p_trans->SetScale({ 0.4f, 0.3f });
 		sr->SetOpacity(0.0f);
 
 		AddGameObject(teleobj);
@@ -2721,62 +2714,62 @@ void BossScene::Update(float deltaTime)
 	}
 
 
-	// 카메라 이동량 계산
-	float dx = m_ScrollSpeed * deltaTime;
-	float dy = 0.f;
+	//// 카메라 이동량 계산
+	//float dx = m_ScrollSpeed * deltaTime;
+	//float dy = 0.f;
 
-	m_TotalXMove += dx;
+	//m_TotalXMove += dx;
 
-	auto camtrans = m_Camera->GetComponent<TransformComponent>();
-	auto curpos = camtrans->GetPosition();
-	camtrans->SetPosition({ curpos.x + 100 * deltaTime, curpos.y });
+	//auto camtrans = m_Camera->GetComponent<TransformComponent>();
+	//auto curpos = camtrans->GetPosition();
+	//camtrans->SetPosition({ curpos.x + 100 * deltaTime, curpos.y });
 
-	for (auto& telegraph : m_Telegraphs)
-	{
-		auto tr = telegraph->GetComponent<TransformComponent>();
-		auto pos = tr->GetPosition();
-		tr->SetPosition({ pos.x + dx, pos.y + dy });
-	}
+	//for (auto& telegraph : m_Telegraphs)
+	//{
+	//	auto tr = telegraph->GetComponent<TransformComponent>();
+	//	auto pos = tr->GetPosition();
+	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
+	//}
 
-	for (auto& anim : m_Anims)
-	{
-		if (anim->m_Name == "Boss_Anim_Phase2_Arm") continue;
-		auto tr = anim->GetComponent<TransformComponent>();
-		auto pos = tr->GetPosition();
-		tr->SetPosition({ pos.x + dx, pos.y + dy });
+	//for (auto& anim : m_Anims)
+	//{
+	//	if (anim->m_Name == "Boss_Anim_Phase2_Arm") continue;
+	//	auto tr = anim->GetComponent<TransformComponent>();
+	//	auto pos = tr->GetPosition();
+	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
 
-	}
+	//}
 
-	for (auto& bomb : m_Bombs)
-	{
-		auto tr = bomb->GetComponent<TransformComponent>();
-		auto pos = tr->GetPosition();
-		tr->SetPosition({ pos.x + dx, pos.y + dy });
+	//for (auto& bomb : m_Bombs)
+	//{
+	//	auto tr = bomb->GetComponent<TransformComponent>();
+	//	auto pos = tr->GetPosition();
+	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
 
-	}
+	//}
 
-	for (auto& background : m_Backgrounds)
-	{
-		auto tr = background.second->GetComponent<TransformComponent>();
-		auto pos = tr->GetPosition();
-		tr->SetPosition({ pos.x + dx, pos.y + dy });
+	//for (auto& background : m_Backgrounds)
+	//{
+	//	auto tr = background.second->GetComponent<TransformComponent>();
+	//	auto pos = tr->GetPosition();
+	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
 
-	}
+	//}
 
-	// 파이어 오브젝트 이동
-	for (auto& fire : m_Fires)
-	{
-		auto tr = fire->GetComponent<TransformComponent>();
-		auto pos = tr->GetPosition();
-		tr->SetPosition({ pos.x + dx, pos.y + dy });
-	}
+	//// 파이어 오브젝트 이동
+	//for (auto& fire : m_Fires)
+	//{
+	//	auto tr = fire->GetComponent<TransformComponent>();
+	//	auto pos = tr->GetPosition();
+	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
+	//}
 
-	{
-		auto tr = m_Phase_2_Arm->GetComponent<TransformComponent>();
-		auto pos = tr->GetPosition();
-		tr->SetPosition({ pos.x + dx, pos.y + dy });
+	//{
+	//	auto tr = m_Phase_2_Arm->GetComponent<TransformComponent>();
+	//	auto pos = tr->GetPosition();
+	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
 
-	}
+	//}
 
 
 	//---------------------

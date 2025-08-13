@@ -60,7 +60,7 @@ BossBlackBoard::BossBlackBoard(
 	SetValue("WarningTime", 3.0f);
 
 
-	SetValue("3Phase", false);
+	SetValue("3Phase", true);
 	SetValue("RandomValue", 0.0f);
 
 	SetValue("SkillWeight_1", 1.0f);

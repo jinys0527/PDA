@@ -173,8 +173,8 @@ void ArmSmash::EndWarning(BlackBoard& bb)
 
         if (!m_AttackRange.empty()) //위치 조정
         {
-            float posX = m_MoveStartPos.x + 1400.f;
-            float posY = m_MoveStartPos.y - 210.f;
+            float posX = m_MoveStartPos.x + 1100.f;
+            float posY = m_MoveStartPos.y - 60.f;
             animObj->GetComponent<TransformComponent>()->SetPosition({posX, posY});
 
         }
