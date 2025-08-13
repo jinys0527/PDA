@@ -2453,6 +2453,8 @@ void BossScene::Initialize()
 				}
 			});
 
+		gameObject->Start(&m_SoundManager);
+
 		{
 			auto& clips = m_AssetManager.LoadAnimation(L"Sour_Run_Ani", L"../Resource/Character/Sour/Sour_Run_Ani.json");
 			for (const auto& [clipName, clip] : clips)
@@ -2601,7 +2603,7 @@ void BossScene::Initialize()
 			effectsr->SetPivotPreset(SpritePivotPreset::HealPivot, { 400, 400 });
 
 			auto effectComp = effect->AddComponent<PlayerEffectComponent>();
-			effectComp->Start();
+			effectComp->Start(&m_SoundManager);
 
 			AddGameObject(effect);
 		}
@@ -2972,6 +2974,16 @@ void BossScene::Update(float deltaTime)
 	{
 		gameObject.second->Update(deltaTime);
 	}
+
+	auto cameraPos = m_GameObjects.find("Camera")->second->GetComponent<TransformComponent>()->GetPosition();
+	auto playerPos = m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->GetPosition();
+
+	if (playerPos.x > cameraPos.x + 900)
+		playerPos.x = cameraPos.x + 900;
+	if (playerPos.x < cameraPos.x - 900)
+		playerPos.x = cameraPos.x - 900;
+
+	m_GameObjects.find("player")->second->GetComponent<TransformComponent>()->SetPosition(playerPos);
 
 	m_UIManager.Update(deltaTime);
 }

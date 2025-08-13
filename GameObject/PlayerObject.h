@@ -6,6 +6,7 @@
 #include <iostream>
 
 //class RunPlayerController;
+class SoundManager;
 
 struct PlayerAttackInfo
 {
@@ -33,6 +34,8 @@ public:
 	virtual void Render(std::vector<RenderInfo>& renderInfo);// 아마 그림자 어떻게 할지에 따라 바뀔듯, 그림자를 이 클래스 바깥의 오브젝트로 한다면 그냥 렌더가 될 것 같고 이 클래스 안에 두게 된다면 여기서 같이 그리게 함
 
 	void Reset();
+
+	void Start(SoundManager* soundmanager);
 
 	RunPlayerController* m_Controller;
 	RigidbodyComponent* m_RigidbodyComponent;// 혹시 몰라 쓰는 포인터들 비용 커질 것 같으면 지워도 됩니다

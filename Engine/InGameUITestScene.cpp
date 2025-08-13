@@ -1273,7 +1273,7 @@ void InGameUITestScene::Initialize()
 			effectsr->SetPivotPreset(SpritePivotPreset::HealPivot, { 400, 400 });
 
 			auto effectComp = effect->AddComponent<PlayerEffectComponent>();
-			effectComp->Start();
+			effectComp->Start(&m_SoundManager);
 
 			AddGameObject(effect);
 		}

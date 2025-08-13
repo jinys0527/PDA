@@ -19,6 +19,7 @@ void RunPlayerController::Start()
 	GetEventDispatcher().AddListener(EventType::OnPlayerReinforcedCollisionOccur, this);
 	GetEventDispatcher().AddListener(EventType::MouseRightClick, this);
 	GetEventDispatcher().AddListener(EventType::MouseRightClickUp, this);
+	GetEventDispatcher().AddListener(EventType::OnBossScene, this);
 
 	m_PlayerOwner = (PlayerObject*)(m_Owner);
 
@@ -33,6 +34,7 @@ RunPlayerController::~RunPlayerController()
 	GetEventDispatcher().RemoveListener(EventType::OnPlayerReinforcedCollisionOccur, this);	
 	GetEventDispatcher().RemoveListener(EventType::MouseRightClick, this);
 	GetEventDispatcher().RemoveListener(EventType::MouseRightClickUp, this);
+	GetEventDispatcher().RemoveListener(EventType::OnBossScene, this);
 }
 
 
@@ -257,6 +259,10 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 		std::cout << mousePos.x << " " << mousePos.y << std::endl;
 
 		m_PlayerOwner->GetFSM().Trigger("Shoot");
+	}
+	else if (type == EventType::OnBossScene)
+	{
+		m_IsBoss = (bool)data;
 	}
 }
 

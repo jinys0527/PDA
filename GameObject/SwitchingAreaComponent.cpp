@@ -12,6 +12,9 @@ void SwitchingAreaComponent::Start(int index)
 	}
 	else
 	{
+		m_IsLoaded = false;
+		m_IsStart = false;
+
 		index = index % 2;
 
 		if (index == 1)
