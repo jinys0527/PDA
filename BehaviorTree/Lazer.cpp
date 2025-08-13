@@ -59,6 +59,7 @@ NodeState Lazer::Tick(BlackBoard& bb, float deltaTime)
         // 첫 프레임: 중앙 활성화
         if (m_ActivateStep == 0)
         {
+            bb.GetSoundManager().SFX_Shot(L"boss_laser_explosion");
             m_Telegraphs[m_StartTelIndex]->SetColliderActive(true);
             ActiveAnimation(m_StartTelIndex, true);
             m_PrevLeft = m_StartTelIndex;
