@@ -1771,9 +1771,9 @@ void GameScene::Update(float deltaTime)
 	if (!uiObjects.find("menuBox")->second->IsVisible() && !uiObjects.find("settingBackGround")->second->IsVisible()) //"menuBox" find("settingBackGround")
 	{
 
-			m_GameManager->m_scrollSpeed += deltaTime * 100;
-		if (m_GameManager->m_scrollSpeed >= 2000)
-			m_GameManager->m_scrollSpeed = 2000;
+			m_GameManager->m_scrollSpeed += deltaTime * 500;
+		if (m_GameManager->m_scrollSpeed >= 1500)
+			m_GameManager->m_scrollSpeed = 1500;
 
 		if (m_GameObjects.find("player")->second->GetComponent<RunPlayerController>()->GetIsBoss())
 		{
