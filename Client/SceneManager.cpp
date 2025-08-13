@@ -22,9 +22,9 @@ void SceneManager::Initialize()
 	gameScene->Initialize();
 	gameScene->SetName("GameScene");
 
-	ChangeScene("GameScene");
+	ChangeScene("TitleScene");
 	m_UIManager.Start();
-	m_UIManager.SetCurrentScene("GameScene");
+	m_UIManager.SetCurrentScene("TitleScene");
 
 // 	auto inGameUITestScene = AddScene("InGameUITestScene", std::make_shared<InGameUITestScene>(m_EventDispatcher, m_AssetManager, m_SoundAssetManager, m_SoundManager, m_Renderer, m_UIManager));
 // 	inGameUITestScene->SetSceneManager(this);

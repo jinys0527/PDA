@@ -534,9 +534,7 @@ void TitleScene::Initialize()
 		sourSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Back", "../Resource/UI/CharacterSelect/SOUR_Back.png")); 
 		if (auto bg = weaksourBackGround.lock()) bg->SetIsVisible(false);
 		});
-	sourSelectButtonComp->GetFSM().SetOnEnter("Click", [this]() {
-		// 캐릭터 1개라 변경 처리 없음
-		});
+	
 
 	auto sourSelectButtonRect = sourSelectButton->GetComponent<RectTransformComponent>();
 	sourSelectButtonRect->SetPosition({ -525.0f, -370.0f });
@@ -582,9 +580,7 @@ void TitleScene::Initialize()
 		acidSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Back", "../Resource/UI/CharacterSelect/ACID_Back.png")); 
 		if (auto bg = weakacidBackGround.lock()) bg->SetIsVisible(false);
 		});
-	acidSelectButtonComp->GetFSM().SetOnEnter("Click", [this]() {
-		// 캐릭터 1개라 변경 처리 없음
-	});
+	
 
 	auto acidSelectButtonRect = acidSelectButton->GetComponent<RectTransformComponent>();
 	acidSelectButtonRect->SetPosition({ 0.0f, -330.0f });
@@ -593,6 +589,50 @@ void TitleScene::Initialize()
 	acidSelectButtonRect->SetPivotPreset(RectTransformPivotPreset::Center);
 #pragma endregion
 
+	sourSelectButtonComp->GetFSM().SetOnEnter("Click", [sourSelectButtonComp, acidSelectButtonComp, acidNameImg, weakacidBackGround, acidSelectButtonImg, sourNameImg, weaksourBackGround, sourSelectButtonImg, this]() {
+		m_isAcid = false;
+		sourSelectButtonComp->GetFSM().SetOnExit("Hover", []() {
+			});
+		sourSelectButtonComp->GetFSM().SetOnEnter("Hover", [sourNameImg, weaksourBackGround, sourSelectButtonImg, this]() {
+			sourNameImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Name_Up", "../Resource/UI/CharacterSelect/SOUR_Name_Up.png"));
+			sourSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Up", "../Resource/UI/CharacterSelect/SOUR_Up.png"));
+			if (auto bg = weaksourBackGround.lock()) bg->SetIsVisible(true);
+			});
+		acidSelectButtonComp->GetFSM().SetOnEnter("Hover", [acidNameImg, weakacidBackGround, acidSelectButtonImg, this]() {
+			acidNameImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Name_Up", "../Resource/UI/CharacterSelect/ACID_Name_Up.png"));
+			acidSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Up", "../Resource/UI/CharacterSelect/ACID_Up.png"));
+			});
+		acidSelectButtonComp->GetFSM().SetOnExit("Hover", [acidNameImg, weakacidBackGround, acidSelectButtonImg, this]() {
+			acidNameImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Name_Down", "../Resource/UI/CharacterSelect/ACID_Name_Down.png"));
+			acidSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Back", "../Resource/UI/CharacterSelect/ACID_Back.png"));
+			if (auto bg = weakacidBackGround.lock()) bg->SetIsVisible(false);
+			});
+		acidNameImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Name_Down", "../Resource/UI/CharacterSelect/ACID_Name_Down.png"));
+		acidSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Back", "../Resource/UI/CharacterSelect/ACID_Back.png"));
+		if (auto bg = weakacidBackGround.lock()) bg->SetIsVisible(false);
+		});
+	acidSelectButtonComp->GetFSM().SetOnEnter("Click", [acidSelectButtonComp, sourSelectButtonComp, sourNameImg, weaksourBackGround, sourSelectButtonImg, acidNameImg, weakacidBackGround, acidSelectButtonImg, this]() {
+		m_isAcid = true;
+		acidSelectButtonComp->GetFSM().SetOnExit("Hover", []() {
+			});
+		acidSelectButtonComp->GetFSM().SetOnEnter("Hover", [acidNameImg, weakacidBackGround, acidSelectButtonImg, this]() {
+			acidNameImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Name_Up", "../Resource/UI/CharacterSelect/ACID_Name_Up.png"));
+			acidSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Up", "../Resource/UI/CharacterSelect/ACID_Up.png"));
+			if (auto bg = weakacidBackGround.lock()) bg->SetIsVisible(true);
+			});
+		sourSelectButtonComp->GetFSM().SetOnEnter("Hover", [sourNameImg, weaksourBackGround, sourSelectButtonImg, this]() {
+			sourNameImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Name_Up", "../Resource/UI/CharacterSelect/SOUR_Name_Up.png"));
+			sourSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Up", "../Resource/UI/CharacterSelect/SOUR_Up.png"));
+			});
+		sourSelectButtonComp->GetFSM().SetOnExit("Hover", [sourNameImg, weaksourBackGround, sourSelectButtonImg, this]() {
+			sourNameImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Name_Down", "../Resource/UI/CharacterSelect/SOUR_Name_Down.png"));
+			sourSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Back", "../Resource/UI/CharacterSelect/SOUR_Back.png"));
+			if (auto bg = weaksourBackGround.lock()) bg->SetIsVisible(false);
+			});
+		sourNameImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Name_Down", "../Resource/UI/CharacterSelect/SOUR_Name_Down.png"));
+		sourSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Back", "../Resource/UI/CharacterSelect/SOUR_Back.png"));
+		if (auto bg = weaksourBackGround.lock()) bg->SetIsVisible(false);
+		});
 
 #pragma region backButton
 	auto backButton = std::make_shared<ButtonUI>(m_EventDispatcher);
@@ -627,8 +667,11 @@ void TitleScene::Initialize()
 	selectButtonComp->GetFSM().SetOnEnter("Hover", [selectButtonImg, this]() { selectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"charselect_selectbutton_on", "../Resource/UI/CharacterSelect/charselect_selectbutton_on.png")); });
 	selectButtonComp->GetFSM().SetOnExit("Hover", [selectButtonImg, this]() { selectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"charselect_selectbutton_off", "../Resource/UI/CharacterSelect/charselect_selectbutton_off.png")); });
 	selectButtonComp->GetFSM().SetOnEnter("Click", [this]() {
-		m_SceneManager->ChangeScene("GameScene");
-		m_UIManager.SetCurrentScene("GameScene");
+		if(!m_isAcid)
+		{
+			m_SceneManager->ChangeScene("GameScene");
+			m_UIManager.SetCurrentScene("GameScene");
+		}
 		});
 
 	auto selectButtonRect = selectButton->GetComponent<RectTransformComponent>();
