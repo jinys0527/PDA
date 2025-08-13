@@ -71,7 +71,6 @@ void BossScene::Initialize()
 #pragma endregion
 
 #pragma region Background
-	std::unordered_map<std::string, std::shared_ptr<GameObject>> m_Backgrounds;
 
 	//3페 구멍 배경
 	{
@@ -300,7 +299,6 @@ void BossScene::Initialize()
 #pragma endregion
 
 #pragma region anim_now
-	std::vector<std::shared_ptr<GameObject>> m_Anims;
 	std::unordered_map<std::string, std::vector<int>> m_AnimIndexMap;
 
 #pragma endregion
@@ -2532,6 +2530,7 @@ void BossScene::Initialize()
 	}
 
 	AddGameObject(cameraObject);
+
 }
 
 void BossScene::Finalize()
@@ -2721,37 +2720,63 @@ void BossScene::Update(float deltaTime)
 		return; // 3초 지나기 전에는 행동트리 실행 X
 	}
 
-	//// 카메라 이동량 계산
-	//float dx = m_ScrollSpeed * deltaTime;
-	//float dy = 0.f;
 
-	//m_TotalXMove += dx;
+	// 카메라 이동량 계산
+	float dx = m_ScrollSpeed * deltaTime;
+	float dy = 0.f;
 
-	//auto camtrans = m_Camera->GetComponent<TransformComponent>();
-	//auto curpos = camtrans->GetPosition();
-	//camtrans->SetPosition({ curpos.x + 100 * deltaTime, curpos.y });
+	m_TotalXMove += dx;
 
-	//for (auto& telegraph : m_Telegraphs)
-	//{
-	//	auto tr = telegraph->GetComponent<TransformComponent>();
-	//	auto pos = tr->GetPosition();
-	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
-	//}
+	auto camtrans = m_Camera->GetComponent<TransformComponent>();
+	auto curpos = camtrans->GetPosition();
+	camtrans->SetPosition({ curpos.x + 100 * deltaTime, curpos.y });
 
-	//// 파이어 오브젝트 이동
-	//for (auto& fire : m_Fires)
-	//{
-	//	auto tr = fire->GetComponent<TransformComponent>();
-	//	auto pos = tr->GetPosition();
-	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
-	//}
+	for (auto& telegraph : m_Telegraphs)
+	{
+		auto tr = telegraph->GetComponent<TransformComponent>();
+		auto pos = tr->GetPosition();
+		tr->SetPosition({ pos.x + dx, pos.y + dy });
+	}
 
-	//{
-	//	auto tr = m_Phase_2_Arm->GetComponent<TransformComponent>();
-	//	auto pos = tr->GetPosition();
-	//	tr->SetPosition({ pos.x + dx, pos.y + dy });
+	for (auto& anim : m_Anims)
+	{
+		if (anim->m_Name == "Boss_Anim_Phase2_Arm") continue;
+		auto tr = anim->GetComponent<TransformComponent>();
+		auto pos = tr->GetPosition();
+		tr->SetPosition({ pos.x + dx, pos.y + dy });
 
-	//}
+	}
+
+	for (auto& bomb : m_Bombs)
+	{
+		auto tr = bomb->GetComponent<TransformComponent>();
+		auto pos = tr->GetPosition();
+		tr->SetPosition({ pos.x + dx, pos.y + dy });
+
+	}
+
+	for (auto& background : m_Backgrounds)
+	{
+		auto tr = background.second->GetComponent<TransformComponent>();
+		auto pos = tr->GetPosition();
+		tr->SetPosition({ pos.x + dx, pos.y + dy });
+
+	}
+
+	// 파이어 오브젝트 이동
+	for (auto& fire : m_Fires)
+	{
+		auto tr = fire->GetComponent<TransformComponent>();
+		auto pos = tr->GetPosition();
+		tr->SetPosition({ pos.x + dx, pos.y + dy });
+	}
+
+	{
+		auto tr = m_Phase_2_Arm->GetComponent<TransformComponent>();
+		auto pos = tr->GetPosition();
+		tr->SetPosition({ pos.x + dx, pos.y + dy });
+
+	}
 
 
 	//---------------------
@@ -2822,4 +2847,9 @@ void BossScene::SavePlayerInfo()
 
 void BossScene::LoadPlayerInfo()
 {
+}
+
+void BossScene::OnLoadComplete()
+{
+	m_IsLoaded = true;
 }

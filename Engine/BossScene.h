@@ -31,6 +31,8 @@ public:
 	void LoadPlayerInfo();
 
 private:
+	void OnLoadComplete();
+
 	float time = 0.f;
 
 	float m_BTElapsedTime = 0.0f;
@@ -42,11 +44,16 @@ private:
 	std::vector<std::shared_ptr<Telegraph>> m_Telegraphs;
 	std::vector<std::shared_ptr<GameObject>> m_Fires;
 	std::vector<std::shared_ptr<GameObject>> m_Bombs;
+	std::vector<std::shared_ptr<GameObject>> m_Anims;
+	std::unordered_map<std::string, std::shared_ptr<GameObject>> m_Backgrounds;
+
 
 	std::shared_ptr<GameObject> m_Phase_2_Arm;
 
 	float m_TotalXMove = 0.0f;
 	float m_ScrollSpeed = 100.f;
 
+
+	bool m_IsLoaded = false;
 };
 

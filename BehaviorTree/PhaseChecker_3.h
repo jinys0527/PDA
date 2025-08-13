@@ -12,8 +12,9 @@ public:
 private:
 	bool m_PhaseChange = false;
 
-	float m_targetX = -1000.f;
-	float m_moveSpeed = 300.f;
+	float m_moveSpeed = 800.f;
+	float m_moveDuration = 8.0f;
+	float m_elapsedTime = 0.0f;
 
 	float m_fadeSpeed = 1.0f;
 	int m_Back2FadeDirection = 1;

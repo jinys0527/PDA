@@ -17,8 +17,9 @@ private:
 
 	int m_PrintState = 3;
 
-	float m_targetX = 1200.f;
 	float m_moveSpeed = 300.f;
+	float m_moveDuration = 4.0f;
+	float m_elapsedTime = 0.0f;
 
 	std::shared_ptr<GameObject> m_Lazer_CCTV;
 
