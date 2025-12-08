@@ -37,6 +37,15 @@ bool BoxColliderComponent::BoxVsBox(const BoxColliderComponent& other) const
            (thisMax.y >= otherMin.y && thisMin.y <= otherMax.y);
 }
 
+Vec2F BoxColliderComponent::GetCenter()
+{
+	auto* transform = m_Owner->GetComponent<TransformComponent>();
+
+	m_Center = transform->GetPosition();
+	return m_Center;
+	
+}
+
 void BoxColliderComponent::Serialize(nlohmann::json& j) const
 {
 }

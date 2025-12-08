@@ -1,5 +1,5 @@
-#pragma once
-
+﻿#pragma once
+ 
 #include "NzWndBase.h"
 #include <wrl/client.h>
 #include "Engine.h"

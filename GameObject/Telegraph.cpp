@@ -2,14 +2,17 @@
 #include "BoxColliderComponent.h"
 #include "SpriteRenderer.h"
 #include "TransformComponent.h"
+#include "AnimationComponent.h"
 
 #include <cmath>
 
 Telegraph::Telegraph(EventDispatcher& eventDispatcher) : Obstacle(eventDispatcher)
 {
 	auto box = GetComponent<BoxColliderComponent>();
+  
+    box->SetSize({ 291.6f, 349.f });
     box->SetIsActive(false);
-    
+    box->SetSize({ 729.f, 349.f });
 }
 
 void Telegraph::Update(float deltaTime)
@@ -18,17 +21,29 @@ void Telegraph::Update(float deltaTime)
     {
         auto trans = GetComponent<TransformComponent>();
         m_InitPos = trans->GetPosition();
+
+        m_WarningTexture = GetComponent<SpriteRenderer>()->GetTexture();
+        m_IsInitialized = true;
     }
 
-    if (!m_IsWaving) return;
+    if (m_IsWaving)
+    {
+        m_Time += deltaTime;
 
-    m_Time += deltaTime;
+        float opacity = 0.5f + 0.5f * sinf(m_Time * m_FadeSpeed);  // 0 ~ 1·Î ºÎµå·´°Ô ¿Ô´Ù°¬´Ù
 
-    float opacity = 0.5f + 0.5f * sinf(m_Time * m_FadeSpeed);  // 0 ~ 1�� �ε巴�� �Դٰ���
+        auto sr = GetComponent<SpriteRenderer>();
+        if (sr)
+            sr->SetOpacity(opacity);
+    }
 
-    auto sr = GetComponent<SpriteRenderer>();
-    if (sr)
-        sr->SetOpacity(opacity);
+    if (m_IsAnimationPlaying)
+    {
+        if (auto anim = GetComponent<AnimationComponent>()->IsAnimationFinished())
+        {
+            SetInactive();
+        }
+    }
 }
 
 void Telegraph::SetActive()
@@ -38,7 +53,10 @@ void Telegraph::SetActive()
 
     auto sr = GetComponent<SpriteRenderer>();
     if (sr)
+    {
         sr->SetOpacity(m_Opacity);
+        sr->SetTexture(m_WarningTexture);
+    }
 }
 
 void Telegraph::SetInactive()
@@ -55,4 +73,34 @@ void Telegraph::SetColliderActive(bool active)
 {
 	auto box = GetComponent<BoxColliderComponent>();
 	box->SetIsActive(active);
+}
+
+void Telegraph::SetActiveAnimation() 
+{ 
+    auto animobj = GetComponent<TransformComponent>()->GetChildrens().front();
+    auto anim = animobj->GetOwner()->GetComponent<AnimationComponent>();
+    anim->SetIsActive(true);
+    anim->Play();
+    auto sprite = GetComponent<SpriteRenderer>();
+    sprite->SetOpacity(1);
+    m_IsAnimationPlaying = true;
+}
+
+void Telegraph::SetInactiveAnimation()
+{
+    auto anim = GetComponent<AnimationComponent>();
+    anim->SetIsActive(false);
+    auto sprite = GetComponent<SpriteRenderer>();
+    sprite->SetOpacity(0);
+
+    sprite->SetTexture(m_WarningTexture);
+
+    m_IsAnimationPlaying = false;
+
+}
+
+Math::Vector2F Telegraph::GetCurrPos()
+{
+    return m_Transform->GetPosition();
+
 }

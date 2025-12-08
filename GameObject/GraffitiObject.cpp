@@ -9,7 +9,9 @@ GraffitiObject::GraffitiObject(EventDispatcher& eventDispatcher) : GameObject(ev
 	m_Sprite = AddComponent<SpriteRenderer>();
 
 	srand((unsigned int)time(NULL));
-	m_RandTexture = rand();
+
+	m_RandTexture = rand()%5;
+
 }
 
 void GraffitiObject::Render(std::vector<RenderInfo>& renderInfo)
@@ -24,7 +26,7 @@ void GraffitiObject::Render(std::vector<RenderInfo>& renderInfo)
 			if (sprite)
 			{
 				RenderInfo info;
-				if (!m_GraffitiComponent->GetIsClicked())
+				if (!m_GraffitiComponent->GetIsFirst()) 
 				{
 					info.draw = true;
 				}
@@ -34,14 +36,16 @@ void GraffitiObject::Render(std::vector<RenderInfo>& renderInfo)
 					std::advance(iter, m_RandTexture);
 
 					m_Sprite->SetTexture(iter->Get());
+					//info.bitmap = 
 				}
 
 				info.bitmap = sprite->GetTexture();
+				info.layer = m_Transform->GetZOrder();
 				info.worldMatrix = m_Transform->GetWorldMatrix();
 				info.pivot = sprite->GetPivot();
-				// Opacity Àû¿ë
+				// Opacity ì ìš©
 				info.opacity = sprite->GetOpacity();
-				// UI°¡ ¾Æ´Ñ ÀÏ¹Ý ¿ÀºêÁ§Æ® À§Ä¡·Î ¼³Á¤
+				// UIê°€ ì•„ë‹Œ ì¼ë°˜ ì˜¤ë¸Œì íŠ¸ ìœ„ì¹˜ë¡œ ì„¤ì •
 
 				renderInfo.push_back(info);
 			}
@@ -68,6 +72,15 @@ void GraffitiObject::SetGravittis(AssetManager* assetManager, int chapter)
 		{
 			std::wstring key = L"statue" + std::to_wstring(i + 1);
 			std::wstring path = L"../Resource/Background/Chapter2/" + key + L".png";
+			m_GraffitiTextures[i] = assetManager->LoadTexture(key, path);
+		}
+	}
+	else if (chapter == 3 || chapter == 4)
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			std::wstring key = L"Snipe";
+			std::wstring path = L"../Resource/Character/Boss/" + key + L".png";
 			m_GraffitiTextures[i] = assetManager->LoadTexture(key, path);
 		}
 	}

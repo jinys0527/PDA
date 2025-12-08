@@ -24,7 +24,7 @@ void Scene::AddGameObject(std::shared_ptr<GameObject> gameObject)
 	{
 		SetMainCamera(gameObject);
 	}
-	m_GameObjects[gameObject->m_Name] = gameObject;
+	m_GameObjects[gameObject->m_Name] = std::move(gameObject);
 }
 
 void Scene::RemoveGameObject(std::shared_ptr<GameObject> gameObject)

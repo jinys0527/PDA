@@ -27,13 +27,13 @@ void GameManager::OnEvent(EventType type, const void* data)
 	switch (type)
 	{
 	case EventType::OnPlayerHpChanged:
-		m_playerHp = (int)data;
-		if (m_playerHp < m_prevHp)
+		m_forhitHp = (int)data;
+		if (m_forhitHp < m_prevHp)
 		{
 			m_scrollSpeed = 0;
 			m_hitCount++;
 		}
-		m_prevHp = m_playerHp;
+		m_prevHp = m_forhitHp;
 		break;
 	case EventType::OnPlayerDeath:
 
@@ -42,4 +42,10 @@ void GameManager::OnEvent(EventType type, const void* data)
 		
 		break;
 	}
+}
+
+void GameManager::Initial()
+{
+	m_playerHp = m_initialHp;
+	m_playerReinforcedAttack = m_initialReinforcedAttack;
 }

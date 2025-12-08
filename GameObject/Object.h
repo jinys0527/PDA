@@ -11,9 +11,11 @@
 class Object
 {
 	friend class Scene;
-	friend class TestScene;
 	friend class TitleScene;
 	friend class GameScene;
+	friend class CharacterScene;
+	friend class InGameUITestScene;
+
 public:
 	Object(EventDispatcher& eventDispatcher);
 	virtual ~Object() = default;
@@ -63,9 +65,32 @@ public:
 		return result;
 	}
 
+	template<typename T>
+	void RemoveComponent(T* Component)
+	{
+		auto it = m_Components.find(T::StaticTypeName);
+		if (it == m_Components.end())
+			return;
+		auto& vec = it->second;
+
+		// 3. vector가 비면 map에서 key 제거
+		if (vec.empty())
+			m_Components.erase(it);
+	}
+
 	virtual void Update(float deltaTime);
 
 	virtual void FixedUpdate();
+
+	void SetName(std::string name)
+	{
+		m_Name = name;
+	}
+
+	std::string GetName() const
+	{
+		return m_Name;
+	}
 
 	void SendMessages(const myCore::MessageID msg, void* data = nullptr);
 

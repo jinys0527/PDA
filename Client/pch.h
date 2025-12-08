@@ -45,6 +45,10 @@
 #pragma comment(lib, "windowscodecs.lib")
 
 
+// WIC (Windows Imaging Component)
+#pragma comment(lib, "windowscodecs.lib")
+
+
 // COM 및 DirectX 인터페이스
 #include <wrl/client.h>              // ComPtr
 #include <d3d11.h>                   // Direct3D 11
@@ -53,6 +57,8 @@
 #include <d2d1_3helper.h>            // D2D1::Helper 클래스들
 #include <dwrite_3.h>                // DirectWrite (최신 텍스트 엔진)
 #include <wincodec.h>                // WIC (이미지 로딩)
+
+
 
 #define _USE_MATH_DEFINES
 #include <cmath>

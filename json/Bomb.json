@@ -1,0 +1,113 @@
+{
+    "frames": [
+        {
+            "filename": "frame_0",
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 400,
+                "h": 400
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_1",
+            "frame": {
+                "x": 400,
+                "y": 0,
+                "w": 400,
+                "h": 400
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_2",
+            "frame": {
+                "x": 800,
+                "y": 0,
+                "w": 400,
+                "h": 400
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_3",
+            "frame": {
+                "x": 0,
+                "y": 400,
+                "w": 400,
+                "h": 400
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_4",
+            "frame": {
+                "x": 400,
+                "y": 400,
+                "w": 400,
+                "h": 400
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_5",
+            "frame": {
+                "x": 800,
+                "y": 400,
+                "w": 400,
+                "h": 400
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_6",
+            "frame": {
+                "x": 0,
+                "y": 800,
+                "w": 400,
+                "h": 400
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_7",
+            "frame": {
+                "x": 400,
+                "y": 800,
+                "w": 400,
+                "h": 400
+            },
+            "duration": 100
+        },
+        {
+            "filename": "frame_8",
+            "frame": {
+                "x": 800,
+                "y": 800,
+                "w": 400,
+                "h": 400
+            },
+            "duration": 100
+        }
+    ],
+    "meta": {
+        "app": "CustomSpriteSheetTool",
+        "version": "1.0",
+        "image": "Bomb.png",
+        "size": {
+          "w": 1200,
+          "h": 1200
+    },
+    "frameTags": [
+      {
+        "name": "bomb",
+        "from": 0,
+        "to": 8,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "scale": "1"
+  }
+}

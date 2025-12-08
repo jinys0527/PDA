@@ -62,6 +62,7 @@ public:
 		return m_Fill;
 	}
 
+	__declspec(noinline)
 	void SetValue(float value)
 	{
 		value = std::clamp(value, 0.0f, 1.0f);

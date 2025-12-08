@@ -4,6 +4,7 @@
 #include <d2d1.h>
 #include <dwrite.h>
 #include <string>
+#include "SimpleMathHelper.h"
 
 class UITextComponent : public UIComponent
 {
@@ -46,6 +47,8 @@ public:
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;
 
+	void SetPosition(Math::Vector2F pivot) { m_Position = pivot; }
+	Math::Vector2F GetPosition() { return m_Position; }
 
 private:
 	void RebuildTextResources();
@@ -62,6 +65,8 @@ private:
 	DWRITE_PARAGRAPH_ALIGNMENT m_ParagraphAlign = DWRITE_PARAGRAPH_ALIGNMENT_NEAR;
 
 	bool m_UseExternalLayout = false;
+
+	Math::Vector2F m_Position = { 0, 0 };
 
 	Microsoft::WRL::ComPtr<IDWriteFactory> m_dwriteFactory;
 	Microsoft::WRL::ComPtr<IDWriteTextFormat> m_TextFormat;

@@ -39,7 +39,7 @@ NodeState SkillCondition::Tick(BlackBoard& bb, float deltaTime)
     }
 
     float randomValue = bb.GetValue<float>("RandomValue").value();
-
+    
     if (randomValue < skillchance)
     {
         // 실행된 스킬: 가중치 감소
@@ -59,6 +59,22 @@ NodeState SkillCondition::Tick(BlackBoard& bb, float deltaTime)
         {
             n = 5;
         }
+
+        //가중치 코드
+        //std::cout << "[SkillCondition] 현재 스킬 가중치 상태:" << std::endl;
+        //for (int i = 1; i <= n; ++i)
+        //{
+        //    std::string skillKey = "SkillWeight_" + std::to_string(i);
+        //    auto valOpt = bb.GetValue<float>(skillKey);
+        //    if (valOpt.has_value())
+        //    {
+        //        std::cout << "  " << skillKey << ": " << valOpt.value() << std::endl;
+        //    }
+        //    else
+        //    {
+        //        std::cout << "  " << skillKey << ": (값 없음)" << std::endl;
+        //    }
+        //}
 
         for (int i = 1; i <= n; ++i)
         {

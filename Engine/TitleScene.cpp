@@ -13,13 +13,17 @@
 #include "BoxColliderComponent.h"
 #include "SoundUI.h"
 #include "UIImageComponent.h"
+#include "LoadingRollerComponent.h"
+#include "RollerBackComponent.h"
 
 void TitleScene::Initialize()
 {
+	m_SoundManager.BGM_Shot(L"bgm_run_longver2", 1.0f);
 #pragma region Setting
 	auto soundUI = std::make_shared<SoundUI>(m_SoundManager, m_EventDispatcher);
 	soundUI->SetZOrder(5);
 	soundUI->m_Name = "soundUI";
+	soundUI->SetSlider();
 	auto soundUIRect = soundUI->GetComponent<RectTransformComponent>();
 	soundUIRect->SetPosition({ -321.0f, -50.0f });
 	soundUIRect->SetSize({ 642.0f, 308.0f });
@@ -206,6 +210,7 @@ void TitleScene::Initialize()
 	exitOkButtonComp->GetFSM().SetOnEnter("Hover", [exitOkButtonImg, this]() { exitOkButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"exitconfirm_ok_button_on", "../Resource/UI/Exit/exitconfirm_ok_button_on.png")); });
 	exitOkButtonComp->GetFSM().SetOnExit("Hover", [exitOkButtonImg, this]() { exitOkButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"exitconfirm_ok_button_off", "../Resource/UI/Exit/exitconfirm_ok_button_off.png")); });
 	exitOkButtonComp->GetFSM().SetOnEnter("Click", [this]() {
+		m_SoundManager.SFX_Shot(L"ui_click");
 		if (m_SceneManager)
 		{
 			m_SceneManager->RequestQuit();
@@ -349,6 +354,9 @@ void TitleScene::Initialize()
 
 	// SettingButton 클릭 시
 	settingButtonComp->GetFSM().SetOnEnter("Click", [weakbackGround, weakMenuBox, weakStartButton, weakSettingButton, weakCreditButton, weaksettingBackGround, weaksettingOkButton, weakSoundUI, this]() {
+		m_SoundManager.BGM_Shot(L"bgm_run_longver2", 1.0f);
+		m_SoundManager.SFX_Shot(L"ui_screen_transition");
+		m_SoundManager.SFX_Shot(L"ui_click");
 		if (auto bg = weakbackGround.lock()) bg->SetIsVisible(false);
 		if (auto box = weakMenuBox.lock()) box->SetIsVisible(false);
 		if (auto startBtn = weakStartButton.lock()) startBtn->SetIsVisible(false);
@@ -364,6 +372,9 @@ void TitleScene::Initialize()
 
 	// CreditButton 클릭 시
 	creditButtonComp->GetFSM().SetOnEnter("Click", [weakbackGround, weakMenuBox, weakStartButton, weakSettingButton, weakCreditButton, weakcreditBackGround, weakcreditMainButton, this]() {
+		m_SoundManager.BGM_Shot(L"bgm_credits2", 1.0f);
+		m_SoundManager.SFX_Shot(L"ui_screen_transition");
+		m_SoundManager.SFX_Shot(L"ui_click");
 		if (auto bg = weakbackGround.lock()) bg->SetIsVisible(false);
 		if (auto box = weakMenuBox.lock()) box->SetIsVisible(false);
 		if (auto startBtn = weakStartButton.lock()) startBtn->SetIsVisible(false);
@@ -378,6 +389,9 @@ void TitleScene::Initialize()
 
 	//Setting창 Ok
 	settingOkButtoComp->GetFSM().SetOnEnter("Click", [weakbackGround, weakMenuBox, weakStartButton, weakSettingButton, weakCreditButton, weaksettingBackGround, weaksettingOkButton, weakSoundUI, this]() {
+		m_SoundManager.BGM_Shot(L"bgm_run_longver2", 1.0f);
+		m_SoundManager.SFX_Shot(L"ui_screen_transition");
+		m_SoundManager.SFX_Shot(L"ui_click");
 		if (auto box = weakMenuBox.lock()) box->SetIsVisible(true);
 		if (auto bg = weakbackGround.lock()) bg->SetIsVisible(true);
 		if (auto startBtn = weakStartButton.lock()) startBtn->SetIsVisible(true);
@@ -393,6 +407,9 @@ void TitleScene::Initialize()
 
 	//CreditMain
 	creditMainButtonComp->GetFSM().SetOnEnter("Click", [weakbackGround, weakMenuBox, weakStartButton, weakSettingButton, weakCreditButton, weakcreditBackGround, weakcreditMainButton, this]() {
+		m_SoundManager.SFX_Shot(L"ui_click");
+		m_SoundManager.SFX_Shot(L"ui_screen_transition");
+		m_SoundManager.BGM_Shot(L"bgm_run_longver2", 1.0f);
 		if (auto box = weakMenuBox.lock()) box->SetIsVisible(true);
 		if (auto bg = weakbackGround.lock()) bg->SetIsVisible(true);
 		if (auto startBtn = weakStartButton.lock()) startBtn->SetIsVisible(true);
@@ -406,6 +423,9 @@ void TitleScene::Initialize()
 
 	//ExitNo
 	exitNoButtonComp->GetFSM().SetOnEnter("Click", [weakbackGround, weakMenuBox, weakStartButton, weakSettingButton, weakCreditButton, weakexitBackGround, weakexitOkButton, weakexitNoButton, this]() {
+		m_SoundManager.SFX_Shot(L"ui_click");
+		m_SoundManager.SFX_Shot(L"ui_screen_transition");
+		m_SoundManager.BGM_Shot(L"bgm_run_longver2", 1.0f);
 		if (auto box = weakMenuBox.lock()) box->SetIsVisible(true);
 		if (auto bg = weakbackGround.lock()) bg->SetIsVisible(true);
 		if (auto startBtn = weakStartButton.lock()) startBtn->SetIsVisible(true);
@@ -534,9 +554,7 @@ void TitleScene::Initialize()
 		sourSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Back", "../Resource/UI/CharacterSelect/SOUR_Back.png")); 
 		if (auto bg = weaksourBackGround.lock()) bg->SetIsVisible(false);
 		});
-	sourSelectButtonComp->GetFSM().SetOnEnter("Click", [this]() {
-		// 캐릭터 1개라 변경 처리 없음
-		});
+	
 
 	auto sourSelectButtonRect = sourSelectButton->GetComponent<RectTransformComponent>();
 	sourSelectButtonRect->SetPosition({ -525.0f, -370.0f });
@@ -582,9 +600,7 @@ void TitleScene::Initialize()
 		acidSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Back", "../Resource/UI/CharacterSelect/ACID_Back.png")); 
 		if (auto bg = weakacidBackGround.lock()) bg->SetIsVisible(false);
 		});
-	acidSelectButtonComp->GetFSM().SetOnEnter("Click", [this]() {
-		// 캐릭터 1개라 변경 처리 없음
-	});
+	
 
 	auto acidSelectButtonRect = acidSelectButton->GetComponent<RectTransformComponent>();
 	acidSelectButtonRect->SetPosition({ 0.0f, -330.0f });
@@ -593,6 +609,53 @@ void TitleScene::Initialize()
 	acidSelectButtonRect->SetPivotPreset(RectTransformPivotPreset::Center);
 #pragma endregion
 
+	sourSelectButtonComp->GetFSM().SetOnEnter("Click", [sourSelectButtonComp, acidSelectButtonComp, acidNameImg, weakacidBackGround, acidSelectButtonImg, sourNameImg, weaksourBackGround, sourSelectButtonImg, this]() {
+		m_SoundManager.BGM_Shot(L"bgm_run_longver2", 1.0f);
+		m_SoundManager.SFX_Shot(L"ui_click");
+		m_isAcid = false;
+		sourSelectButtonComp->GetFSM().SetOnExit("Hover", []() {
+			});
+		sourSelectButtonComp->GetFSM().SetOnEnter("Hover", [sourNameImg, weaksourBackGround, sourSelectButtonImg, this]() {
+			sourNameImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Name_Up", "../Resource/UI/CharacterSelect/SOUR_Name_Up.png"));
+			sourSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Up", "../Resource/UI/CharacterSelect/SOUR_Up.png"));
+			if (auto bg = weaksourBackGround.lock()) bg->SetIsVisible(true);
+			});
+		acidSelectButtonComp->GetFSM().SetOnEnter("Hover", [acidNameImg, weakacidBackGround, acidSelectButtonImg, this]() {
+			acidNameImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Name_Up", "../Resource/UI/CharacterSelect/ACID_Name_Up.png"));
+			acidSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Up", "../Resource/UI/CharacterSelect/ACID_Up.png"));
+			});
+		acidSelectButtonComp->GetFSM().SetOnExit("Hover", [acidNameImg, weakacidBackGround, acidSelectButtonImg, this]() {
+			acidNameImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Name_Down", "../Resource/UI/CharacterSelect/ACID_Name_Down.png"));
+			acidSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Back", "../Resource/UI/CharacterSelect/ACID_Back.png"));
+			if (auto bg = weakacidBackGround.lock()) bg->SetIsVisible(false);
+			});
+		acidNameImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Name_Down", "../Resource/UI/CharacterSelect/ACID_Name_Down.png"));
+		acidSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Back", "../Resource/UI/CharacterSelect/ACID_Back.png"));
+		if (auto bg = weakacidBackGround.lock()) bg->SetIsVisible(false);
+		});
+	acidSelectButtonComp->GetFSM().SetOnEnter("Click", [acidSelectButtonComp, sourSelectButtonComp, sourNameImg, weaksourBackGround, sourSelectButtonImg, acidNameImg, weakacidBackGround, acidSelectButtonImg, this]() {
+		m_SoundManager.SFX_Shot(L"ui_click");
+		m_isAcid = true;
+		acidSelectButtonComp->GetFSM().SetOnExit("Hover", []() {
+			});
+		acidSelectButtonComp->GetFSM().SetOnEnter("Hover", [acidNameImg, weakacidBackGround, acidSelectButtonImg, this]() {
+			acidNameImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Name_Up", "../Resource/UI/CharacterSelect/ACID_Name_Up.png"));
+			acidSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"ACID_Up", "../Resource/UI/CharacterSelect/ACID_Up.png"));
+			if (auto bg = weakacidBackGround.lock()) bg->SetIsVisible(true);
+			});
+		sourSelectButtonComp->GetFSM().SetOnEnter("Hover", [sourNameImg, weaksourBackGround, sourSelectButtonImg, this]() {
+			sourNameImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Name_Up", "../Resource/UI/CharacterSelect/SOUR_Name_Up.png"));
+			sourSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Up", "../Resource/UI/CharacterSelect/SOUR_Up.png"));
+			});
+		sourSelectButtonComp->GetFSM().SetOnExit("Hover", [sourNameImg, weaksourBackGround, sourSelectButtonImg, this]() {
+			sourNameImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Name_Down", "../Resource/UI/CharacterSelect/SOUR_Name_Down.png"));
+			sourSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Back", "../Resource/UI/CharacterSelect/SOUR_Back.png"));
+			if (auto bg = weaksourBackGround.lock()) bg->SetIsVisible(false);
+			});
+		sourNameImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Name_Down", "../Resource/UI/CharacterSelect/SOUR_Name_Down.png"));
+		sourSelectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"SOUR_Back", "../Resource/UI/CharacterSelect/SOUR_Back.png"));
+		if (auto bg = weaksourBackGround.lock()) bg->SetIsVisible(false);
+		});
 
 #pragma region backButton
 	auto backButton = std::make_shared<ButtonUI>(m_EventDispatcher);
@@ -614,6 +677,111 @@ void TitleScene::Initialize()
 	backButtonRect->SetPivotPreset(RectTransformPivotPreset::Center);
 #pragma endregion
 
+#pragma region loading
+
+
+	auto loadingBackGround = std::make_shared<UIObject>(m_EventDispatcher);
+	loadingBackGround->m_Name = "Roller1";
+	//exitBackGround->SetIsFullScreen(true);
+	loadingBackGround->SetZOrder(8);
+	auto loadingBackGroundImg = loadingBackGround->AddComponent<UIImageComponent>();
+	loadingBackGroundImg->SetBitmap(m_AssetManager.LoadTexture(L"Roller", "../Resource/UI/Loading/Roller.png"));
+	loadingBackGroundImg->SetUV({ 893.0f, 1932.0f });
+	auto loadingBackGroundRect = loadingBackGround->GetComponent<RectTransformComponent>();
+	loadingBackGroundRect->SetPosition({ -1220.0f, -550.0f });
+	loadingBackGroundRect->SetSize({ 1000.0f, 2000.0f });
+	loadingBackGroundRect->SetAnchorPreset(AnchorPrset::FullStretch);
+	loadingBackGroundRect->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	loadingBackGround->SetIsVisible(true);
+	auto loadingComp = loadingBackGround->AddComponent<LoadingRollerComponent>();
+	loadingComp->SetIndex(0);
+	loadingComp->SetScenePtr(this);
+	loadingComp->SetOpacity(0);
+
+
+
+	auto loadingBackGround2 = std::make_shared<UIObject>(m_EventDispatcher);
+	loadingBackGround2->m_Name = "Roller2";
+	//exitBackGround->SetIsFullScreen(true);
+	loadingBackGround2->SetZOrder(9);
+	auto loadingBackGroundImg2 = loadingBackGround2->AddComponent<UIImageComponent>();
+	loadingBackGroundImg2->SetBitmap(m_AssetManager.LoadTexture(L"Roller", "../Resource/UI/Loading/Roller.png"));
+	loadingBackGroundImg2->SetUV({ 893.0f, 1932.0f });
+	auto loadingBackGroundRect2 = loadingBackGround2->GetComponent<RectTransformComponent>();
+	loadingBackGroundRect2->SetPosition({ -500.0f, -550.0f });
+	loadingBackGroundRect2->SetSize({ 1000.0f, 2000.0f });
+	loadingBackGroundRect2->SetAnchorPreset(AnchorPrset::FullStretch);
+	loadingBackGroundRect2->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	loadingBackGround2->SetIsVisible(true);
+
+	auto loadingComp2 = loadingBackGround2->AddComponent<LoadingRollerComponent>();
+	loadingComp2->SetIndex(1);
+	loadingComp2->SetScenePtr(this);
+	loadingComp2->SetOpacity(0);
+
+
+
+	auto loadingBackGround3 = std::make_shared<UIObject>(m_EventDispatcher);
+	loadingBackGround3->m_Name = "Roller3";
+	//exitBackGround->SetIsFullScreen(true);
+	loadingBackGround3->SetZOrder(10);
+	auto loadingBackGroundImg3 = loadingBackGround3->AddComponent<UIImageComponent>();
+	loadingBackGroundImg3->SetBitmap(m_AssetManager.LoadTexture(L"Roller", "../Resource/UI/Loading/Roller.png"));
+	loadingBackGroundImg3->SetUV({ 893.0f, 1932.0f });
+	auto loadingBackGroundRect3 = loadingBackGround3->GetComponent<RectTransformComponent>();
+	loadingBackGroundRect3->SetPosition({ 219.9f, -550.0f });
+	loadingBackGroundRect3->SetSize({ 1000.0f, 2000.0f });
+	loadingBackGroundRect3->SetAnchorPreset(AnchorPrset::FullStretch);
+	loadingBackGroundRect3->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	loadingBackGround3->SetIsVisible(true);
+
+	auto loadingComp3 = loadingBackGround3->AddComponent<LoadingRollerComponent>();
+	loadingComp3->SetIndex(2);
+	loadingComp3->SetScenePtr(this);
+	loadingComp3->SetFunc([this]
+		{
+			this->m_SceneManager->ChangeScene();
+		});
+	loadingComp3->SetOpacity(0);
+
+	auto loadingBackGround4 = std::make_shared<UIObject>(m_EventDispatcher);
+	loadingBackGround4->m_Name = "Roller4";
+	loadingBackGround4->SetZOrder(11);
+	//loadingBackGround4->SetIsFullScreen(true);
+	auto loadingBackGroundImg4 = loadingBackGround4->AddComponent<UIImageComponent>();
+	loadingBackGroundImg4->SetBitmap(m_AssetManager.LoadTexture(L"LODING", "../Resource/UI/Loading/LODING.png"));
+	loadingBackGroundImg4->SetUV({ 1920.0f, 1080.0f });
+	auto loadingBackGroundRect4 = loadingBackGround4->GetComponent<RectTransformComponent>();
+	loadingBackGroundRect4->SetPosition({ -1920.0f, -540.0f });
+	loadingBackGroundRect4->SetSize({ 3000.0f, 1080.0f });
+	loadingBackGroundRect4->SetAnchorPreset(AnchorPrset::FullStretch);
+	loadingBackGroundRect4->SetPivotPreset(RectTransformPivotPreset::Center);
+
+	loadingBackGround4->SetIsVisible(true);
+
+	auto loadingComp4 = loadingBackGround4->AddComponent<RollerBackComponent>();
+	loadingComp4->SetScenePtr(this);
+	loadingComp4->SetOpacity(0);
+
+
+	m_EventDispatcher.AddListener(EventType::OnLoadedScene, loadingComp);
+	m_EventDispatcher.AddListener(EventType::OnLoadedScene, loadingComp2);
+	m_EventDispatcher.AddListener(EventType::OnLoadedScene, loadingComp3);
+	m_EventDispatcher.AddListener(EventType::OnLoadedScene, loadingComp4);
+
+	m_UIManager.AddUI("TitleScene", loadingBackGround);
+	m_UIManager.AddUI("TitleScene", loadingBackGround2);
+	m_UIManager.AddUI("TitleScene", loadingBackGround3);
+	m_UIManager.AddUI("TitleScene", loadingBackGround4);
+	m_SceneManager->SetChangeScene("TitleScene");
+
+
+
+#pragma endregion
+
 #pragma region select
 	auto selectButton = std::make_shared<ButtonUI>(m_EventDispatcher);
 	selectButton->m_Name = "selectButton";
@@ -626,9 +794,17 @@ void TitleScene::Initialize()
 	auto selectButtonComp = selectButton->GetComponent<UIButtonComponent>();
 	selectButtonComp->GetFSM().SetOnEnter("Hover", [selectButtonImg, this]() { selectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"charselect_selectbutton_on", "../Resource/UI/CharacterSelect/charselect_selectbutton_on.png")); });
 	selectButtonComp->GetFSM().SetOnExit("Hover", [selectButtonImg, this]() { selectButtonImg->SetBitmap(m_AssetManager.LoadTexture(L"charselect_selectbutton_off", "../Resource/UI/CharacterSelect/charselect_selectbutton_off.png")); });
-	selectButtonComp->GetFSM().SetOnEnter("Click", [this]() {
-		m_SceneManager->ChangeScene("GameScene");
-		m_UIManager.SetCurrentScene("GameScene");
+	selectButtonComp->GetFSM().SetOnEnter("Click", [loadingComp, loadingComp2, loadingComp3, this]() {
+		m_SoundManager.BGM_Shot(L"bgm_run_longver2", 1.0f);
+		m_SoundManager.SFX_Shot(L"ui_click");
+		m_SoundManager.SFX_Shot(L"ui_screen_transition");
+		if(!m_isAcid)
+		{
+			m_SceneManager->SetChangeScene("GameScene");
+			loadingComp->Start();
+			loadingComp2->Start();
+			loadingComp3->Start();
+		}
 		});
 
 	auto selectButtonRect = selectButton->GetComponent<RectTransformComponent>();
@@ -662,7 +838,10 @@ void TitleScene::Initialize()
 	std::weak_ptr<ButtonUI> weakcreditButton = creditButton;
 	std::weak_ptr<UIObject> weakpressAnyKey = pressAnyKey;
 	
-	backButtonComp->GetFSM().SetOnEnter("Click", [weakcharacterSelectBackGround, weaksourName, weakacidName, weaksourSelectButton, weakacidSelectButton, weakbackButton, weakselectButton, weakmenuBox, weakstartButton, weaksettingButton, weakcreditButton]() {
+	backButtonComp->GetFSM().SetOnEnter("Click", [weakcharacterSelectBackGround, weaksourBackGround, weakacidBackGround, weaksourName, weakacidName, weaksourSelectButton, weakacidSelectButton, weakbackButton, weakselectButton, weakmenuBox, weakstartButton, weaksettingButton, weakcreditButton, this]() {
+		m_SoundManager.BGM_Shot(L"bgm_run_longver2", 1.0f);
+		m_SoundManager.SFX_Shot(L"ui_click");
+		m_SoundManager.SFX_Shot(L"ui_screen_transition");
 		if (auto bg = weakcharacterSelectBackGround.lock()) bg->SetIsVisible(false);
 		if (auto bg = weaksourName.lock()) bg->SetIsVisible(false);
 		if (auto bg = weakacidName.lock()) bg->SetIsVisible(false);
@@ -674,10 +853,13 @@ void TitleScene::Initialize()
 		if (auto btn = weakstartButton.lock()) btn->SetIsVisible(true);
 		if (auto btn = weaksettingButton.lock()) btn->SetIsVisible(true);
 		if (auto btn = weakcreditButton.lock()) btn->SetIsVisible(true);
+		if (auto bg = weaksourBackGround.lock()) bg->SetIsVisible(false);
+		if (auto bg = weakacidBackGround.lock()) bg->SetIsVisible(false);
 		});
 
 
-	startButtonComp->GetFSM().SetOnEnter("Click", [weakcharacterSelectBackGround, weaksourName, weakacidName, weaksourSelectButton, weakacidSelectButton, weakbackButton, weakselectButton, weakmenuBox, weakstartButton, weaksettingButton, weakcreditButton]() {
+	startButtonComp->GetFSM().SetOnEnter("Click", [weakcharacterSelectBackGround, weaksourName, weakacidName, weaksourSelectButton, weakacidSelectButton, weakbackButton, weakselectButton, weakmenuBox, weakstartButton, weaksettingButton, weakcreditButton, this]() {
+		m_SoundManager.SFX_Shot(L"ui_click");
 		if (auto bg = weakcharacterSelectBackGround.lock()) bg->SetIsVisible(true);
 		if (auto bg = weaksourName.lock()) bg->SetIsVisible(true);
 		if (auto bg = weakacidName.lock()) bg->SetIsVisible(true);
@@ -692,10 +874,20 @@ void TitleScene::Initialize()
 		});
 #pragma region controlObject
 	auto controlObject = std::make_shared<GameObject>(m_EventDispatcher);
+	controlObject->SetName("Control");
 	auto controlComp = controlObject->AddComponent<ControlComponent>();
 	controlComp->Start();
 
-	controlComp->RegisterKeyDownCallback(VK_ESCAPE, [weakbackGround, weakexitBackGround, weakexitOkButton, weakexitNoButton, weakmenuBox, weakstartButton, weaksettingButton, weakcreditButton, this]() {
+	controlComp->RegisterKeyDownCallback(VK_ESCAPE, [weakbackGround, weakexitBackGround, weakexitOkButton, weakexitNoButton, weakmenuBox, weakstartButton, weaksettingButton, weakcreditButton, weakacidBackGround, weaksourBackGround, this]() {
+		if (auto bg = weakacidBackGround.lock())
+		{
+			m_SoundManager.BGM_Shot(L"bgm_boss_longver2", 1.f);
+			m_SoundManager.SFX_Shot(L"ui_screen_transition");
+			bg->SetIsVisible(false);
+			if (auto bg = weaksourBackGround.lock())
+				bg->SetIsVisible(false);
+		}
+		
 		if (auto bg = weakbackGround.lock()) bg->SetIsVisible(false);
 		if (auto bg = weakexitBackGround.lock()) bg->SetIsVisible(true);
 		if (auto btn = weakexitOkButton.lock()) btn->SetIsVisible(true);
@@ -734,6 +926,8 @@ void TitleScene::Initialize()
 
 	AddGameObject(cameraObject);
 #pragma endregion
+
+
 }
 
 void TitleScene::Finalize()
@@ -743,10 +937,14 @@ void TitleScene::Finalize()
 
 void TitleScene::Enter()
 {
+	auto escController = m_GameObjects.find("Control")->second->GetComponent<ControlComponent>();
+	escController->Enter();
 }
 
 void TitleScene::Leave()
 {
+	auto escController = m_GameObjects.find("Control")->second->GetComponent<ControlComponent>();
+	escController->Leave();
 }
 
 

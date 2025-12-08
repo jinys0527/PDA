@@ -48,6 +48,9 @@ public:
 	void SetPosition(const Vec2F& pos) { m_Position = pos; SetDirty(); }
 	void SetRotation(const float deg) { m_Rotation = deg; SetDirty(); }
 	void SetScale(const Vec2F& scale) { m_Scale = scale; SetDirty(); }
+	void SetZOrder(const int zorder) { m_ZOrder = zorder; }
+
+	int GetZOrder() { return m_ZOrder; }
 
 	const Vec2F& GetPosition() const { return m_Position; }
 	float GetRotation() const { return m_Rotation; }
@@ -74,6 +77,10 @@ public:
 	void Serialize(nlohmann::json& j) const override;
 	void Deserialize(const nlohmann::json& j) override;
 
+	std::vector<TransformComponent*>& GetChildrens()
+	{
+		return m_Children;
+	}
 private:
 	void SetDirty()
 	{

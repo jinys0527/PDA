@@ -118,6 +118,8 @@ void UIObject::Render(std::vector<UIRenderInfo>& renderInfo)
 				// Opacity Àû¿ë
 				info.opacity = image->GetOpacity();
 				info.srcRect = D2D1_RECT_F{ image->GetUV().left, image->GetUV().top, image->GetUV().right, image->GetUV().bottom };
+				if (!item->m_IsVisible)
+					info.parentSize = { 0, 0 };
 				renderInfo.emplace_back(info);
 			}
 		}
@@ -129,7 +131,7 @@ void UIObject::Render(std::vector<UITextInfo>& renderInfo)
 	for (auto& text : GetComponents<UITextComponent>())
 	{
 		UITextInfo info;
-		info.anchoredPosition = m_RectTransform->GetPosition();
+		info.anchoredPosition = m_RectTransform->GetPosition() + text->GetPosition();
 		info.anchor = m_RectTransform->GetAnchor();
 		info.sizeDelta = { 0, 0 };
 		info.layer = m_ZOrder;

@@ -13,9 +13,15 @@
 #include "Lazer.h"
 #include "ArmSwip.h"
 #include "ArmStretch.h"
+#include "HitNode.h"
+#include "IsDeadNode.h"
 
 void BossBehaviorTree::Initialize()
 {
+	//마지막으로 실행될 스킬 노드 이름을 저장할 변수
+	std::vector<std::string> lastSkills;
+
+
 #pragma region PhaseCheckers_and_CoolDown
 	auto P1_PhaseChecker = std::make_shared<PhaseChecker_1>("PhaseChecker_1");
 	auto P2_PhaseChecker = std::make_shared<PhaseChecker_2>("PhaseChecker_2");
@@ -76,10 +82,13 @@ void BossBehaviorTree::Initialize()
 	auto P1_Skill_1_2_Sequence = std::make_shared<Sequence>("P1_Skill_1_2_Sequence");
 	P1_Skill_1_2_Sequence->AddChild(P1_Skill_1_3_Wait);
 	P1_Skill_1_2_Sequence->AddChild(P1_Skill_1_3_Parallel);
+	//마지막 스킬 이름 추가
+	//lastSkills.push_back("P1_Skill_1_2_Pick_5");
 
 	auto P1_Skill_1_1_Parallel = std::make_shared<ParallelNode>("P1_Skill_1_1_Parallel");
 	P1_Skill_1_1_Parallel->AddChild(P1_Skill_1_2_Pick_5);
 	P1_Skill_1_1_Parallel->AddChild(P1_Skill_1_2_Sequence);
+
 
 	auto P1_Skill_1 = std::make_shared<Sequence>("P1_Skill_1");
 	P1_Skill_1->AddChild(P1_Skill_1_Con);
@@ -89,16 +98,16 @@ void BossBehaviorTree::Initialize()
 #pragma region 1-2
 	// 1-2
 	auto P1_Skill_2_5_Wait = std::make_shared<WaitNode>("P1_Skill_2_5_Wait", 0.5f);
-	auto P1_Skill_2_5_Lazer_3 = std::make_shared<Lazer>("Row_3");
+	auto P1_Skill_2_5_Lazer_1 = std::make_shared<Lazer>("Row_1");
 
-	auto P1_Skill_2_4_ArmSmash_1 = std::make_shared<ArmSmash>("Row_1");
+	auto P1_Skill_2_4_ArmSmash_3 = std::make_shared<ArmSmash>("Row_3");
 	auto P1_Skill_2_4_Sequence = std::make_shared<Sequence>("P1_Skill_2_4_Sequence");
 	P1_Skill_2_4_Sequence->AddChild(P1_Skill_2_5_Wait);
-	P1_Skill_2_4_Sequence->AddChild(P1_Skill_2_5_Lazer_3);
+	P1_Skill_2_4_Sequence->AddChild(P1_Skill_2_5_Lazer_1);
 
 	auto P1_Skill_2_3_Wait = std::make_shared<WaitNode>("P1_Skill_2_3_Wait", 0.5f);
 	auto P1_Skill_2_3_Parallel = std::make_shared<ParallelNode>("P1_Skill_2_3_Parallel");
-	P1_Skill_2_3_Parallel->AddChild(P1_Skill_2_4_ArmSmash_1);
+	P1_Skill_2_3_Parallel->AddChild(P1_Skill_2_4_ArmSmash_3);
 	P1_Skill_2_3_Parallel->AddChild(P1_Skill_2_4_Sequence);
 
 	auto P1_Skill_2_2_Pick_5 = std::make_shared<Pick>("Pick_5");
@@ -184,20 +193,20 @@ void BossBehaviorTree::Initialize()
 	P1_Skill_5_5_ParallelNode->AddChild(P1_Skill_5_6_Pick_0);
 	P1_Skill_5_5_ParallelNode->AddChild(P1_Skill_5_6_Pick_14);
 
-	auto P1_Skill_5_4_Lazer_2 = std::make_shared<Lazer>("Row_2");
+	auto P1_Skill_5_4_Lazer_1 = std::make_shared<Lazer>("Row_1");
 	auto P1_Skill_5_4_Sequence = std::make_shared<Sequence>("P1_Skill_5_4_Sequence");
 	P1_Skill_5_4_Sequence->AddChild(P1_Skill_5_5_Wait);
 	P1_Skill_5_4_Sequence->AddChild(P1_Skill_5_5_ParallelNode);
 
 	auto P1_Skill_5_3_Wait = std::make_shared<WaitNode>("P1_Skill_5_3_Wait", 1.3f);
 	auto P1_Skill_5_3_Parallel = std::make_shared<ParallelNode>("P1_Skill_5_3_Parallel");
-	P1_Skill_5_3_Parallel->AddChild(P1_Skill_5_4_Lazer_2);
+	P1_Skill_5_3_Parallel->AddChild(P1_Skill_5_4_Lazer_1);
 	P1_Skill_5_3_Parallel->AddChild(P1_Skill_5_4_Sequence);
-	auto P1_Skill_5_3_ArmSmash_1 = std::make_shared<ArmSmash>("Row_1");
+	auto P1_Skill_5_3_ArmSmash_2 = std::make_shared<ArmSmash>("Row_2");
 	auto P1_Skill_5_3_ArmSmash_3 = std::make_shared<ArmSmash>("Row_3");
 
 	auto P1_Skill_5_2_ParallelNode = std::make_shared<ParallelNode>("P1_Skill_5_2_ParallelNode");
-	P1_Skill_5_2_ParallelNode->AddChild(P1_Skill_5_3_ArmSmash_1);
+	P1_Skill_5_2_ParallelNode->AddChild(P1_Skill_5_3_ArmSmash_2);
 	P1_Skill_5_2_ParallelNode->AddChild(P1_Skill_5_3_ArmSmash_3);
 	auto P1_Skill_5_2_Sequence = std::make_shared<Sequence>("P1_Skill_5_2_Sequence");
 	P1_Skill_5_2_Sequence->AddChild(P1_Skill_5_3_Wait);
@@ -436,8 +445,13 @@ void BossBehaviorTree::Initialize()
 	auto Phase_2 = std::make_shared<Sequence>("Phase_2");
 	auto Phase_3 = std::make_shared<Sequence>("Phase_3");
 
+	auto Phase_1_HitNode = std::make_shared<HitNode>("Phase_1_HitNode");
+	auto Phase_1_Parellel_CoolDown = std::make_shared<ParallelNode>("Phase_1_Parellel_CoolDown");
+	Phase_1_Parellel_CoolDown->AddChild(Phase_1_HitNode);
+	Phase_1_Parellel_CoolDown->AddChild(P1_BossCoolDown);
+
 	Phase_1->AddChild(P1_PhaseChecker);
-	Phase_1->AddChild(P1_BossCoolDown);
+	Phase_1->AddChild(Phase_1_Parellel_CoolDown);
 	Phase_1->AddChild(Phase_1_Skills);
 
 	Phase_2->AddChild(P2_PhaseChecker);
@@ -445,9 +459,15 @@ void BossBehaviorTree::Initialize()
 	Phase_2->AddChild(Phase_2_Skills);
 
 
+	auto Phase_3_HitNode = std::make_shared<HitNode>("Phase_3_HitNode");
+	auto Phase_3_Parellel_CoolDown = std::make_shared<ParallelNode>("Phase_3_Parellel_CoolDown");
+	Phase_3_Parellel_CoolDown->AddChild(Phase_3_HitNode);
+	Phase_3_Parellel_CoolDown->AddChild(P3_BossCoolDown);
+	auto Phase_3_IsDeadNode = std::make_shared<IsDeadNode>("IsDeadNode");
 
 	Phase_3->AddChild(P3_PhaseChecker);
-	Phase_3->AddChild(P3_BossCoolDown);
+	Phase_3->AddChild(Phase_3_IsDeadNode);
+	Phase_3->AddChild(Phase_3_Parellel_CoolDown);
 	Phase_3->AddChild(Phase_3_Skills);
 
 
@@ -458,6 +478,7 @@ void BossBehaviorTree::Initialize()
 
 	m_BehaviorTree = Root;
 #pragma endregion
+
 }
 
 void BossBehaviorTree::Tick(float deltaTime)

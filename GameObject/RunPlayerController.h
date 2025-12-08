@@ -96,7 +96,7 @@ private:
 
 	float m_Z;
 	float m_Velocity;
-	float m_JumpPower = 10.0f;
+	float m_JumpPower = 11.0f;
 	float m_JumpCancelSpeed = 10.0f;
 
 	float m_RailHeight;

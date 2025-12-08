@@ -9,8 +9,10 @@ class GameObject : public Object
 {
 	friend class Editor;
 	friend class Scene;
-	friend class TestScene;
 	friend class TitleScene;
+	friend class InGameUITestScene;
+	friend class BossScene;
+
 public:
 	GameObject(EventDispatcher& eventDispatcher);
 	virtual ~GameObject() = default;
@@ -30,6 +32,11 @@ public:
 
 	virtual void Serialize(nlohmann::json& j) const;
 	virtual void Deserialize(const nlohmann::json& j);
+
+	GameObject(const GameObject&) = delete;
+	GameObject& operator=(const GameObject&) = delete;
+	GameObject(GameObject&&) = delete;
+	GameObject& operator=(GameObject&&) = delete;
 
 protected:
 	TransformComponent* m_Transform;

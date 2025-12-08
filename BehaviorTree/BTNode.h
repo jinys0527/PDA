@@ -23,6 +23,7 @@ public :
 	virtual ~BTNode() = default;
 	virtual NodeState Tick(BlackBoard& bb, float deltaTime) = 0;
 
+	virtual void Reset() {}
 protected:
 	std::string m_Name;
 

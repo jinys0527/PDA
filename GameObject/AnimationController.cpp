@@ -21,6 +21,11 @@ bool AnimationController::IsLastFrameFinished() const
 	return m_Elapsed >= lastFrameEnd;
 }
 
+void AnimationController::FinishFrame()
+{
+	m_Elapsed = m_Clip->GetTotalDuration();
+}
+
 void AnimationController::SetClip(const AnimationClip* clip)
 {
 	m_Clip = clip;

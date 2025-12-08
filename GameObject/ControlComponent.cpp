@@ -1,4 +1,5 @@
 #include "ControlComponent.h"
+#include "GameObject.h"
 #include "Object.h"
 #include "Event.h"
 
@@ -11,6 +12,7 @@ ControlComponent::~ControlComponent()
 {
 	m_Owner->GetEventDispatcher().RemoveListener(EventType::KeyDown, this);
 }
+
 
 void ControlComponent::Start()
 {
@@ -31,6 +33,8 @@ void ControlComponent::Deserialize(const nlohmann::json& j)
 
 void ControlComponent::OnEvent(EventType type, const void* data)
 {
+	if (!m_IsCorrectScene)
+		return;
 	if (type != EventType::KeyDown)
 		return;
 
@@ -45,7 +49,7 @@ void ControlComponent::OnEvent(EventType type, const void* data)
 	int key = keyData->key;
 
 	auto it = m_KeyDownCallbacks.find(key);
-	if (it != m_KeyDownCallbacks.end())
+	if (it != m_KeyDownCallbacks.end() )
 	{
 		it->second();
 	}
@@ -59,4 +63,14 @@ void ControlComponent::RegisterKeyDownCallback(int vkKey, std::function<void()> 
 void ControlComponent::UnregisterKeyDownCallback(int vkKey)
 {
 	m_KeyDownCallbacks.erase(vkKey);
+}
+
+void ControlComponent::Enter()
+{
+	m_IsCorrectScene = true;
+}
+
+void ControlComponent::Leave()
+{
+	m_IsCorrectScene = false;
 }

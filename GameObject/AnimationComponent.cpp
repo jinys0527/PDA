@@ -24,16 +24,25 @@ void AnimationComponent::Play(const std::string& name, bool loop /*= true*/)
 	m_CurrentClipName = name;
 }
 
+void AnimationComponent::Finish()
+{
+	m_AnimationController.FinishFrame();
+}
+
 void AnimationComponent::Update(float deltaTime)
 {
 	m_AnimationController.Update(deltaTime);
 	const Frame& frame = m_AnimationController.GetCurrentFrame();
 	
 	const AnimationClip* currentClip = m_Clips[m_CurrentClipName];
-	Microsoft::WRL::ComPtr<ID2D1Bitmap1> texture = m_AssetManager->GetTexture(currentClip->GetTextureKey());
+	Microsoft::WRL::ComPtr<ID2D1Bitmap1> texture;
+	if (m_AssetManager)
+	{
+		texture = m_AssetManager->GetTexture(currentClip->GetTextureKey());
+	}
 	if (!texture)
 		return;
-
+	
 	auto sr = m_Owner->GetComponent<SpriteRenderer>();
 	sr->SetTexture(texture, frame.ToRectF());
 }

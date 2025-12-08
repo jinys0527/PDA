@@ -13,8 +13,12 @@ public:
 private:
 	void StartWarning(BlackBoard& bb) override;
 	void EndWarning(BlackBoard& bb) override;
-	void Reset() override;
+	void Reset();
 
+	//현재 재생하는 애니메이션 오브젝트
+	std::shared_ptr<GameObject> m_CurrentAnimObj;
 
+	float m_AttackElapsedTime = 0.f;
+	bool m_ColliderOn = false;
 };
 

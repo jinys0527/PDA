@@ -18,7 +18,9 @@ enum class SpritePivotPreset
 	BottomLeft,
 	BottomCenter,
 	BottomRight,
-	Center
+	Center,
+	HealPivot,
+	Phase_2_Arm
 };
 
 class SpriteRenderer : public Component
@@ -65,6 +67,9 @@ public:
 	void SetFlipY(bool flipY);
 	bool GetFlipY() const;
 
+	void SetLayer(int value);
+	int GetLayer() const;
+
 	void SetUseSrcRect(bool useSrcRect) { m_UseSrcRect = useSrcRect; }
 	bool GetUseSrcRect() const { return m_UseSrcRect; }
 
@@ -89,6 +94,7 @@ private:
 	Vec2F m_Pivot;
 	D2D1_RECT_F m_SrcRect = {};       // 사용할 텍스처 영역
 	bool m_UseSrcRect = false;        // 전체 텍스처 쓸지, 일부 영역 쓸지
+	int m_Layer = -1;
 };
 
 REGISTER_COMPONENT(SpriteRenderer);

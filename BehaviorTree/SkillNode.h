@@ -2,6 +2,7 @@
 #include "BTNode.h"
 #include "Telegraph.h"
 #include "GameObject.h"
+#include "AnimationUtils.h"
 
 //ÆÈ ³»·ÁÂï±â
 class SkillNode : public BTNode
@@ -38,6 +39,5 @@ protected:
 	float m_WarningTime = 3.f;
 	float m_ElapsedTime = 0.f;
 	float m_AnimTimer = 0.0f;
-
 };
 

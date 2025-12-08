@@ -25,5 +25,6 @@ public:
 	void Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo, std::vector<UITextInfo>& uiTextInfo) override;
 	
 private:
+	bool m_isAcid = false;
 };
 

@@ -49,21 +49,20 @@ void InputManager::Update()
 	}
 	
 
-	if (m_MousePrev.rightPressed == false)
+
+	if (m_MousePrev.rightPressed == false && m_Mouse.rightPressed)
 	{
-		if (m_Mouse.rightPressed == true && m_Mouse.rightPressed)
-		{
-			m_EventDispatcher.Dispatch(EventType::MouseRightClick, &m_Mouse);
-		}
-		else if (m_Mouse.rightPressed == true && m_Mouse.rightPressed)
-		{
-			m_EventDispatcher.Dispatch(EventType::MouseRightClickHold, &m_Mouse);
-		}
-		else
-		{
-			m_EventDispatcher.Dispatch(EventType::MouseRightClickUp, &m_Mouse);
-		}
+		m_EventDispatcher.Dispatch(EventType::MouseRightClick, &m_Mouse);
 	}
+	else if (m_MousePrev.rightPressed == true && m_Mouse.rightPressed)
+	{
+		m_EventDispatcher.Dispatch(EventType::MouseRightClickHold, &m_Mouse);
+	}
+	else if(m_MousePrev.rightPressed == true && !m_Mouse.rightPressed)
+	{
+		m_EventDispatcher.Dispatch(EventType::MouseRightClickUp, &m_Mouse);
+	}
+	
 
 
 	//버튼위에 호버됐는지 확인하기 위해 매번 보내야함

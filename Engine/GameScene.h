@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 class GameObject;
+class ChapterBackgroundManager;
 
 class GameScene : public Scene
 {
@@ -27,6 +28,11 @@ public:
 	void FixedUpdate() override;
 	void Update(float deltaTime) override;
 	void Render(std::vector<RenderInfo>& renderInfo, std::vector<UIRenderInfo>& uiRenderInfo, std::vector<UITextInfo>& uiTextInfo) override;
+
+	void SavePlayerInfo();
+	void LoadPlayerInfo();
 	
+private:
+	std::shared_ptr<ChapterBackgroundManager> m_ChapterBackgroundManager;
 };
 

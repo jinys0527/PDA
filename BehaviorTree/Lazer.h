@@ -13,6 +13,8 @@ private:
 	void EndWarning(BlackBoard& bb);
 	void Reset();
 
+	void ActiveAnimation(int index, bool flag);
+
 	int m_StartTelIndex;
 	int m_PrevLeft = -1;
 	int m_PrevRight = -1;
@@ -23,5 +25,13 @@ private:
 	float m_ActivateTimer = 0.0f;
 
 	bool m_IsActivating = false;
+
+	std::vector<std::shared_ptr<GameObject>> m_Fires;
+
+	std::shared_ptr<GameObject> m_CurrentAnimObj;
+
+	std::shared_ptr<GameObject> m_Lazer_CCTV;
+	std::shared_ptr<GameObject> m_Boss_Main;
+
 };
 

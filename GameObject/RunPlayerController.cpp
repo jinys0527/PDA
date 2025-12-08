@@ -8,7 +8,7 @@ RunPlayerController::RunPlayerController() : Component(), IEventListener()
 {
 	m_Z = 0;
 	m_Velocity = 0;
-	m_RailHeight = 200;
+	m_RailHeight = 108;
 }
 
 void RunPlayerController::Start()
@@ -19,6 +19,7 @@ void RunPlayerController::Start()
 	GetEventDispatcher().AddListener(EventType::OnPlayerReinforcedCollisionOccur, this);
 	GetEventDispatcher().AddListener(EventType::MouseRightClick, this);
 	GetEventDispatcher().AddListener(EventType::MouseRightClickUp, this);
+	GetEventDispatcher().AddListener(EventType::OnBossScene, this);
 
 	m_PlayerOwner = (PlayerObject*)(m_Owner);
 
@@ -33,6 +34,7 @@ RunPlayerController::~RunPlayerController()
 	GetEventDispatcher().RemoveListener(EventType::OnPlayerReinforcedCollisionOccur, this);	
 	GetEventDispatcher().RemoveListener(EventType::MouseRightClick, this);
 	GetEventDispatcher().RemoveListener(EventType::MouseRightClickUp, this);
+	GetEventDispatcher().RemoveListener(EventType::OnBossScene, this);
 }
 
 
@@ -70,9 +72,9 @@ void RunPlayerController::Update(float deltaTime)
 	Math::Vector2F pos = m_TransformComponent->GetPosition();
 	pos.y -= prevZ * m_RailHeight;
 
-	if (pos.y <= 0 && m_RigidBodyComponent->GetVelocity().y < 0) // 점프 
+	if (pos.y <= 65.f && m_RigidBodyComponent->GetVelocity().y < 0) // 점프 
 	{
-		pos.y = 0;
+		pos.y = 65.f;
 		Math::Vector2F vel = m_RigidBodyComponent->GetVelocity();
 		vel.y = 0;
 		m_RigidBodyComponent->SetVelocity(vel);
@@ -127,8 +129,11 @@ void RunPlayerController::Update(float deltaTime)
 				{
 					m_PlayerOwner->SetIsFlip(true);
 				}
-			}
-			
+			}			
+		}
+		else
+		{
+			m_PlayerOwner->SetIsFlip(false);
 		}
 
 		m_Owner->GetComponent<TransformComponent>()->Translate(delta);// 실제론 이거 써야해요
@@ -147,6 +152,8 @@ void RunPlayerController::Update(float deltaTime)
 void RunPlayerController::OnEvent(EventType type, const void* data)
 {
 	// 키 입력 처리
+	if (!m_PlayerOwner->GetScene())
+		return;
 
 	if (type == EventType::KeyDown)
 	{
@@ -205,8 +212,8 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 		{
 			int hp = m_PlayerOwner->GetHp();
 			hp -= (int)data;
-			if (hp > 3)
-				hp = 3;
+			if (hp > 5)
+				hp = 5;
 			m_PlayerOwner->SetHp(hp);
 			if ((int)data > 0)
 			{
@@ -247,9 +254,15 @@ void RunPlayerController::OnEvent(EventType type, const void* data)
 		tempMousePos = viewMatrix.TransformPoint(tempMousePos);
 
 		mousePos.x = tempMousePos.x;
-		mousePos.y = tempMousePos.y;
+		mousePos.y = tempMousePos.y - 400;
+
+		std::cout << mousePos.x << " " << mousePos.y << std::endl;
 
 		m_PlayerOwner->GetFSM().Trigger("Shoot");
+	}
+	else if (type == EventType::OnBossScene)
+	{
+		m_IsBoss = (bool)data;
 	}
 }
 
@@ -313,6 +326,8 @@ void RunPlayerController::SlideCheck()
 	}
 	else
 	{
+		if (m_PlayerOwner->GetSlideCool() > 0)
+			return;
 		auto state = m_PlayerOwner->GetFSM().GetCurrentState();
 		if (m_IsShiftPressed && (state == "Idle" || state == "Run" || state == "Kick"))
 		{

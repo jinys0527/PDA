@@ -1,5 +1,5 @@
-#pragma once
-
+﻿#pragma once
+ 
 enum class EventType
 {
 	//Input
@@ -34,7 +34,10 @@ enum class EventType
 	OnScoreChange,
 	OnBossScene,
 	OnPlayerAttack,
-	Quit
+	Quit,
+
+	OnBossAttacked,
+	OnLoadedScene
 };
 
 class IEventListener
