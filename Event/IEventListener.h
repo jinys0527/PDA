@@ -1,5 +1,5 @@
-#pragma once
-
+﻿#pragma once
+ 
 enum class EventType
 {
 	//Input

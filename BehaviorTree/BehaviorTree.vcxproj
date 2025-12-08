@@ -172,7 +172,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)GameObject;$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer;$(SolutionDir)ResourceManager;$(SolutionDir)AI;$(SolutionDir)Event;$(SolutionDir)Engine;$(SolutionDir)Client;$(SolutionDir)SoundSystem;$(SolutionDir)ThirdParty\FMOD\inc</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -191,10 +191,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)GameObject;$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer;$(SolutionDir)ResourceManager;$(SolutionDir)AI;$(SolutionDir)Event;$(SolutionDir)Engine;$(SolutionDir)Client;$(SolutionDir)SoundSystem;$(SolutionDir)ThirdParty\FMOD\inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GameObject;$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer;$(SolutionDir)ResourceManager;$(SolutionDir)AI;$(SolutionDir)Event;$(SolutionDir)Engine;$(SolutionDir)Client;$(SolutionDir)SoundSystem;$(SolutionDir)ThirdParty\FMOD\inc;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -212,10 +212,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)GameObject;$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer;$(SolutionDir)ResourceManager;$(SolutionDir)AI;$(SolutionDir)Event;$(SolutionDir)Engine;$(SolutionDir)Client;$(SolutionDir)SoundSystem;$(SolutionDir)ThirdParty\FMOD\inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GameObject;$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer;$(SolutionDir)ResourceManager;$(SolutionDir)AI;$(SolutionDir)Event;$(SolutionDir)Engine;$(SolutionDir)Client;$(SolutionDir)SoundSystem;$(SolutionDir)ThirdParty\FMOD\inc;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -229,6 +230,8 @@
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)GameObject;$(SolutionDir)D2DCommon;$(SolutionDir)D2DRenderer;$(SolutionDir)ResourceManager;$(SolutionDir)AI;$(SolutionDir)Event;$(SolutionDir)Engine;$(SolutionDir)Client;$(SolutionDir)SoundSystem;$(SolutionDir)ThirdParty\FMOD\inc</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>

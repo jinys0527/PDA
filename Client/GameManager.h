@@ -1,5 +1,5 @@
-#pragma once
-
+﻿#pragma once
+ 
 #include "FSM.h"
 #include "EventDispatcher.h"
 

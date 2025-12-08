@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #ifndef PCH_H
 #define PCH_H
@@ -6,7 +6,7 @@
 #include "framework.h"
 #include <iostream>
 
-#define WIN32_LEAN_AND_MEAN             // °ÅÀÇ »ç¿ëµÇÁö ¾Ê´Â ³»¿ëÀ» Windows Çì´õ¿¡¼­ Á¦¿ÜÇÕ´Ï´Ù.
+#define WIN32_LEAN_AND_MEAN             // ê±°ì˜ ì‚¬ìš©ë˜ì§€ ì•ŠëŠ” ë‚´ìš©ì„ Windows í—¤ë”ì—ì„œ ì œì™¸í•©ë‹ˆë‹¤.
 
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -31,15 +31,33 @@
 #include <vector>
 #include <string>
 
+// ë¯¸ë¦¬ ì»´íŒŒì¼ëœ í—¤ë”ë¥¼ ì‚¬ìš©í•˜ëŠ” ê²½ìš° ì»´íŒŒì¼ì´ ì„±ê³µí•˜ë ¤ë©´ ì´ ì†ŒìŠ¤ íŒŒì¼ì´ í•„ìš”í•©ë‹ˆë‹¤.
+// 
 
-// COM ¹× DirectX ÀÎÅÍÆäÀÌ½º
+#pragma comment(lib, "ole32.lib")
+// Direct3D & DXGI
+#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "dxgi.lib")
+//#pragma comment(lib, "d3dcompiler.lib")
+
+// Direct2D & DirectWrite
+#pragma comment(lib, "d2d1.lib")
+#pragma comment(lib, "dwrite.lib")
+
+// WIC (Windows Imaging Component)
+#pragma comment(lib, "windowscodecs.lib")
+
+
+// COM ë° DirectX ì¸í„°í˜ì´ìŠ¤
 #include <wrl/client.h>              // ComPtr
 #include <d3d11.h>                   // Direct3D 11
-#include <dxgi1_6.h>                 // DXGI 1.6 (Windows 10 ÀÌ»ó ÃÖ½Å ½º¿ÒÃ¼ÀÎ)
+#include <dxgi1_6.h>                 // DXGI 1.6 (Windows 10 ì´ìƒ ìµœì‹  ìŠ¤ì™‘ì²´ì¸)
 #include <d2d1_3.h>                  // Direct2D 1.3 (ID2D1Factory4)
-#include <d2d1_3helper.h>            // D2D1::Helper Å¬·¡½ºµé
-#include <dwrite_3.h>                // DirectWrite (ÃÖ½Å ÅØ½ºÆ® ¿£Áø)
-#include <wincodec.h>                // WIC (ÀÌ¹ÌÁö ·Îµù)
+#include <d2d1_3helper.h>            // D2D1::Helper í´ë˜ìŠ¤ë“¤
+#include <dwrite_3.h>                // DirectWrite (ìµœì‹  í…ìŠ¤íŠ¸ ì—”ì§„)
+#include <wincodec.h>                // WIC (ì´ë¯¸ì§€ ë¡œë”©)
+
+
 
 #define _USE_MATH_DEFINES
 #include <cmath>
